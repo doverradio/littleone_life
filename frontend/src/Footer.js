@@ -15,15 +15,15 @@ const Footer = () =>
                 </div>
 
                 {/* Quick Links */}
-                <div>
+                <div style={{ color: "white" }}>
                     <a href="/about">About Us</a> |
                     <a href="/terms">Terms of Service</a> |
                     <a href="/privacy">Privacy Policy</a>
                 </div>
 
                 {/* Copyright */}
-                <div>
-                    © {currentYear} bigdeal.sale. All Rights Reserved.
+                <div style={{ color: "white" }}>
+                    © {currentYear} littleone.life. All Rights Reserved.
                 </div>
 
             </div>
