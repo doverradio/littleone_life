@@ -4,7 +4,7 @@ const Footer = () =>
 {
     const currentYear = new Date().getFullYear();
     return (
-        <footer style={{backgroundColor: "#f8f9fa", padding: "20px 0"}}>
+        <footer style={{backgroundColor: "black", padding: "20px 0"}}>
             <div style={{display: "flex", justifyContent: "space-around", alignItems: "center", flexDirection: "column", width: "80%", margin: "0 auto"}}>
 
                 {/* Social Media Icons */}
