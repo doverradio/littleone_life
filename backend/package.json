@@ -11,7 +11,6 @@
   "license": "ISC",
   "dependencies": {
     "@analytics/google-analytics": "^0.5.3",
-    "@aws-sdk/client-mturk": "^3.25.0",
     "@google-cloud/local-auth": "^2.1.0",
     "@googleapis/drive": "^4.0.0",
     "@hendt/ebay-api": "^6.0.1",
@@ -23,7 +22,6 @@
     "amazon-mws": "0.0.27",
     "amazon-sp-api": "^0.7.2",
     "analytics": "^0.8.1",
-    "api-mturk": "^1.2.4",
     "apollo-server-express": "^2.21.0",
     "aws-sdk": "^2.1100.0",
     "aws4": "^1.11.0",
