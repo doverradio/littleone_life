@@ -105,6 +105,7 @@
     "query-string": "^8.1.0",
     "redis": "^3.1.2",
     "shippo": "^1.7.1",
+    "shortid": "^2.2.16",
     "socket.io": "^4.4.1",
     "stripe": "^12.6.0",
     "tiktok-api": "^0.4.1",
