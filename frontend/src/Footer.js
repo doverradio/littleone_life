@@ -1,9 +1,10 @@
 import React from "react";
-import { SiFacebook } from "react-icons/si";
+import { SiFacebook, SiRumble } from "react-icons/si";
 import { FaXTwitter } from "react-icons/fa6";
 import { BsInstagram } from "react-icons/bs";
 import { PiTiktokLogoBold } from "react-icons/pi";
 import { BsYoutube } from "react-icons/bs";
+import { FcReddit } from "react-icons/fc";
 
 const Footer = () =>
 {
@@ -14,11 +15,15 @@ const Footer = () =>
 
                 {/* Social Media Icons */}
                 <div style={{ color: "white" }}>
-                    <a title="youtube" href="https://www.youtube.com/@littleone9939" target="_blank" rel="noopener noreferrer"><BsYoutube /></a> |&nbsp;
-                    <a title="facebook" href="https://www.facebook.com/BillArnoldTeachesDivinePlan" target="_blank" rel="noopener noreferrer"><SiFacebook /></a> |&nbsp;
-                    <a title="twitter" href="https://twitter.com/BillArnoldTeach" target="_blank" rel="noopener noreferrer"><FaXTwitter /></a> |&nbsp;
-                    <a title="tiktok" href="https://www.tiktok.com/@littleone9939" target="_blank" rel="noopener noreferrer"><PiTiktokLogoBold /></a> |&nbsp;
-                    <a title="instagram" href="https://www.instagram.com/littleone9939/" target="_blank" rel="noopener noreferrer"><BsInstagram /></a>
+                    <a title="Youtube" href="https://www.youtube.com/@littleone9939" target="_blank" rel="noopener noreferrer"><img src="youtube.png" style={{ height: "18px", width: "18px" }} alt="YouTube" /></a> |&nbsp;
+                    <a title="Facebook" href="https://www.facebook.com/BillArnoldTeachesDivinePlan" target="_blank" rel="noopener noreferrer"><SiFacebook /></a> |&nbsp;
+                    <a title="Twitter (X)" href="https://twitter.com/BillArnoldTeach" target="_blank" rel="noopener noreferrer"><FaXTwitter /></a> |&nbsp;
+                    <a title="TikTok" href="https://www.tiktok.com/@littleone9939" target="_blank" rel="noopener noreferrer"><img src="tiktok.png" style={{ height: "18px", width: "18px" }} alt="TikTok" /></a> |&nbsp;
+                    <a title="Reddit" href="https://www.reddit.com/user/littleone9939" target="_blank" rel="noopener noreferrer"><FcReddit /></a> |&nbsp;
+                    {/* <a title="Rumble" href="https://rumble.com/user/littleone9939" target="_blank" rel="noopener noreferrer"><SiRumble /></a> |&nbsp; */}
+                    <a title="Rumble" href="https://rumble.com/user/littleone9939" target="_blank" rel="noopener noreferrer"><img src="rumble.png" style={{ height: "18px", width: "18px" }} alt="Rumble" /></a> |&nbsp;
+                    <a title="TruthSocial" href="https://truthsocial.com/@littleone9939" target="_blank" rel="noopener noreferrer"><img src="truth-social-logo.png" style={{ height: "18px", width: "18px" }} alt="TruthSocial" /></a> |&nbsp;
+                    <a title="Instagram" href="https://www.instagram.com/littleone9939/" target="_blank" rel="noopener noreferrer"><img src="instagram.png" style={{ height: "18px", width: "18px" }} alt="Instagram" /></a>
                 </div>
 
                 {/* Quick Links */}
