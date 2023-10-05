@@ -24,14 +24,51 @@ code {
   min-height: 100vh;
 }
 
-.main-content {
-  flex: 1 0 auto;  /* This will allow the main content to grow but not shrink, pushing the footer down */
+/* Assuming MainPage or a similar component is the direct child of #root */
+MainPage {
+  display: flex;
+  flex-direction: column;
+  flex: 1; /* This ensures that MainPage takes up all the available space */
 }
 
-.main-page-content {
-  height: calc(100vh - 15vh - 10vh);
+.main-content, .main-page-content {
+  flex: 1; /* This will push the footer down */
+}
+
+/* This class hides the element on larger screens */
+@media (min-width: 768px) { /* adjust 768px as needed for your breakpoint */
+  .d-lg-none {
+      display: none !important;
+  }
+}
+
+/* This class hides the element on smaller screens */
+@media (max-width: 767px) {
+  .d-sm-block {
+      display: none !important;
+  }
 }
 
 footer {
   flex-shrink: 0;  /* Prevents the footer from shrinking */
+}
+.main-content-container {
+  margin: 40px auto;
+  background-color: black;
+  color: white;
+}
+
+/* This ensures that on screens larger than 768px (typical breakpoint for tablets and up), the width will be 1200px */
+@media (min-width: 768px) {
+  .main-content-container {
+      width: 1200px;
+  }
+}
+
+/* On screens smaller than 768px, the width will adjust to 100% minus some margin for breathing space */
+@media (max-width: 767px) {
+  .main-content-container {
+      width: calc(100% - 20px);
+      padding: 0 10px;
+  }
 }

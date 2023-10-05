@@ -28,9 +28,9 @@ const SignUp = () => {
     return (
         <>
             <NavbarMain />
-            <h2 className="m-1 p-1">Signup</h2>
-            <div className="signup-form d-flex justify-content-center main-content">
-                <form onSubmit={handleSubmit}>
+            <div className="signup-form d-flex justify-content-center main-content" style={{ backgroundColor: "black", color: "white" }}>
+                <h2 className="m-1 p-1 text-center">Signup</h2>
+                <form onSubmit={handleSubmit} className="mt-5">
                     <div className="form-group m-1 p-1">
                         <label>Email:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
                         <input type="email" name="email" value={formData.email} onChange={handleChange} required />
@@ -51,7 +51,7 @@ const SignUp = () => {
                         <label>Cell Phone:&nbsp;&nbsp;</label>
                         <input type="tel" name="cellPhone" value={formData.cellPhone} onChange={handleChange} required />
                     </div>
-                    <button className="btn btn-primary btn-sm m-1" type="submit">Signup</button>
+                    <button className="btn btn-secondary btn-sm m-1" type="submit">Signup</button>
                 </form>
             </div>
             <Footer />

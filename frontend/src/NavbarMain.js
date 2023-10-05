@@ -23,7 +23,8 @@ const NavbarMain = () => {
 
                 <NavLink to="/" className="navbar-brand d-none d-lg-block">
                     {/* <img src="/logo.png" style={{ borderRadius: '50%', width: '90px', height: '90px' }} alt="" /> */}
-                    <span style={{ color: "white" }}>littleone.life</span>
+                    <img src="/logo_knight.png" style={{ borderRadius: '50%', width: '90px', height: '90px' }} alt="" />
+                    {/* <span style={{ color: "white" }}>littleone.life</span> */}
                 </NavLink>
                 
                 <div className="collapse navbar-collapse" id="navbar-main" style={{ color: 'white' }}>
@@ -67,7 +68,7 @@ const NavbarMain = () => {
                                 <div>
                                     <PiMagnifyingGlassThin />
                                 </div>
-                                </IconContext.Provider>
+                            </IconContext.Provider>
                         </button>
 
 

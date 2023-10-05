@@ -16,10 +16,14 @@ const SignIn = () =>
     return(
         <>
             <NavbarMain />
-            <h2 className="m-1 p-1">Sign In</h2>
-            <div className="signin-container d-flex justify-content-center main-content">
-                <form onSubmit={handleSubmit}>
+            
+            <div className="signin-container d-flex justify-content-center main-content" style={{ backgroundColor: "black", color: "white" }}>
+                <h2 className="m-1 p-1">Sign In</h2>
+                <form onSubmit={handleSubmit} className="mt-5">
                     <div className="form-group m-1 p-1">
+                        <br />
+                        <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                        <br />
                         <label htmlFor="email">Email:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
                         <input 
                             type="email" 
@@ -28,9 +32,7 @@ const SignIn = () =>
                             onChange={(e) => setEmail(e.target.value)}
                             required
                         />
-                        <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
                     </div>
-                    <br />
                     <div className="form-group m-1 p-1">
                         <label htmlFor="password">Password:&nbsp;&nbsp;&nbsp;&nbsp;</label>
                         <input 

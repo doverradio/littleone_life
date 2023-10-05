@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import NavbarMain from "./NavbarMain";
 import Footer from './Footer';
 
@@ -11,6 +11,14 @@ const Contact = () =>
         message: ''
     });
     
+    
+    useEffect(() => {
+        document.body.style.backgroundColor = 'black';
+        return () => {
+            document.body.style.backgroundColor = null;
+        };
+    }, []);
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData(prevData => ({
@@ -29,7 +37,7 @@ const Contact = () =>
     return(
         <>
             <NavbarMain />
-            <div className="main-content" style={{ maxWidth: "600px", margin: "40px auto" }}>
+            <div className="main-content-container" style={{ margin: "40px auto", backgroundColor: "black", color: "white" }}>
                 <h1>Contact Us</h1>
 
                 <form onSubmit={handleSubmit}>
@@ -75,12 +83,12 @@ const Contact = () =>
                             value={formData.message}
                             onChange={handleChange}
                             className="form-control"
-                            rows="5"
+                            rows="8"
                             required 
                         />
                     </div>
 
-                    <button type="submit" className="btn btn-primary">Submit</button>
+                    <button type="submit" className="btn btn-secondary">Submit</button>
                 </form>
             </div>
             <Footer />
