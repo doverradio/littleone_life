@@ -7,7 +7,7 @@ const AboutUs = () =>
     return(
         <>
             <NavbarMain />
-            <div className="container-fluid main-content">
+            {/* <div className="container-fluid main-content">
                 <div className="row">
                     <div className="col-12">
                         <h2 className="m-1 p-1">Our Story</h2>
@@ -56,7 +56,7 @@ const AboutUs = () =>
                         </p>
                     </div>
                 </div>
-            </div>
+            </div> */}
             <Footer />
         </>
     )
