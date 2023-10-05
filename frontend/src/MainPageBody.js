@@ -12,7 +12,6 @@ const MainPageBody = () => {
                         <h1 className="text-center d-lg-none">Enlist in the Divine Mission.</h1>
                         <h1 className="text-center d-sm-block">Embrace the Light. Embody the Love. Enlist in the Divine Mission.</h1>
 
-                        {/* <h1 className="text-center">Embrace the Light. Embody the Love. Enlist in the Divine Mission.</h1> */}
                         <p className="text-center">Discover a Spiritual Journey Unlike Any Other</p>
                     </div>
                 </div>
@@ -43,11 +42,11 @@ const MainPageBody = () => {
                     </div>
                 </div> */}
 
-                <div className="row mt-4">
+                <div className="row mt-4 mb-5">
                     <div className="col-12 text-center" style={{ color: "white" }}>
                         <h2>Become a Soldier of the Light</h2>
                         <p>Feel the call? Join us.</p>
-                        <Link to="/signup" className="btn btn-secondary btn-sm">Join Now</Link>
+                        <Link to="/signup" className="btn btn-light btn-sm">Join Now</Link>
                     </div>
                 </div>
 
