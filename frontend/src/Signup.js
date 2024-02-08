@@ -4,7 +4,7 @@ import Footer from "./Footer";
 import { signup } from './api/auth'; // Adjust the path as necessary
 
 const SignUp = () => {
-    const [formData, setFormData] = useState({
+    const [userData, setUserData] = useState({
         firstName: '',
         lastName: '',
         email: '',
@@ -14,7 +14,7 @@ const SignUp = () => {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData(prevData => ({
+        setUserData(prevData => ({
             ...prevData,
             [name]: name === 'cellPhone' ? formatPhoneNumber(value) : value
         }));
@@ -23,11 +23,11 @@ const SignUp = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log('Form data submitted:', formData);
+        console.log('User data submitted:', userData);
         
         // Call the signup API function
         try {
-            const response = await signup(formData);
+            const response = await signup(userData);
             console.log('Signup response:', response);
             // Handle the response, e.g., show a message, redirect, etc.
         } catch (error) {
@@ -70,7 +70,7 @@ const SignUp = () => {
                                     type="email" 
                                     name="email" 
                                     className="form-control"
-                                    value={formData.email} 
+                                    value={userData.email} 
                                     onChange={handleChange} 
                                     required 
                                 />
@@ -81,7 +81,7 @@ const SignUp = () => {
                                     type="password" 
                                     name="password" 
                                     className="form-control"
-                                    value={formData.password} 
+                                    value={userData.password} 
                                     onChange={handleChange} 
                                     required 
                                 />
@@ -92,7 +92,7 @@ const SignUp = () => {
                                     type="text" 
                                     name="firstName" 
                                     className="form-control"
-                                    value={formData.firstName} 
+                                    value={userData.firstName} 
                                     onChange={handleChange} 
                                     required 
                                 />
@@ -103,7 +103,7 @@ const SignUp = () => {
                                     type="text" 
                                     name="lastName" 
                                     className="form-control"
-                                    value={formData.lastName} 
+                                    value={userData.lastName} 
                                     onChange={handleChange} 
                                     required 
                                 />
@@ -114,7 +114,7 @@ const SignUp = () => {
                                     type="tel" 
                                     name="cellPhone" 
                                     className="form-control"
-                                    value={formData.cellPhone} 
+                                    value={userData.cellPhone} 
                                     onChange={handleChange} 
                                     required 
                                 />
