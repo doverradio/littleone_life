@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import NavbarMain from "./NavbarMain";
 import Footer from "./Footer";
+import { signup } from './api/auth'; // Adjust the path as necessary
 
 const SignUp = () => {
     const [formData, setFormData] = useState({
@@ -15,15 +16,45 @@ const SignUp = () => {
         const { name, value } = e.target;
         setFormData(prevData => ({
             ...prevData,
-            [name]: value
+            [name]: name === 'cellPhone' ? formatPhoneNumber(value) : value
         }));
     };
+    
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         console.log('Form data submitted:', formData);
-        // Handle the form submission here
+        
+        // Call the signup API function
+        try {
+            const response = await signup(formData);
+            console.log('Signup response:', response);
+            // Handle the response, e.g., show a message, redirect, etc.
+        } catch (error) {
+            console.error('Signup error:', error);
+            // Handle the error, e.g., show an error message
+        }
     };
+
+    const formatPhoneNumber = (value) => {
+        if (!value) return value;
+    
+        // Remove all non-digits
+        const phoneNumber = value.replace(/[^\d]/g, '');
+    
+        // Check if the input is of correct length
+        const phoneNumberLength = phoneNumber.length;
+    
+        if (phoneNumberLength < 4) return phoneNumber;
+    
+        if (phoneNumberLength < 7) {
+            return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3)}`;
+        }
+    
+        return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3, 6)}-${phoneNumber.slice(6, 10)}`;
+    };
+    
+    
 
     return (
         <>
