@@ -13,7 +13,7 @@ const Contact = () =>
     
     
     useEffect(() => {
-        document.body.style.backgroundColor = 'black';
+        document.body.style.backgroundColor = 'white';
         return () => {
             document.body.style.backgroundColor = null;
         };
@@ -37,7 +37,7 @@ const Contact = () =>
     return(
         <>
             <NavbarMain />
-            <div className="main-content-container" style={{ margin: "40px auto", backgroundColor: "black", color: "white" }}>
+            <div className="main-content-container" style={{ margin: "40px auto", backgroundColor: "white", color: "black" }}>
                 <h1>Contact Us</h1>
 
                 <form onSubmit={handleSubmit}>
