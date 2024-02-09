@@ -37,19 +37,20 @@ const NavbarMain = () => {
                     </li>
                 </ul>
                 <ul className="navbar-nav ml-auto">
-                    {isAuthenticated() ? (
+                    {isAuthenticated() && isAuthenticated().user.role === 0 && (
+                        <li className="nav-item">
+                            <NavLink to="/user/dashboard" className="nav-link" activeClassName="active" style={{ color: 'black' }}>User Dashboard</NavLink>
+                        </li>
+                    )}
+                    {isAuthenticated() && isAuthenticated().user.role === 1 && (
+                        <li className="nav-item">
+                            <NavLink to="/admin/dashboard" className="nav-link" activeClassName="active" style={{ color: 'black' }}>Admin Dashboard</NavLink>
+                        </li>
+                    )}
+                    {isAuthenticated() && (
                         <li className="nav-item">
                             <button className="btn btn-link nav-link" onClick={handleSignout} style={{ color: '#c0392b' }}>Sign Out</button>
                         </li>
-                    ) : (
-                        <>
-                            <li className="nav-item">
-                                <NavLink to="/signup" className="nav-link" activeClassName="active" style={{ color: 'black' }}>Sign Up</NavLink>
-                            </li>
-                            <li className="nav-item">
-                                <NavLink to="/signin" className="nav-link" activeClassName="active" style={{ color: 'black' }}>Sign In</NavLink>
-                            </li>
-                        </>
                     )}
                 </ul>
             </div>
