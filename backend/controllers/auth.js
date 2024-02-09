@@ -9,114 +9,36 @@ const _ = require("lodash");
 // const BraintreeVaultCustomers = require("../models/braintreevaultcustomers");
 const log = console.log;
 
-const signupMemberToBraintreePaymentsVault = async userData =>
+
+exports.signup = async ( req, res ) =>
 {
     try {
-        let endpoint = `http://${process.env.API_IP}:8000/api/braintree/createcustomer`
-        let method = `POST`
-        let headers = { Accept: "application/json", "Content-Type": "application/json" }
-        let body = JSON.stringify( userData )
-        let response = await fetch( endpoint, { method, headers, body } )
-        response = await response.json()
-        return response
+        let user = new User(req.body);
+        let userDoc = await user.save();
+        
+        // Manually pick the fields you want to include in the response
+        const userResponse = {
+            firstName: userDoc.firstName,
+            lastName: userDoc.lastName,
+            email: userDoc.email,
+            role: userDoc.role,
+            createdAt: userDoc.createdAt,
+            updatedAt: userDoc.updatedAt
+        };
+
+        // let welcomeEmail = await sendSignupEmail(userDoc);
+        // res.json({ userSaved: userResponse, welcomeEmail });
+        res.json({ userSaved: userResponse });
     } catch ( e ) {
-        log(`signupMemberToBraintreePaymentsVault e: `, e)
+        log(`signup e: `, e)
         return
     }
 }
 
-exports.signup = async ( req, res ) =>  // a 
-{
-    let a = {}
-    a.errors = {}
-    try {
-        let braintree_response = await signupMemberToBraintreePaymentsVault( req.body )
-        
-        // check if braintree_response.success === true
-        if ( braintree_response.success === true )
-        {
-            // let { customer } = braintree_response
-            // let braintreevaultcustomers_doc = new BraintreeVaultCustomers( customer )
-            // braintreevaultcustomers_doc = await braintreevaultcustomers_doc.save()
-            // req.body.braintreeVault_id = `${ braintreevaultcustomers_doc._id }`
-            a.user = new User( req.body )
-            a.userDoc = await a.user.save().catch( e_userSaved => { log( `e_userSaved: `, e_userSaved ); a.errors.e_userSaved = e_userSaved } )
-            log( `a.userDoc: `, a.userDoc )
-    
-            let { sign_up_referral_code, sign_up_pro_referral_code } = req.body
-            // check if anyone has this code
-            // if ( sign_up_referral_code )
-            // {
-            //     a.referring_user = await User.findOne( { referral_code: sign_up_referral_code } )
-            //     if ( a.referring_user )
-            //     {
-            //         // add their referral code to ReferralCodes collection
-            //         a.referral_code_doc = new ReferralCodes( 
-            //             { 
-            //                 user: a.referring_user._id,
-            //                 downline: a.userDoc._id,
-            //                 code: sign_up_referral_code,
-            //                 type: `Basic`
-            //             } )
-                    
-            //         // save referral code doc
-            //         await a.referral_code_doc.save().catch( err => log( `err: `, err ) )
-    
-            //         // remove their referral code 
-            //         a.referring_user = await User.findOneAndUpdate( { _id: a.referring_user._id }, { $set: { referral_code: "" } } )
-            //     } else {
-            //         throw `Referring member not found.`
-            //     }
-            // }
-            // if ( sign_up_pro_referral_code )
-            // {
-            //     a.referring_pro_user = await User.findOne( { pro_referral_code: sign_up_pro_referral_code } )
-            //     if ( a.referring_pro_user )
-            //     {
-            //         // add their referral code to ReferralCodes collection
-            //         a.referral_code_doc = new ReferralCodes( 
-            //             { 
-            //                 user: a.referring_pro_user._id,
-            //                 downline: a.userDoc._id,
-            //                 code: sign_up_pro_referral_code,
-            //                 type: `Professional`
-            //             } )
-                        
-            //         // save referral code doc
-            //         await a.referral_code_doc.save().catch( err => log( `err: `, err ) )
-                    
-            //         // remove their referral code 
-            //         a.referring_pro_user = await User.findOneAndUpdate( { _id: a.referring_pro_user._id }, { $set: { pro_referral_code: "" } } )
-            //     } else {
-            //         throw `Referring member not found.`
-            //     }
-            // }
-            // a.userDoc.salt = a.userDoc && a.userDoc.salt ? undefined : void( 0 );
-            // a.userDoc.hashed_password = undefined;
-            
-            /** Set up a new user ebay inventory */
-            // a.preInventoryDoc = new Inventories( { user: a.userDoc._id, marketplace: 'ebay.com', items: [] } )
-            // a.inventoryDoc = await a.preInventoryDoc.save().catch( error_preInventoryDoc => console.log( `Got an error saving preInventoryDoc... `, error_preInventoryDoc ) )
-            a.endpoint = `${ process.env.API_URL }/api/email/sendsignupemail`
-            a.method = `POST`
-            a.headers = { Accept: "application/json", "Content-Type": "application/json" }
-            a.body = JSON.stringify( { user: a.userDoc._id } )
-            a.welcomeEmail = await fetch( a.endpoint, { method: a.method, headers: a.headers, body: a.body } )
-            a.welcomeEmail = await a.welcomeEmail.json()
-            res.json( { userSaved: a.userDoc } )
-        } else {
-
-        }
-
-    } catch( e ) {
-        console.log( `Got an error in signup... e, a`, e, JSON.stringify( a ) )
-        res.status( 400 ).json( { error: e, report: a } )
-    }
-};
-
 exports.signin = async (req, res) => {
     try {
       const { email, password } = req.body;
+
       const userDoc = await User.findOne({ email });
   
       if (!userDoc) {
@@ -131,11 +53,6 @@ exports.signin = async (req, res) => {
         _id,
         name,
         role,
-        stripe_account_id,
-        stripe_seller,
-        stripeSession,
-        refresh_token,
-        chatgptkey_id
       } = userDoc;
   
       const token = jwt.sign({ _id }, process.env.JWT_SECRET);
@@ -149,11 +66,6 @@ exports.signin = async (req, res) => {
           email,
           name,
           role,
-          stripe_account_id,
-          stripe_seller,
-          stripeSession,
-          refresh_token,
-          chatgptkey_id
         }
       });
     } catch (error) {

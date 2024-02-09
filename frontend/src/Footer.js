@@ -15,15 +15,14 @@ const Footer = () =>
 
                 {/* Social Media Icons */}
                 <div style={{ color: "black" }}>
-                    <a title="Youtube" href="https://www.youtube.com/@littleone9939" target="_blank" rel="noopener noreferrer"><img src="youtube.png" style={{ height: "18px", width: "18px" }} alt="YouTube" /></a> |&nbsp;
+                    <a title="Youtube" href="https://www.youtube.com/@littleone9939" target="_blank" rel="noopener noreferrer"><img src="/youtube.png" style={{ height: "18px", width: "18px" }} alt="YouTube" /></a> |&nbsp;
                     <a title="Facebook" href="https://www.facebook.com/BillArnoldTeachesDivinePlan" target="_blank" rel="noopener noreferrer"><SiFacebook /></a> |&nbsp;
                     <a title="Twitter (X)" href="https://twitter.com/BillArnoldTeach" target="_blank" rel="noopener noreferrer"><FaXTwitter /></a> |&nbsp;
-                    <a title="TikTok" href="https://www.tiktok.com/@littleone9939" target="_blank" rel="noopener noreferrer"><img src="tiktok.png" style={{ height: "18px", width: "18px" }} alt="TikTok" /></a> |&nbsp;
+                    <a title="TikTok" href="https://www.tiktok.com/@littleone9939" target="_blank" rel="noopener noreferrer"><img src="/tiktok.png" style={{ height: "18px", width: "18px" }} alt="TikTok" /></a> |&nbsp;
                     <a title="Reddit" href="https://www.reddit.com/user/littleone9939" target="_blank" rel="noopener noreferrer"><FcReddit /></a> |&nbsp;
-                    {/* <a title="Rumble" href="https://rumble.com/user/littleone9939" target="_blank" rel="noopener noreferrer"><SiRumble /></a> |&nbsp; */}
-                    <a title="Rumble" href="https://rumble.com/user/littleone9939" target="_blank" rel="noopener noreferrer"><img src="rumble.png" style={{ height: "18px", width: "18px" }} alt="Rumble" /></a> |&nbsp;
-                    <a title="TruthSocial" href="https://truthsocial.com/@littleone9939" target="_blank" rel="noopener noreferrer"><img src="truth-social-logo.png" style={{ height: "18px", width: "18px" }} alt="TruthSocial" /></a> |&nbsp;
-                    <a title="Instagram" href="https://www.instagram.com/littleone9939/" target="_blank" rel="noopener noreferrer"><img src="instagram.png" style={{ height: "18px", width: "18px" }} alt="Instagram" /></a>
+                    <a title="Rumble" href="https://rumble.com/user/littleone9939" target="_blank" rel="noopener noreferrer"><img src="/rumble.png" style={{ height: "18px", width: "18px" }} alt="Rumble" /></a> |&nbsp;
+                    <a title="TruthSocial" href="https://truthsocial.com/@littleone9939" target="_blank" rel="noopener noreferrer"><img src="/truth-social-logo.png" style={{ height: "18px", width: "18px" }} alt="TruthSocial" /></a> |&nbsp;
+                    <a title="Instagram" href="https://www.instagram.com/littleone9939/" target="_blank" rel="noopener noreferrer"><img src="/instagram.png" style={{ height: "18px", width: "18px" }} alt="Instagram" /></a>
                 </div>
 
                 {/* Quick Links */}

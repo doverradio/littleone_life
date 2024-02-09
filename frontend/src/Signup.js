@@ -54,12 +54,10 @@ const SignUp = () => {
         return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3, 6)}-${phoneNumber.slice(6, 10)}`;
     };
     
-    
-
     return (
         <>
             <NavbarMain />
-            <div className="container-fluid" style={{ backgroundColor: "white", color: "black", height: "80vh" }}>
+            <div className="container-fluid" style={{ backgroundColor: "white", color: "black", height: "73vh" }}>
                 <div className="row h-100 justify-content-center align-items-center">
                     <div className="col-md-6 col-lg-4">
                         <h2 className="text-center m-1 p-1">Signup</h2>

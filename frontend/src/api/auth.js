@@ -5,11 +5,8 @@ const log = console.log;
 
 // Function to handle user sign-up
 export const signup = async (user) => {
-  log(`Begin signup!`)
   try {
-    let endpoint = `${API}/signup`
-    log(`signup endpoint: `, endpoint)
-    const response = await fetch(endpoint, {
+    const response = await fetch(`${API}/signup`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
