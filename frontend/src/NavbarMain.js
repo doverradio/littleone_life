@@ -1,8 +1,6 @@
 import React from "react";
 import { NavLink, useNavigate  } from 'react-router-dom';
 import { isAuthenticated, signout } from './api/auth'
-import { PiMagnifyingGlassThin } from "react-icons/pi";
-import {IconContext} from "react-icons"
 
 const NavbarMain = () => {
 

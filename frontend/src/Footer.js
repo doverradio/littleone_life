@@ -1,9 +1,6 @@
 import React from "react";
-import { SiFacebook, SiRumble } from "react-icons/si";
+import { SiFacebook } from "react-icons/si";
 import { FaXTwitter } from "react-icons/fa6";
-import { BsInstagram } from "react-icons/bs";
-import { PiTiktokLogoBold } from "react-icons/pi";
-import { BsYoutube } from "react-icons/bs";
 import { FcReddit } from "react-icons/fc";
 
 const Footer = () =>
