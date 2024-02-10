@@ -67,7 +67,13 @@ const SignIn = () => {
             }
         }
         if (isAuthenticated()) {
-            navigate('/');
+            if (user && user.role === 1) {
+                navigate('/admin/dashboard');
+            } else if (user && user.role === 0) {
+                navigate('/user/dashboard');
+            } else {
+                navigate('/');
+            }
         }
     };
 
