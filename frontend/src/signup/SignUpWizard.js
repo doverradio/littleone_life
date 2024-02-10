@@ -148,7 +148,6 @@ const SignUpWizard = () => {
     const handleSubmit = async () => {
         try {
             const response = await signup(userData);
-            console.log('User signed up successfully:', response);
             // Optionally, you can handle success response here
             
             // Show success toast
