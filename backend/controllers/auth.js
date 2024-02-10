@@ -63,6 +63,7 @@ exports.signin = async (req, res) => {
         const { username, password } = req.body;
 
         const userDoc = await User.findOne({ username });
+        console.log("UserDoc from DB:", userDoc);
 
         if (!userDoc) {
             return res.status(400).json({ error: "User with that username does not exist. Please sign up" });

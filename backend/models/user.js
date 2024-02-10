@@ -29,10 +29,10 @@ const userSchema = new mongoose.Schema({
         type: String,
         trim: true,
     },
-    // hashed_password: {
-    //     type: String,
-    //     required: true
-    // },
+    hashed_password: {
+        type: String,
+        required: true
+    },
     about: {
         type: String,
         trim: true
