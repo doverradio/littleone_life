@@ -20,23 +20,40 @@ export const signup = async (user) => {
   }
 };
 
+export const checkUsernameAvailability = async (username) => {
+  try {
+      const response = await fetch(`${API}/check-username`, {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ username }),
+      });
+      return await response.json();
+  } catch (error) {
+      console.error('Error in checking username availability:', error);
+      throw error;
+  }
+};
+
+
 export const signin = user => {
-  log('signin API:', process.env.REACT_APP_API);
+  // console.log('signin API:', process.env.REACT_APP_API);
 
   return fetch(`${API}/signin`, {
       method: "POST",
       headers: {
-          Accept: "application/json",
           "Content-Type": "application/json"
       },
       body: JSON.stringify(user)
   })
-      .then(response => {
-          return response.json();
-      })
-      .catch(err => {
-          console.log(err);
-      });
+  .then(response => {
+      return response.json();
+  })
+  .catch(err => {
+      console.error('Error in signin:', err);
+      throw err; // Re-throw the error so it can be handled by the calling component
+  });
 };
 
 export const authenticate = (data, next) => {

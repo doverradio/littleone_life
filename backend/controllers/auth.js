@@ -9,33 +9,98 @@ const _ = require("lodash");
 // const BraintreeVaultCustomers = require("../models/braintreevaultcustomers");
 const log = console.log;
 
+exports.checkUsernameAvailability = async (req, res) => {
+    const { username } = req.body;
 
-exports.signup = async ( req, res ) =>
-{
     try {
+        const userExists = await User.findOne({ username });
+        if (userExists) {
+            return res.json({ isAvailable: false });
+        }
+        return res.json({ isAvailable: true });
+    } catch (error) {
+        log('Error in checking username availability:', error);
+        return res.status(500).json({ error: 'Server error while checking username' });
+    }
+};
+
+exports.signup = async (req, res) => {
+    const { username, password } = req.body;
+
+    try {
+        // Check if username already exists
+        const existingUser = await User.findOne({ username });
+        if (existingUser) {
+            return res.status(400).json({ error: 'Username already exists' });
+        }
+
+        // Proceed with creating a new user
         let user = new User(req.body);
+        user.password = password; // Set the password, which will automatically hash it and set hashed_password
         let userDoc = await user.save();
-        
+
         // Manually pick the fields you want to include in the response
         const userResponse = {
+            username: userDoc.username,
             firstName: userDoc.firstName,
             lastName: userDoc.lastName,
             email: userDoc.email,
+            phone: userDoc.phone,
             role: userDoc.role,
             createdAt: userDoc.createdAt,
             updatedAt: userDoc.updatedAt
         };
 
-        // let welcomeEmail = await sendSignupEmail(userDoc);
-        // res.json({ userSaved: userResponse, welcomeEmail });
         res.json({ userSaved: userResponse });
-    } catch ( e ) {
-        log(`signup e: `, e)
-        return
+    } catch (e) {
+        console.error(`Signup error: `, e);
+        res.status(500).send('Error in signup process');
     }
-}
+};
 
 exports.signin = async (req, res) => {
+    try {
+        const { username, password } = req.body;
+
+        const userDoc = await User.findOne({ username });
+
+        if (!userDoc) {
+            return res.status(400).json({ error: "User with that username does not exist. Please sign up" });
+        }
+
+        if (!userDoc.authenticate(password)) {
+            return res.status(401).json({ error: "Username and password don't match" });
+        }
+
+        const {
+            _id,
+            role,
+            firstName,
+            lastName
+        } = userDoc;
+
+        const token = jwt.sign({ _id }, process.env.JWT_SECRET);
+
+        res.cookie("t", token, { expire: new Date() + 9999 });
+
+        return res.json({
+            token,
+            user: {
+                _id,
+                username,
+                firstName,
+                lastName,
+                role
+            }
+        });
+    } catch (error) {
+        console.log("Got an error in signin...", error);
+        res.status(400).json({ error }); // removed ', report: a' from response for security purposes
+    }
+};
+
+
+exports.signin0 = async (req, res) => {
     try {
       const { email, password } = req.body;
 

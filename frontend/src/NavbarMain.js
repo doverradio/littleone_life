@@ -47,10 +47,19 @@ const NavbarMain = () => {
                             <NavLink to="/admin/dashboard" className="nav-link" activeClassName="active" style={{ color: 'black' }}>Admin Dashboard</NavLink>
                         </li>
                     )}
-                    {isAuthenticated() && (
+                    {isAuthenticated() ? (
                         <li className="nav-item">
                             <button className="btn btn-link nav-link" onClick={handleSignout} style={{ color: '#c0392b' }}>Sign Out</button>
                         </li>
+                    ) : (
+                        <>
+                            <li className="nav-item">
+                                <NavLink to="/signup" className="nav-link" activeClassName="active" style={{ color: 'black' }}>Sign Up</NavLink>
+                            </li>
+                            <li className="nav-item">
+                                <NavLink to="/signin" className="nav-link" activeClassName="active" style={{ color: 'black' }}>Sign In</NavLink>
+                            </li>
+                        </>
                     )}
                 </ul>
             </div>

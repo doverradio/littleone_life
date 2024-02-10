@@ -7,7 +7,8 @@ const {
     signout,
     requireSignin,
     forgotPassword,
-    resetPassword
+    resetPassword,
+    checkUsernameAvailability
 } = require("../controllers/auth");
 const { userSignupValidator } = require("../validator");
 const { 
@@ -18,6 +19,7 @@ const {
 router.post("/signup", signup);
 router.post("/signin", signin);
 router.get("/signout", signout);
+router.post('/check-username', checkUsernameAvailability);
 router.put('/forgot-password', forgotPasswordValidator, forgotPassword);
 router.put('/reset-password', resetPasswordValidator,  resetPassword);
 

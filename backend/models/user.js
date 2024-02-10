@@ -29,10 +29,10 @@ const userSchema = new mongoose.Schema({
         type: String,
         trim: true,
     },
-    hashed_password: {
-        type: String,
-        required: true
-    },
+    // hashed_password: {
+    //     type: String,
+    //     required: true
+    // },
     about: {
         type: String,
         trim: true
@@ -79,8 +79,11 @@ userSchema.plugin(fieldEncryption, {
     fields: ['firstName', 'lastName', 'email', 'about', 'phone'],
     secret: encKey,
     saltGenerator: function(secret) {
-        return crypto.randomBytes(16).toString('hex');
+        // Ensure the salt is a string of length 16
+        const salt = crypto.randomBytes(8).toString('hex'); // Generate a hex string of 16 characters (8 bytes)
+        return salt;
     }
 });
+
 
 module.exports = mongoose.model('User', userSchema);
