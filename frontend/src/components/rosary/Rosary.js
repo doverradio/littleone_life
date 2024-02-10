@@ -40,6 +40,10 @@ const Rosary = () => {
     const handleMysteryDivClick = (mysteryName) => {
         setSelectedMystery(mysteryName);
     };
+    
+    const handleMysteryClick = (mysteryName) => {
+        setSelectedMystery(mysteryName);
+    };
 
     // Render the component
     return (
@@ -65,48 +69,35 @@ const Rosary = () => {
             </div>
             <hr />
             
-            <h2>Select Mystery</h2>
-            <form>
+            <h2 className='text-center'>{selectedMystery ? selectedMystery : 'Select Mystery'}</h2>
+
+            <div className="mysteries-row" style={{ 
+                display: 'flex', 
+                justifyContent: 'space-around', // Adjust to 'space-around' for better spacing
+                flexWrap: 'nowrap', // Prevent wrapping
+            }}>
                 {mysteries.map((mystery, index) => (
-                <div 
-                    key={index} 
-                    className="form-check"
-                    onClick={() => handleMysteryDivClick(mystery.name)}
-                    style={{ cursor: 'pointer' }}
-                >
-                    <input
-                        type="radio"
-                        id={mystery.name}
-                        name="mystery"
-                        className='form-check-input'
-                        value={mystery.name}
-                        checked={selectedMystery === mystery.name}
-                        onChange={handleMysteryChange}
-                    />
-                    <label htmlFor={mystery.name} className="form-check-label">
-                    <img 
-                        src={mystery.image} 
-                        alt={mystery.name} 
+                    <div 
+                        key={index}
+                        onClick={() => handleMysteryClick(mystery.name)}
                         style={{ 
-                            height: '180px', 
-                            width: '180px', 
-                            display: 'block', 
-                            margin: 'auto', 
                             cursor: 'pointer',
-                            border: selectedMystery === mystery.name ? '5px solid blue' : 'none'
-                        }} 
-                    />
-                    <span 
-                        style={{ 
-                            fontWeight: selectedMystery === mystery.name ? 'bold' : 'normal' // Bold if selected
+                            border: selectedMystery === mystery.name ? '2px solid blue' : 'none',
+                            textAlign: 'center',
+                            margin: '5px',
+                            flex: '1 0 20%', // Adjust the flex grow, shrink, and basis
+                            borderRadius: '15%'
                         }}
                     >
-                        {mystery.name}
-                    </span>
-                    </label>
-                </div>
+                        <img 
+                            src={mystery.image} 
+                            alt={mystery.name} 
+                            style={{ height: '50px', width: '50px', borderRadius: '15%' }}
+                        />
+                        <p>{mystery.name}</p>
+                    </div>
                 ))}
-            </form>
+            </div>
             <hr />
             <h2>Prayer Intentions</h2>
             {prayerIntentions.length > 0 ? (
