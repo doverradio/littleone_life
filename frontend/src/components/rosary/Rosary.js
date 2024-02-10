@@ -4,6 +4,7 @@ import luminousImage from './luminous.jpg';
 import sorrowfulImage from './sorrowful.jpg';
 import gloriousImage from './glorious.jpg';
 import joyfulImage from './joyful.jpg';
+import './styles.css'
 
 // Define the Rosary component
 const Rosary = () => {
@@ -69,7 +70,7 @@ const Rosary = () => {
             </div>
             <hr />
             
-            <h2 className='text-center'>{selectedMystery ? selectedMystery : 'Select Mystery'}</h2>
+            <h2 className='text-center fancy-font'>{selectedMystery ? selectedMystery : 'Select Mystery'}</h2>
 
             <div className="mysteries-row" style={{ 
                 display: 'flex', 
@@ -94,7 +95,7 @@ const Rosary = () => {
                             alt={mystery.name} 
                             style={{ height: '50px', width: '50px', borderRadius: '15%' }}
                         />
-                        <p>{mystery.name}</p>
+                        <p className="fancy-font">{mystery.name}</p>
                     </div>
                 ))}
             </div>
