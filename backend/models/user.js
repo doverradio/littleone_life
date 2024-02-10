@@ -1,49 +1,55 @@
-const mongoose = require("mongoose");
-const crypto = require("crypto");
+const mongoose = require('mongoose');
+const crypto = require('crypto');
 const { v1: uuidv1 } = require('uuid');
-const { ObjectId } = mongoose.Schema;
+const fieldEncryption = require('mongoose-field-encryption').fieldEncryption;
 
-const userSchema = new mongoose.Schema(
-    {
-        firstName: {
-            type: String,
-            trim: true,
-            // required: true,
-            maxlength: 100
-        },
-        lastName: {
-            type: String,
-            trim: true,
-            // required: true,
-            maxlength: 100
-        },
-        email: {
-            type: String,
-            trim: true,
-            required: true,
-            unique: true
-        },
-        hashed_password: {
-            type: String,
-            required: true
-        },
-        about: {
-            type: String,
-            trim: true
-        },
-        salt: String,
-        role: {
-            type: Number,
-            default: 0
-        },
-
+const userSchema = new mongoose.Schema({
+    username: {
+        type: String,
+        trim: true,
+        required: true,
+        unique: true,
+        maxlength: 25
     },
-    { timestamps: true }
-);
+    firstName: {
+        type: String,
+        trim: true,
+        maxlength: 100
+    },
+    lastName: {
+        type: String,
+        trim: true,
+        maxlength: 100
+    },
+    email: {
+        type: String,
+        trim: true,
+    },
+    phone: {
+        type: String,
+        trim: true,
+    },
+    hashed_password: {
+        type: String,
+        required: true
+    },
+    about: {
+        type: String,
+        trim: true
+    },
+    salt: String,
+    role: {
+        type: Number,
+        default: 0
+    }
+}, { timestamps: true });
 
-// virtual field
-userSchema
-    .virtual("password")
+// Encryption key and signature key
+var encKey = process.env.SOME_32BYTE_BASE64_STRING;
+var sigKey = process.env.SOME_64BYTE_BASE64_STRING;
+
+// Virtual field for password
+userSchema.virtual('password')
     .set(function(password) {
         this._password = password;
         this.salt = uuidv1();
@@ -53,22 +59,28 @@ userSchema
         return this._password;
     });
 
+// Methods
 userSchema.methods = {
     authenticate: function(plainText) {
         return this.encryptPassword(plainText) === this.hashed_password;
     },
-
     encryptPassword: function(password) {
-        if (!password) return "";
+        if (!password) return '';
         try {
-            return crypto
-                .createHmac("sha1", this.salt)
-                .update(password)
-                .digest("hex");
+            return crypto.createHmac('sha1', this.salt).update(password).digest('hex');
         } catch (err) {
-            return "";
+            return '';
         }
     }
 };
 
-module.exports = mongoose.model("User", userSchema);
+// Field encryption
+userSchema.plugin(fieldEncryption, {
+    fields: ['firstName', 'lastName', 'email', 'about', 'phone'],
+    secret: encKey,
+    saltGenerator: function(secret) {
+        return crypto.randomBytes(16).toString('hex');
+    }
+});
+
+module.exports = mongoose.model('User', userSchema);
