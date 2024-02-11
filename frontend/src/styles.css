@@ -5,4 +5,10 @@
     text-align: center;
 }
 
-/* Additional styling */
+/* Add this in your CSS file */
+.navbar-icon {
+    padding: 10px;
+    display: inline-block; /* or flex depending on your navbar design */
+    color: dimgray;
+}
+

@@ -1,6 +1,8 @@
 import React from "react";
 import { NavLink, useNavigate  } from 'react-router-dom';
 import { isAuthenticated, signout } from './api/auth'
+import { FaCog } from 'react-icons/fa'; // Example using react-icons
+import { Link } from 'react-router-dom';
 
 const NavbarMain = () => {
 
@@ -48,9 +50,16 @@ const NavbarMain = () => {
                         </li>
                     )}
                     {isAuthenticated() ? (
-                        <li className="nav-item">
-                            <button className="btn btn-link nav-link" onClick={handleSignout} style={{ color: '#c0392b' }}>Sign Out</button>
-                        </li>
+                        <>
+                            {isAuthenticated() && (
+                                <Link to="/user/settings" className="navbar-icon">
+                                    <FaCog size={24} />
+                                </Link>
+                            )}
+                            <li className="nav-item">
+                                <button className="btn btn-link nav-link" onClick={handleSignout} style={{ color: '#c0392b' }}>Sign Out</button>
+                            </li>
+                        </>
                     ) : (
                         <>
                             <li className="nav-item">

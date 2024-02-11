@@ -11,6 +11,7 @@ import PrivateRoute from './auth/PrivateRoute';
 import AdminRoute from './auth/AdminRoute';
 import UserDashboard from "./user/UserDashboard";
 import AdminDashboard from "./admin/AdminDashboard";
+import Settings from "./components/settings/Settings";
 
 const RoutesComponent = () => {
     return (
@@ -25,6 +26,7 @@ const RoutesComponent = () => {
                 <Route path="/privacy" element={<PrivacyPolicy />} />
                 
                 <Route path="/user/dashboard" element={<PrivateRoute component={UserDashboard} />} />
+                <Route path="/user/settings" element={<PrivateRoute component={Settings} />} />
                 <Route path="/admin/dashboard" element={<AdminRoute component={AdminDashboard} />} />
 
                 {/* <Route path="/user/dashboard" element={<PrivateRoute />}>

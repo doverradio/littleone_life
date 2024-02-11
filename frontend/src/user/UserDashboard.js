@@ -4,13 +4,59 @@ import Footer from "../Footer";
 import Modal from "./Modal";
 import Rosary from "../components/rosary/Rosary";
 import rosaryIcon from '../components/rosary/rosary_icon.png'
+import Mass from "../components/mass/Mass";
+import massIcon from '../components/mass/mass_icon.png'
+import Confession from "../components/confession/Confession"; // Import the Confession component
+import confessionIcon from '../components/confession/confession_icon.png'; // Path to your confession icon
+import DivineMercy from "../components/divinemercy/DivineMercy";
+import divineMercyIcon from '../components/divinemercy/divinemercy_icon.png'; // Path to your Divine Mercy icon
+import './styles.css'
 
 const UserDashboard = () => {
     const [isRosaryModalOpen, setIsRosaryModalOpen] = useState(false);
+    const [isMassModalOpen, setIsMassModalOpen] = useState(false);
+    const [isConfessionModalOpen, setIsConfessionModalOpen] = useState(false);
+    
+    const [modalState, setModalState] = useState({
+        rosary: false,
+        mass: false,
+        confession: false,
+    });
 
-    const toggleRosaryModal = () => {
-        setIsRosaryModalOpen(!isRosaryModalOpen);
+    const [icons, setIcons] = useState([
+        { id: 'rosary', icon: rosaryIcon, modal: setIsRosaryModalOpen, component: <Rosary /> },
+        { id: 'mass', icon: massIcon, modal: setIsMassModalOpen, component: <Mass /> },
+        { id: 'confession', icon: confessionIcon, modalOpen: isConfessionModalOpen, component: <Confession />, toggleModal: setIsConfessionModalOpen },
+        { id: 'divine Mercy Chaplet', icon: divineMercyIcon, modalOpen: false, component: <DivineMercy /> } 
+    ]);
+
+    
+    const toggleModal = (id) => {
+        setIcons(icons.map(icon => {
+            if (icon.id === id) {
+                return { ...icon, modalOpen: !icon.modalOpen };
+            }
+            return icon;
+        }));
     };
+
+    const onDragStart = (e, id) => {
+        e.dataTransfer.setData('id', id);
+    };
+
+    const onDrop = (e, targetId) => {
+        const id = e.dataTransfer.getData('id');
+        const draggedIcon = icons.find(icon => icon.id === id);
+        const targetIconIndex = icons.findIndex(icon => icon.id === targetId);
+
+        const newIcons = [...icons];
+        newIcons.splice(icons.indexOf(draggedIcon), 1); // Remove the dragged icon
+        newIcons.splice(targetIconIndex, 0, draggedIcon); // Insert the dragged icon before the target icon
+
+        setIcons(newIcons);
+    };
+
+
     return (
         <>
             <NavbarMain />
@@ -19,26 +65,34 @@ const UserDashboard = () => {
                     <h2>User Dashboard</h2>
                     {/* Add your user dashboard content here */}
                 </div>
-                <div className="row">
-                    <div className="col-12">
-                        <img 
-                            src={rosaryIcon} 
-                            alt="Rosary" 
-                            className="clickable-icon" 
-                            style={{
-                                height: '55px',
-                                width: '55px',
-                                cursor: 'pointer'
-                            }}
-                            title="Rosary"
-                            onClick={toggleRosaryModal} 
-                        />
-                        
-                        <Modal show={isRosaryModalOpen} onHide={toggleRosaryModal}>
-                            <Rosary />
-                        </Modal>
-
-                    </div>
+                <div className="d-flex flex-wrap justify-content-start">
+                    {icons.map(icon => (
+                        <div 
+                            key={icon.id} 
+                            className="icon-container p-2"
+                            draggable 
+                            onDragStart={(e) => onDragStart(e, icon.id)}
+                            onDrop={(e) => onDrop(e, icon.id)}
+                            onDragOver={(e) => e.preventDefault()}
+                            onClick={() => toggleModal(icon.id)}
+                        >
+                            <img 
+                                src={icon.icon} 
+                                alt={icon.id} 
+                                className="clickable-icon"
+                                style={{ height: '55px', width: '55px' }}
+                            />
+                            <div className="icon-label">
+                                {icon.id.charAt(0).toUpperCase() + icon.id.slice(1, 10)} {/* Only show the first 10 characters */}
+                                {icon.id.length > 10 ? "..." : ""} {/* Add ellipsis if the text is longer than 10 characters */}
+                            </div>
+                            {icon.modalOpen && (
+                                <Modal show={icon.modalOpen} onHide={() => toggleModal(icon.id)}>
+                                    {icon.component}
+                                </Modal>
+                            )}
+                        </div>
+                    ))}
                 </div>
             </div>
             <Footer />

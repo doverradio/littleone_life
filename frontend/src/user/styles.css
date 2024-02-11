@@ -37,3 +37,31 @@
     text-decoration: none;
     cursor: pointer;
 }
+
+.icon-black-border {
+    border: 2px solid black;
+    border-radius: 10px; /* Adjust as necessary for the desired roundness */
+  }
+  
+  .icon-label {
+    width: 90px; /* Adjust the width as needed */
+    white-space: nowrap; /* Keep the text in a single line */
+    overflow: hidden; /* Hide the overflow text */
+    text-overflow: ellipsis; /* Add an ellipsis at the end of the truncated text */
+    display: block; /* Block display is needed for width to take effect */
+  }
+  
+  
+  .icon-container:hover .icon-label,
+  .icon-container:focus .icon-label {
+    text-overflow: clip;
+    white-space: normal;
+    overflow: visible;
+  }
+  
+  .icon-container {
+    text-align: center;
+    padding: 0.5rem;
+    cursor: pointer;
+  }
+  
