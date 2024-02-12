@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { ObjectId } = mongoose.Schema;
 
 const churchSchema = new mongoose.Schema(
     {
@@ -31,7 +32,7 @@ const churchSchema = new mongoose.Schema(
             type: String,
             trim: true
         }],
-        contactNumber: {
+        phone: {
             type: String,
             trim: true
         },
@@ -42,7 +43,12 @@ const churchSchema = new mongoose.Schema(
         additionalInfo: {
             type: String,
             trim: true
-        }
+        },
+        users: [{
+            type: ObjectId,
+            ref: 'User',
+            required: true
+          }],
     },
     { timestamps: true }
 );

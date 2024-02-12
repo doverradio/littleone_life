@@ -19,7 +19,7 @@ export const createIntention = async (intention) => {
 };
 
 // Function to get all intentions for a user
-export const getAllIntentions = async (userId) => {
+export const getAllIntentions = async (userId, type) => {
     try {
         const response = await fetch(`${API}/intentions`, {
             method: 'POST',
@@ -27,7 +27,7 @@ export const getAllIntentions = async (userId) => {
                 'Content-Type': 'application/json',
                 // Add authorization headers if needed
             },
-            body: JSON.stringify({ userId }),
+            body: JSON.stringify({ userId, type }),
         });
         return await response.json();
     } catch (error) {

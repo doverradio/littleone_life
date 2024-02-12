@@ -68,7 +68,7 @@ const Rosary = () => {
     
     const fetchIntentions = async () => {
         try {
-            const response = await getAllIntentions(userId);
+            const response = await getAllIntentions(userId, "Rosary");
             if (response) {
                 setPrayerIntentions(response);
             } else {

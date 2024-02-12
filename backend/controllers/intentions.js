@@ -29,7 +29,7 @@ exports.createIntention = async (req, res) => {
 // Get all intentions for a user
 exports.getAllIntentions = async (req, res) => {
     try {
-        const { userId } = req.body;
+        const { userId, type } = req.body;
         // console.log("Received userId:", userId);
 
         // Validate userId
@@ -37,7 +37,7 @@ exports.getAllIntentions = async (req, res) => {
             return res.status(400).json({ error: "Invalid user ID" });
         }
 
-        const intentions = await Intention.find({ user: userId });
+        const intentions = await Intention.find({ user: userId, type });
         // console.log("Intentions:", intentions);
 
         res.json(intentions);

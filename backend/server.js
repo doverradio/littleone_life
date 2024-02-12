@@ -8,7 +8,9 @@ const mongoose = require('mongoose');
 require('dotenv').config();
 
 const authRoutes = require("./routes/auth");
-const intentionRoutes = require('./routes/intentions')
+const churchRoutes = require('./routes/church');
+const intentionRoutes = require('./routes/intentions');
+const massAttendanceRoutes = require('./routes/massAttendance');
 const rosaryRoutes = require('./routes/rosary');
 
 
@@ -48,7 +50,9 @@ else {
 }
 
 app.use('/api', authRoutes);
+app.use('/api', churchRoutes);
 app.use('/api', intentionRoutes);
+app.use('/api', massAttendanceRoutes);
 app.use('/api', rosaryRoutes);
 
 const PORT = process.env.PORT || 8000;

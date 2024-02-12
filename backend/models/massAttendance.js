@@ -16,7 +16,7 @@ const massAttendanceSchema = new mongoose.Schema(
             required: true
         },
         massTime: {
-            type: Date,
+            type: String,
             required: true
         },
         i: [{
@@ -41,7 +41,7 @@ var encKey = process.env.SOME_32BYTE_BASE64_STRING;
 var sigKey = process.env.SOME_64BYTE_BASE64_STRING;
 
 // Apply field encryption to the content field
-intentionSchema.plugin(fieldEncryption, {
+massAttendanceSchema.plugin(fieldEncryption, {
   fields: ['specialIntentions'],
   secret: encKey, // use the encryption key
   saltGenerator: function (secret) {
