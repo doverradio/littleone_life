@@ -1,4 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+// import { getAllIntentions, createIntention, updateIntention, deleteIntention } from '../../api/intentions';
+// import { createMassAttendance, countMassesByUser } from '../../api/massAttendance'; 
+import { isAuthenticated } from '../../api/auth';
+import { MdOutlineModeEdit } from "react-icons/md";
 import divineMercyIcon from './divinemercy_icon.png'; // Adjust the path to where your icon is stored
 
 const DivineMercy = () => {
@@ -6,6 +10,12 @@ const DivineMercy = () => {
     const [count, setCount] = useState(0);
     const [prayerIntentions, setPrayerIntentions] = useState([]);
 
+    const {
+        user: { _id }
+    } = isAuthenticated();
+
+    const userId = _id;
+    
     const addPrayerIntention = () => {
         // This could prompt the user for input or open another component/modal
         // For now, we'll just add a default intention

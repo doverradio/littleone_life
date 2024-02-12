@@ -10,12 +10,10 @@ const churchSchema = new mongoose.Schema(
         address: {
             type: String,
             trim: true,
-            required: true
         },
         city: {
             type: String,
             trim: true,
-            required: true
         },
         state: {
             type: String,
@@ -24,7 +22,6 @@ const churchSchema = new mongoose.Schema(
         country: {
             type: String,
             trim: true,
-            required: true
         },
         zipCode: {
             type: String,
