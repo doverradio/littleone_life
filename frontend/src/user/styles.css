@@ -14,28 +14,35 @@
 }
 
 .modal-content {
-    background-color: #fefefe;
-    margin: auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%;
-    max-width: 500px; /* Could be responsive */
-    border-radius: 5px;
-    position: relative;
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 98vw; /* As previously discussed */
+  height: 100vh; /* Set the height */
+  /* height: 100vh; Set the height */
+  overflow-y: auto;
+  border-radius: 5px;
+  position: relative;
 }
+
+
 
 .close {
-    color: #aaaaaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
+  position: absolute; /* Absolute positioning */
+  top: 10px; /* Adjust as needed */
+  right: 15px; /* Adjust as needed */
+  color: #aaaaaa;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer; /* To indicate clickable action */
 }
 
+/* Keep your existing hover and focus styles */
 .close:hover,
 .close:focus {
-    color: #000;
-    text-decoration: none;
-    cursor: pointer;
+  color: #000;
+  text-decoration: none;
 }
 
 .icon-black-border {

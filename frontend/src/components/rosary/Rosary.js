@@ -23,6 +23,41 @@ const Rosary = () => {
     const [editingIntentionId, setEditingIntentionId] = useState(null); // new state
     const [editContent, setEditContent] = useState(''); // new state to hold the edited content
 
+    // New state to keep track of selected mystery details
+    const [selectedMysteryDetails, setSelectedMysteryDetails] = useState([]);
+
+    // Define the mysteries details
+    const mysteriesDetails = {
+        Luminous: [
+            "First Mystery of Light: Baptism in the Jordan",
+            "Second Mystery of Light: The Wedding Feast at Cana",
+            "Third Mystery of Light: Proclamation of the Kingdom of God",
+            "Fourth Mystery of Light: Transfiguration",
+            "Fifth Mystery of Light: Institution of the Eucharist"
+        ],
+        Sorrowful: [
+            "The Agony of Jesus in the Garden of Gethsemane",
+            "The Scourging of Jesus at the Pillar",
+            "The Crowning of Jesus with Thorns",
+            "The Carrying of the Cross",
+            "The Crucifixion and Death of Jesus"
+        ],
+        Glorious: [
+            "The Resurrection of Jesus",
+            "The Ascension of Jesus into Heaven",
+            "The Descent of the Holy Spirit at Pentecost",
+            "The Assumption of Mary into Heaven",
+            "The Coronation of Our Lady in Heaven"
+        ],
+        Joyful: [
+            "The Annunciation of the Angel Gabriel to Mary",
+            "The Visitation of Mary to Elizabeth",
+            "The Birth of Jesus in Bethlehem of Judea",
+            "The Presentation of Jesus in the Temple",
+            "The Finding of Jesus in the Temple"
+        ]
+    };
+
     const {
         user: { _id }
     } = isAuthenticated();
@@ -80,24 +115,6 @@ const Rosary = () => {
     };
     
 
-    const handleSubmitNewIntention = async () => {
-        // ... submit new intention to the backend
-        try {
-            const response = await createIntention({ user: userId, content: newIntention, type: 'Rosary' });
-            setNewIntention(''); // Reset the new intention input
-            setIsAddingIntention(false); // Close the add intention input field
-    
-            // Re-fetch intentions to update the list with the newly added intention
-            fetchIntentions();
-        } catch (error) {
-            console.error('Error adding new intention:', error);
-            // Optionally, handle the error (e.g., show an error message)
-        }
-    };
-
-    const handleEditIntention = async (intentionId, newContent) => {
-        // ... submit edited intention to the backend
-    };
 
     const handleDeleteIntention = async (intentionId) => {
         // ... delete intention and update state
@@ -156,6 +173,7 @@ const Rosary = () => {
     
     const handleMysteryClick = (mysteryName) => {
         setSelectedMystery(mysteryName);
+        setSelectedMysteryDetails(mysteriesDetails[mysteryName]); // Update the details based on selected mystery
     };
 
     
@@ -177,8 +195,8 @@ const Rosary = () => {
 
     // Render the component
     return (
-        <div className="rosary-component">
-            <div className="row">
+        <div className="rosary-component container">
+            <div className="row rosary-header">
                 <div className="col-3">
                     <img 
                         src={rosaryIcon} 
@@ -198,118 +216,176 @@ const Rosary = () => {
                 </div>
             </div>
             <hr />
-            
-            <h2 className='text-center fancy-font'>{selectedMystery ? selectedMystery : 'Select Mystery'}</h2>
-
-            <div className="mysteries-row" style={{ 
-                display: 'flex', 
-                justifyContent: 'space-around', // Adjust to 'space-around' for better spacing
-                flexWrap: 'nowrap', // Prevent wrapping
-            }}>
-                {mysteries.map((mystery, index) => (
+            <div className="row">
+                <div className="col-12">
+                    <h2 className='text-center fancy-font'>{selectedMystery ? selectedMystery : 'Select Mystery'}</h2>
+                </div>
+            </div>
+            <div className="row">
+                <div className="col-12">
                     <div 
-                        key={index}
-                        onClick={() => handleMysteryClick(mystery.name)}
+                        className="mysteries-row" 
                         style={{ 
-                            cursor: 'pointer',
-                            border: selectedMystery === mystery.name ? '2px solid blue' : 'none',
-                            textAlign: 'center',
-                            margin: '5px',
-                            flex: '1 0 20%', // Adjust the flex grow, shrink, and basis
-                            borderRadius: '15%'
+                            display: 'flex', 
+                            justifyContent: 'space-around', // Adjust to 'space-around' for better spacing
+                            flexWrap: 'nowrap', // Prevent wrapping
                         }}
                     >
-                        <img 
-                            src={mystery.image} 
-                            alt={mystery.name} 
-                            style={{ height: '50px', width: '50px', borderRadius: '15%' }}
-                        />
-                        <p className="fancy-font">{mystery.name}</p>
+                        {mysteries.map((mystery, index) => (
+                            <div 
+                                key={index}
+                                onClick={() => handleMysteryClick(mystery.name)}
+                                style={{ 
+                                    cursor: 'pointer',
+                                    // border: selectedMystery === mystery.name ? '2px solid lightgrey' : 'none',
+                                    textAlign: 'center',
+                                    margin: '5px',
+                                    flex: '1 0 20%', // Adjust the flex grow, shrink, and basis
+                                    borderRadius: '15%'
+                                }}
+                            >
+                                <img 
+                                    src={mystery.image} 
+                                    alt={mystery.name} 
+                                    style={{ height: '50px', width: '50px', borderRadius: '15%' }}
+                                />
+                                <p className="fancy-font">{mystery.name}</p>
+                            </div>
+                        ))}
                     </div>
-                ))}
+                </div>
+            </div>
+            
+            <div className="row">
+                <div className="col-12">
+                    <div className="mystery-details-container">
+                        <ol className="mystery-details">
+                            {selectedMysteryDetails.map((detail, index) => (
+                                <li key={index}>{detail}</li>
+                            ))}
+                        </ol>
+                    </div>
+                </div>
             </div>
             <hr />
-            <h2>Prayer Intentions</h2>
-            {prayerIntentions.length > 0 ? (
-                <ul style={{ listStyle: 'none' }}>
-                    {prayerIntentions.map(intention => (
-                        <li key={intention._id}>
-                            {editingIntentionId === intention._id ? (
-                                <form onSubmit={handleUpdateIntention}>
-                                    <textarea
-                                        rows={5}
-                                        className="form-control"
-                                        value={editContent}
-                                        onChange={(e) => setEditContent(e.target.value)}
-                                    />
-                                    <button type="submit" className="btn btn-primary btn-sm">Save</button>
-                                    <button 
-                                        className="btn btn-secondary btn-sm" 
-                                        onClick={() => setEditingIntentionId(null)}
-                                    >
-                                        Cancel
-                                    </button>
-                                    <button 
-                                        className='btn btn-danger btn-sm'
-                                        onClick={() => handleDeleteIntention(intention._id)}
-                                    >
-                                        Delete
-                                    </button>
-                                </form>
-                            ) : (
-                                <div className="container">
-                                    <div className="row">
-                                        <div className="col-2">
-                                            <input 
-                                                type="checkbox" 
-                                                checked={selectedIntentions.includes(intention._id)}
-                                                onChange={() => handleIntentionCheckboxChange(intention._id)}
-                                            />
-                                        </div>
-                                        <div className="col-9">
-                                            <p style={{ fontSize: '12px', textAlign: 'left', wordBreak: 'break-word' }}>
-                                                {intention.content}
-                                            </p>
-                                        </div>
-                                        <div className="col-1">
-                                            <span 
-                                                className='btn btn-light btn-sm'
-                                                onClick={() => handleEditClick(intention._id, intention.content)}
-                                            >
-                                                <MdOutlineModeEdit />
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                            )}
-                        </li>
-                    ))}
-                </ul>
-            ) : <p>No intentions added yet.</p>}
-
-
-            {isAddingIntention ? (
-                <form onSubmit={handleNewIntentionSubmit}>
-                    <textarea 
-                        className='form-control m-1'
-                        value={newIntention}
-                        onChange={(e) => setNewIntention(e.target.value)} 
-                    />
-                    <button type="submit" className='btn btn-outline-secondary btn-sm'>Add</button>
-                </form>
-            ) : (
-                <button className="btn btn-outline-secondary btn-sm" onClick={addPrayerIntention}>
-                    Add intention
-                </button>
-            )}
+            <div className="row">
+                <div className="col-12">
+                    <h2>Prayer Intentions</h2>
+                </div>
+            </div>
+            <div className="row">
+                <div className="col-12">
+                    {
+                        prayerIntentions.length > 0 ? (
+                            <ul style={{ listStyle: 'none' }}>
+                                {
+                                    prayerIntentions.map(intention => (
+                                        <li key={intention._id}>
+                                            {
+                                                editingIntentionId === intention._id ? (
+                                                    <form onSubmit={handleUpdateIntention}>
+                                                        <textarea
+                                                            rows={5}
+                                                            className="form-control"
+                                                            value={editContent}
+                                                            onChange={(e) => setEditContent(e.target.value)}
+                                                        />
+                                                        <div className="row my-2">
+                                                            <div className="col-12">
+                                                                <button type="submit" className="btn btn-primary btn-sm m-1">Save</button>
+                                                                <button 
+                                                                    className="btn btn-secondary btn-sm m-1" 
+                                                                    onClick={() => setEditingIntentionId(null)}
+                                                                >
+                                                                    Cancel
+                                                                </button>
+                                                                <button 
+                                                                    className='btn btn-danger btn-sm m-1'
+                                                                    onClick={() => handleDeleteIntention(intention._id)}
+                                                                >
+                                                                    Delete
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                    ) : (
+                                                        <div className="container">
+                                                            <div className="row">
+                                                                <div className="col-1">
+                                                                    <input 
+                                                                        type="checkbox" 
+                                                                        checked={selectedIntentions.includes(intention._id)}
+                                                                        onChange={() => handleIntentionCheckboxChange(intention._id)}
+                                                                    />
+                                                                </div>
+                                                                <div className="col-9">
+                                                                    <p style={{ fontSize: '12px', textAlign: 'left', wordBreak: 'break-word' }}>
+                                                                        {intention.content}
+                                                                    </p>
+                                                                </div>
+                                                                <div className="col-1">
+                                                                    <span 
+                                                                        // className='btn btn-light btn-sm'
+                                                                        onClick={() => handleEditClick(intention._id, intention.content)}
+                                                                        style={{ fontSize: '9px'}}
+                                                                    >
+                                                                        <MdOutlineModeEdit />
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    )
+                                            }
+                                        </li>
+                                    ))
+                                }
+                            </ul>
+                        ) 
+                        : 
+                        <p>
+                            No intentions added yet.
+                        </p>
+                    }
+                </div>
+            </div>
+            <div className="row">
+                <div className="col-12">
+                    {
+                        isAddingIntention ? (
+                            <form onSubmit={handleNewIntentionSubmit}>
+                                <textarea 
+                                    className='form-control m-1'
+                                    value={newIntention}
+                                    onChange={(e) => setNewIntention(e.target.value)} 
+                                />
+                                <button type="submit" className='btn btn-outline-secondary btn-sm'>Add</button>
+                            </form>
+                            ) 
+                            : 
+                            (
+                                <button className="btn btn-outline-secondary btn-sm" onClick={addPrayerIntention}>
+                                    Add intention
+                                </button>
+                            )
+                    }
+                </div>
+            </div>
             <hr />
-            <button 
-                onClick={handlePrayRosary} 
-                className="pray-rosary-btn btn btn-primary btn-block"
-            >
-                Submit
-            </button>
-            <p>You have prayed {count} rosaries.</p>
+            <div className="row">
+                <div className="col-12">
+                    <button 
+                        onClick={handlePrayRosary} 
+                        className="pray-rosary-btn btn btn-primary btn-block"
+                    >
+                        Submit
+                    </button>
+                </div>
+            </div>
+            <div className="row">
+                <div className="col-12">
+                    <p>You have prayed {count} rosaries.</p>
+                </div>
+            </div>
         </div>
     );
 };

@@ -3,3 +3,29 @@
     font-family: 'Rouge Script', cursive; /* Replace 'Georgia' with your preferred web safe font */
 }
 
+.rosary-header {
+    max-height: 100px; 
+    overflow: hidden;
+}
+
+/* .rosary-content {
+    max-height: calc(96vh - 100px); 
+    overflow-y: auto;
+}  */
+
+.mystery-details-container {
+    display: flex;
+    justify-content: center; /* Center the container */
+}
+
+.mystery-details {
+    text-align: left; /* Keep the text left-aligned */
+    font-size: 16px; /* Base font size for larger screens */
+}
+
+/* Media query for mobile devices */
+@media (max-width: 768px) {
+    .mystery-details li {
+        font-size: 10px; /* Smaller font size for mobile screens */
+    }
+}
