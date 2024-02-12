@@ -56,6 +56,21 @@ const UserDashboard = () => {
         setIcons(newIcons);
     };
 
+    const handleTouchStart = (e, iconId) => {
+        const touchLocation = e.targetTouches[0];
+        // You may want to set the initial touch location state here
+    };
+    
+    const handleTouchMove = (e, iconId) => {
+        e.preventDefault(); // Prevent scrolling when touching and moving
+        const touchLocation = e.targetTouches[0];
+        // Update the position of the icon based on the touch location
+        // You may need to translate touch positions to your icon's positioning logic
+    };
+
+    const handleTouchEnd = (e, iconId) => {
+        // Handle the drop logic when the touch ends
+    };
 
     return (
         <>
@@ -75,6 +90,9 @@ const UserDashboard = () => {
                             onDrop={(e) => onDrop(e, icon.id)}
                             onDragOver={(e) => e.preventDefault()}
                             onClick={() => toggleModal(icon.id)}
+                            onTouchStart={(e) => handleTouchStart(e, icon.id)}
+                            onTouchMove={(e) => handleTouchMove(e, icon.id)}
+                            onTouchEnd={(e) => handleTouchEnd(e, icon.id)}
                         >
                             <img 
                                 src={icon.icon} 
