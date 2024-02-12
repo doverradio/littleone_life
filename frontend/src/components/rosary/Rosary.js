@@ -267,7 +267,7 @@ const Rosary = () => {
                                             />
                                         </div>
                                         <div className="col-9">
-                                            <p style={{ fontSize: '12px' }}>
+                                            <p style={{ fontSize: '12px', textAlign: 'left', wordBreak: 'break-word' }}>
                                                 {intention.content}
                                             </p>
                                         </div>
