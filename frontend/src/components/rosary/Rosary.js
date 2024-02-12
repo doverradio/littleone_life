@@ -25,6 +25,8 @@ const Rosary = () => {
 
     // New state to keep track of selected mystery details
     const [selectedMysteryDetails, setSelectedMysteryDetails] = useState([]);
+    const [selectedMysteryIcon, setSelectedMysteryIcon] = useState(null);
+
 
     // Define the mysteries details
     const mysteriesDetails = {
@@ -173,7 +175,9 @@ const Rosary = () => {
     
     const handleMysteryClick = (mysteryName) => {
         setSelectedMystery(mysteryName);
-        setSelectedMysteryDetails(mysteriesDetails[mysteryName]); // Update the details based on selected mystery
+        setSelectedMysteryDetails(mysteriesDetails[mysteryName]);
+        const selectedMystery = mysteries.find(mystery => mystery.name === mysteryName);
+        setSelectedMysteryIcon(selectedMystery ? selectedMystery.image : null);
     };
 
     
@@ -210,7 +214,7 @@ const Rosary = () => {
                     />
                 </div>
                 <div className="col-9">
-                    <h1 className="m-1">
+                    <h1 className="m-1 header-font">
                         Rosary
                     </h1>
                 </div>
@@ -218,7 +222,7 @@ const Rosary = () => {
             <hr />
             <div className="row">
                 <div className="col-12">
-                    <h2 className='text-center fancy-font'>{selectedMystery ? selectedMystery : 'Select Mystery'}</h2>
+                    <h2 className='text-center header-font'>{selectedMystery ? selectedMystery : 'Select Mystery'}</h2>
                 </div>
             </div>
             <div className="row">
@@ -256,21 +260,28 @@ const Rosary = () => {
                 </div>
             </div>
             
-            <div className="row">
-                <div className="col-12">
-                    <div className="mystery-details-container">
-                        <ol className="mystery-details">
-                            {selectedMysteryDetails.map((detail, index) => (
-                                <li key={index}>{detail}</li>
-                            ))}
-                        </ol>
-                    </div>
+            <div className="row justify-content-center">
+                <div className="col-12 col-lg-4">
+                    <ol className="mystery-details">
+                        {selectedMysteryDetails.map((detail, index) => (
+                            <li key={index}>{detail}</li>
+                        ))}
+                    </ol>
+                </div>
+                <div className="col-12 col-lg-4">
+                    {selectedMysteryIcon && (
+                        <img 
+                            src={selectedMysteryIcon} 
+                            alt={selectedMystery} 
+                            style={{ width: '250px', height: '250px' }} 
+                        />
+                    )}
                 </div>
             </div>
             <hr />
             <div className="row">
                 <div className="col-12">
-                    <h2>Prayer Intentions</h2>
+                    <h2 className='header-font'>Prayer Intentions</h2>
                 </div>
             </div>
             <div className="row">
@@ -381,7 +392,7 @@ const Rosary = () => {
                     </button>
                 </div>
             </div>
-            <div className="row">
+            <div className="row mb-4">
                 <div className="col-12">
                     <p>You have prayed {count} rosaries.</p>
                 </div>
