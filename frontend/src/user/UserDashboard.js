@@ -22,6 +22,7 @@ const UserDashboard = () => {
         mass: false,
         confession: false,
     });
+    
 
     const [icons, setIcons] = useState([
         { id: 'rosary', icon: rosaryIcon, modal: setIsRosaryModalOpen, component: <Rosary /> },

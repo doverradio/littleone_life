@@ -10,9 +10,10 @@ import gloriousImage from './glorious.jpg';
 import joyfulImage from './joyful.jpg';
 import rosaryImage from './rosary_howto.jpg';
 import './styles.css'
+import ButtonLoader from '../../loaders/ButtonLoader';
 
 // Define the Rosary component
-const Rosary = () => {
+const Rosary = ({ onHide }) => {
     // State to keep track of the number of rosaries prayed
     const [count, setCount] = useState(0);
     const [selectedMystery, setSelectedMystery] = useState('Luminous');
@@ -28,6 +29,7 @@ const Rosary = () => {
     const [selectedMysteryDetails, setSelectedMysteryDetails] = useState([]);
     const [selectedMysteryIcon, setSelectedMysteryIcon] = useState(null);
     const [activeTab, setActiveTab] = useState('Questions');
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
 
 
@@ -64,14 +66,15 @@ const Rosary = () => {
     };
 
     const {
-        user: { _id }
+        user: { _id },
+        token
     } = isAuthenticated();
 
     const userId = _id;
     
     const fetchIntentions = async () => {
         try {
-            const response = await getAllIntentions(userId, "Rosary");
+            const response = await getAllIntentions(userId, "Rosary", token);
             if (response) {
                 setPrayerIntentions(response);
             } else {
@@ -86,7 +89,7 @@ const Rosary = () => {
 
     
     const fetchRosaryCount = async () => {
-        const response = await getRosaryCountByUser(userId);
+        const response = await getRosaryCountByUser(userId, token);
         if (response) {
             setCount(response.rosaryCount);
         }
@@ -126,6 +129,7 @@ const Rosary = () => {
     };
 
     const handlePrayRosary = async () => {
+        setIsSubmitting(true); // Set submitting to true
         const rosaryData = {
             userId,
             mystery: selectedMystery,
@@ -134,14 +138,22 @@ const Rosary = () => {
         };
     
         try {
-            const response = await createRosary(rosaryData.userId, rosaryData.mystery, rosaryData.intentions, rosaryData.recording);
-            console.log('Rosary created successfully:', response);
-            // Handle successful submission (e.g., show a success message, reset the form)
+            await createRosary(rosaryData.userId, rosaryData.mystery, rosaryData.intentions, rosaryData.recording, token);
+            // console.log('Rosary created successfully:', response);
+            onHide(); // Close modal after successful submission
+            
+            
+            // Reset the form here
+            setSelectedIntentions([]); // Clear the selected intentions
+            setSelectedMystery('Luminous'); // Reset to default mystery or leave as is based on your UI logic
+            // Reset any other states used in the form if needed
+
         } catch (error) {
             console.error('Error creating rosary:', error);
             // Handle errors (e.g., show an error message)
         }
     
+        setIsSubmitting(false); // Set submitting to false after response is received
         setCount(prevCount => prevCount + 1);
     };
     
@@ -163,7 +175,7 @@ const Rosary = () => {
         e.preventDefault();
         if (!newIntention) return;
         try {
-            await createIntention({ user: userId, content: newIntention, type: 'Rosary' });
+            await createIntention({ user: userId, content: newIntention, type: 'Rosary' }, token);
             fetchIntentions(); // Re-fetch the intentions
             setNewIntention('');
             setIsAddingIntention(false);
@@ -192,7 +204,7 @@ const Rosary = () => {
     const handleUpdateIntention = async (e) => {
         e.preventDefault();
         try {
-            await updateIntention(editingIntentionId, { content: editContent });
+            await updateIntention(editingIntentionId, { content: editContent }, token);
             fetchIntentions(); // Re-fetch intentions to update the list
             setEditingIntentionId(null); // Reset the editing state
         } catch (error) {
@@ -406,7 +418,11 @@ const Rosary = () => {
                                     onClick={handlePrayRosary} 
                                     className="pray-rosary-btn btn btn-primary btn-block"
                                 >
-                                    Submit
+                                    {
+                                        isSubmitting ?
+                                        <ButtonLoader />
+                                        : `Submit`
+                                    }
                                 </button>
                             </div>
                         </div>

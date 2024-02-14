@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const { requireSignin, authMiddleware, adminMiddleware, isAuth, isAdmin } = require('../controllers/auth');
 const {
     createChurch,
     getAllChurches,
@@ -8,10 +9,10 @@ const {
     deleteChurch
 } = require('../controllers/church');
 
-router.post('/church/create', createChurch);
-router.post('/churches', getAllChurches);
-router.post('/church/get', getChurchById);
-router.put('/church/update', updateChurch);
-router.delete('/church/delete', deleteChurch);
+router.post('/church/create', requireSignin, authMiddleware, isAuth, createChurch);
+router.post('/churches', requireSignin, authMiddleware, isAuth, getAllChurches);
+router.post('/church/get', requireSignin, authMiddleware, isAuth, getChurchById);
+router.put('/church/update', requireSignin, authMiddleware, isAuth, updateChurch);
+router.delete('/church/delete', requireSignin, authMiddleware, isAuth, deleteChurch);
 
 module.exports = router;

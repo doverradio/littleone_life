@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const { requireSignin, authMiddleware, adminMiddleware, isAuth, isAdmin } = require('../controllers/auth');
 const {
     createIntention,
     getAllIntentions,
@@ -12,10 +13,10 @@ const {
 // const { isAuthenticated } = require('../middlewares/auth');
 
 // Routes
-router.post('/intention', createIntention); // Create a new intention
-router.post('/intentions', getAllIntentions); // Get all intentions for a user
-router.post('/intention/:id', getIntentionById); // Get a single intention by ID
-router.put('/intention/:id', updateIntention); // Update an intention
-router.delete('/intention/:id', deleteIntention); // Delete an intention
+router.post('/intention', requireSignin, authMiddleware, isAuth, createIntention); // Create a new intention
+router.post('/intentions', requireSignin, authMiddleware, isAuth, getAllIntentions); // Get all intentions for a user
+router.post('/intention/:id', requireSignin, authMiddleware, isAuth, getIntentionById); // Get a single intention by ID
+router.put('/intention/:id', requireSignin, authMiddleware, isAuth, updateIntention); // Update an intention
+router.delete('/intention/:id', requireSignin, authMiddleware, isAuth, deleteIntention); // Delete an intention
 
 module.exports = router;

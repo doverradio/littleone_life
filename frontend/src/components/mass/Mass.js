@@ -37,14 +37,15 @@ const Mass = () => {
     const [selectedMassTime, setSelectedMassTime] = useState('');
 
     const {
-        user: { _id }
+        user: { _id },
+        token
     } = isAuthenticated();
 
     const userId = _id;
 
     const fetchUserChurches = async () => {
         try {
-            const response = await getAllChurches(userId);
+            const response = await getAllChurches(userId, token);
             if (response) {
                 setUserChurches(response);
             } else {
@@ -57,7 +58,7 @@ const Mass = () => {
 
     const fetchIntentions = async () => {
         try {
-            const response = await getAllIntentions(userId, "Mass");
+            const response = await getAllIntentions(userId, "Mass", token);
             if (response) {
                 setPrayerIntentions(response);
             } else {
@@ -111,7 +112,7 @@ const Mass = () => {
     const submitNewChurch = async (e) => {
         e.preventDefault();
         try {
-            const response = await createChurch({ ...newChurch, users: [userId] });
+            const response = await createChurch({ ...newChurch, users: [userId] }, token);
             if (response) {
                 setUserChurches([...userChurches, response]);
                 setShowChurchForm(false);
@@ -180,7 +181,7 @@ const Mass = () => {
         e.preventDefault();
         if (!newIntention) return;
         try {
-            await createIntention({ user: userId, content: newIntention, type: 'Mass' });
+            await createIntention({ user: userId, content: newIntention, type: 'Mass' }, token);
             fetchIntentions(); // Re-fetch the intentions
             setNewIntention('');
             setIsAddingIntention(false);
@@ -210,7 +211,7 @@ const Mass = () => {
     const handleUpdateIntention = async (e) => {
         e.preventDefault();
         try {
-            await updateIntention(editingIntentionId, { content: editContent });
+            await updateIntention(editingIntentionId, { content: editContent }, token);
             fetchIntentions(); // Re-fetch intentions to update the list
             setEditingIntentionId(null); // Reset the editing state
         } catch (error) {

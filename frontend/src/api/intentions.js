@@ -1,13 +1,13 @@
 const API = process.env.REACT_APP_API ? process.env.REACT_APP_API : 'https://www.littleone.life/api';
 
 // Function to create a new intention
-export const createIntention = async (intention) => {
+export const createIntention = async (intention, token) => {
     try {
         const response = await fetch(`${API}/intention`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                // Add authorization headers if needed
+                'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify(intention),
         });
@@ -19,13 +19,13 @@ export const createIntention = async (intention) => {
 };
 
 // Function to get all intentions for a user
-export const getAllIntentions = async (userId, type) => {
+export const getAllIntentions = async (userId, type, token) => {
     try {
         const response = await fetch(`${API}/intentions`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                // Add authorization headers if needed
+                'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify({ userId, type }),
         });
@@ -37,13 +37,13 @@ export const getAllIntentions = async (userId, type) => {
 };
 
 // Function to get a single intention by ID
-export const getIntentionById = async (intentionId) => {
+export const getIntentionById = async (intentionId, token) => {
     try {
         const response = await fetch(`${API}/intention/${intentionId}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                // Add authorization headers if needed
+                'Authorization': `Bearer ${token}`
             },
         });
         return await response.json();
@@ -54,13 +54,13 @@ export const getIntentionById = async (intentionId) => {
 };
 
 // Function to update an intention
-export const updateIntention = async (intentionId, intentionData) => {
+export const updateIntention = async (intentionId, intentionData, token) => {
     try {
         const response = await fetch(`${API}/intention/${intentionId}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
-                // Add authorization headers if needed
+                'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify(intentionData),
         });
@@ -72,13 +72,13 @@ export const updateIntention = async (intentionId, intentionData) => {
 };
 
 // Function to delete an intention
-export const deleteIntention = async (intentionId) => {
+export const deleteIntention = async (intentionId, token) => {
     try {
         const response = await fetch(`${API}/intention/${intentionId}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
-                // Add authorization headers if needed
+                'Authorization': `Bearer ${token}`
             },
         });
         return await response.json();
