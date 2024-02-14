@@ -13,6 +13,7 @@ import './styles.css'
 import ButtonLoader from '../../loaders/ButtonLoader';
 import { useModal } from '../../context/ModalContext';
 import PieChartMysteries from './PieChartMysteries';
+import ToggleSlider from '../utils/ToggleSlider';
 
 // Define the Rosary component
 const Rosary = () => {
@@ -35,6 +36,7 @@ const Rosary = () => {
     const [selectedMysteryIcon, setSelectedMysteryIcon] = useState(null);
     const [activeTab, setActiveTab] = useState('Questions');
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isEmailEnabled, setIsEmailEnabled] = useState(false);
 
     const DEFAULT_FONT_SIZE = 11; // Default font size in px
     const MAX_FONT_SIZE = 33; // Max font size in px
@@ -109,6 +111,11 @@ const Rosary = () => {
         setFontSize(currentSize => Math.max(currentSize - 1, MIN_FONT_SIZE));
     };
 
+    // You can remove the handleEmailToggle function or leave it for future implementation
+    const handleEmailToggle = () => {
+        // Future email functionality logic
+    };
+
     const fetchMysteryCounts = async () => {
         try {
             const response = await getMysteryCount(userId, token);
@@ -126,7 +133,6 @@ const Rosary = () => {
         }
     };
     
-
     const fetchIntentions = async () => {
         try {
             const response = await getAllIntentions(userId, "Rosary", token);
@@ -200,14 +206,14 @@ const Rosary = () => {
         try {
             await createRosary(rosaryData.userId, rosaryData.mystery, rosaryData.intentions, rosaryData.recording, token);
             // console.log('Rosary created successfully:', response);
-            toggleModal('rosary'); // Close modal after successful submission
             
             
             // Reset the form here
             setSelectedIntentions([]); // Clear the selected intentions
             setSelectedMystery('Luminous'); // Reset to default mystery or leave as is based on your UI logic
             // Reset any other states used in the form if needed
-
+            
+            toggleModal('rosary'); // Close modal after successful submission
         } catch (error) {
             console.error('Error creating rosary:', error);
             // Handle errors (e.g., show an error message)
@@ -503,7 +509,7 @@ const Rosary = () => {
                                 </button>
                             </div>
 
-                            <div className="row">
+                            <div className="row mb-5">
                                 <div className="col-12">
                                     <h2 style={{ fontSize: '25px' }} className="text-center m-1">
                                         How to Pray the Rosary
@@ -518,7 +524,7 @@ const Rosary = () => {
                                             alt="rosary image" 
                                         />
                                     </div>
-                                    <div style={{ textAlign: 'left', fontSize: `${fontSize}px` }}>
+                                    <div className='' style={{ textAlign: 'left', fontSize: `${fontSize}px` }}>
                                         <p>
                                             1a. <strong>Begin with the Sign of the Cross:</strong><br />
                                             <span style={{ color: 'blue' }}>    
@@ -626,7 +632,7 @@ const Rosary = () => {
 
 
                                         </p>
-                                        <h3 className='text-center' style={{ fontSize: '25px' }}>Conclude the Rosary with the Sign of the Cross.</h3>
+                                        <h3 className='text-center mb-5' style={{ fontSize: '25px' }}>Conclude the Rosary with the Sign of the Cross.</h3>
                                     </div>
                                 </div>
                             </div>
@@ -653,6 +659,14 @@ const Rosary = () => {
                 {activeTab === 'Settings' && (
                     <div>
                         {/* Content for Settings */}
+                        <div className="email-toggle">
+                            <ToggleSlider 
+                            isEnabled={isEmailEnabled} 
+                            toggleFunction={handleEmailToggle} 
+                            componentName="Rosary"
+                            isDisabled={true} // Disable the toggle
+                            />
+                        </div>
                     </div>
                 )}
             </div>

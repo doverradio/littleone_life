@@ -1,11 +1,11 @@
 const MassAttendance = require('../models/massAttendance'); // Adjust the path as necessary
-// Include other models if needed, e.g., User or Church
+const log = console.log;
 
 exports.createMassAttendance = async (req, res) => {
     try {
         const massAttendance = new MassAttendance(req.body);
         await massAttendance.save();
-        res.status(201).json(massAttendance);
+        res.status(201).json({result: `success!`});
     } catch (error) {
         res.status(400).json({ error: "Unable to record mass attendance" });
     }

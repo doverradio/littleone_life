@@ -4,7 +4,6 @@ const log = console.log;
 
 // Create a new Rosary
 exports.createRosary = async (req, res) => {
-    log(`Begin createRosary!  req.body: `, req.body)
     let { userId, mystery, intentions } = req.body;
 
     let rosaryObj = {
@@ -16,7 +15,7 @@ exports.createRosary = async (req, res) => {
 
     try {
         await rosary.save();
-        res.status(201).json(rosary);
+        res.status(201).json({result: `success!`});
     } catch (error) {
         res.status(400).json({ error: error.message });
     }

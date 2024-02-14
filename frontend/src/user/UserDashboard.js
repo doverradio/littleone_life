@@ -79,7 +79,7 @@ const UserDashboard = () => {
         // You may want to set the initial touch location state here
     };
     
-    const handleTouchMove = (e, iconId) => {
+    const handleTouchMove = (e, iconId, options) => {
         e.preventDefault(); // Prevent scrolling when touching and moving
         const touchLocation = e.targetTouches[0];
         // Update the position of the icon based on the touch location
@@ -89,6 +89,9 @@ const UserDashboard = () => {
     const handleTouchEnd = (e, iconId) => {
         // Handle the drop logic when the touch ends
     };
+
+    const eventOptions = { passive: false };
+
 
     return (
         <>
@@ -109,7 +112,7 @@ const UserDashboard = () => {
                             onDragOver={(e) => e.preventDefault()}
                             onClick={() => toggleModal(icon.id)}
                             onTouchStart={(e) => handleTouchStart(e, icon.id)}
-                            onTouchMove={(e) => handleTouchMove(e, icon.id)}
+                            onTouchMove={(e) => handleTouchMove(e, icon.id, eventOptions)}
                             onTouchEnd={(e) => handleTouchEnd(e, icon.id)}
                         >
                             <img 

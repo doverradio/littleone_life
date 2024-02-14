@@ -49,6 +49,12 @@ else {
   app.use(cors({ origin: `${process.env.CLIENT_URL}` }));
 }
 
+// // Add this middleware for debugging
+// app.use((req, res, next) => {
+//   console.log('Received token:', req.headers.authorization);
+//   next();
+// });
+
 app.use('/api', authRoutes);
 app.use('/api', churchRoutes);
 app.use('/api', intentionRoutes);
