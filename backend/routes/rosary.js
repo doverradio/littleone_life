@@ -10,7 +10,8 @@ const {
     updateRosary,
     deleteRosary,
     getRosaryHistory,
-    getUserRosaryCount
+    getUserRosaryCount,
+    getMysteryCount
 } = require('../controllers/rosary');
 
 router.post('/rosary/create', requireSignin, authMiddleware, isAuth, createRosary);
@@ -20,5 +21,8 @@ router.post('/rosaries', requireSignin, authMiddleware, isAuth, getAllRosaries);
 router.post('/rosary/update', requireSignin, authMiddleware, isAuth, updateRosary);
 router.post('/rosary/delete', requireSignin, authMiddleware, isAuth, deleteRosary);
 router.post('/rosary/history', requireSignin, authMiddleware, isAuth, getRosaryHistory);
+
+// For Charts
+router.post('/rosary/mystery-count', requireSignin, authMiddleware, isAuth, getMysteryCount)
 
 module.exports = router;

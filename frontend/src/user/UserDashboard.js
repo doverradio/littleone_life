@@ -11,34 +11,51 @@ import confessionIcon from '../components/confession/confession_icon.png'; // Pa
 import DivineMercy from "../components/divinemercy/DivineMercy";
 import divineMercyIcon from '../components/divinemercy/divinemercy_icon.png'; // Path to your Divine Mercy icon
 import './styles.css'
+import { useModal } from "../context/ModalContext";
 
 const UserDashboard = () => {
-    const [isRosaryModalOpen, setIsRosaryModalOpen] = useState(false);
-    const [isMassModalOpen, setIsMassModalOpen] = useState(false);
-    const [isConfessionModalOpen, setIsConfessionModalOpen] = useState(false);
     
-    const [modalState, setModalState] = useState({
-        rosary: false,
-        mass: false,
-        confession: false,
-    });
+    const { modalState, toggleModal } = useModal(); // Import from context
+
+    // const [isRosaryModalOpen, setIsRosaryModalOpen] = useState(false);
+    // const [isMassModalOpen, setIsMassModalOpen] = useState(false);
+    // const [isConfessionModalOpen, setIsConfessionModalOpen] = useState(false);
+    
+    // const [modalState, setModalState] = useState({
+    //     rosary: false,
+    //     mass: false,
+    //     confession: false,
+    // });
     
 
+    // const [icons, setIcons] = useState([
+    //     { id: 'rosary', icon: rosaryIcon, modal: setIsRosaryModalOpen, component: <Rosary /> },
+    //     { id: 'mass', icon: massIcon, modal: setIsMassModalOpen, component: <Mass /> },
+    //     { id: 'confession', icon: confessionIcon, modalOpen: isConfessionModalOpen, component: <Confession />, toggleModal: setIsConfessionModalOpen },
+    //     { id: 'divine Mercy Chaplet', icon: divineMercyIcon, modalOpen: false, component: <DivineMercy /> } 
+    // ]);
+
+    
     const [icons, setIcons] = useState([
-        { id: 'rosary', icon: rosaryIcon, modal: setIsRosaryModalOpen, component: <Rosary /> },
-        { id: 'mass', icon: massIcon, modal: setIsMassModalOpen, component: <Mass /> },
-        { id: 'confession', icon: confessionIcon, modalOpen: isConfessionModalOpen, component: <Confession />, toggleModal: setIsConfessionModalOpen },
-        { id: 'divine Mercy Chaplet', icon: divineMercyIcon, modalOpen: false, component: <DivineMercy /> } 
+        { id: 'rosary', icon: rosaryIcon, component: <Rosary /> },
+        { id: 'mass', icon: massIcon, component: <Mass /> },
+        { id: 'confession', icon: confessionIcon, component: <Confession /> },
+        { id: 'divine Mercy Chaplet', icon: divineMercyIcon, component: <DivineMercy /> } 
     ]);
+    
+    // const toggleModal = (id) => {
+    //     setIcons(icons.map(icon => {
+    //         if (icon.id === id) {
+    //             return { ...icon, modalOpen: !icon.modalOpen };
+    //         }
+    //         return icon;
+    //     }));
+    // };
 
     
-    const toggleModal = (id) => {
-        setIcons(icons.map(icon => {
-            if (icon.id === id) {
-                return { ...icon, modalOpen: !icon.modalOpen };
-            }
-            return icon;
-        }));
+    // Function to handle icon click and toggle modal
+    const handleIconClick = (id) => {
+        toggleModal(id);
     };
 
     const onDragStart = (e, id) => {
@@ -105,8 +122,8 @@ const UserDashboard = () => {
                                 {icon.id.charAt(0).toUpperCase() + icon.id.slice(1, 10)} {/* Only show the first 10 characters */}
                                 {icon.id.length > 10 ? "..." : ""} {/* Add ellipsis if the text is longer than 10 characters */}
                             </div>
-                            {icon.modalOpen && (
-                                <Modal show={icon.modalOpen} onHide={() => toggleModal(icon.id)}>
+                            {modalState[icon.id] && (
+                                <Modal id={icon.id}>
                                     {icon.component}
                                 </Modal>
                             )}

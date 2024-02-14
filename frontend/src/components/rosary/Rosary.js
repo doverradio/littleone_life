@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { getAllIntentions, createIntention, updateIntention, deleteIntention } from '../../api/intentions';
-import { createRosary, getRosaryCountByUser } from '../../api/rosary';
+import { createRosary, getRosaryCountByUser, getMysteryCount } from '../../api/rosary';
 import { isAuthenticated } from '../../api/auth';
 import { MdOutlineModeEdit } from "react-icons/md";
 import rosaryIcon from './rosary_icon.png'; // Adjust the path to where your icon is stored
@@ -11,9 +11,14 @@ import joyfulImage from './joyful.jpg';
 import rosaryImage from './rosary_howto.jpg';
 import './styles.css'
 import ButtonLoader from '../../loaders/ButtonLoader';
+import { useModal } from '../../context/ModalContext';
+import PieChartMysteries from './PieChartMysteries';
 
 // Define the Rosary component
-const Rosary = ({ onHide }) => {
+const Rosary = () => {
+
+    const { toggleModal } = useModal();
+
     // State to keep track of the number of rosaries prayed
     const [count, setCount] = useState(0);
     const [selectedMystery, setSelectedMystery] = useState('Luminous');
@@ -31,16 +36,40 @@ const Rosary = ({ onHide }) => {
     const [activeTab, setActiveTab] = useState('Questions');
     const [isSubmitting, setIsSubmitting] = useState(false);
 
+    const DEFAULT_FONT_SIZE = 11; // Default font size in px
+    const MAX_FONT_SIZE = 33; // Max font size in px
+    const MIN_FONT_SIZE = 11; // Min font size in px
+    const [fontSize, setFontSize] = useState(DEFAULT_FONT_SIZE);
 
-
+    const [mysteryCounts, setMysteryCounts] = useState(null); // hold mystery counts for pie chart
+    const [chartData, setChartData] = useState({
+        labels: [],
+        datasets: [{
+          data: [],
+          backgroundColor: [
+            // Define colors for each mystery
+            '#FF6384',
+            '#36A2EB',
+            '#FFCE56',
+            '#4BC0C0'
+          ],
+          hoverBackgroundColor: [
+            '#FF6384',
+            '#36A2EB',
+            '#FFCE56',
+            '#4BC0C0'
+          ]
+        }]
+      });
+      
     // Define the mysteries details
     const mysteriesDetails = {
         Luminous: [
-            "First Mystery of Light: Baptism in the Jordan",
-            "Second Mystery of Light: The Wedding Feast at Cana",
-            "Third Mystery of Light: Proclamation of the Kingdom of God",
-            "Fourth Mystery of Light: Transfiguration",
-            "Fifth Mystery of Light: Institution of the Eucharist"
+            "Jesus' Baptism in the Jordan",
+            "The Wedding Feast at Cana",
+            "The Proclamation of the Kingdom",
+            "The Transfiguration",
+            "The Institution of the Eucharist"
         ],
         Sorrowful: [
             "The Agony of Jesus in the Garden of Gethsemane",
@@ -72,6 +101,32 @@ const Rosary = ({ onHide }) => {
 
     const userId = _id;
     
+    const increaseFontSize = () => {
+        setFontSize(currentSize => Math.min(currentSize + 1, MAX_FONT_SIZE));
+    };
+
+    const decreaseFontSize = () => {
+        setFontSize(currentSize => Math.max(currentSize - 1, MIN_FONT_SIZE));
+    };
+
+    const fetchMysteryCounts = async () => {
+        try {
+            const response = await getMysteryCount(userId, token);
+            if(response) {
+                const labels = response.map(item => item._id);
+                const data = response.map(item => item.count);
+                setChartData(prevChartData => ({
+                    ...prevChartData,
+                    labels: labels,
+                    datasets: [{ ...prevChartData.datasets[0], data: data }]
+                }));
+            }
+        } catch (error) {
+            console.error('Error fetching mystery counts:', error);
+        }
+    };
+    
+
     const fetchIntentions = async () => {
         try {
             const response = await getAllIntentions(userId, "Rosary", token);
@@ -87,7 +142,6 @@ const Rosary = ({ onHide }) => {
         }
     };
 
-    
     const fetchRosaryCount = async () => {
         const response = await getRosaryCountByUser(userId, token);
         if (response) {
@@ -98,7 +152,16 @@ const Rosary = ({ onHide }) => {
     useEffect(() => {
         fetchIntentions();
         fetchRosaryCount();
-    }, [userId]);
+        
+        if (activeTab === 'Responses') {
+            fetchMysteryCounts();
+        }
+    }, [userId, token, activeTab]);
+
+    const formattedChartData = chartData.labels.map((label, index) => {
+        return { label: label, value: chartData.datasets[0].data[index] };
+      });
+      
 
     // Define the mysteries and their associated images
     const mysteries = [
@@ -108,7 +171,6 @@ const Rosary = ({ onHide }) => {
         { name: 'Joyful', image: joyfulImage }
     ];
 
-    
     const handleIntentionCheckboxChange = (intentionId) => {
         setSelectedIntentions(prevSelected => {
             // Check if the intentionId is already in the selectedIntentions array
@@ -122,8 +184,6 @@ const Rosary = ({ onHide }) => {
         });
     };
     
-
-
     const handleDeleteIntention = async (intentionId) => {
         // ... delete intention and update state
     };
@@ -140,7 +200,7 @@ const Rosary = ({ onHide }) => {
         try {
             await createRosary(rosaryData.userId, rosaryData.mystery, rosaryData.intentions, rosaryData.recording, token);
             // console.log('Rosary created successfully:', response);
-            onHide(); // Close modal after successful submission
+            toggleModal('rosary'); // Close modal after successful submission
             
             
             // Reset the form here
@@ -157,20 +217,10 @@ const Rosary = ({ onHide }) => {
         setCount(prevCount => prevCount + 1);
     };
     
-    
-    const handleMysteryChange = (event) => {
-        setSelectedMystery(event.target.value);
-    };
-
     const addPrayerIntention = () => {
         setIsAddingIntention(true); // Show the form for adding a new intention
     };
 
-    const handleNewIntentionChange = (e) => {
-        setNewIntention(e.target.value);
-    };
-
-    
     const handleNewIntentionSubmit = async (e) => {
         e.preventDefault();
         if (!newIntention) return;
@@ -184,10 +234,6 @@ const Rosary = ({ onHide }) => {
         }
     };
     
-    const handleMysteryDivClick = (mysteryName) => {
-        setSelectedMystery(mysteryName);
-    };
-    
     const handleMysteryClick = (mysteryName) => {
         setSelectedMystery(mysteryName);
         setSelectedMysteryDetails(mysteriesDetails[mysteryName]);
@@ -195,7 +241,6 @@ const Rosary = ({ onHide }) => {
         setSelectedMysteryIcon(selectedMystery ? selectedMystery.image : null);
     };
 
-    
     const handleEditClick = (intentionId, content) => {
         setEditingIntentionId(intentionId); // Set the currently editing intention's ID
         setEditContent(content); // Set the initial content for editing
@@ -437,12 +482,33 @@ const Rosary = ({ onHide }) => {
                     <>
                         {/* Content for Prayers */}
                         <div className="container">
+                                
+                            {/* Font Size Controls */}
+                            <div className="text-size-controls">
+                                {/* <div>
+                                    <p>Text Size</p>
+                                </div> */}
+                                Text Size
+                                <button 
+                                    onClick={decreaseFontSize}
+                                    className='btn btn-outline-secondary btn-sm m-1'
+                                >
+                                    -
+                                </button>
+                                <button 
+                                    onClick={increaseFontSize}
+                                    className='btn btn-outline-secondary btn-sm m-1'
+                                >
+                                    +
+                                </button>
+                            </div>
+
                             <div className="row">
                                 <div className="col-12">
                                     <h2 style={{ fontSize: '25px' }} className="text-center m-1">
                                         How to Pray the Rosary
                                     </h2>
-                                    <p style={{ fontSize: '11px' }}>
+                                    <p style={{ fontSize: `${fontSize}px` }}>
                                         Engaging in the Rosary involves a series of prayers that offer deep reflection on the 
                                         life events of Jesus and Mary. Here’s a simple guide to follow:
                                     </p>
@@ -452,7 +518,7 @@ const Rosary = ({ onHide }) => {
                                             alt="rosary image" 
                                         />
                                     </div>
-                                    <div style={{ textAlign: 'left', fontSize: '11px' }}>
+                                    <div style={{ textAlign: 'left', fontSize: `${fontSize}px` }}>
                                         <p>
                                             1a. <strong>Begin with the Sign of the Cross:</strong><br />
                                             <span style={{ color: 'blue' }}>    
@@ -566,20 +632,22 @@ const Rosary = ({ onHide }) => {
                             </div>
                         </div>
                     </>
-                    
-                    
                 )}
                 {activeTab === 'Responses' && (
                     <div>
-                        {/* Pie Chart Placeholder */}
-                        <div id="pie-chart-placeholder">Pie Chart Will Go Here</div>
+                        <div className="container mt-5">
+                            <div className="row my-3">
+                                <div className="col-12">
+                                    <p style={{ fontWeight: 'bold' }}>Total: {count} Rosaries</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <PieChartMysteries data={formattedChartData} />
+
+
+                        {/* Add your legend or additional components here */}
                         {/* Legend for Pie Chart */}
-                        <ul>
-                            <li>Luminous Mysteries</li>
-                            <li>Sorrowful Mysteries</li>
-                            <li>Glorious Mysteries</li>
-                            <li>Joyful Mysteries</li>
-                        </ul>
                     </div>
                 )}
                 {activeTab === 'Settings' && (

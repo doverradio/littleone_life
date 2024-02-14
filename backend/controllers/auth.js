@@ -164,20 +164,14 @@ exports.adminMiddleware = (req, res, next) => {
 };
 
 
-exports.isAuth = async ( req, res, next ) => 
-{
-    let a = {}
-    a.user = req.profile && req.auth && req.profile._id == req.auth._id;
-    try 
-    {
-        if ( !a.user ) { return res.status( 403 ).json( { error: "Access denied" } ) }
-        next();
-    } catch ( e ) {
-        console.log( `Got an error in isAuth... e, a`, e, JSON.stringify( a ) )
-        res.status( 400 ).json( { error: e, report: a } )
+exports.isAuth = (req, res, next) => {
+    const userIsAuthenticated = req.profile && req.auth && req.profile._id.toString() === req.auth._id;
+    if (!userIsAuthenticated) {
+        return res.status(403).json({ error: "Access denied" });
     }
-    
+    next();
 };
+
 
 exports.isAdmin = async ( req, res, next ) => // a
 {

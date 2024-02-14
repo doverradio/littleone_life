@@ -126,3 +126,22 @@ export const getRosaryHistory = async (userId, token) => {
     throw error;
   }
 };
+
+
+// For Charts
+export const getMysteryCount = async (userId, token) => {
+  try {
+    const response = await fetch(`${API}/rosary/mystery-count`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({ userId })
+    });
+    return await response.json();
+  } catch (error) {
+    console.error('Error in getMysteryCount:', error);
+    throw error;
+  }
+};

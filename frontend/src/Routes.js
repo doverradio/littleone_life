@@ -12,31 +12,34 @@ import AdminRoute from './auth/AdminRoute';
 import UserDashboard from "./user/UserDashboard";
 import AdminDashboard from "./admin/AdminDashboard";
 import Settings from "./components/settings/Settings";
+import { ModalProvider } from "./context/ModalContext";
 
 const RoutesComponent = () => {
     return (
-        <Router>
-            <Routes>
-                <Route path="/" element={<MainPage />} />
-                <Route path="/about" element={<AboutUs />} />
-                <Route path="/signin" element={<SignIn />} />
-                <Route path="/signup" element={<SignUp />} />
-                <Route path="/terms" element={<TermsOfService />} />
-                <Route path="/contact" element={<Contact />} />
-                <Route path="/privacy" element={<PrivacyPolicy />} />
-                
-                <Route path="/user/dashboard" element={<PrivateRoute component={UserDashboard} />} />
-                <Route path="/user/settings" element={<PrivateRoute component={Settings} />} />
-                <Route path="/admin/dashboard" element={<AdminRoute component={AdminDashboard} />} />
+        <ModalProvider>
+            <Router>
+                <Routes>
+                    <Route path="/" element={<MainPage />} />
+                    <Route path="/about" element={<AboutUs />} />
+                    <Route path="/signin" element={<SignIn />} />
+                    <Route path="/signup" element={<SignUp />} />
+                    <Route path="/terms" element={<TermsOfService />} />
+                    <Route path="/contact" element={<Contact />} />
+                    <Route path="/privacy" element={<PrivacyPolicy />} />
+                    
+                    <Route path="/user/dashboard" element={<PrivateRoute component={UserDashboard} />} />
+                    <Route path="/user/settings" element={<PrivateRoute component={Settings} />} />
+                    <Route path="/admin/dashboard" element={<AdminRoute component={AdminDashboard} />} />
 
-                {/* <Route path="/user/dashboard" element={<PrivateRoute />}>
-                    <Route path="" element={<UserDashboard />} />
-                </Route>
-                <Route path="/admin/dashboard" element={<AdminRoute />}>
-                    <Route path="" element={<AdminDashboard />} />
-                </Route> */}
-            </Routes>
-        </Router>
+                    {/* <Route path="/user/dashboard" element={<PrivateRoute />}>
+                        <Route path="" element={<UserDashboard />} />
+                    </Route>
+                    <Route path="/admin/dashboard" element={<AdminRoute />}>
+                        <Route path="" element={<AdminDashboard />} />
+                    </Route> */}
+                </Routes>
+            </Router>
+        </ModalProvider>
     );
 };
 

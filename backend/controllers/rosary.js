@@ -1,4 +1,5 @@
 const Rosary = require("../models/rosary"); // Adjust the path according to your structure
+const mongoose = require('mongoose');
 const log = console.log;
 
 // Create a new Rosary
@@ -89,5 +90,22 @@ exports.deleteRosary = async (req, res) => {
         res.json({ message: "Rosary deleted successfully" });
     } catch (error) {
         res.status(400).json({ error: error.message });
+    }
+};
+
+
+// For Charts
+exports.getMysteryCount = async (req, res) => {
+    log(`Begin getMysteryCount!  req.body: `, req.body)
+    let { userId } = req.body;
+    try {
+        const counts = await Rosary.aggregate([
+            { $match: { user: new mongoose.Types.ObjectId(userId) } },
+            { $group: { _id: "$m", count: { $sum: 1 } } }
+        ]);
+        res.json(counts);
+    } catch (err) {
+        log(`getMysteryCount err: `, err)
+        res.status(400).send("Error getting mystery counts");
     }
 };

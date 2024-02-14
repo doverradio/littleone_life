@@ -44,3 +44,34 @@
     font-weight: bold;
     color: blue;
 }
+
+.highlighted {
+    stroke: #fff; /* White stroke for highlighting */
+    stroke-width: 2; /* Thicker stroke to make the slice stand out */
+  }
+  
+  .legend-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+  }
+  
+  .legend-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+  }
+  
+  .legend-item span:first-child {
+    margin-right: 10px;
+  }
+
+  .pie-chart-container {
+    width: 100%;
+    max-width: 360px; /* or your preferred max width */
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
