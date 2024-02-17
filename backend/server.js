@@ -9,6 +9,7 @@ require('dotenv').config();
 
 const authRoutes = require("./routes/auth");
 const churchRoutes = require('./routes/church');
+const confessionRoutes = require('./routes/confession');
 const intentionRoutes = require('./routes/intentions');
 const massAttendanceRoutes = require('./routes/massAttendance');
 const rosaryRoutes = require('./routes/rosary');
@@ -57,6 +58,7 @@ else {
 
 app.use('/api', authRoutes);
 app.use('/api', churchRoutes);
+app.use('/api', confessionRoutes);
 app.use('/api', intentionRoutes);
 app.use('/api', massAttendanceRoutes);
 app.use('/api', rosaryRoutes);

@@ -12,29 +12,15 @@ import DivineMercy from "../components/divinemercy/DivineMercy";
 import divineMercyIcon from '../components/divinemercy/divinemercy_icon.png'; // Path to your Divine Mercy icon
 import './styles.css'
 import { useModal } from "../context/ModalContext";
+import { isAuthenticated } from "../api/auth";
 
 const UserDashboard = () => {
     
     const { modalState, toggleModal } = useModal(); // Import from context
 
-    // const [isRosaryModalOpen, setIsRosaryModalOpen] = useState(false);
-    // const [isMassModalOpen, setIsMassModalOpen] = useState(false);
-    // const [isConfessionModalOpen, setIsConfessionModalOpen] = useState(false);
-    
-    // const [modalState, setModalState] = useState({
-    //     rosary: false,
-    //     mass: false,
-    //     confession: false,
-    // });
-    
-
-    // const [icons, setIcons] = useState([
-    //     { id: 'rosary', icon: rosaryIcon, modal: setIsRosaryModalOpen, component: <Rosary /> },
-    //     { id: 'mass', icon: massIcon, modal: setIsMassModalOpen, component: <Mass /> },
-    //     { id: 'confession', icon: confessionIcon, modalOpen: isConfessionModalOpen, component: <Confession />, toggleModal: setIsConfessionModalOpen },
-    //     { id: 'divine Mercy Chaplet', icon: divineMercyIcon, modalOpen: false, component: <DivineMercy /> } 
-    // ]);
-
+    const {
+        user: { firstName }
+    } = isAuthenticated();
     
     const [icons, setIcons] = useState([
         { id: 'rosary', icon: rosaryIcon, component: <Rosary /> },
@@ -43,15 +29,6 @@ const UserDashboard = () => {
         { id: 'divine Mercy Chaplet', icon: divineMercyIcon, component: <DivineMercy /> } 
     ]);
     
-    // const toggleModal = (id) => {
-    //     setIcons(icons.map(icon => {
-    //         if (icon.id === id) {
-    //             return { ...icon, modalOpen: !icon.modalOpen };
-    //         }
-    //         return icon;
-    //     }));
-    // };
-
     
     // Function to handle icon click and toggle modal
     const handleIconClick = (id) => {
@@ -92,13 +69,12 @@ const UserDashboard = () => {
 
     const eventOptions = { passive: false };
 
-
     return (
         <>
             <NavbarMain />
             <div className="container" style={{ height: '73vh' }}>
                 <div className="row justify-content-center align-items-center">
-                    <h2>User Dashboard</h2>
+                    <h2 className="header-font mt-2">{firstName}'s Faith Journey</h2>
                     {/* Add your user dashboard content here */}
                 </div>
                 <div className="d-flex flex-wrap justify-content-start">

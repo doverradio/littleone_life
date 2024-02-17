@@ -361,12 +361,9 @@ const Mass = () => {
                                                             onChange={handleChurchChange}
                                                             value={newChurch.website} 
                                                         />
-                                                        {/* Add other fields similarly */}
                                                         <button className='btn btn-primary btn-sm m-1' type="submit">Create Church</button>
                                                         <button className='btn btn-danger btn-sm m-1' onClick={() => setShowChurchForm(false)}>Cancel</button>
                                                     </form>
-                                                // <div className="form-container">
-                                                // </div>
                                             )}
                                         </div>
                                     </div>

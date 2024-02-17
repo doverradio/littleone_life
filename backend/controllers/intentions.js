@@ -28,6 +28,7 @@ exports.createIntention = async (req, res) => {
 
 // Get all intentions for a user
 exports.getAllIntentions = async (req, res) => {
+    log(`Begin getAllIntentions! req.body: `, req.body)
     try {
         const { userId, type } = req.body;
         // console.log("Received userId:", userId);
@@ -50,7 +51,8 @@ exports.getAllIntentions = async (req, res) => {
 // Get a single intention by ID
 exports.getIntentionById = async (req, res) => {
     try {
-        const intention = await Intention.findById(req.params.id);
+        const { _id } = req.body;
+        const intention = await Intention.findById(_id);
         if (!intention) {
             return res.status(404).json({ error: 'Intention not found' });
         }
@@ -63,7 +65,8 @@ exports.getIntentionById = async (req, res) => {
 // Update an intention
 exports.updateIntention = async (req, res) => {
     try {
-        const intention = await Intention.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        const { _id } = req.body;
+        const intention = await Intention.findByIdAndUpdate(_id, req.body, { new: true });
         if (!intention) {
             return res.status(404).json({ error: 'Intention not found' });
         }
@@ -76,7 +79,8 @@ exports.updateIntention = async (req, res) => {
 // Delete an intention
 exports.deleteIntention = async (req, res) => {
     try {
-        const intention = await Intention.findByIdAndDelete(req.params.id);
+        const { _id } = req.body;
+        const intention = await Intention.findByIdAndDelete(_id);
         if (!intention) {
             return res.status(404).json({ error: 'Intention not found' });
         }

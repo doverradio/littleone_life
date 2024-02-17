@@ -491,9 +491,6 @@ const Rosary = () => {
                                 
                             {/* Font Size Controls */}
                             <div className="text-size-controls">
-                                {/* <div>
-                                    <p>Text Size</p>
-                                </div> */}
                                 Text Size
                                 <button 
                                     onClick={decreaseFontSize}

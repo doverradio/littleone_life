@@ -39,12 +39,13 @@ export const getAllIntentions = async (userId, type, token) => {
 // Function to get a single intention by ID
 export const getIntentionById = async (intentionId, token) => {
     try {
-        const response = await fetch(`${API}/intention/${intentionId}`, {
+        const response = await fetch(`${API}/intention/getintention`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             },
+            body: JSON.stringify({ _id: intentionId })
         });
         return await response.json();
     } catch (error) {
@@ -56,13 +57,13 @@ export const getIntentionById = async (intentionId, token) => {
 // Function to update an intention
 export const updateIntention = async (intentionId, intentionData, token) => {
     try {
-        const response = await fetch(`${API}/intention/${intentionId}`, {
+        const response = await fetch(`${API}/intention/update`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             },
-            body: JSON.stringify(intentionData),
+            body: JSON.stringify({_id: intentionId, ...intentionData}),
         });
         return await response.json();
     } catch (error) {
@@ -74,12 +75,13 @@ export const updateIntention = async (intentionId, intentionData, token) => {
 // Function to delete an intention
 export const deleteIntention = async (intentionId, token) => {
     try {
-        const response = await fetch(`${API}/intention/${intentionId}`, {
+        const response = await fetch(`${API}/intention/delete`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             },
+            body: JSON.stringify({ _id: intentionId })
         });
         return await response.json();
     } catch (error) {
