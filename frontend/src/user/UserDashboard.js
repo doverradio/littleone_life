@@ -10,9 +10,11 @@ import Confession from "../components/confession/Confession"; // Import the Conf
 import confessionIcon from '../components/confession/confession_icon.png'; // Path to your confession icon
 import DivineMercy from "../components/divinemercy/DivineMercy";
 import divineMercyIcon from '../components/divinemercy/divinemercy_icon.png'; // Path to your Divine Mercy icon
+import prayerSettingsIcon from '../components/otherprayers/prayersettings_icon.png'
 import './styles.css'
 import { useModal } from "../context/ModalContext";
 import { isAuthenticated } from "../api/auth";
+import PrayerSettings from "../components/otherprayers/PrayerSettings";
 
 const UserDashboard = () => {
     
@@ -22,18 +24,41 @@ const UserDashboard = () => {
         user: { firstName }
     } = isAuthenticated();
     
+    // Define available prayers with visibility control
+    const [availablePrayers, setAvailablePrayers] = useState([
+        { id: 'rosary', name: 'Rosary', isVisible: true },
+        { id: 'mass', name: 'Mass', isVisible: true },
+        { id: 'confession', name: 'Confession', isVisible: true },
+        { id: 'divineMercy', name: 'Divine Mercy', isVisible: false },
+        { id: 'stmichael', name: 'St. Michael Prayer', isVisible: false },
+        { id: 'stfrancis', name: 'St. Francis Prayer', isVisible: false },
+        { id: 'stleandroruiz', name: 'St. Leandro Ruiz Prayer', isVisible: false },
+        // Add other prayers here
+    ]);
+
+
+    // Function to handle changes in prayer visibility
+    const handlePrayerVisibilityChange = (prayerId, isVisible) => {
+        setAvailablePrayers(prevPrayers => prevPrayers.map(
+            prayer => prayer.id === prayerId ? { ...prayer, isVisible } : prayer
+        ));
+    };
+
     const [icons, setIcons] = useState([
         { id: 'rosary', icon: rosaryIcon, component: <Rosary /> },
         { id: 'mass', icon: massIcon, component: <Mass /> },
         { id: 'confession', icon: confessionIcon, component: <Confession /> },
-        { id: 'divine Mercy Chaplet', icon: divineMercyIcon, component: <DivineMercy /> } 
+        { id: 'divineMercy', icon: divineMercyIcon, component: <DivineMercy /> }, // Updated ID
+        { 
+            id: 'prayerSettings', 
+            icon: prayerSettingsIcon, 
+            component: <PrayerSettings availablePrayers={availablePrayers} setAvailablePrayers={setAvailablePrayers} />
+        },
     ]);
     
     
-    // Function to handle icon click and toggle modal
-    const handleIconClick = (id) => {
-        toggleModal(id);
-    };
+    
+    
 
     const onDragStart = (e, id) => {
         e.dataTransfer.setData('id', id);
@@ -78,41 +103,54 @@ const UserDashboard = () => {
                     {/* Add your user dashboard content here */}
                 </div>
                 <div className="d-flex flex-wrap justify-content-start">
-                    {icons.map(icon => (
-                        <div 
-                            key={icon.id} 
-                            className="icon-container p-2"
-                            draggable 
-                            onDragStart={(e) => onDragStart(e, icon.id)}
-                            onDrop={(e) => onDrop(e, icon.id)}
-                            onDragOver={(e) => e.preventDefault()}
-                            onClick={() => toggleModal(icon.id)}
-                            onTouchStart={(e) => handleTouchStart(e, icon.id)}
-                            onTouchMove={(e) => handleTouchMove(e, icon.id, eventOptions)}
-                            onTouchEnd={(e) => handleTouchEnd(e, icon.id)}
-                        >
-                            <img 
-                                src={icon.icon} 
-                                alt={icon.id} 
-                                className="clickable-icon"
-                                style={{ height: '55px', width: '55px' }}
-                            />
-                            <div className="icon-label">
-                                {icon.id.charAt(0).toUpperCase() + icon.id.slice(1, 10)} {/* Only show the first 10 characters */}
-                                {icon.id.length > 10 ? "..." : ""} {/* Add ellipsis if the text is longer than 10 characters */}
+                    {icons.map(icon => {
+                                        
+                        // Check if the prayer is visible
+                        const isVisible = availablePrayers.find(prayer => prayer.id === icon.id)?.isVisible ?? true;
+
+                        return isVisible && (
+                            <div 
+                                key={icon.id} 
+                                className="icon-container p-2"
+                                draggable 
+                                onDragStart={(e) => onDragStart(e, icon.id)}
+                                onDrop={(e) => onDrop(e, icon.id)}
+                                onDragOver={(e) => e.preventDefault()}
+                                onClick={() => toggleModal(icon.id)}
+                                onTouchStart={(e) => handleTouchStart(e, icon.id)}
+                                onTouchMove={(e) => handleTouchMove(e, icon.id, eventOptions)}
+                                onTouchEnd={(e) => handleTouchEnd(e, icon.id)}
+                            >
+                                <img 
+                                    src={icon.icon} 
+                                    alt={icon.id} 
+                                    className="clickable-icon"
+                                    style={{ height: '55px', width: '55px' }}
+                                />
+                                <div className="icon-label">
+                                    {icon.id.charAt(0).toUpperCase() + icon.id.slice(1, 10)} {/* Only show the first 10 characters */}
+                                    {icon.id.length > 10 ? "..." : ""} {/* Add ellipsis if the text is longer than 10 characters */}
+                                </div>
+                                {modalState[icon.id] && (
+                                    <Modal id={icon.id}>
+                                        {icon.component}
+                                    </Modal>
+                                )}
                             </div>
-                            {modalState[icon.id] && (
-                                <Modal id={icon.id}>
-                                    {icon.component}
-                                </Modal>
-                            )}
-                        </div>
-                    ))}
+                        )
+                    }
+                    )}
                 </div>
             </div>
+            {/* Modal for Prayer Settings */}
+            {modalState.prayerSettings && (
+                <Modal id="prayerSettings">
+                    <PrayerSettings availablePrayers={availablePrayers} onVisibilityChange={handlePrayerVisibilityChange} />
+                </Modal>
+            )}
             <Footer />
         </>
-    );
+    );    
 }
 
 export default UserDashboard;
