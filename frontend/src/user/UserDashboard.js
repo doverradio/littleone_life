@@ -15,6 +15,8 @@ import './styles.css'
 import { useModal } from "../context/ModalContext";
 import { isAuthenticated } from "../api/auth";
 import PrayerSettings from "../components/otherprayers/PrayerSettings";
+import StMichaelPrayer from "../components/otherprayers/stmichaelprayer/StMichaelPrayer";
+import stMichaelIcon from '../components/otherprayers/stmichaelprayer/stmichael_icon.png';
 
 const UserDashboard = () => {
     
@@ -49,6 +51,7 @@ const UserDashboard = () => {
         { id: 'mass', icon: massIcon, component: <Mass /> },
         { id: 'confession', icon: confessionIcon, component: <Confession /> },
         { id: 'divineMercy', icon: divineMercyIcon, component: <DivineMercy /> }, // Updated ID
+        { id: 'stMichaelPrayer', icon: stMichaelIcon, component: <StMichaelPrayer /> },
         { 
             id: 'prayerSettings', 
             icon: prayerSettingsIcon, 
