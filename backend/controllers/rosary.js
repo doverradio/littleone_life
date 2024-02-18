@@ -95,7 +95,6 @@ exports.deleteRosary = async (req, res) => {
 
 // For Charts
 exports.getMysteryCount = async (req, res) => {
-    log(`Begin getMysteryCount!  req.body: `, req.body)
     let { userId } = req.body;
     try {
         const counts = await Rosary.aggregate([
@@ -106,5 +105,42 @@ exports.getMysteryCount = async (req, res) => {
     } catch (err) {
         log(`getMysteryCount err: `, err)
         res.status(400).send("Error getting mystery counts");
+    }
+};
+
+exports.getUserRosaries = async (req, res) => {
+    try {
+        const { userId, page, limit } = req.body;
+        const userRosaries = await Rosary.find({ user: userId })
+            .skip((page - 1) * limit)
+            .limit(limit)
+            .populate('i', 'content') // Adjust based on what details you want from Intention
+            .exec();
+
+        const total = await Rosary.countDocuments({ user: userId });
+
+        res.json({ rosaries: userRosaries, total });
+    } catch (error) {
+        console.error('Error fetching user rosaries:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+};
+
+exports.deleteRosaries = async (req, res) => {
+    try {
+        // Extract the IDs from the request body
+        const { rowsToDelete } = req.body;
+
+        // Delete the documents with the provided IDs
+        await Rosary.deleteMany({ _id: { $in: rowsToDelete } });
+
+        res.status(200).json({
+            message: 'Rosaries deleted successfully'
+        });
+    } catch (error) {
+        res.status(500).json({
+            message: 'Error deleting rosaries',
+            error: error.message
+        });
     }
 };

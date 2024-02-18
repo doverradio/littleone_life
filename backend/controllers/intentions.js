@@ -5,7 +5,6 @@ const log = console.log;
 
 // Create a new intention
 exports.createIntention = async (req, res) => {
-    log(`Begin createIntention! req.body: `, req.body);
     try {
         const { user, content, type } = req.body;
 
@@ -28,7 +27,6 @@ exports.createIntention = async (req, res) => {
 
 // Get all intentions for a user
 exports.getAllIntentions = async (req, res) => {
-    log(`Begin getAllIntentions! req.body: `, req.body)
     try {
         const { userId, type } = req.body;
         // console.log("Received userId:", userId);

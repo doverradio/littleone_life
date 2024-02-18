@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { getAllIntentions, createIntention, updateIntention, deleteIntention } from '../../api/intentions';
-import { createRosary, getRosaryCountByUser, getMysteryCount } from '../../api/rosary';
+import { createRosary, getRosaryCountByUser, getMysteryCount, getUserRosaries, deleteRosaries } from '../../api/rosary';
 import { isAuthenticated } from '../../api/auth';
 import { MdOutlineModeEdit } from "react-icons/md";
 import rosaryIcon from './rosary_icon.png'; // Adjust the path to where your icon is stored
@@ -14,6 +14,7 @@ import ButtonLoader from '../../loaders/ButtonLoader';
 import { useModal } from '../../context/ModalContext';
 import PieChartMysteries from './PieChartMysteries';
 import ToggleSlider from '../utils/ToggleSlider';
+import ReusableDatatable from '../utils/datatable/ReusableDatatable';
 
 // Define the Rosary component
 const Rosary = () => {
@@ -64,6 +65,64 @@ const Rosary = () => {
         }]
       });
       
+    // State for storing the list of rosaries
+    const [rosaries, setRosaries] = useState([]);
+
+    // State for pagination
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalRosaries, setTotalRosaries] = useState(0);
+    const rosariesPerPage = 30; // Or any other number you prefer
+
+    // State for loading and error handling
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+
+    // State to trigger refresh
+    const [refreshTrigger, setRefreshTrigger] = useState(0);
+
+    // Function to fetch rosaries
+    const fetchRosaries = async () => {
+        setLoading(true);
+        try {
+            const data = await getUserRosaries(userId, token, currentPage, rosariesPerPage);
+            setRosaries(data.rosaries);
+            setTotalRosaries(data.total);
+            setLoading(false);
+        } catch (err) {
+            setError(err.message);
+            setLoading(false);
+        }
+    };
+    
+    const handleDelete = async (selectedIds) => {
+        if (window.confirm('Are you sure you want to delete the selected rosaries?')) {
+            try {
+                const response = await deleteRosaries(selectedIds, token);
+                if (response) {
+                    console.log('Deleted successfully');
+
+                    // Update your state or UI here
+                    setRefreshTrigger(prev => prev + 1); // Increment to trigger refresh
+                    
+                    const data = await getUserRosaries(userId, token, currentPage, rosariesPerPage);
+                    setRosaries(data.rosaries);
+                    setTotalRosaries(data.total);
+                }
+            } catch (error) {
+                console.error('Delete operation failed:', error);
+                // Show error message to user if needed
+            }
+        }
+    };
+
+    
+    // Define the columns for the datatable
+    const columns = [
+        { header: 'Date', accessor: 'createdAt', isDate: true },
+        { header: 'Mystery', accessor: 'm' },
+        // Add other columns as needed
+    ];
+
     // Define the mysteries details
     const mysteriesDetails = {
         Luminous: [
@@ -158,11 +217,27 @@ const Rosary = () => {
     useEffect(() => {
         fetchIntentions();
         fetchRosaryCount();
+        fetchRosaries();
         
         if (activeTab === 'Responses') {
             fetchMysteryCounts();
         }
-    }, [userId, token, activeTab]);
+    }, [userId, token, activeTab, currentPage]);
+
+    
+    // Pagination handlers
+    const handleNextPage = () => {
+        if (currentPage * rosariesPerPage < totalRosaries) {
+            setCurrentPage(currentPage + 1);
+        }
+    };
+
+    const handlePreviousPage = () => {
+        if (currentPage > 1) {
+            setCurrentPage(currentPage - 1);
+        }
+    };
+
 
     const formattedChartData = chartData.labels.map((label, index) => {
         return { label: label, value: chartData.datasets[0].data[index] };
@@ -261,6 +336,25 @@ const Rosary = () => {
         } catch (error) {
             console.error('Error updating intention:', error);
         }
+    };
+
+        
+    const handleRowSelect = (selectedRows) => {
+        // Implement what should happen when rows are selected
+        // console.log(selectedRows);
+    };
+
+    // Function to format data for the datatable
+    const formatDataForTable = (rosaries) => {
+        // Format your rosary data here to match the columns' structure
+        return rosaries.map(rosary => {
+            return {
+                createdAt: rosary.createdAt, // Format date as needed
+                m: rosary.m,
+                _id: rosary._id
+                // Map other fields as needed
+            };
+        });
     };
 
     // Render the component
@@ -641,16 +735,23 @@ const Rosary = () => {
                         <div className="container mt-5">
                             <div className="row my-3">
                                 <div className="col-12">
-                                    <p style={{ fontWeight: 'bold' }}>Total: {count} Rosaries</p>
+                                    <p style={{ fontWeight: 'bold' }}>Total: {rosaries.length} Rosaries</p>
                                 </div>
                             </div>
                         </div>
                         
                         <PieChartMysteries data={formattedChartData} />
 
+                        <ReusableDatatable
+                            data={formatDataForTable(rosaries)} 
+                            columns={columns} 
+                            pageSize={30} 
+                            checkbox={true}
+                            onRowSelect={handleRowSelect} 
+                            onDelete={handleDelete}
+                            refreshTrigger={refreshTrigger}
+                        />
 
-                        {/* Add your legend or additional components here */}
-                        {/* Legend for Pie Chart */}
                     </div>
                 )}
                 {activeTab === 'Settings' && (

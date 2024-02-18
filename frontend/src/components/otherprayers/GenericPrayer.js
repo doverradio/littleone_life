@@ -16,7 +16,7 @@ const GenericPrayer = ({ prayerTitle, prayerText, iconSrc }) => {
             log(`Clicked handleSubmitPrayer!`)
             // Handle success
         } catch (error) {
-            // Handle error
+            log(`handleSubmitPrayer error: `, error)
         }
     };
 

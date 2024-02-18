@@ -11,7 +11,9 @@ const {
     deleteRosary,
     getRosaryHistory,
     getUserRosaryCount,
-    getMysteryCount
+    getMysteryCount,
+    getUserRosaries,
+    deleteRosaries
 } = require('../controllers/rosary');
 
 router.post('/rosary/create', requireSignin, authMiddleware, isAuth, createRosary);
@@ -24,5 +26,9 @@ router.post('/rosary/history', requireSignin, authMiddleware, isAuth, getRosaryH
 
 // For Charts
 router.post('/rosary/mystery-count', requireSignin, authMiddleware, isAuth, getMysteryCount)
+
+// For Data Table
+router.post('/rosary/user-rosaries', requireSignin, authMiddleware, isAuth, getUserRosaries);
+router.delete('/rosary/delete-rosaries', requireSignin, authMiddleware, isAuth, deleteRosaries); // Route for deleting rosaries from data table
 
 module.exports = router;

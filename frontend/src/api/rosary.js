@@ -145,3 +145,38 @@ export const getMysteryCount = async (userId, token) => {
     throw error;
   }
 };
+
+export const getUserRosaries = async (userId, token, page = 1, limit = 30) => {
+  try {
+      const response = await fetch(`${API}/rosary/user-rosaries`, {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({ userId, page, limit })
+      });
+      return await response.json();
+  } catch (error) {
+      console.error('Error fetching user rosaries:', error);
+      throw error;
+  }
+};
+
+export const deleteRosaries = async (rosaryIds, token) => {
+  try {
+      const response = await fetch(`${API}/rosary/delete-rosaries`, {
+          method: 'DELETE',
+          headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({ rowsToDelete: rosaryIds })
+      });
+
+      return await response.json();
+  } catch (error) {
+      console.error('Error deleting rosaries:', error);
+      throw error;
+  }
+};

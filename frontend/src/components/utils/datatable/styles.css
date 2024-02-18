@@ -1,0 +1,40 @@
+/* Add this CSS to your stylesheet */
+.datatable-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+/* Add this CSS to your stylesheet */
+.datatable {
+    width: 100%; /* Adjust as needed */
+    border-collapse: collapse; /* Ensures borders are collapsed into a single border */
+    text-align: left; /* Align text to the left, you can adjust as needed */
+    font-size: 14px;
+}
+
+.datatable th, .datatable td {
+    border: 1px solid #ddd; /* Add border to cells */
+    padding: 8px; /* Add padding inside cells */
+}
+
+/* Add zebra-striping to rows if desired */
+.datatable tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+/* Style for the table header */
+.datatable th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    background-color: #4CAF50;
+    color: white;
+}
+
+.datatable-delete-btn, .datatable-pagination {
+    margin: 10px 0;
+    align-self: stretch;
+    display: flex;
+    justify-content: center;
+}
