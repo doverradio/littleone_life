@@ -1,12 +1,7 @@
 const User = require("../models/user");
-// const ReferralCodes = require("../models/referralcodes");
-// const Inventories = require( "../models/inventories" )
 const jwt = require("jsonwebtoken"); // to generate signed token
 const { expressjwt: expressJwt } = require('express-jwt');
-const { errorHandler } = require("../helpers/dbErrorHandler");
 const _ = require("lodash");
-// const e = require("express");
-// const BraintreeVaultCustomers = require("../models/braintreevaultcustomers");
 const log = console.log;
 
 exports.checkUsernameAvailability = async (req, res) => {

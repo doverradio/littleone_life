@@ -37,6 +37,10 @@ const userSchema = new mongoose.Schema({
         type: String,
         trim: true
     },
+    prayerSettings: {
+        type: Array,
+        default: []
+    },
     salt: String,
     role: {
         type: Number,
@@ -76,7 +80,7 @@ userSchema.methods = {
 
 // Field encryption
 userSchema.plugin(fieldEncryption, {
-    fields: ['firstName', 'lastName', 'email', 'about', 'phone'],
+    fields: ['firstName', 'lastName', 'email', 'about', 'phone', 'prayerSettings'],
     secret: encKey,
     saltGenerator: function(secret) {
         // Ensure the salt is a string of length 16

@@ -13,6 +13,7 @@ const confessionRoutes = require('./routes/confession');
 const intentionRoutes = require('./routes/intentions');
 const massAttendanceRoutes = require('./routes/massAttendance');
 const rosaryRoutes = require('./routes/rosary');
+const userRoutes = require('./routes/user');
 
 
 // app
@@ -62,6 +63,7 @@ app.use('/api', confessionRoutes);
 app.use('/api', intentionRoutes);
 app.use('/api', massAttendanceRoutes);
 app.use('/api', rosaryRoutes);
+app.use('/api', userRoutes);
 
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {

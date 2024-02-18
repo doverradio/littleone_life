@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
 const PrayerSettings = ({ availablePrayers, onVisibilityChange }) => {
     // Assuming 'availablePrayers' is an array of objects containing { id, name, isVisible }

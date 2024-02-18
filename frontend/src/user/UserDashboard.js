@@ -1,4 +1,4 @@
-import React, { useState }  from "react";
+import React, { useState, useEffect }  from "react";
 import NavbarMain from "../NavbarMain";
 import Footer from "../Footer";
 import Modal from "./Modal";
@@ -14,6 +14,7 @@ import prayerSettingsIcon from '../components/otherprayers/prayersettings_icon.p
 import './styles.css'
 import { useModal } from "../context/ModalContext";
 import { isAuthenticated } from "../api/auth";
+import { getPrayerSettings, updatePrayerSettings } from "../api/user";
 import PrayerSettings from "../components/otherprayers/PrayerSettings";
 import StMichaelPrayer from "../components/otherprayers/stmichaelprayer/StMichaelPrayer";
 import stMichaelIcon from '../components/otherprayers/stmichaelprayer/stmichael_icon.png';
@@ -23,27 +24,70 @@ const UserDashboard = () => {
     const { modalState, toggleModal } = useModal(); // Import from context
 
     const {
-        user: { firstName }
+        user: { firstName, _id: userId },
+        token
     } = isAuthenticated();
     
     // Define available prayers with visibility control
-    const [availablePrayers, setAvailablePrayers] = useState([
+    const [availablePrayers, setAvailablePrayers] = useState([]);
+
+    const defaultPrayerSettings = [
         { id: 'rosary', name: 'Rosary', isVisible: true },
         { id: 'mass', name: 'Mass', isVisible: true },
         { id: 'confession', name: 'Confession', isVisible: true },
         { id: 'divineMercy', name: 'Divine Mercy', isVisible: false },
-        { id: 'stmichael', name: 'St. Michael Prayer', isVisible: false },
+        { id: 'stMichaelPrayer', name: 'St. Michael Prayer', isVisible: false },
         { id: 'stfrancis', name: 'St. Francis Prayer', isVisible: false },
         { id: 'stleandroruiz', name: 'St. Leandro Ruiz Prayer', isVisible: false },
         // Add other prayers here
-    ]);
+    ]
 
+    
+    const fetchPrayerSettings = async () => {
+        try {
+            const settings = await getPrayerSettings(userId, token);
+            if (settings.length === 0) {
+                // Initialize settings if empty
+                await updatePrayerSettings(userId, defaultPrayerSettings, token);
+                const updatedSettings = await getPrayerSettings(userId, token);
+                setAvailablePrayers(updatedSettings);
+            } else {
+                // Use fetched settings
+                setAvailablePrayers(settings);
+            }
+        } catch (error) {
+            console.error("Error fetching prayer settings:", error);
+            // Handle error appropriately
+        }
+    };
+
+    
+    useEffect(() => {
+
+        fetchPrayerSettings();
+    }, []); // Empty dependency array to run only once on component mount
+
+
+    // Function to update prayer settings in the database
+    const persistPrayerSettings = async (updatedPrayers) => {
+        try {
+            const response = await updatePrayerSettings(userId, updatedPrayers);
+            console.log(response); // Handle the response appropriately
+        } catch (error) {
+            console.error('Error updating prayer settings:', error);
+            // Handle errors (e.g., show a notification to the user)
+        }
+    };
 
     // Function to handle changes in prayer visibility
     const handlePrayerVisibilityChange = (prayerId, isVisible) => {
-        setAvailablePrayers(prevPrayers => prevPrayers.map(
-            prayer => prayer.id === prayerId ? { ...prayer, isVisible } : prayer
-        ));
+        setAvailablePrayers(prevPrayers => {
+            const updatedPrayers = prevPrayers.map(
+                prayer => prayer.id === prayerId ? { ...prayer, isVisible } : prayer
+            );
+            persistPrayerSettings(updatedPrayers); // Persist the updated settings
+            return updatedPrayers;
+        });
     };
 
     const [icons, setIcons] = useState([
