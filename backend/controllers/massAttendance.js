@@ -39,12 +39,38 @@ exports.getMassAttendanceByUser = async (req, res) => {
 exports.getAllMassAttendances = async (req, res) => {
     const { userId } = req.body;
     try {
-        const massAttendances = await MassAttendance.find({user: userId}).populate('user').populate('church');
+        const massAttendances = await MassAttendance.find({user: userId}) //.populate('user').populate('church');
+        let formattedMasses = massAttendances.filter( mass => {
+            let { church, massTime, i } = mass;
+            return { church, massTime, intentions: i, user: userId }
+        })
+        res.json(formattedMasses);
+    } catch (error) {
+        res.status(400).json({ error: "Unable to retrieve mass attendances" });
+    }
+};
+
+exports.getAllMassAttendances1 = async (req, res) => {
+    const { userId } = req.body;
+    try {
+        const massAttendances = await MassAttendance.aggregate([
+            { $match: { user: userId } },
+            { $group: { _id: "$church", count: { $sum: 1 } } },
+            { $lookup: {
+                from: "churches", // the collection name in MongoDB
+                localField: "_id",
+                foreignField: "_id",
+                as: "church"
+            }},
+            { $unwind: "$church" }
+        ]);
         res.json(massAttendances);
     } catch (error) {
         res.status(400).json({ error: "Unable to retrieve mass attendances" });
     }
 };
+
+
 
 exports.updateMassAttendance = async (req, res) => {
     const { massId } = req.body;

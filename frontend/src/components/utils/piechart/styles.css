@@ -1,0 +1,48 @@
+
+
+.legend-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+  }
+  
+  .legend-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+  }
+  
+  .legend-item span:first-child {
+    margin-right: 10px;
+  }
+
+  /* .pie-chart-container {
+    width: 100%;
+    max-width: 360px;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+} */
+
+.pie-chart-container {
+    width: 100%;
+    max-width: 500px; /* Adjust the max width as needed */
+    margin: auto;
+    display: flex;
+    flex-direction: row; /* Change to row to align chart and legend side by side */
+    align-items: center;
+    justify-content: center;
+}
+
+
+@media screen and (max-width: 600px) {
+    .pie-chart-container {
+      flex-direction: column; /* Stack vertically on smaller screens */
+    }
+  
+    .legend-container {
+      padding-top: 20px; /* Add some space above the legend */
+    }
+  }
