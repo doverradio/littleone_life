@@ -103,3 +103,44 @@ export const deleteConfession = async (confessionId, token) => {
         throw error;
     }
 };
+
+export const getUserConfessions = async (userId, page, limit, token) => {
+    try {
+        const response = await fetch(`${API}/confession/user-confessions`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ userId, page, limit })
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        return data; // { confessions: userConfessions, total }
+    } catch (error) {
+        console.error('Error fetching user confessions:', error);
+        // Handle errors as appropriate for your application
+    }
+};
+
+export const deleteConfessions = async (confessionIds, token) => {
+    try {
+        const response = await fetch(`${API}/confession/delete-confessions`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ rowsToDelete: confessionIds })
+        });
+
+        return await response.json();
+    } catch (error) {
+        console.error('Error deleting confessions:', error);
+        throw error;
+    }
+};

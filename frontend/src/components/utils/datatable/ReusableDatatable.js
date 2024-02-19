@@ -113,7 +113,11 @@ const ReusableDatatable = ({ data, columns, pageSize, checkbox, onRowSelect, onD
             {/* Pagination Controls */}
             <div className="datatable-pagination">
                 {Array.from({ length: totalPages }, (_, i) => i + 1).map(pageNumber => (
-                    <button key={pageNumber} onClick={() => goToPage(pageNumber)}>
+                    <button 
+                        key={pageNumber} 
+                        onClick={() => goToPage(pageNumber)}
+                        className='btn btn-outline-primary btn-sm m-1'
+                    >
                         {pageNumber}
                     </button>
                 ))}

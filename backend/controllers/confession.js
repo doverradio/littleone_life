@@ -83,3 +83,52 @@ exports.deleteConfession = async (req, res) => {
         res.status(400).json({ error: error.message });
     }
 };
+
+exports.getUserConfessions = async (req, res) => {
+    try {
+        const { userId, page, limit } = req.body;
+
+        // Fetch confessions with pagination
+        const userConfessions = await Confession.find({ user: userId })
+            .populate('church')
+            .skip((page - 1) * limit)
+            .limit(limit)
+            .exec();
+
+        // Transform the userConfessions
+        const formattedConfessions = userConfessions.map(confession => {
+            let newChurch = confession.church && confession.church.name ? confession.church.name : 'Unknown Church';
+            return {
+                ...confession.toObject(), // Convert Mongoose document to a plain JavaScript object
+                church: newChurch
+            };
+        });
+
+        // Get total count for pagination
+        const total = await Confession.countDocuments({ user: userId });
+
+        res.json({ confessions: formattedConfessions, total });
+    } catch (error) {
+        console.error('Error fetching user confessions:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+};
+
+exports.deleteConfessions = async (req, res) => {
+    try {
+        // Extract the IDs of the confessions to delete from the request body
+        const { rowsToDelete } = req.body;
+
+        // Delete the Confession documents with the provided IDs
+        await Confession.deleteMany({ _id: { $in: rowsToDelete } });
+
+        res.status(200).json({
+            message: 'Confessions deleted successfully'
+        });
+    } catch (error) {
+        res.status(500).json({
+            message: 'Error deleting confessions',
+            error: error.message
+        });
+    }
+};

@@ -61,6 +61,7 @@ const Mass = () => {
         token
     } = isAuthenticated();
 
+    const userId = _id;
     
     const [massAttendances, setMassAttendances] = useState([]);
 
@@ -115,8 +116,6 @@ const Mass = () => {
         }
     };
     
-
-    const userId = _id;
     
     const increaseFontSize = () => {
         setFontSize(currentSize => Math.min(currentSize + 1, MAX_FONT_SIZE));

@@ -1,12 +1,12 @@
 
 
-.legend-container {
+/* .legend-container {
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 10px;
   }
-  
+   */
   .legend-item {
     display: flex;
     align-items: center;
@@ -17,24 +17,35 @@
     margin-right: 10px;
   }
 
-  /* .pie-chart-container {
+/* .pie-chart-container {
     width: 100%;
-    max-width: 360px;
+    max-width: 500px; 
     margin: auto;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
+    justify-content: center;
 } */
 
 .pie-chart-container {
-    width: 100%;
-    max-width: 500px; /* Adjust the max width as needed */
-    margin: auto;
-    display: flex;
-    flex-direction: row; /* Change to row to align chart and legend side by side */
-    align-items: center;
-    justify-content: center;
+  width: 100%;
+  max-width: 600px; /* Adjust the max width as needed */
+  margin: auto;
+  display: flex;
+  flex-direction: row; /* Keep side by side */
+  align-items: center;
+  justify-content: space-around; /* This will add space between the chart and the legend */
 }
+
+.legend-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Align items to the start */
+  padding: 10px;
+}
+
+/* Other styles remain the same */
+
 
 
 @media screen and (max-width: 600px) {

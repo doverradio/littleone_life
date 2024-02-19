@@ -22,10 +22,11 @@ const PieChart = ({ data, colorMapping, width: initialWidth = 360, height: initi
   const drawChart = () => {
     const isMobile = window.innerWidth < 600;
     const containerWidth = ref.current.clientWidth || window.innerWidth;
-    const width = isMobile ? containerWidth * 0.8 : initialWidth;
-    const height = isMobile ? containerWidth * 0.8 : initialHeight;
+    const width = isMobile ? containerWidth * 0.8 : initialWidth * 0.7; // Reduce the size on desktop
+    const height = isMobile ? containerWidth * 0.8 : initialHeight * 0.7; // Reduce the size on desktop
+    
     const radius = Math.min(width, height) / 2;
-    const fontSize = width / 20;
+    const fontSize = isMobile ? width / 20 : width / 25; // Smaller font size for desktop
 
     d3.select(ref.current).html('');
     const total = d3.sum(data.map(d => d.value));

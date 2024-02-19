@@ -5,3 +5,14 @@
 .header-font {
     font-family: 'Georgia', serif; 
 }
+
+@media (max-width: 767px) {
+    .prayer-image {
+        order: -1; /* This places the image above the text */
+    }
+}
+
+.parent-container {
+    display: flex;
+    flex-direction: column;
+}

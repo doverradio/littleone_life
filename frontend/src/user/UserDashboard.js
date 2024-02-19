@@ -8,8 +8,8 @@ import Mass from "../components/mass/Mass";
 import massIcon from '../components/mass/mass_icon.png'
 import Confession from "../components/confession/Confession"; // Import the Confession component
 import confessionIcon from '../components/confession/confession_icon.png'; // Path to your confession icon
-import DivineMercy from "../components/divinemercy/DivineMercy";
-import divineMercyIcon from '../components/divinemercy/divinemercy_icon.png'; // Path to your Divine Mercy icon
+import DivineMercy from "../components/otherprayers/divinemercy/DivineMercy";
+import divineMercyIcon from '../components/otherprayers/divinemercy/divinemercy_icon.png'; // Path to your Divine Mercy icon
 import prayerSettingsIcon from '../components/otherprayers/prayersettings_icon.png'
 import './styles.css'
 import { useModal } from "../context/ModalContext";

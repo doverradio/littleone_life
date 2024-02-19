@@ -8,7 +8,9 @@ const {
     getAllConfessions,
     getConfessionById,
     updateConfession,
-    deleteConfession
+    deleteConfession,
+    getUserConfessions,
+    deleteConfessions
 } = require('../controllers/confession');
 
 // Create a new confession
@@ -28,5 +30,11 @@ router.post('/confession/update', requireSignin, authMiddleware, isAuth, updateC
 
 // Delete a confession
 router.post('/confession/delete', requireSignin, authMiddleware, isAuth, deleteConfession);
+
+
+// Datatable
+router.post('/confession/user-confessions', requireSignin, authMiddleware, isAuth, getUserConfessions);
+router.delete('/confession/delete-confessions', requireSignin, authMiddleware, isAuth, deleteConfessions);
+
 
 module.exports = router;
