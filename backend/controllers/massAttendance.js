@@ -50,23 +50,34 @@ exports.getAllMassAttendances = async (req, res) => {
     }
 };
 
-exports.getAllMassAttendances1 = async (req, res) => {
-    const { userId } = req.body;
+exports.getUserMasses = async (req, res) => {
     try {
-        const massAttendances = await MassAttendance.aggregate([
-            { $match: { user: userId } },
-            { $group: { _id: "$church", count: { $sum: 1 } } },
-            { $lookup: {
-                from: "churches", // the collection name in MongoDB
-                localField: "_id",
-                foreignField: "_id",
-                as: "church"
-            }},
-            { $unwind: "$church" }
-        ]);
-        res.json(massAttendances);
+        const { userId, page, limit } = req.body;
+
+        // Fetch masses with pagination
+        const userMasses = await MassAttendance.find({ user: userId })
+            .populate('i')
+            .populate('church')
+            .skip((page - 1) * limit)
+            .limit(limit)
+            .exec();
+
+        // Transform the userMasses
+        const formattedMasses = userMasses.map(mass => {
+            let newChurch = mass.church && mass.church.name ? mass.church.name : 'Unknown Church';
+            return {
+                ...mass.toObject(), // Convert Mongoose document to a plain JavaScript object
+                church: newChurch
+            };
+        });
+
+        // Get total count for pagination
+        const total = await MassAttendance.countDocuments({ user: userId });
+
+        res.json({ masses: formattedMasses, total });
     } catch (error) {
-        res.status(400).json({ error: "Unable to retrieve mass attendances" });
+        console.error('Error fetching user masses:', error);
+        res.status(500).json({ error: 'Internal server error' });
     }
 };
 
@@ -92,3 +103,21 @@ exports.deleteMassAttendance = async (req, res) => {
     }
 };
 
+exports.deleteMassAttendances = async (req, res) => {
+    try {
+        // Extract the IDs of the mass attendances to delete from the request body
+        const { rowsToDelete } = req.body;
+
+        // Delete the MassAttendance documents with the provided IDs
+        await MassAttendance.deleteMany({ _id: { $in: rowsToDelete } });
+
+        res.status(200).json({
+            message: 'Mass attendances deleted successfully'
+        });
+    } catch (error) {
+        res.status(500).json({
+            message: 'Error deleting mass attendances',
+            error: error.message
+        });
+    }
+};

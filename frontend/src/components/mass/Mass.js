@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { getAllIntentions, createIntention, updateIntention, deleteIntention } from '../../api/intentions';
-import { createMassAttendance, countMassesByUser, getAllMassAttendances } from '../../api/massAttendance'; 
+import { createMassAttendance, countMassesByUser, getAllMassAttendances, getMassAttendances, deleteMassAttendances } from '../../api/massAttendance'; 
 import { createChurch, getAllChurches } from '../../api/church';
 import { isAuthenticated } from '../../api/auth';
 import { MdOutlineModeEdit } from "react-icons/md";
@@ -15,6 +15,7 @@ import ButtonLoader from '../../loaders/ButtonLoader';
 import MassQuestions from './MassQuestions';
 import MassPrayers from './MassPrayers';
 import PieChart from '../utils/piechart/PieChart';
+import ReusableDatatable from '../utils/datatable/ReusableDatatable';
 const log = console.log;
 
 const Mass = () => {
@@ -62,6 +63,19 @@ const Mass = () => {
 
     
     const [massAttendances, setMassAttendances] = useState([]);
+
+    // For ReusableDatatable
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(0);
+    const [refreshTrigger, setRefreshTrigger] = useState(0);
+    const [masses, setMasses] = useState([]);
+    const [totalMasses, setTotalMasses] = useState(0);
+
+    const massesPerPage = 30; // Or any other number you prefer
+
+    const pageSize = 10; // Adjust as needed
+
+    // For PieChart
     const [pieChartData, setPieChartData] = useState([]);
     const [error, setError] = useState('');
 
@@ -151,13 +165,24 @@ const Mass = () => {
             setCount(response.massAttendanceCount);
         }
     };
+
+    
+    const fetchData = async () => {
+        const data = await getMassAttendances(userId, currentPage, pageSize, token);
+        if (data) {
+            setMassAttendances(data.masses);
+            // setMasses(data.masses);
+            setTotalPages(Math.ceil(data.total / pageSize));
+        }
+    };
     
     useEffect(() => {
         fetchIntentions();
         fetchMassCount();
         fetchUserChurches(); // Fetch user churches
         fetchMassAttendances();
-    }, [userId]);
+        fetchData();
+    }, [userId, currentPage, pageSize, token]);
 
     const massTimesOptions = [
         '6:00 A.M.', '6:30 A.M.', '7:00 A.M.', '7:30 A.M.',
@@ -170,6 +195,74 @@ const Mass = () => {
         '8:00 P.M.', '8:30 P.M.', '9:00 P.M.', '9:30 P.M.',
         '10:00 P.M.', '10:30 P.M.', '11:00 P.M.', '11:30 P.M.'
     ];
+
+    const columns = [
+        {
+            header: 'Mass Time',
+            accessor: 'massTime'
+        },
+        {
+            header: 'Church',
+            accessor: 'church',
+            // If church is an object with more details, you might want to format it differently
+        },
+        // {
+        //     header: 'Special Intentions',
+        //     accessor: 'specialIntentions'
+        // },
+        // {
+        //     header: 'Intention Content',
+        //     accessor: 'i',
+        //     // Assuming 'i' is an array of intentions. You might need to customize the rendering.
+        //     customRender: (rowData) => {
+        //         // Join multiple intentions' content into a single string
+        //         return rowData.i.map(intention => intention.content).join(', ');
+        //     }
+        // },
+        {
+            header: 'Created At',
+            accessor: 'createdAt',
+            isDate: true // Assuming you have date formatting logic in your table
+        },
+        // {
+        //     header: 'Updated At',
+        //     accessor: 'updatedAt',
+        //     isDate: true // Assuming you have date formatting logic in your table
+        // }
+        // Add more columns as needed
+    ];
+    
+    const onRowSelect = (rowData) => {
+        // rowData contains the data of the clicked row
+        // console.log('Selected Row Data:', rowData);
+        // You can then use this data to show details, redirect to another page, or open a modal for editing, etc.
+    };
+
+    const handleDelete = async (selectedIds) => {
+        if (window.confirm('Are you sure you want to delete the selected masses?')) {
+            try {
+                const response = await deleteMassAttendances(selectedIds, token);
+                if (response) {
+                    console.log('Deleted successfully');
+
+                    // Update your state or UI here
+                    setRefreshTrigger(prev => prev + 1); // Increment to trigger refresh
+
+                    // Fetch the updated list of masses
+                    const data = await getMassAttendances(userId, currentPage, massesPerPage, token);
+                    // Update state with the new data
+                    setMassAttendances(data.masses);
+                    // setMasses(data.masses);
+                    // log(`data.total: `, data.total)
+                    setTotalMasses(data.total);
+                }
+            } catch (error) {
+                console.error('Delete operation failed:', error);
+                // Show error message to user if needed
+            }
+        }
+    };
+    
     
     const handleMassTimeChange = (e) => {
         setSelectedMassTime(e.target.value);
@@ -347,7 +440,7 @@ const Mass = () => {
                             setSpecialIntentions={ setSpecialIntentions }
                             handleSubmitMass={ handleSubmitMass }
                             isSubmitting={ isSubmitting }
-                            count={ count }
+                            count={ massAttendances.length }
                             handleChurchSelection={ handleChurchSelection }
                             editContent={ editContent }
                         />
@@ -367,12 +460,24 @@ const Mass = () => {
                         <div className="container mt-5">
                             <div className="row my-3">
                                 <div className="col-12">
-                                    <p style={{ fontWeight: 'bold' }}>Total: {count} Masses</p>
+                                    <p style={{ fontWeight: 'bold' }}>Total: {massAttendances.length} Masses</p>
                                 </div>
                             </div>
                         </div>
                         
                         <PieChart data={pieChartData} />
+
+                        <ReusableDatatable 
+                            data={massAttendances}
+                            columns={columns}
+                            pageSize={massesPerPage}
+                            checkbox={true}
+                            currentPage={currentPage}
+                            totalPages={totalPages}
+                            onRowSelect={onRowSelect}
+                            onDelete={handleDelete}
+                            refreshTrigger={refreshTrigger}
+                        />
 
 
                     </div>
