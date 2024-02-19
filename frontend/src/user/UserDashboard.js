@@ -18,6 +18,8 @@ import { getPrayerSettings, updatePrayerSettings } from "../api/user";
 import PrayerSettings from "../components/otherprayers/PrayerSettings";
 import StMichaelPrayer from "../components/otherprayers/stmichaelprayer/StMichaelPrayer";
 import stMichaelIcon from '../components/otherprayers/stmichaelprayer/stmichael_icon.png';
+import StFrancisPrayer from "../components/otherprayers/stfrancis/StFrancisPrayer";
+import stFrancisIcon from "../components/otherprayers/stfrancis/stfrancis_icon.png";
 
 const UserDashboard = () => {
     
@@ -96,6 +98,7 @@ const UserDashboard = () => {
         { id: 'confession', icon: confessionIcon, component: <Confession /> },
         { id: 'divineMercy', icon: divineMercyIcon, component: <DivineMercy /> }, // Updated ID
         { id: 'stMichaelPrayer', icon: stMichaelIcon, component: <StMichaelPrayer /> },
+        { id: 'stfrancis', icon: stFrancisIcon, component: <StFrancisPrayer /> },
         { 
             id: 'prayerSettings', 
             icon: prayerSettingsIcon, 
