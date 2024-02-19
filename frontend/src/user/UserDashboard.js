@@ -21,6 +21,9 @@ import stMichaelIcon from '../components/otherprayers/stmichaelprayer/stmichael_
 import StFrancisPrayer from "../components/otherprayers/stfrancis/StFrancisPrayer";
 import stFrancisIcon from "../components/otherprayers/stfrancis/stfrancis_icon.png";
 
+import StLeandroRuizPrayer from "../components/otherprayers/stleandroruiz/StLeandroRuiz";
+import stLeandroRuizIcon from "../components/otherprayers/stleandroruiz/stleandroruiz_icon.png";
+
 const UserDashboard = () => {
     
     const { modalState, toggleModal } = useModal(); // Import from context
@@ -99,6 +102,7 @@ const UserDashboard = () => {
         { id: 'divineMercy', icon: divineMercyIcon, component: <DivineMercy /> }, // Updated ID
         { id: 'stMichaelPrayer', icon: stMichaelIcon, component: <StMichaelPrayer /> },
         { id: 'stfrancis', icon: stFrancisIcon, component: <StFrancisPrayer /> },
+        { id: 'stleandroruiz', icon: stLeandroRuizIcon, component: <StLeandroRuizPrayer /> },
         { 
             id: 'prayerSettings', 
             icon: prayerSettingsIcon, 
