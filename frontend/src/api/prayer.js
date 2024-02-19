@@ -127,7 +127,7 @@ export const getTypeCount = async (userId, token) => {
 };
 
 // For Data Table
-export const getUserPrayers = async (userId, token, page = 1, limit = 30) => {
+export const getUserPrayers = async (userId, type, token, page = 1, limit = 30) => {
   try {
     const response = await fetch(`${API}/prayer/user-prayers`, {
       method: 'POST',
@@ -135,7 +135,7 @@ export const getUserPrayers = async (userId, token, page = 1, limit = 30) => {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`
       },
-      body: JSON.stringify({ userId, page, limit })
+      body: JSON.stringify({ userId, page, limit, type })
     });
     return await response.json();
   } catch (error) {

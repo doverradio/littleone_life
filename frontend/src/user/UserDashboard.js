@@ -96,15 +96,16 @@ const UserDashboard = () => {
     };
 
     const [icons, setIcons] = useState([
-        { id: 'rosary', icon: rosaryIcon, component: <Rosary /> },
-        { id: 'mass', icon: massIcon, component: <Mass /> },
-        { id: 'confession', icon: confessionIcon, component: <Confession /> },
-        { id: 'divineMercy', icon: divineMercyIcon, component: <DivineMercy /> }, // Updated ID
-        { id: 'stMichaelPrayer', icon: stMichaelIcon, component: <StMichaelPrayer /> },
-        { id: 'stfrancis', icon: stFrancisIcon, component: <StFrancisPrayer /> },
-        { id: 'stleandroruiz', icon: stLeandroRuizIcon, component: <StLeandroRuizPrayer /> },
+        { id: 'rosary', name: 'Rosary', icon: rosaryIcon, component: <Rosary /> },
+        { id: 'mass', name: 'Mass', icon: massIcon, component: <Mass /> },
+        { id: 'confession', name: 'Confession', icon: confessionIcon, component: <Confession /> },
+        { id: 'divineMercy', name: 'Divine Mercy', icon: divineMercyIcon, component: <DivineMercy /> }, // Updated ID
+        { id: 'stMichaelPrayer', name: 'St. Michael Prayer', icon: stMichaelIcon, component: <StMichaelPrayer /> },
+        { id: 'stfrancis', name: 'St. Francis Prayer', icon: stFrancisIcon, component: <StFrancisPrayer /> },
+        { id: 'stleandroruiz', name: 'St. Leandro Ruiz Prayer', icon: stLeandroRuizIcon, component: <StLeandroRuizPrayer /> },
         { 
             id: 'prayerSettings', 
+            name: 'Prayer Settings',
             icon: prayerSettingsIcon, 
             component: <PrayerSettings availablePrayers={availablePrayers} setAvailablePrayers={setAvailablePrayers} />
         },
@@ -178,12 +179,13 @@ const UserDashboard = () => {
                                 <img 
                                     src={icon.icon} 
                                     alt={icon.id} 
+                                    title={icon.name}
                                     className="clickable-icon"
                                     style={{ height: '55px', width: '55px' }}
                                 />
                                 <div className="icon-label">
-                                    {icon.id.charAt(0).toUpperCase() + icon.id.slice(1, 10)} {/* Only show the first 10 characters */}
-                                    {icon.id.length > 10 ? "..." : ""} {/* Add ellipsis if the text is longer than 10 characters */}
+                                    {icon.name.charAt(0).toUpperCase() + icon.name.slice(1, 10)} {/* Only show the first 10 characters */}
+                                    {icon.name.length > 10 ? "..." : ""} {/* Add ellipsis if the text is longer than 10 characters */}
                                 </div>
                                 {modalState[icon.id] && (
                                     <Modal id={icon.id}>

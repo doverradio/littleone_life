@@ -6,9 +6,17 @@ const ReusableDatatable = ({ data, columns, pageSize, checkbox, onRowSelect, onD
     const [sortedData, setSortedData] = useState([]);
     const [selectedRows, setSelectedRows] = useState([]);
 
+    const dateField = 'createdAt'; // Example field name
+
     // Initially sort and set data
     useEffect(() => {
-        setSortedData(data); // Replace with actual sorting logic if needed
+        
+        // Sort data by the date field in descending order (newest first)
+        const sorted = [...data].sort((a, b) => {
+            return new Date(b[dateField]) - new Date(a[dateField]);
+        });
+
+        setSortedData(sorted); // Replace with actual sorting logic if needed
         setSelectedRows([]);
     }, [data, refreshTrigger]);
 

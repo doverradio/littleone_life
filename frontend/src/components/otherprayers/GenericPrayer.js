@@ -3,9 +3,11 @@ import { MdOutlineModeEdit } from 'react-icons/md';
 import { isAuthenticated } from '../../api/auth';
 import { createIntention, getAllIntentions, updateIntention } from '../../api/intentions';
 import ToggleSlider from '../utils/ToggleSlider';
-import { createPrayer } from '../../api/prayer';
+import { createPrayer, deletePrayers, getUserPrayers } from '../../api/prayer';
 import { useModal } from '../../context/ModalContext';
 import ButtonLoader from '../../loaders/ButtonLoader';
+import ReusableDatatable from '../utils/datatable/ReusableDatatable';
+import './styles.css'
 const log = console.log;
 
 const GenericPrayer = ({ prayerTitle, prayerText, iconSrc, onIntentionChange, prayerType, showIntentions, modalId }) => {
@@ -18,7 +20,14 @@ const GenericPrayer = ({ prayerTitle, prayerText, iconSrc, onIntentionChange, pr
     const [selectedIntentions, setSelectedIntentions] = useState([]);
     const [isEmailEnabled, setIsEmailEnabled] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [prayers, setPrayers] = useState([]);
+    const [totalPrayers, setTotalPrayers] = useState(0);
     
+    
+    // For ReusableDatatable
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(0);
+    const [refreshTrigger, setRefreshTrigger] = useState(0);
     const [activeTab, setActiveTab] = useState('Questions');
 
     const DEFAULT_FONT_SIZE = 13; // Default font size in px
@@ -35,7 +44,6 @@ const GenericPrayer = ({ prayerTitle, prayerText, iconSrc, onIntentionChange, pr
 
     const userId = _id;
 
-    
     const increaseFontSize = () => {
         setFontSize(currentSize => Math.min(currentSize + 1, MAX_FONT_SIZE));
     };
@@ -48,13 +56,11 @@ const GenericPrayer = ({ prayerTitle, prayerText, iconSrc, onIntentionChange, pr
         // Future email functionality logic
     };
 
-    
     const handleIntentionInteraction = (intentionId, actionType) => {
         // Handle different actions like edit, delete, etc.
         // Call onIntentionChange to notify parent component about changes
     };
 
-    
     // Intentions functions
     const fetchIntentions = async () => {
         try {
@@ -65,13 +71,11 @@ const GenericPrayer = ({ prayerTitle, prayerText, iconSrc, onIntentionChange, pr
         }
     };
 
-
     useEffect(() => {
-        // setLocalIntentions(intentions || []);
+        fetchData();
         fetchIntentions();
     }, []);
 
-    
     const handleIntentionCheckboxChange = (intentionId) => {
         setSelectedIntentions(prevSelected => {
             // Check if the intentionId is already in the selectedIntentions array
@@ -85,7 +89,6 @@ const GenericPrayer = ({ prayerTitle, prayerText, iconSrc, onIntentionChange, pr
         });
     };
 
-    
     const handleUpdateIntention = async (e) => {
         e.preventDefault();
         try {
@@ -110,7 +113,6 @@ const GenericPrayer = ({ prayerTitle, prayerText, iconSrc, onIntentionChange, pr
         }
     };
     
-
     const renderIntentions = () => {
         if (!intentions || intentions.length === 0 && showIntentions === true ) {
             return <p>No intentions added yet.</p>;
@@ -187,6 +189,7 @@ const GenericPrayer = ({ prayerTitle, prayerText, iconSrc, onIntentionChange, pr
         setEditingIntentionId(id);
         setEditContent(content);
     };
+
     const handleDeleteIntention = async (intentionId) => {
         // ... delete intention and update state
     };
@@ -201,6 +204,39 @@ const GenericPrayer = ({ prayerTitle, prayerText, iconSrc, onIntentionChange, pr
             onIntentionChange([...localIntentions, { content: newIntention }]);
         }
     };
+
+    const onRowSelect = (rowData) => {
+        // rowData contains the data of the clicked row
+        // console.log('Selected Row Data:', rowData);
+        // You can then use this data to show details, redirect to another page, or open a modal for editing, etc.
+    };
+
+    
+    const handleDelete = async (selectedIds) => {
+        if (window.confirm('Are you sure you want to delete the selected masses?')) {
+            try {
+                const response = await deletePrayers(selectedIds, token);
+                if (response) {
+                    console.log('Deleted successfully');
+
+                    // Update your state or UI here
+                    setRefreshTrigger(prev => prev + 1); // Increment to trigger refresh
+
+                    // Fetch the updated list of masses
+                    const data = await getUserPrayers(userId, prayerType, token, currentPage, pageSize);
+                    // Update state with the new data
+                    setPrayers(data.prayers);
+                    // setMasses(data.masses);
+                    // log(`data.total: `, data.total)
+                    setTotalPrayers(data.total);
+                }
+            } catch (error) {
+                console.error('Delete operation failed:', error);
+                // Show error message to user if needed
+            }
+        }
+    };
+
     
     const renderContent = () => {
         switch (activeTab) {
@@ -278,7 +314,44 @@ const GenericPrayer = ({ prayerTitle, prayerText, iconSrc, onIntentionChange, pr
                     }
                 </>;
             case 'Responses':
-                return <div>Responses Content</div>;
+                return <div>
+                    {
+                        prayers && prayers.length > 0 ?
+                        <>
+                            <div className="container">
+                                <div className="row">
+                                    <div className="col-12">
+                                        <ReusableDatatable
+                                            data={prayers}
+                                            columns={responsesColumns}
+                                            pageSize={pageSize}
+                                            checkbox={checkbox}
+                                            currentPage={currentPage}
+                                            totalPages={totalPages}
+                                            onRowSelect={onRowSelect}
+                                            onDelete={handleDelete}
+                                            refreshTrigger={refreshTrigger}
+                                            // Add other necessary props here
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        </>
+                        :
+                        <>
+                            <div className="container">
+                                <div className="row">
+                                    <div className="col-12">
+                                        <p style={{ color: 'red' }} className="text-center">
+                                            No {prayerType}s yet. Go back to the Questions tab and enter a new {prayerType}.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </>
+                    }
+                
+                </div>;
             case 'Settings':
                 return <div>
                     
@@ -298,7 +371,6 @@ const GenericPrayer = ({ prayerTitle, prayerText, iconSrc, onIntentionChange, pr
                 return null;
         }
     };
-
 
     const handleSubmitPrayer = async () => {
         setIsSubmitting(true); // Set submitting to true
@@ -320,8 +392,35 @@ const GenericPrayer = ({ prayerTitle, prayerText, iconSrc, onIntentionChange, pr
         
         setIsSubmitting(false); // Set submitting to false after response is received
     };
-    
 
+    
+    // Define the necessary props for ReusableDatatable
+    const responsesColumns = [
+        {
+            header: 'Prayer',
+            accessor: 'type'
+        },
+        {
+            header: 'Created At',
+            accessor: 'createdAt',
+            isDate: true // Assuming you have date formatting logic in your table
+        },
+    ];; // Define the columns for your datatable
+    const pageSize = 10; // Set the page size
+    const checkbox = true; // Set if checkboxes are needed
+
+    
+    const fetchData = async () => {
+        const data = await getUserPrayers(userId, prayerType, token, currentPage, pageSize);
+
+        if (data) {
+            setPrayers(data.prayers);
+            // setMasses(data.masses);
+            setTotalPages(Math.ceil(data.total / pageSize));
+        }
+    };
+    
+    
     return (
         <div className="generic-prayer-container">
             <img 

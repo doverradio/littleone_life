@@ -100,14 +100,14 @@ exports.getTypeCount = async (req, res) => {
 
 exports.getUserPrayers = async (req, res) => {
     try {
-        const { userId, page, limit } = req.body;
-        const userPrayers = await Prayer.find({ user: userId })
+        const { userId, page, limit, type } = req.body;
+        const userPrayers = await Prayer.find({ user: userId, type })
             .skip((page - 1) * limit)
             .limit(limit)
             // Adjust the populate if you have intentions or other references
             .exec();
 
-        const total = await Prayer.countDocuments({ user: userId });
+        const total = await Prayer.countDocuments({ user: userId, type });
 
         res.json({ prayers: userPrayers, total });
     } catch (error) {
