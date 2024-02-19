@@ -37,6 +37,7 @@ const StMichaelPrayer = () => {
             iconSrc={stMichaelIcon} 
             showIntentions={false}
             prayerType={`St. Michael Prayer`}
+            modalId={`stMichaelPrayer`}
         />
     );
 };

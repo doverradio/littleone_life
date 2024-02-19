@@ -12,6 +12,7 @@ const churchRoutes = require('./routes/church');
 const confessionRoutes = require('./routes/confession');
 const intentionRoutes = require('./routes/intentions');
 const massAttendanceRoutes = require('./routes/massAttendance');
+const prayerRoutes = require('./routes/prayer')
 const rosaryRoutes = require('./routes/rosary');
 const userRoutes = require('./routes/user');
 
@@ -62,6 +63,7 @@ app.use('/api', churchRoutes);
 app.use('/api', confessionRoutes);
 app.use('/api', intentionRoutes);
 app.use('/api', massAttendanceRoutes);
+app.use('/api', prayerRoutes);
 app.use('/api', rosaryRoutes);
 app.use('/api', userRoutes);
 

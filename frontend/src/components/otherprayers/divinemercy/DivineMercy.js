@@ -159,6 +159,7 @@ const DivineMercy = () => {
                 iconSrc={divineMercyIcon} 
                 showIntentions={true}
                 prayerType={`Divine Mercy`}
+                modalId={`divineMercy`}
             />
         </>
     );

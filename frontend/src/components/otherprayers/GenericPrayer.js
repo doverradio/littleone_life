@@ -3,9 +3,12 @@ import { MdOutlineModeEdit } from 'react-icons/md';
 import { isAuthenticated } from '../../api/auth';
 import { createIntention, getAllIntentions, updateIntention } from '../../api/intentions';
 import ToggleSlider from '../utils/ToggleSlider';
+import { createPrayer } from '../../api/prayer';
+import { useModal } from '../../context/ModalContext';
+import ButtonLoader from '../../loaders/ButtonLoader';
 const log = console.log;
 
-const GenericPrayer = ({ prayerTitle, prayerText, iconSrc, onIntentionChange, prayerType, showIntentions }) => {
+const GenericPrayer = ({ prayerTitle, prayerText, iconSrc, onIntentionChange, prayerType, showIntentions, modalId }) => {
     const [newIntention, setNewIntention] = useState('');
     const [localIntentions, setLocalIntentions] = useState( []);
     const [editingIntentionId, setEditingIntentionId] = useState(null);
@@ -14,6 +17,7 @@ const GenericPrayer = ({ prayerTitle, prayerText, iconSrc, onIntentionChange, pr
     const [intentions, setIntentions] = useState([]);
     const [selectedIntentions, setSelectedIntentions] = useState([]);
     const [isEmailEnabled, setIsEmailEnabled] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
     
     const [activeTab, setActiveTab] = useState('Questions');
 
@@ -22,6 +26,8 @@ const GenericPrayer = ({ prayerTitle, prayerText, iconSrc, onIntentionChange, pr
     const MIN_FONT_SIZE = 11; // Min font size in px
     const [fontSize, setFontSize] = useState(DEFAULT_FONT_SIZE);
     
+    const { toggleModal } = useModal();
+
     const {
         user: { _id },
         token
@@ -232,7 +238,11 @@ const GenericPrayer = ({ prayerTitle, prayerText, iconSrc, onIntentionChange, pr
                                     onClick={handleSubmitPrayer}
                                     className='btn btn-primary btn-block m-1'
                                 >
-                                    Submit Prayer
+                                    {
+                                        isSubmitting ?
+                                        <ButtonLoader />
+                                        : `Submit Prayer`
+                                    }
                                 </button>
                             </div>
                         </div>
@@ -291,20 +301,26 @@ const GenericPrayer = ({ prayerTitle, prayerText, iconSrc, onIntentionChange, pr
 
 
     const handleSubmitPrayer = async () => {
-        // Logic to handle submission of the prayer session
+        setIsSubmitting(true); // Set submitting to true
         const prayerData = {
-            // ... Data to be sent to backend
+            userId: userId,
+            type: prayerType,
+            intentions: showIntentions ? selectedIntentions : []
         };
+    
         try {
-            // await createPrayerSession(prayerData);
-            log(`Clicked handleSubmitPrayer!`)
-            // Handle success
+            const response = await createPrayer(userId, prayerData, token);
+            log(`Prayer Session Created:`, response);
+            // Reset state or show success message
+            toggleModal(modalId);
         } catch (error) {
-            log(`handleSubmitPrayer error: `, error)
+            log(`handleSubmitPrayer error: `, error);
+            // Handle error
         }
+        
+        setIsSubmitting(false); // Set submitting to false after response is received
     };
-
-    const classNames = `btn btn`
+    
 
     return (
         <div className="generic-prayer-container">

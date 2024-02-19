@@ -72,7 +72,7 @@ const UserDashboard = () => {
     const persistPrayerSettings = async (updatedPrayers) => {
         try {
             const response = await updatePrayerSettings(userId, updatedPrayers);
-            console.log(response); // Handle the response appropriately
+            // console.log(response); // Handle the response appropriately
         } catch (error) {
             console.error('Error updating prayer settings:', error);
             // Handle errors (e.g., show a notification to the user)
