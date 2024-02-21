@@ -19,68 +19,40 @@ const NavbarMain = ({ backgroundColor }) => {
     const isDashboardRoute = location.pathname.startsWith('/user/dashboard') || location.pathname.startsWith('/admin/dashboard');
 
     return (
-        <nav 
-            className="navbar navbar-expand-lg navbar-light" 
-            style={{
-                backgroundColor: backgroundColor, 
-                color: 'black',
-                transition: 'background-color 4s ease'
-            }}
-        >
-            {/* Toggle button for mobile view */}
-            <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-main" aria-controls="navbar-main" aria-expanded="false" aria-label="Toggle navigation">
-                <span className="navbar-toggler-icon" style={{ color: 'black' }}></span>
-            </button>
+        <nav className="navbar navbar-light" 
+             style={{ backgroundColor: backgroundColor, color: 'black', transition: 'background-color 4s ease' }}>
+            
+            <div className="container-fluid"> {/* Use container-fluid for full width */}
+                <NavLink to="/" className="navbar-brand">
+                    <img src="/logo.png" alt="logo" style={{ borderRadius: '50%', width: '90px', height: '90px' }} />
+                </NavLink>
 
-            <NavLink to="/" className="navbar-brand d-none d-lg-block">
-                <img src="/logo.png" style={{ borderRadius: '50%', width: '90px', height: '90px' }} alt="" />
-            </NavLink>
+                <div className="d-flex align-items-center"> {/* Flexbox container */}
+                    {/* Conditionally render User Dashboard link */}
+                    {!isDashboardRoute && isAuthenticated() && (
+                        <NavLink to={`/${isAuthenticated().user.role === 0 ? 'user' : 'admin'}/dashboard`} className="nav-link d-lg-none" activeClassName="active" style={{ color: 'black', fontSize: '' }}>
+                            {isAuthenticated().user.role === 0 ? 'User Dashboard' : 'Admin Dashboard'}
+                        </NavLink>
+                    )}
 
-            <div className="collapse navbar-collapse" id="navbar-main">
-                <ul className="navbar-nav mr-auto">
-                    {/* <li className="nav-item">
-                        <NavLink exact to="/" className="nav-link" activeClassName="active" style={{ color: 'black' }}>Home</NavLink>
-                    </li> */}
-                    {/* <li className="nav-item">
-                        <NavLink to="/about" className="nav-link" activeClassName="active" style={{ color: 'black' }}>About Us</NavLink>
-                    </li> */}
-                    {/* <li className="nav-item">
-                        <NavLink to="/contact" className="nav-link" activeClassName="active" style={{ color: 'black' }}>Contact</NavLink>
-                    </li> */}
-                </ul>
-                <ul className="navbar-nav ml-auto">
-                    {!isDashboardRoute && isAuthenticated() && isAuthenticated().user.role === 0 && (
-                        <li className="nav-item">
-                            <NavLink to="/user/dashboard" className="nav-link" activeClassName="active" style={{ color: 'black' }}>User Dashboard</NavLink>
-                        </li>
-                    )}
-                    {!isDashboardRoute && isAuthenticated() && isAuthenticated().user.role === 1 && (
-                        <li className="nav-item">
-                            <NavLink to="/admin/dashboard" className="nav-link" activeClassName="active" style={{ color: 'black' }}>Admin Dashboard</NavLink>
-                        </li>
-                    )}
-                    {isAuthenticated() ? (
+                    {/* Settings and Sign Out */}
+                    {isAuthenticated() && (
                         <>
-                            {isAuthenticated() && (
-                                <Link to="/user/settings" className="navbar-icon">
-                                    <FaCog size={24} />
-                                </Link>
-                            )}
-                            <li className="nav-item">
-                                <button className="btn btn-link nav-link" onClick={handleSignout} style={{ color: '#c0392b' }}>Sign Out</button>
-                            </li>
-                        </>
-                    ) : (
-                        <>
-                            <li className="nav-item">
-                                <NavLink to="/signup" className="nav-link" activeClassName="active" style={{ color: 'black' }}>Sign Up</NavLink>
-                            </li>
-                            <li className="nav-item">
-                                <NavLink to="/signin" className="nav-link" activeClassName="active" style={{ color: 'black' }}>Sign In</NavLink>
-                            </li>
+                            <Link to="/user/settings" className="navbar-icon">
+                                <FaCog size={24} />
+                            </Link>
+                            <button className="btn btn-link nav-link" onClick={handleSignout} style={{ color: '#c0392b' }}>Sign Out</button>
                         </>
                     )}
-                </ul>
+
+                    {/* Sign Up and Sign In Links */}
+                    {!isAuthenticated() && (
+                        <>
+                            <NavLink to="/signup" className="nav-link" activeClassName="active" style={{ color: 'black' }}>Sign Up</NavLink>
+                            <NavLink to="/signin" className="nav-link" activeClassName="active" style={{ color: 'black' }}>Sign In</NavLink>
+                        </>
+                    )}
+                </div>
             </div>
         </nav>
     );

@@ -104,3 +104,11 @@
 .horizontal-list a:hover {
     text-decoration: underline;
 }
+
+.fancy-font {
+  /* font-family: 'Georgia', serif; Replace 'Georgia' with your preferred web safe font */
+  font-family: 'Handlee', cursive; /* Replace 'Georgia' with your preferred web safe font */
+}
+.header-font {
+  font-family: 'Georgia', serif; 
+}

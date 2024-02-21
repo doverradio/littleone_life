@@ -16,8 +16,8 @@ const MainPageBody = () => {
           }}
         >
             {/* Add your content here */}
-            <div className="content-container">
-                <h1>Welcome to Littleone.life</h1>
+            <div className="content-container header-font" style={{ color: 'black' }}>
+                <h1>littleone life</h1>
                 <p>Your spiritual journey begins here.</p>
                 {/* More content can be added here */}
             </div>
