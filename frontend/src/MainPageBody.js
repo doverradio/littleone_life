@@ -11,7 +11,7 @@ const MainPageBody = () => {
               backgroundImage: `url(${backgroundImage})`,
               backgroundSize: 'cover',
               backgroundPosition: 'center',
-              height: '100vh', // This sets the height to full viewport height
+              height: '73vh', // This sets the height to full viewport height
               color: 'white' // Assuming you want white text over your image
           }}
         >

@@ -1,12 +1,13 @@
 import React from "react";
-import { NavLink, useNavigate  } from 'react-router-dom';
+import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { isAuthenticated, signout } from './api/auth'
 import { FaCog } from 'react-icons/fa'; // Example using react-icons
 import { Link } from 'react-router-dom';
 
-const NavbarMain = () => {
+const NavbarMain = ({ backgroundColor }) => {
 
     const navigate = useNavigate();
+    const location = useLocation(); // Get the current location
 
     const handleSignout = () => {
         signout(() => {
@@ -15,8 +16,17 @@ const NavbarMain = () => {
         });
     };
 
+    const isDashboardRoute = location.pathname.startsWith('/user/dashboard') || location.pathname.startsWith('/admin/dashboard');
+
     return (
-        <nav className="navbar navbar-expand-lg navbar-light" style={{ backgroundColor: 'white', color: 'black'}}>
+        <nav 
+            className="navbar navbar-expand-lg navbar-light" 
+            style={{
+                backgroundColor: backgroundColor, 
+                color: 'black',
+                transition: 'background-color 4s ease'
+            }}
+        >
             {/* Toggle button for mobile view */}
             <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-main" aria-controls="navbar-main" aria-expanded="false" aria-label="Toggle navigation">
                 <span className="navbar-toggler-icon" style={{ color: 'black' }}></span>
@@ -28,23 +38,23 @@ const NavbarMain = () => {
 
             <div className="collapse navbar-collapse" id="navbar-main">
                 <ul className="navbar-nav mr-auto">
-                    <li className="nav-item">
+                    {/* <li className="nav-item">
                         <NavLink exact to="/" className="nav-link" activeClassName="active" style={{ color: 'black' }}>Home</NavLink>
-                    </li>
-                    <li className="nav-item">
+                    </li> */}
+                    {/* <li className="nav-item">
                         <NavLink to="/about" className="nav-link" activeClassName="active" style={{ color: 'black' }}>About Us</NavLink>
-                    </li>
-                    <li className="nav-item">
+                    </li> */}
+                    {/* <li className="nav-item">
                         <NavLink to="/contact" className="nav-link" activeClassName="active" style={{ color: 'black' }}>Contact</NavLink>
-                    </li>
+                    </li> */}
                 </ul>
                 <ul className="navbar-nav ml-auto">
-                    {isAuthenticated() && isAuthenticated().user.role === 0 && (
+                    {!isDashboardRoute && isAuthenticated() && isAuthenticated().user.role === 0 && (
                         <li className="nav-item">
                             <NavLink to="/user/dashboard" className="nav-link" activeClassName="active" style={{ color: 'black' }}>User Dashboard</NavLink>
                         </li>
                     )}
-                    {isAuthenticated() && isAuthenticated().user.role === 1 && (
+                    {!isDashboardRoute && isAuthenticated() && isAuthenticated().user.role === 1 && (
                         <li className="nav-item">
                             <NavLink to="/admin/dashboard" className="nav-link" activeClassName="active" style={{ color: 'black' }}>Admin Dashboard</NavLink>
                         </li>

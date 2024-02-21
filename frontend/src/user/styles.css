@@ -81,3 +81,26 @@
     cursor: pointer;
   }
   
+  .horizontal-list {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.horizontal-list li {
+    margin: 0 10px;
+}
+
+.horizontal-list a {
+    text-decoration: none;
+    color: #000; /* or any color you prefer */
+    font-weight: bold;
+}
+
+/* Add hover effect for links if needed */
+.horizontal-list a:hover {
+    text-decoration: underline;
+}
