@@ -35,9 +35,8 @@ import stLeandroRuizIcon from "../components/otherprayers/stleandroruiz/stleandr
 import './styles.css'
 
 const God = ({setBackgroundColor}) => {
-    const { modalState, toggleModal, togglePrayerSettingsModal  } = useModal(); // Import from context
+    const { modalState, toggleModal } = useModal(); // Import from context
     const [availablePrayers, setAvailablePrayers] = useState([]); // Define available prayers with visibility control
-    const [activeIcon, setActiveIcon] = useState(null);
     const [icons, setIcons] = useState([
         { id: 'rosary', name: 'Rosary', icon: rosaryIcon, component: <Rosary /> },
         { id: 'mass', name: 'Mass', icon: massIcon, component: <Mass /> },
@@ -50,7 +49,7 @@ const God = ({setBackgroundColor}) => {
             id: 'prayerSettings', 
             name: 'Prayer Settings',
             icon: prayerSettingsIcon, 
-            component: <PrayerSettings availablePrayers={availablePrayers} onVisibilityChange={handlePrayerVisibilityChange} setAvailablePrayers={setAvailablePrayers} />
+            component: <PrayerSettings availablePrayers={availablePrayers} setAvailablePrayers={setAvailablePrayers} />
         },
     ]);
 
@@ -63,50 +62,48 @@ const God = ({setBackgroundColor}) => {
     }, [setBackgroundColor]); // Empty dependency array to run only once on component mount
 
 
-    const handleIconClick = (iconId) => {
-        setActiveIcon(activeIcon === iconId ? null : iconId);
-    };
-    
-    // Event handler to open the modal
-    const openPrayerSettingsModal = () => {
-        togglePrayerSettingsModal();
-    };
-
     return (
         <>
             <div className="d-flex flex-wrap justify-content-center mt-5">
                 {icons.map(icon => {
+                                    
+                    // Check if the prayer is visible
                     const isVisible = availablePrayers.find(prayer => prayer.id === icon.id)?.isVisible ?? true;
-                    // Show icon only if it's visible and no active icon or it's the active icon
-                    return isVisible && (!activeIcon || activeIcon === icon.id) && (
+
+                    return isVisible && (
                         <div 
                             key={icon.id} 
                             className="icon-container p-2"
                             draggable 
-                            onClick={() => handleIconClick(icon.id)}
-                            // ... other event handlers ...
+                            onDragStart={(e) => onDragStart(e, icon.id)}
+                            onDrop={(e) => onDrop(e, icon.id, icons, setIcons)}
+                            onDragOver={(e) => e.preventDefault()}
+                            onClick={() => toggleModal(icon.id)}
+                            onTouchStart={(e) => handleTouchStart(e, icon.id)}
+                            onTouchMove={(e) => handleTouchMove(e, icon.id, eventOptions)}
+                            onTouchEnd={(e) => handleTouchEnd(e, icon.id)}
                         >
-                            <img src={icon.icon} alt={icon.id} title={icon.name} className="clickable-icon" style={{ height: '55px', width: '55px' }} />
-                            <div 
-                                className="icon-label" 
-                                key={activeIcon === icon.id ? 'active-' + icon.id : 'inactive-' + icon.id}
-                            >
-                                {icon.name}
+                            <img 
+                                src={icon.icon} 
+                                alt={icon.id} 
+                                title={icon.name}
+                                className="clickable-icon"
+                                style={{ height: '55px', width: '55px' }}
+                            />
+                            <div className="icon-label">
+                                {icon.name.charAt(0).toUpperCase() + icon.name.slice(1, 10)} {/* Only show the first 10 characters */}
+                                {icon.name.length > 10 ? "..." : ""} {/* Add ellipsis if the text is longer than 10 characters */}
                             </div>
+                            {modalState[icon.id] && (
+                                <Modal id={icon.id}>
+                                    {icon.component}
+                                </Modal>
+                            )}
                         </div>
                     )
-                })}
+                }
+                )}
             </div>
-
-            
-        {/* Render content of the active icon in a card */}
-        {activeIcon && (
-            <div className="card">
-                <div className="card-body">
-                    {icons.find(icon => icon.id === activeIcon)?.component}
-                </div>
-            </div>
-        )}
             
             {/* Modal for Prayer Settings */}
             {modalState.prayerSettings && (

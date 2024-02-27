@@ -360,7 +360,7 @@ const Rosary = () => {
     // Render the component
     return (
         <div className="rosary-component container">
-            <div className="row rosary-header">
+            {/* <div className="row rosary-header">
                 <div className="col-3">
                     <img 
                         src={rosaryIcon} 
@@ -378,7 +378,7 @@ const Rosary = () => {
                         Rosary
                     </h1>
                 </div>
-            </div>
+            </div> */}
             <hr />
             <div className="tab-navigation">
                 <a href="#!" className={activeTab === 'Questions' ? 'active' : ''} onClick={() => setActiveTab('Questions')}>Questions</a>

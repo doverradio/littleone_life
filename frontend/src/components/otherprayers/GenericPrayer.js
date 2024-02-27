@@ -288,7 +288,7 @@ const GenericPrayer = ({ prayerTitle, prayerText, iconSrc, onIntentionChange, pr
                                         <button onClick={() => setIsAddingIntention(true)} className="btn btn-outline-secondary btn-sm m-2">
                                             Add Intention
                                         </button>
-                                    ) : <div>After saying the prayer, click Submit Prayer below.</div>
+                                    ) : <div className='row justify-content-center align-items-center'>After saying the prayer, click Submit Prayer below.</div>
                                 }
                                 </div>
                                 {renderIntentions()}
@@ -312,7 +312,7 @@ const GenericPrayer = ({ prayerTitle, prayerText, iconSrc, onIntentionChange, pr
                     </div>
                 </>;
             case 'Prayers':
-                return <>
+                return <div className='row justify-content-center align-items-center'>
                     {/* Font Size Controls */}
                     <div className="text-size-controls">
                         {/* <div>
@@ -339,7 +339,7 @@ const GenericPrayer = ({ prayerTitle, prayerText, iconSrc, onIntentionChange, pr
                         decreaseFontSize: decreaseFontSize
                         })
                     }
-                </>;
+                </div>;
             case 'Responses':
                 return <div>
                     {
@@ -452,7 +452,7 @@ const GenericPrayer = ({ prayerTitle, prayerText, iconSrc, onIntentionChange, pr
     
     return (
         <div className="generic-prayer-container">
-            <img 
+            {/* <img 
                 src={iconSrc} 
                 alt={prayerTitle} 
                 className="prayer-icon"
@@ -461,7 +461,7 @@ const GenericPrayer = ({ prayerTitle, prayerText, iconSrc, onIntentionChange, pr
                     width: '220px'
                 }}
             />
-            <h1>{prayerTitle}</h1>
+            <h1>{prayerTitle}</h1> */}
             
             <hr />
 

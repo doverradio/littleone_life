@@ -39,7 +39,7 @@ const MassQuestions = ({
         <div>
         {/* Content of the Mass component */}            
         <div className="row justify-content-center">
-            <div className="col-12 col-lg-4">
+            <div className="col-12 col-lg-6">
                 <form>
                     {userChurches.map(church => (
                         <div key={church._id} className="radio-button-container">
@@ -50,7 +50,7 @@ const MassQuestions = ({
                                 value={church._id} 
                                 onChange={handleChurchSelection} 
                             />
-                            <label htmlFor={church._id}>&nbsp;&nbsp;{church.name}</label>
+                            <label style={{ fontSize: '15px' }} htmlFor={church._id}>&nbsp;&nbsp;{church.name}</label>
                         </div>
                     ))}
                 </form>

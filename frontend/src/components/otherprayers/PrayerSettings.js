@@ -14,6 +14,7 @@ const PrayerSettings = ({ availablePrayers, onVisibilityChange, setAvailablePray
             <h2>Prayer Settings</h2>
             <p>Select the prayers you want to display on your dashboard:</p>
             <div className="prayer-list">
+                {JSON.stringify(availablePrayers)}
                 {availablePrayers.map(prayer => (
                     <div key={prayer.id} className="prayer-item">
                         <input 

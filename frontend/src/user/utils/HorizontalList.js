@@ -16,11 +16,11 @@ const HorizontalList = ({setBackgroundColor}) => {
             <div className="row justify-content-center align-items-center">
                 <ul className="horizontal-list">
                     <li style={{cursor: 'pointer'}} className={activeTab === "God" ? "active-tab" : ""} onClick={() => handleTabClick("God")}>God</li>
-                    <li style={{cursor: 'pointer'}} className={activeTab === "Self" ? "active-tab" : ""} onClick={() => handleTabClick("Self")}>Self</li>
-                    <li style={{cursor: 'pointer'}} className={activeTab === "Society" ? "active-tab" : ""} onClick={() => handleTabClick("Society")}>Society</li>
+                    {/* <li style={{cursor: 'pointer'}} className={activeTab === "Self" ? "active-tab" : ""} onClick={() => handleTabClick("Self")}>Self</li> */}
+                    {/* <li style={{cursor: 'pointer'}} className={activeTab === "Society" ? "active-tab" : ""} onClick={() => handleTabClick("Society")}>Society</li> */}
                 </ul>
             </div>
-            <div className="tab-content" style={{ height: '73vh' }}>
+            <div className="tab-content" style={{ height: '' }}>
                 {activeTab === "God" && <God setBackgroundColor={setBackgroundColor} />}
                 {activeTab === "Self" && <Self setBackgroundColor={setBackgroundColor} />}
                 {activeTab === "Society" && <Society setBackgroundColor={setBackgroundColor} />}
