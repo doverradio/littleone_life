@@ -2,6 +2,8 @@ const User = require("../models/user");
 const jwt = require("jsonwebtoken"); // to generate signed token
 const { expressjwt: expressJwt } = require('express-jwt');
 const _ = require("lodash");
+const { OAuth2Client } = require('google-auth-library');
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 const log = console.log;
 
 exports.checkUsernameAvailability = async (req, res) => {
@@ -94,7 +96,41 @@ exports.signin = async (req, res) => {
     }
 };
 
-
+exports.googleLogin = async (req, res) => {
+    const { token }  = req.body;
+  
+    async function verify() {
+      const ticket = await client.verifyIdToken({
+          idToken: token,
+          audience: process.env.GOOGLE_CLIENT_ID,
+      });
+      const payload = ticket.getPayload();
+      const userid = payload['sub'];
+      // Check if user exists in database or create a new one
+      let user = await User.findOne({ googleId: userid });
+      if (!user) {
+        // Create a new user in your database
+        user = new User({
+          // Fill user details from Google payload
+          googleId: userid,
+          email: payload.email,
+          name: payload.name,
+          // ... other user data ...
+        });
+        await user.save();
+      }
+      // Generate your JWT token
+      const token = jwt.sign({_id: user._id}, process.env.JWT_SECRET);
+      // Return your JWT token or session data
+      res.json({token, user});
+    }
+  
+    try {
+      await verify();
+    } catch (error) {
+      res.status(401).send("Unauthorized");
+    }
+  };
  
 
 exports.signout = async ( req, res ) =>  // a 

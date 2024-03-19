@@ -53,15 +53,48 @@ const God = ({setBackgroundColor}) => {
             component: <PrayerSettings availablePrayers={availablePrayers} onVisibilityChange={handlePrayerVisibilityChange} setAvailablePrayers={setAvailablePrayers} />
         },
     ]);
+    
+    const [contextMenu, setContextMenu] = useState({
+            visible: false,
+            x: 0,
+            y: 0,
+            iconId: null
+        });
+
 
     const { user: {  _id: userId }, token } = isAuthenticated();
 
     useEffect(() => {
+        const defaultIconId = localStorage.getItem('defaultIcon');
+        if (defaultIconId) {
+            setActiveIcon(defaultIconId);
+        }
         fetchPrayerSettings(userId, token, getPrayerSettings, updatePrayerSettings, setAvailablePrayers);
         setBackgroundColor('#dff9fb'); // Set the background color for God component
         return () => setBackgroundColor('white'); // Reset to white when component unmounts
     }, [setBackgroundColor]); // Empty dependency array to run only once on component mount
 
+    // Handle Right Click (Desktop) and Long Press (Mobile)
+    const handleContextMenu = (event, iconId) => {
+        event.preventDefault();
+        setContextMenu({
+            visible: true,
+            x: event.clientX,
+            y: event.clientY,
+            iconId: iconId
+        });
+    };
+    
+    const handleLongPress = (iconId) => {
+        // For mobile view, set the position where you want the menu to appear
+        setContextMenu({
+            visible: true,
+            x: 100, // Example position, adjust as needed
+            y: 100, // Example position, adjust as needed
+            iconId: iconId
+        });
+    };
+    
 
     const handleIconClick = (iconId) => {
         setActiveIcon(activeIcon === iconId ? null : iconId);
@@ -70,6 +103,17 @@ const God = ({setBackgroundColor}) => {
     // Event handler to open the modal
     const openPrayerSettingsModal = () => {
         togglePrayerSettingsModal();
+    };
+
+    const setAsDefault = (iconId) => {
+        // Logic to handle setting an icon as default
+        localStorage.setItem('defaultIcon', iconId);
+    
+        // Close the context menu
+        setContextMenu({ ...contextMenu, visible: false });
+    
+        // Optionally, you might want to set this icon as active immediately
+        setActiveIcon(iconId);
     };
 
     return (
@@ -98,6 +142,21 @@ const God = ({setBackgroundColor}) => {
                 })}
             </div>
 
+            {/* Render the Context Menu */}
+            {contextMenu.visible && (
+                <div
+                    style={{
+                        position: 'absolute',
+                        top: `${contextMenu.y}px`,
+                        left: `${contextMenu.x}px`
+                    }}
+                >
+                    <ul>
+                        <li onClick={() => setAsDefault(contextMenu.iconId)}>Set as Default</li>
+                        {/* Add other menu items here */}
+                    </ul>
+                </div>
+            )}
             
         {/* Render content of the active icon in a card */}
         {activeIcon && (

@@ -15,6 +15,7 @@ import { useModal } from '../../context/ModalContext';
 import PieChartMysteries from './PieChartMysteries';
 import ToggleSlider from '../utils/ToggleSlider';
 import ReusableDatatable from '../utils/datatable/ReusableDatatable';
+import VirtualRosary from './virtualrosary/VirtualRosary';
 
 // Define the Rosary component
 const Rosary = () => {
@@ -79,6 +80,14 @@ const Rosary = () => {
 
     // State to trigger refresh
     const [refreshTrigger, setRefreshTrigger] = useState(0);
+    
+    const [showVirtualRosary, setShowVirtualRosary] = useState(false); // for controlling virtual rosary visibility
+
+    
+    const toggleVirtualRosary = () => {
+        setShowVirtualRosary(prev => !prev);
+    };
+    
 
     // Function to fetch rosaries
     const fetchRosaries = async () => {
@@ -320,6 +329,9 @@ const Rosary = () => {
         setSelectedMysteryDetails(mysteriesDetails[mysteryName]);
         const selectedMystery = mysteries.find(mystery => mystery.name === mysteryName);
         setSelectedMysteryIcon(selectedMystery ? selectedMystery.image : null);
+        
+        // Toggle Virtual Rosary display
+        toggleVirtualRosary();
     };
 
     const handleEditClick = (intentionId, content) => {
@@ -435,6 +447,9 @@ const Rosary = () => {
                             </div>
                         </div>
                         
+                    {/* Conditionally render Virtual Rosary */}
+                    {showVirtualRosary && <VirtualRosary selectedMystery={selectedMystery} />}
+
                         <div className="row justify-content-center">
                             <div className="col-12 col-lg-4">
                                 <ol className="mystery-details">

@@ -7,7 +7,8 @@ const {
     requireSignin,
     forgotPassword,
     resetPassword,
-    checkUsernameAvailability
+    checkUsernameAvailability,
+    googleLogin
 } = require("../controllers/auth");
 const { userSignupValidator } = require("../validator");
 const { 
@@ -21,5 +22,6 @@ router.post("/signout", signout);
 router.post('/check-username', checkUsernameAvailability);
 router.put('/forgot-password', forgotPasswordValidator, forgotPassword);
 router.put('/reset-password', resetPasswordValidator,  resetPassword);
+router.post('/google-login', googleLogin); // https://littleone.life/api/google/callback
 
 module.exports = router;

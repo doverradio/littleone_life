@@ -1,0 +1,26 @@
+.virtual-rosary {
+    text-align: center;
+}
+
+.rosary-beads {
+    display: flex;
+    justify-content: center;
+    margin: 10px 0;
+}
+
+.bead {
+    height: 20px;
+    width: 20px;
+    margin: 5px;
+    background-color: gray;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.active-bead {
+    background-color: gold;
+}
+
+.rosary-controls button {
+    margin: 5px;
+}

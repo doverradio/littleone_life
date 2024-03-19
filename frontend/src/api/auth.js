@@ -118,3 +118,21 @@ export const resetPassword = resetInfo => {
       })
       .catch(err => console.log(err));
 };
+
+// Function to handle Google login
+export const googleLogin = async (googleToken) => {
+  try {
+      const response = await fetch(`${API}/google-login`, {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ token: googleToken })
+      });
+
+      return await response.json();
+  } catch (error) {
+      console.error("Error in Google login:", error);
+      throw error;
+  }
+};
