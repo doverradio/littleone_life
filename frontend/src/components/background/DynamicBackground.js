@@ -5,7 +5,7 @@ const DynamicBackground = ({ color }) => {
     const backgroundStyle = {
         backgroundColor: color,
         transition: 'background-color 4s ease', // Adjust the time here
-        position: 'fixed',
+        position: 'absolute',
         top: 0,
         left: 0,
         right: 0,

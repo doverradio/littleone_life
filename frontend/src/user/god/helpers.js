@@ -19,11 +19,9 @@ export const fetchPrayerSettings = async (userId, token, getPrayerSettings, upda
             // Initialize settings if empty
             await updatePrayerSettings(userId, defaultPrayerSettings, token);
             const updatedSettings = await getPrayerSettings(userId, token);
-            // console.log(`updatedSettings: `, updatedSettings)
             setAvailablePrayers(updatedSettings);
         } else {
             // Use fetched settings
-            console.log(`fetched settings: `, settings)
             setAvailablePrayers(settings);
         }
     } catch (error) {

@@ -17,18 +17,8 @@ export const ModalProvider = ({ children }) => {
         }));
     };
 
-    const togglePrayerSettingsModal = () => {
-        setModalState(prevState => ({
-          ...prevState,
-          prayerSettings: !prevState.prayerSettings
-        }));
-      };
-      
-      // Pass this function down through the context
-
-      
     return (
-        <ModalContext.Provider value={{ modalState, toggleModal, togglePrayerSettingsModal }}>
+        <ModalContext.Provider value={{ modalState, toggleModal }}>
             {children}
         </ModalContext.Provider>
     );

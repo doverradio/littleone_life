@@ -30,12 +30,7 @@ const NavbarMain = ({ backgroundColor }) => {
                 <div className="d-flex align-items-center"> {/* Flexbox container */}
                     {/* Conditionally render User Dashboard link */}
                     {!isDashboardRoute && isAuthenticated() && (
-                        <NavLink 
-                            to={`/${isAuthenticated().user.role === 0 ? 'user' : 'admin'}/dashboard`} 
-                            className="nav-link" 
-                            activeClassName="active" 
-                            style={{ color: 'black', fontSize: '' }}
-                        >
+                        <NavLink to={`/${isAuthenticated().user.role === 0 ? 'user' : 'admin'}/dashboard`} className="nav-link d-lg-none" activeClassName="active" style={{ color: 'black', fontSize: '' }}>
                             {isAuthenticated().user.role === 0 ? 'User Dashboard' : 'Admin Dashboard'}
                         </NavLink>
                     )}

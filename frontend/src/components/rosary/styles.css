@@ -33,18 +33,11 @@
     }
 }
 
-.tab-navigation {
-    display: flex;
-    justify-content: center;
-    padding: 10px; /* Adjust as needed */
-}
-
 .tab-navigation a {
     padding: 7px;
-    margin: 0 3px; /* Adjusted for equal spacing on both sides */
+    margin-right: 3px;
     text-decoration: none;
     color: black;
-    font-size: 15px;
 }
 
 .tab-navigation a.active {
@@ -82,13 +75,3 @@
     flex-direction: column;
     align-items: center;
 }
-
-.text-size-controls {
-    display: flex; /* Enables flexbox */
-    justify-content: center; /* Centers content horizontally */
-    align-items: center; /* Aligns items vertically in the center */
-    flex-direction: row; /* Ensures the items are laid out in a row */
-    text-align: center; /* Centers the text */
-}
-
-

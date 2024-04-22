@@ -25,23 +25,3 @@
     align-items: center; /* This will vertically align the radio button with the label */
     margin-bottom: 10px; /* Optional: adds some space between each radio button */
 }
-
-
-.tab-navigation {
-    display: flex;
-    justify-content: center;
-    padding: 10px; /* Adjust as needed */
-}
-
-.tab-navigation a {
-    padding: 7px;
-    margin: 0 3px; /* Adjusted for equal spacing on both sides */
-    text-decoration: none;
-    color: black;
-    font-size: 15px;
-}
-
-.tab-navigation a.active {
-    font-weight: bold;
-    color: blue;
-}

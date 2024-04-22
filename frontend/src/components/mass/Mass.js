@@ -378,7 +378,7 @@ const Mass = () => {
     
     return (
         <div className="mass-component container">
-            {/* <div className="row">
+            <div className="row">
                 <div className="col-3">
                     <img 
                         src={massIcon} 
@@ -396,7 +396,7 @@ const Mass = () => {
                         Mass
                     </h1>
                 </div>
-            </div> */}
+            </div>
             <hr />
             <div className="tab-navigation">
                 <a href="#!" className={activeTab === 'Questions' ? 'active' : ''} onClick={() => setActiveTab('Questions')}>Questions</a>

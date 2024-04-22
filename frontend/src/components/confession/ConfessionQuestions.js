@@ -23,7 +23,7 @@ const ConfessionQuestions = ({
                 {/* Content for Questions tab */}
                 
                 <div className="row justify-content-center">
-                    <div className="col-12 col-lg-6">
+                    <div className="col-12 col-lg-4">
                         <form>
                             {userChurches.map(church => (
                                 <div key={church._id} className="radio-button-container">

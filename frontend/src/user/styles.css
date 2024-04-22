@@ -60,29 +60,21 @@
   }
   
   .icon-label {
-    margin-top: 5px;
     width: 90px; /* Adjust the width as needed */
     white-space: nowrap; /* Keep the text in a single line */
     overflow: hidden; /* Hide the overflow text */
     text-overflow: ellipsis; /* Add an ellipsis at the end of the truncated text */
     display: block; /* Block display is needed for width to take effect */
-}
-
-.icon-container:hover .icon-label,
-.icon-container:focus .icon-label,
-.active-icon-label {
-    text-overflow: clip;
-    white-space: normal;
-    overflow: visible;
-}
-
-
-  .icon-label-full {
-    white-space: normal;
-    overflow: visible;
-    text-overflow: clip;
   }
-
+  
+  
+  .icon-container:hover .icon-label,
+  .icon-container:focus .icon-label {
+    text-overflow: clip;
+    white-space: normal;
+    overflow: visible;
+  }
+  
   .icon-container {
     text-align: center;
     padding: 0.5rem;
@@ -119,49 +111,4 @@
 }
 .header-font {
   font-family: 'Georgia', serif; 
-}
-
-/* Card Styles */
-.card {
-  margin: 10px auto; /* Default margin */
-  max-width: 90%; /* Default max-width for mobile */
-}
-
-@media (min-width: 768px) { /* Adjust the breakpoint as needed */
-  .card {
-      margin: 20px auto; /* More margin for desktop */
-      max-width: 60%; /* Less width for desktop */
-  }
-}
-
-.card-container {
-  margin: 10px;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  transition: box-shadow 0.3s;
-}
-
-.card-container:hover {
-  box-shadow: 0 6px 12px rgba(0,0,0,0.2);
-}
-
-.icon-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  cursor: pointer;
-}
-
-.clickable-icon {
-  width: 55px;
-  height: 55px;
-  /* Add any additional styling for your icons */
-}
-
-
-.card-content {
-  margin-top: 10px;
-  /* Style for the content inside the card */
 }

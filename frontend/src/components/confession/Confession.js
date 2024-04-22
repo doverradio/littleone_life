@@ -305,7 +305,7 @@ const Confession = () => {
     return (
         
         <div className="confession-component container">
-            {/* <div className="row">
+            <div className="row">
                 <div className="col-3">
                     <img 
                         src={confessionIcon} 
@@ -323,7 +323,7 @@ const Confession = () => {
                         Confession
                     </h1>
                 </div>
-            </div> */}
+            </div>
             <hr />
 
             {/* Tab Navigation */}
