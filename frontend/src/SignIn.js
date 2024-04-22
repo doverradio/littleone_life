@@ -92,13 +92,13 @@ const SignIn = () => {
             </div>
             <button onClick={clickSubmit} className="btn btn-primary m-1">Submit</button>
             {/* Google Login Button */}
-            <GoogleLogin
+            {/* <GoogleLogin
                 clientId={process.env.GOOGLE_CLIENT_ID} // Replace with your Google Client ID
                 buttonText="Login with Google"
                 onSuccess={responseGoogleSuccess}
                 onFailure={responseGoogleFailure}
                 cookiePolicy={'single_host_origin'}
-            />
+            /> */}
         </form>
     );
 

@@ -23,7 +23,7 @@ export const fetchPrayerSettings = async (userId, token, getPrayerSettings, upda
             setAvailablePrayers(updatedSettings);
         } else {
             // Use fetched settings
-            // console.log(`fetched settings: `, settings)
+            console.log(`fetched settings: `, settings)
             setAvailablePrayers(settings);
         }
     } catch (error) {

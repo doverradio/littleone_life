@@ -74,6 +74,17 @@ const God = ({setBackgroundColor}) => {
         return () => setBackgroundColor('white'); // Reset to white when component unmounts
     }, [setBackgroundColor]); // Empty dependency array to run only once on component mount
 
+    const iconData = [
+        { id: 'rosary', name: 'Rosary', icon: rosaryIcon, component: Rosary },
+        { id: 'mass', name: 'Mass', icon: massIcon, component: Mass },
+        { id: 'confession', name: 'Confession', icon: confessionIcon, component: Confession },
+        { id: 'divineMercy', name: 'Divine Mercy', icon: divineMercyIcon, component: DivineMercy },
+        { id: 'stMichaelPrayer', name: 'St. Michael Prayer', icon: stMichaelIcon, component: StMichaelPrayer },
+        { id: 'stfrancis', name: 'St. Francis Prayer', icon: stFrancisIcon, component: StFrancisPrayer },
+        { id: 'stleandroruiz', name: 'St. Leandro Ruiz Prayer', icon: stLeandroRuizIcon, component: StLeandroRuizPrayer },
+        { id: 'prayerSettings', name: 'Prayer Settings', icon: prayerSettingsIcon, component: PrayerSettings },
+    ];
+
     // Handle Right Click (Desktop) and Long Press (Mobile)
     const handleContextMenu = (event, iconId) => {
         event.preventDefault();
@@ -162,17 +173,23 @@ const God = ({setBackgroundColor}) => {
         {activeIcon && (
             <div className="card">
                 <div className="card-body">
-                    {icons.find(icon => icon.id === activeIcon)?.component}
+                    {/* {icons.find(icon => icon.id === activeIcon)?.component} */}
+                    {iconData.map(icon => {
+                        const Component = icon.component; // Get the component constructor
+                        return (
+                            <div key={icon.id} className="icon-container p-2" onClick={() => handleIconClick(icon.id)}>
+                                {/* <img src={icon.icon} alt={icon.name} className="clickable-icon" style={{ height: '55px', width: '55px' }} />
+                                <div className="icon-label">{icon.name}</div> */}
+                                {activeIcon === icon.id && (
+                                    <Component availablePrayers={availablePrayers} onVisibilityChange={handlePrayerVisibilityChange} setAvailablePrayers={setAvailablePrayers} />
+                                )}
+                            </div>
+                        );
+                    })}
                 </div>
             </div>
         )}
-            
-            {/* Modal for Prayer Settings */}
-            {modalState.prayerSettings && (
-                <Modal id="prayerSettings">
-                    <PrayerSettings availablePrayers={availablePrayers} onVisibilityChange={handlePrayerVisibilityChange} setAvailablePrayers={setAvailablePrayers} />
-                </Modal>
-            )}
+        
         </>
     );
 };
