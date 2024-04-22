@@ -1,11 +1,11 @@
 import React from 'react';
 
-const PrayerSettings = ({ availablePrayers, onVisibilityChange, setAvailablePrayers }) => {
+const PrayerSettings = ({ availablePrayers, onVisibilityChange }) => {
     // Assuming 'availablePrayers' is an array of objects containing { id, name, isVisible }
 
     // Handle checkbox change to update prayer visibility
     const handleCheckboxChange = (prayerId, isChecked) => {
-        onVisibilityChange(prayerId, isChecked, setAvailablePrayers);
+        onVisibilityChange(prayerId, isChecked);
     };
 
 

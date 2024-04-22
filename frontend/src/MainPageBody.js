@@ -11,13 +11,13 @@ const MainPageBody = () => {
               backgroundImage: `url(${backgroundImage})`,
               backgroundSize: 'cover',
               backgroundPosition: 'center',
-              height: '73vh', // This sets the height to full viewport height
+              height: '100vh', // This sets the height to full viewport height
               color: 'white' // Assuming you want white text over your image
           }}
         >
             {/* Add your content here */}
-            <div className="content-container header-font" style={{ color: 'black' }}>
-                <h1>littleone life</h1>
+            <div className="content-container">
+                <h1>Welcome to Littleone.life</h1>
                 <p>Your spiritual journey begins here.</p>
                 {/* More content can be added here */}
             </div>

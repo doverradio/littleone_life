@@ -3,17 +3,11 @@ import { SiFacebook } from "react-icons/si";
 import { FaXTwitter } from "react-icons/fa6";
 import { FcReddit } from "react-icons/fc";
 
-const Footer = ({ backgroundColor }) =>
+const Footer = () =>
 {
     const currentYear = new Date().getFullYear();
     return (
-        <footer 
-            style={{
-                backgroundColor: backgroundColor, 
-                padding: "20px 0",
-                transition: 'background-color 4s ease'
-            }}
-        >
+        <footer style={{backgroundColor: "white", padding: "20px 0"}}>
             <div style={{display: "flex", justifyContent: "space-around", alignItems: "center", flexDirection: "column", width: "80%", margin: "0 auto"}}>
 
                 {/* Social Media Icons */}
