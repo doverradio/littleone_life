@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import NavbarMain from "./NavbarMain";
 import Footer from "./Footer";
-import { signin, authenticate, isAuthenticated, googleLogin } from './api/auth';
+import { signin, authenticate, isAuthenticated, googleSignIn } from './api/auth';
 import { GoogleLogin } from 'react-google-login'; // Import GoogleLogin
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -29,8 +29,8 @@ const SignIn = () => {
         try {
             const googleToken = response.tokenId; // Get the Google token
     
-            // Use the googleLogin function from auth.js
-            const result = await googleLogin(googleToken);
+            // Use the googleSignIn function from auth.js
+            const result = await googleSignIn(googleToken);
     
             if (result.error) {
                 setValues({ ...values, error: result.error, loading: false });
@@ -92,13 +92,13 @@ const SignIn = () => {
             </div>
             <button onClick={clickSubmit} className="btn btn-primary m-1">Submit</button>
             {/* Google Login Button */}
-            {/* <GoogleLogin
-                clientId={process.env.GOOGLE_CLIENT_ID} // Replace with your Google Client ID
+            <GoogleLogin
+                clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID} // Replace with your Google Client ID
                 buttonText="Login with Google"
                 onSuccess={responseGoogleSuccess}
                 onFailure={responseGoogleFailure}
                 cookiePolicy={'single_host_origin'}
-            /> */}
+            /> 
         </form>
     );
 

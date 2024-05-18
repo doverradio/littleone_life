@@ -55,6 +55,46 @@ exports.signup = async (req, res) => {
     }
 };
 
+// GOOGLE SIGN UP
+exports.googleSignup = async (req, res) => {
+    const { email, googleId, username, name } = req.body;
+
+    try {
+        // Check if username is already taken
+        let existingUser = await User.findOne({ username });
+        if (existingUser) {
+            return res.status(400).json({ error: 'Username is already taken' });
+        }
+
+        // Create a default hashed password since it is required by your model
+        const defaultPassword = uuidv1(); // Or any other method to generate a random string
+        const salt = uuidv1();
+        const hashedPassword = crypto.createHmac('sha1', salt).update(defaultPassword).digest('hex');
+
+        // Create new user
+        let newUser = new User({
+            email,
+            googleId,
+            username,
+            firstName: name.split(' ')[0], // Assuming the name comes as "First Last"
+            lastName: name.split(' ').slice(1).join(' '),
+            salt,
+            hashed_password: hashedPassword,
+        });
+
+        await newUser.save();
+
+        const token = jwt.sign({ _id: newUser._id }, process.env.JWT_SECRET, { expiresIn: '1d' });
+        const { _id, role } = newUser;
+        return res.json({ token, user: { _id, email, username, role } });
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: 'Something went wrong. Please try again.' });
+    }
+};
+
+
 exports.signin = async (req, res) => {
     try {
         const { username, password } = req.body;
@@ -96,7 +136,7 @@ exports.signin = async (req, res) => {
     }
 };
 
-exports.googleLogin = async (req, res) => {
+exports.googleLogin0 = async (req, res) => {
     const { token }  = req.body;
   
     async function verify() {
@@ -130,8 +170,38 @@ exports.googleLogin = async (req, res) => {
     } catch (error) {
       res.status(401).send("Unauthorized");
     }
-  };
+};
  
+// GOOGLE SIGN IN
+exports.googleSignIn = async (req, res) => {
+    const { token } = req.body;
+
+    async function verify() {
+        const ticket = await client.verifyIdToken({
+            idToken: token,
+            audience: process.env.GOOGLE_CLIENT_ID,
+        });
+        const payload = ticket.getPayload();
+        const { email, sub: googleId } = payload;
+
+        let user = await User.findOne({ googleId });
+        if (user) {
+            // User exists, log them in
+            const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: '1d' });
+            return res.json({ token, user });
+        } else {
+            // User does not exist, send email and name for further processing
+            return res.json({ email, name: payload.name, googleId });
+        }
+    }
+
+    try {
+        await verify();
+    } catch (error) {
+        console.log(error);
+        res.status(401).json({ error: "Google login failed. Try again." });
+    }
+};
 
 exports.signout = async ( req, res ) =>  // a 
 {

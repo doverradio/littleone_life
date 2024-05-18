@@ -120,19 +120,53 @@ export const resetPassword = resetInfo => {
 };
 
 // Function to handle Google login
-export const googleLogin = async (googleToken) => {
-  try {
-      const response = await fetch(`${API}/google-login`, {
-          method: 'POST',
-          headers: {
-              'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ token: googleToken })
-      });
+// export const googleLogin = async (googleToken) => {
+//   try {
+//       const response = await fetch(`${API}/google-login`, {
+//           method: 'POST',
+//           headers: {
+//               'Content-Type': 'application/json'
+//           },
+//           body: JSON.stringify({ token: googleToken })
+//       });
 
-      return await response.json();
-  } catch (error) {
-      console.error("Error in Google login:", error);
-      throw error;
-  }
+//       return await response.json();
+//   } catch (error) {
+//       console.error("Error in Google login:", error);
+//       throw error;
+//   }
+// };
+
+export const googleSignIn = async (token) => {
+    try {
+        const response = await fetch(`${API}/google-signin`, {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ token }),
+        });
+        return await response.json();
+    } catch (err) {
+        console.log(err);
+        return { error: 'Google sign-in failed' };
+    }
+};
+
+export const googleSignup = async (data) => {
+    try {
+        const response = await fetch(`${API}/google-signup`, {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        });
+        return await response.json();
+    } catch (err) {
+        console.log(err);
+        return { error: 'Google sign-up failed' };
+    }
 };

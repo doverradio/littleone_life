@@ -1,16 +1,18 @@
 /* eslint-disable import/first */
-import 'ses/lockdown';
+// import 'ses/lockdown';
 
-// eslint-disable-next-line no-undef
-lockdown();
+// // eslint-disable-next-line no-undef
+// lockdown();
 
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-// import App from './App';
 import reportWebVitals from './reportWebVitals';
 import RoutesComponent from './Routes';
 
+if (module.hot) {
+  module.hot.accept();
+}
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
