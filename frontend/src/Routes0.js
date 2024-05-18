@@ -1,21 +1,20 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client'; // Add this import
+import React from "react";
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import MainPage from './MainPage';
-import AboutUs from './AboutUs';
-import SignIn from './SignIn';
-import SignUp from './Signup';
-import TermsOfService from './TermsOfService';
-import Contact from './Contact';
-import PrivacyPolicy from './PrivacyPolicy';
+import MainPage from "./MainPage";
+import AboutUs from "./AboutUs";
+import SignIn from "./SignIn";
+import SignUp from "./Signup";
+import TermsOfService from "./TermsOfService";
+import Contact from "./Contact";
+import PrivacyPolicy from "./PrivacyPolicy";
 import PrivateRoute from './auth/PrivateRoute';
 import AdminRoute from './auth/AdminRoute';
-import UserDashboard from './user/UserDashboard';
-import AdminDashboard from './admin/AdminDashboard';
-import Settings from './components/settings/Settings';
-import { ModalProvider } from './context/ModalContext';
-import Self from './user/Self';
-import Society from './user/Society';
+import UserDashboard from "./user/UserDashboard";
+import AdminDashboard from "./admin/AdminDashboard";
+import Settings from "./components/settings/Settings";
+import { ModalProvider } from "./context/ModalContext";
+import Self from "./user/Self";
+import Society from "./user/Society";
 
 const RoutesComponent = () => {
     return (
@@ -45,15 +44,3 @@ const RoutesComponent = () => {
 };
 
 export default RoutesComponent;
-
-if (module.hot) {
-    module.hot.accept('./Routes', () => {
-        const NextRoutes = require('./Routes').default;
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(
-            <React.StrictMode>
-                <NextRoutes />
-            </React.StrictMode>
-        );
-    });
-}
