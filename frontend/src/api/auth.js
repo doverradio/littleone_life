@@ -1,7 +1,7 @@
 // src/api/auth.js
 
 const API = process.env.REACT_APP_API ? process.env.REACT_APP_API : 'https://www.littleone.life/api'; // Your backend API URL
-const log = console.log;
+// const log = console.log;
 
 // Function to handle user sign-up
 export const signup = async (user) => {
@@ -37,23 +37,40 @@ export const checkUsernameAvailability = async (username) => {
 };
 
 
-export const signin = user => {
-  // console.log('signin API:', process.env.REACT_APP_API);
+// export const signin = user => {
+//   // console.log('signin API:', process.env.REACT_APP_API);
 
-  return fetch(`${API}/signin`, {
-      method: "POST",
-      headers: {
-          "Content-Type": "application/json"
-      },
-      body: JSON.stringify(user)
-  })
-  .then(response => {
-      return response.json();
-  })
-  .catch(err => {
-      console.error('Error in signin:', err);
-      throw err; // Re-throw the error so it can be handled by the calling component
-  });
+//   return fetch(`${API}/signin`, {
+//       method: "POST",
+//       headers: {
+//           "Content-Type": "application/json"
+//       },
+//       body: JSON.stringify(user)
+//   })
+//   .then(response => {
+//       return response.json();
+//   })
+//   .catch(err => {
+//       console.error('Error in signin:', err);
+//       throw err; // Re-throw the error so it can be handled by the calling component
+//   });
+// };
+
+export const signin = async (user) => {
+    try {
+        const response = await fetch(`${API}/signin`, {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(user),
+        });
+        return await response.json();
+    } catch (err) {
+        console.error('Sign-In error:', err);
+        return { error: 'Sign-In failed. Please try again.' };
+    }
 };
 
 export const authenticate = (data, next) => {
@@ -139,7 +156,7 @@ export const resetPassword = resetInfo => {
 
 export const googleSignIn = async (token) => {
     try {
-        const response = await fetch(`${API}/google-signin`, {
+        const response = await fetch(`${API}/google-login`, {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
@@ -149,8 +166,8 @@ export const googleSignIn = async (token) => {
         });
         return await response.json();
     } catch (err) {
-        console.log(err);
-        return { error: 'Google sign-in failed' };
+        console.error('Google Sign-In error:', err);
+        return { error: 'Google sign-in failed. Please try again.' };
     }
 };
 
@@ -166,7 +183,7 @@ export const googleSignup = async (data) => {
         });
         return await response.json();
     } catch (err) {
-        console.log(err);
-        return { error: 'Google sign-up failed' };
+        console.error('Google Sign-Up error:', err);
+        return { error: 'Google sign-up failed. Please try again.' };
     }
 };

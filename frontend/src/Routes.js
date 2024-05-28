@@ -26,8 +26,7 @@ const RoutesComponent = () => {
                     <Route path="/signup" element={<SignUp />} />
                     <Route path="/terms" element={<TermsOfService />} />
                     <Route path="/contact" element={<Contact />} />
-                    <Route path="/privacy" element={<PrivacyPolicy />} />
-                    
+                    <Route path="/privacy" element={<PrivacyPolicy />} />                    
                     <Route path="/user/dashboard" element={<PrivateRoute component={UserDashboard} />} />
                     <Route path="/user/settings" element={<PrivateRoute component={Settings} />} />
                     <Route path="/admin/dashboard" element={<AdminRoute component={AdminDashboard} />} />

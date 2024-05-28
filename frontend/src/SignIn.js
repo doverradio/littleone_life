@@ -3,7 +3,8 @@ import { useNavigate } from "react-router-dom";
 import NavbarMain from "./NavbarMain";
 import Footer from "./Footer";
 import { signin, authenticate, isAuthenticated, googleSignIn } from './api/auth';
-import { GoogleLogin } from 'react-google-login'; // Import GoogleLogin
+// import { GoogleLogin } from 'react-google-login'; // Import GoogleLogin
+import { GoogleLogin } from '@react-oauth/google'; // Use the new GIS component
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -14,31 +15,29 @@ const SignIn = () => {
         error: '',
         loading: false,
         redirectToReferrer: false,
+        googleUser: null,
     });
     
-    const { username, password, loading, error, redirectToReferrer } = values;
+    const { username, password, loading, error, redirectToReferrer, googleUser } = values;
     const { user } = isAuthenticated();
-
     const navigate = useNavigate();
 
     
     // Google Login Success Handler
     const responseGoogleSuccess = async (response) => {
-        console.log("Google sign in success", response);
-    
         try {
-            const googleToken = response.tokenId; // Get the Google token
-    
-            // Use the googleSignIn function from auth.js
+            const googleToken = response.tokenId;
             const result = await googleSignIn(googleToken);
-    
             if (result.error) {
                 setValues({ ...values, error: result.error, loading: false });
-            } else {
-                // Authenticate the user on client side
+            } else if (result.user) {
+                // User exists, authenticate and redirect
                 authenticate(result, () => {
                     setValues({ ...values, redirectToReferrer: true });
                 });
+            } else {
+                // User does not exist, ask for username
+                setValues({ ...values, googleUser: result });
             }
         } catch (error) {
             console.error('Error processing Google sign in:', error);
@@ -50,9 +49,9 @@ const SignIn = () => {
     const responseGoogleFailure = (response) => {
         console.log("Google sign in failed", response);
         // Display a toast message
-        toast.error("Google sign-in failed. Please try again.", {
+        toast.error('Google sign-in failed. Please try again.', {
             position: toast.POSITION.TOP_CENTER,
-            autoClose: 5000
+            autoClose: 5000,
         });
     };
   

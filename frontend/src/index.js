@@ -9,6 +9,7 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 import RoutesComponent from './Routes';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 
 if (module.hot) {
   module.hot.accept();
@@ -16,7 +17,11 @@ if (module.hot) {
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <RoutesComponent />
+  <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
+    <React.StrictMode>
+      <RoutesComponent />
+    </React.StrictMode>
+  </GoogleOAuthProvider>
 );
 
 // If you want to start measuring performance in your app, pass a function
