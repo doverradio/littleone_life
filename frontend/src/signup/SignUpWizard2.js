@@ -6,6 +6,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { v1 as uuidv1 } from 'uuid';  // Import uuidv1
 
+
 const SignUpWizard = ({ googleProfile }) => {
     const navigate = useNavigate();
     const [step, setStep] = useState(1);
@@ -162,7 +163,7 @@ const SignUpWizard = ({ googleProfile }) => {
             // Show success toast
             toast.success("Signup successful! Redirecting to Sign In...", {
                 position: "top-center",
-                autoClose: 5000,
+                autoClose: 2000,
                 hideProgressBar: false,
                 closeOnClick: true,
                 pauseOnHover: true,
@@ -170,85 +171,73 @@ const SignUpWizard = ({ googleProfile }) => {
                 progress: undefined,
             });
 
-            // Redirect to Sign In page after successful signup
-            navigate('/signin');
+            // Wait for 2 seconds before navigating
+            setTimeout(() => {
+                navigate('/signin');
+            }, 2000);
         } catch (error) {
-            // Optionally, you can handle error response here
-            // Show error toast
-            toast.error("Signup failed. Please try again.", {
-                position: "top-center",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-            });
+            console.error('Error signing up user:', error);
+            // Optionally, you can handle error here
         }
     };
 
-    // Function to handle key press event
-    const handleKeyPress = (e) => {
-        if (e.key === 'Enter') {
-            if (step === 1) {
-                nextStep0(); // Handle username validation in the first step
-            } else if (step === 2) {
-                handleNextStep(); // Use handleNextStep to ensure password validation in step 2
+    const handleKeyPress = (event) => {
+        if(event.key === 'Enter'){
+            if (step === 1 && userData.username.trim() === '') {
+                setUsernameEmpty(true); // Set usernameEmpty state to true if username is empty
             } else {
-                nextStep(); // Proceed to the next step for other steps
+                nextStep();
             }
         }
     };
 
-    // Check if the Next button should be disabled
+    // Function to determine if the Next button should be disabled
     const isNextButtonDisabled = () => {
-        if (step === 1) {
-            return userData.username.trim() === '';
-        } else if (step === 2) {
-            return userData.password.trim() === '' || userData.confirmPassword.trim() === '';
-        } else if (step === 3) {
-            return userData.firstName.trim() === '' || userData.lastName.trim() === '';
-        } else if (step === 4) {
-            return userData.phone.trim() === '';
-        }
-        return false;
+        // Disable if no username is entered or if the username is not available
+        return userData.username.trim() === '' || userData.usernameAvailable === false;
     };
 
     return (
         <div>
-            <ToastContainer /> {/* Toast container for notifications */}
-            <div className="progress mb-4">
-                <div
-                    className="progress-bar"
-                    role="progressbar"
-                    style={{ width: `${progress}%` }}
-                    aria-valuenow={progress}
-                    aria-valuemin="0"
-                    aria-valuemax="100"
-                />
+            <ToastContainer />
+
+            {/* Progress bar */}
+            <div className="progress mb-3">
+                <div 
+                    className="progress-bar" 
+                    role="progressbar" 
+                    style={{ width: `${progress}%` }} 
+                    aria-valuenow={progress} 
+                    aria-valuemin="0" 
+                    aria-valuemax="100">
+                    Step {step} of 5
+                </div>
             </div>
+
+            {/* Steps */}
             {step === 1 && (
                 <>
-                    <div>
-                        <input 
-                            type="text" 
-                            value={userData.username} 
-                            onChange={handleChange('username')} 
-                            placeholder="Enter Username"
-                            className='form-control'
-                            onKeyPress={handleKeyPress}
-                        />
-                        {renderUsernameAvailabilityMessage()}
-                        <div className="row">
-                            <div className="col">
-                                <button 
-                                    className="btn btn-primary btn-sm w-100 m-1" 
-                                    onClick={nextStep0}
-                                    disabled={isNextButtonDisabled()} // Disable based on condition
-                                >
-                                    Next
-                                </button>
-                            </div>
+                    <div className="row">
+                        <div className="col-12">
+                            {renderUsernameAvailabilityMessage()}
+                            {usernameEmpty && <p style={{ color: 'red' }}>Please enter a username to proceed</p>} {/* Conditional rendering of error message */}
+                            <input 
+                                type="text" 
+                                value={userData.username} 
+                                onChange={handleChange('username')} 
+                                className='form-control'
+                                placeholder="Username"
+                                onKeyPress={handleKeyPress}
+                            />
+                            {userData.usernameError && <p style={{ color: 'red' }}>{userData.usernameError}</p>}
+                            
+                            <button 
+                                className="btn btn-primary btn-block m-1" 
+                                onClick={nextStep0}
+                                disabled={isNextButtonDisabled()} // Disable based on condition
+                            >
+                                Next
+                            </button>
                         </div>
                     </div>
                 </>
@@ -256,11 +245,12 @@ const SignUpWizard = ({ googleProfile }) => {
             {step === 2 && (
                 <>
                     <div>
+                        {emailEmpty && <p style={{ color: 'red' }}>Please enter an email to proceed</p>} {/* Conditional rendering of error message */}
                         <input 
-                            type="text" 
+                            type="email" 
                             value={userData.email} 
                             onChange={handleChange('email')} 
-                            placeholder="Enter Email"
+                            placeholder="Email"
                             className='form-control'
                             onKeyPress={handleKeyPress}
                         />
