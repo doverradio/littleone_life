@@ -1,5 +1,7 @@
 const User = require("../models/user");
 const jwt = require("jsonwebtoken"); // to generate signed token
+const { v1: uuidv1 } = require('uuid');
+const crypto = require('crypto');
 const { expressjwt: expressJwt } = require('express-jwt');
 const _ = require("lodash");
 const { OAuth2Client } = require('google-auth-library');
@@ -57,6 +59,60 @@ exports.signup = async (req, res) => {
 
 // GOOGLE SIGN UP
 exports.googleSignup = async (req, res) => {
+    const { tokenId, username } = req.body;
+
+    try {
+        // Verify the Google token
+        const ticket = await client.verifyIdToken({
+            idToken: tokenId,
+            audience: process.env.GOOGLE_CLIENT_ID,
+        });
+
+        const payload = ticket.getPayload();
+        const { email, sub: googleId, name } = payload;
+
+        // Check if the email is already associated with an account
+        let existingUser = await User.findOne({ email });
+        if (existingUser) {
+            return res.status(400).json({ error: 'Email is already associated with an account. Please sign in instead.' });
+        }
+
+        // Check if the username is already taken
+        existingUser = await User.findOne({ username });
+        if (existingUser) {
+            return res.status(400).json({ error: 'Username is already taken' });
+        }
+
+        // Create a default hashed password since it is required by your model
+        const defaultPassword = uuidv1(); // Or any other method to generate a random string
+        const salt = uuidv1();
+        const hashedPassword = crypto.createHmac('sha1', salt).update(defaultPassword).digest('hex');
+
+        // Create a new user
+        let newUser = new User({
+            email,
+            googleId,
+            username,
+            firstName: name.split(' ')[0], // Assuming the name comes as "First Last"
+            lastName: name.split(' ').slice(1).join(' '),
+            salt,
+            hashed_password: hashedPassword,
+        });
+
+        await newUser.save();
+
+        // Generate a token
+        const token = jwt.sign({ _id: newUser._id }, process.env.JWT_SECRET, { expiresIn: '1d' });
+        const { _id, role } = newUser;
+        return res.json({ token, user: { _id, email, username, role } });
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: 'Something went wrong. Please try again.' });
+    }
+};
+
+exports.googleSignup0 = async (req, res) => {
     const { email, googleId, username, name } = req.body;
 
     try {

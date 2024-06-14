@@ -4,25 +4,26 @@ import Footer from "./Footer";
 import SignUpWizard from "./signup/SignUpWizard";
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import { toast, ToastContainer } from 'react-toastify';
+import { jwtDecode } from 'jwt-decode';
 import 'react-toastify/dist/ReactToastify.css';
 
 const SignUp = () => {
     const [googleProfile, setGoogleProfile] = useState(null);
 
-    const responseGoogleSuccess = (response) => {
-        console.log("Google sign-in successful", response);
-        if (response.profileObj) {
-            setGoogleProfile(response.profileObj);
-            toast.success("Google sign-in successful! Please complete the signup process.", {
-                position: "top-center",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-            });
-        }
+    const responseGoogleSuccess = (tokenResponse) => {
+        console.log("Google sign-in successful", tokenResponse);
+        const decoded = jwtDecode(tokenResponse.credential);
+        console.log("Decoded Google profile", decoded);
+        setGoogleProfile(decoded);
+        toast.success("Google sign-in successful! Please complete the signup process.", {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        });
     };
 
     const responseGoogleFailure = (response) => {
