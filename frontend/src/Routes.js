@@ -20,16 +20,16 @@ const RoutesComponent = () => {
         <ModalProvider>
             <Router>
                 <Routes>
-                    <Route path="/" element={<MainPage />} />
-                    <Route path="/about" element={<AboutUs />} />
-                    <Route path="/signin" element={<SignIn />} />
-                    <Route path="/signup" element={<SignUp />} />
-                    <Route path="/terms" element={<TermsOfService />} />
-                    <Route path="/contact" element={<Contact />} />
-                    <Route path="/privacy" element={<PrivacyPolicy />} />                    
-                    <Route path="/user/dashboard" element={<PrivateRoute component={UserDashboard} />} />
-                    <Route path="/user/settings" element={<PrivateRoute component={Settings} />} />
-                    <Route path="/admin/dashboard" element={<AdminRoute component={AdminDashboard} />} />
+                    <Route path="/" element={<MainPage />} exact />
+                    <Route path="/about" element={<AboutUs />} exact />
+                    <Route path="/signin" element={<SignIn />} exact />
+                    <Route path="/signup" element={<SignUp />} exact />
+                    <Route path="/terms" element={<TermsOfService />} exact />
+                    <Route path="/contact" element={<Contact />} exact />
+                    <Route path="/privacy" element={<PrivacyPolicy />} exact />
+                    <Route path="/user/dashboard" element={<PrivateRoute component={UserDashboard} />} exact />
+                    <Route path="/user/settings" element={<PrivateRoute component={Settings} />} exact />
+                    <Route path="/admin/dashboard" element={<AdminRoute component={AdminDashboard} />} exact />
                 </Routes>
             </Router>
         </ModalProvider>

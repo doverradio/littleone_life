@@ -4,15 +4,15 @@ import Footer from "./Footer";
 import SignUpWizard from "./signup/SignUpWizard";
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import { toast, ToastContainer } from 'react-toastify';
-import { jwtDecode } from 'jwt-decode';
+import { jwtDecode } from "jwt-decode";
 import 'react-toastify/dist/ReactToastify.css';
 
 const SignUp = () => {
     const [googleProfile, setGoogleProfile] = useState(null);
 
-    const responseGoogleSuccess = (tokenResponse) => {
-        console.log("Google sign-in successful", tokenResponse);
-        const decoded = jwtDecode(tokenResponse.credential);
+    const responseGoogleSuccess = (response) => {
+        console.log("Google sign-in successful", response);
+        const decoded = jwtDecode(response.credential);
         console.log("Decoded Google profile", decoded);
         setGoogleProfile(decoded);
         toast.success("Google sign-in successful! Please complete the signup process.", {
@@ -54,6 +54,7 @@ const SignUp = () => {
                             <GoogleLogin
                                 onSuccess={responseGoogleSuccess}
                                 onError={responseGoogleFailure}
+                                useOneTap
                             />
                         </div>
                     </div>

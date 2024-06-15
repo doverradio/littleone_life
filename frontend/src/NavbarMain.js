@@ -5,7 +5,6 @@ import { FaCog } from 'react-icons/fa'; // Example using react-icons
 import { Link } from 'react-router-dom';
 
 const NavbarMain = () => {
-
     const navigate = useNavigate();
 
     const handleSignout = () => {
@@ -29,24 +28,24 @@ const NavbarMain = () => {
             <div className="collapse navbar-collapse" id="navbar-main">
                 <ul className="navbar-nav mr-auto">
                     <li className="nav-item">
-                        <NavLink exact to="/" className="nav-link" activeClassName="active" style={{ color: 'black' }}>Home</NavLink>
+                        <NavLink to="/" className="nav-link" style={{ color: 'black' }}>Home</NavLink>
                     </li>
                     <li className="nav-item">
-                        <NavLink to="/about" className="nav-link" activeClassName="active" style={{ color: 'black' }}>About Us</NavLink>
+                        <NavLink to="/about" className="nav-link" style={{ color: 'black' }}>About Us</NavLink>
                     </li>
                     <li className="nav-item">
-                        <NavLink to="/contact" className="nav-link" activeClassName="active" style={{ color: 'black' }}>Contact</NavLink>
+                        <NavLink to="/contact" className="nav-link" style={{ color: 'black' }}>Contact</NavLink>
                     </li>
                 </ul>
                 <ul className="navbar-nav ml-auto">
                     {isAuthenticated() && isAuthenticated().user.role === 0 && (
                         <li className="nav-item">
-                            <NavLink to="/user/dashboard" className="nav-link" activeClassName="active" style={{ color: 'black' }}>User Dashboard</NavLink>
+                            <NavLink to="/user/dashboard" className="nav-link" style={{ color: 'black' }}>User Dashboard</NavLink>
                         </li>
                     )}
                     {isAuthenticated() && isAuthenticated().user.role === 1 && (
                         <li className="nav-item">
-                            <NavLink to="/admin/dashboard" className="nav-link" activeClassName="active" style={{ color: 'black' }}>Admin Dashboard</NavLink>
+                            <NavLink to="/admin/dashboard" className="nav-link" style={{ color: 'black' }}>Admin Dashboard</NavLink>
                         </li>
                     )}
                     {isAuthenticated() ? (
@@ -63,10 +62,10 @@ const NavbarMain = () => {
                     ) : (
                         <>
                             <li className="nav-item">
-                                <NavLink to="/signup" className="nav-link" activeClassName="active" style={{ color: 'black' }}>Sign Up</NavLink>
+                                <NavLink to="/signup" className="nav-link" style={{ color: 'black' }}>Sign Up</NavLink>
                             </li>
                             <li className="nav-item">
-                                <NavLink to="/signin" className="nav-link" activeClassName="active" style={{ color: 'black' }}>Sign In</NavLink>
+                                <NavLink to="/signin" className="nav-link" style={{ color: 'black' }}>Sign In</NavLink>
                             </li>
                         </>
                     )}
