@@ -4,12 +4,11 @@ import { useNavigate } from 'react-router-dom';
 import { checkUsernameAvailability, signup, googleSignup } from '../api/auth';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-const log = console.log;
 
 const SignUpWizard = ({ googleProfile }) => {
     const navigate = useNavigate();
     const [step, setStep] = useState(1);
-    
+
     const [userData, setUserData] = useState({
         username: '',
         email: googleProfile ? googleProfile.email : '',
@@ -19,24 +18,30 @@ const SignUpWizard = ({ googleProfile }) => {
         password: '',
         confirmPassword: ''
     });
+
     const [usernameEmpty, setUsernameEmpty] = useState(false);
     const [emailEmpty, setEmailEmpty] = useState(false);
 
-    if ( googleProfile )
-        {
-            log(`SignUpWizard googleProfile: `, googleProfile)
+    useEffect(() => {
+        if (googleProfile) {
+            setUserData(prevData => ({
+                ...prevData,
+                email: googleProfile.email,
+                firstName: googleProfile.given_name,
+                lastName: googleProfile.family_name
+            }));
+            setStep(2); // Skip username step if Google Profile is available
         }
+    }, [googleProfile]);
 
-    // Calculate progress percentage
     const progress = step === 1 ? 1 : (step - 1) * (100 / 4);
 
-    // Check username availability
     const checkUsername = async () => {
         if (userData.username.length > 0) {
             try {
                 const result = await checkUsernameAvailability(userData.username);
-                setUserData({ 
-                    ...userData, 
+                setUserData({
+                    ...userData,
                     usernameAvailable: result.isAvailable,
                     canProceed: result.isAvailable
                 });
@@ -48,7 +53,7 @@ const SignUpWizard = ({ googleProfile }) => {
             setUserData({ ...userData, usernameAvailable: null, canProceed: false });
         }
     };
-    
+
     const debouncedCheckUsername = debounce(checkUsername, 1000);
 
     useEffect(() => {
@@ -73,9 +78,7 @@ const SignUpWizard = ({ googleProfile }) => {
 
     const formatPhoneNumber = (value) => {
         if (!value) return value;
-
         const phoneNumber = value.replace(/[^\d]/g, '');
-
         if (phoneNumber.length < 4) {
             return phoneNumber;
         } else if (phoneNumber.length < 7) {
@@ -119,14 +122,13 @@ const SignUpWizard = ({ googleProfile }) => {
         if (input === 'phone') {
             value = formatPhoneNumber(value);
         }
-
         setUserData({ ...userData, [input]: value });
     };
 
     const handleSubmit = async () => {
         try {
             if (googleProfile) {
-                const response = await googleSignup(userData);
+                const response = await googleSignup({ ...userData, tokenId: googleProfile.tokenId });
                 console.log('Google signup response:', response);
             } else {
                 const response = await signup(userData);
@@ -167,12 +169,12 @@ const SignUpWizard = ({ googleProfile }) => {
         <div>
             <ToastContainer />
             <div className="progress mb-3">
-                <div 
-                    className="progress-bar" 
-                    role="progressbar" 
-                    style={{ width: `${progress}%` }} 
-                    aria-valuenow={progress} 
-                    aria-valuemin="0" 
+                <div
+                    className="progress-bar"
+                    role="progressbar"
+                    style={{ width: `${progress}%` }}
+                    aria-valuenow={progress}
+                    aria-valuemin="0"
                     aria-valuemax="100">
                     Step {step} of 5
                 </div>
@@ -183,17 +185,17 @@ const SignUpWizard = ({ googleProfile }) => {
                         <div className="col-12">
                             {renderUsernameAvailabilityMessage()}
                             {usernameEmpty && <p style={{ color: 'red' }}>Please enter a username to proceed</p>}
-                            <input 
-                                type="text" 
-                                value={userData.username} 
-                                onChange={handleChange('username')} 
+                            <input
+                                type="text"
+                                value={userData.username}
+                                onChange={handleChange('username')}
                                 className='form-control'
                                 placeholder="Username"
                                 onKeyPress={handleKeyPress}
                             />
                             {userData.usernameError && <p style={{ color: 'red' }}>{userData.usernameError}</p>}
-                            <button 
-                                className="btn btn-primary btn-block m-1" 
+                            <button
+                                className="btn btn-primary btn-block m-1"
                                 onClick={nextStep0}
                                 disabled={isNextButtonDisabled()}
                             >
@@ -207,27 +209,27 @@ const SignUpWizard = ({ googleProfile }) => {
                 <>
                     <div>
                         {emailEmpty && <p style={{ color: 'red' }}>Please enter an email to proceed</p>}
-                        <input 
-                            type="email" 
-                            value={userData.email} 
-                            onChange={handleChange('email')} 
+                        <input
+                            type="email"
+                            value={userData.email}
+                            onChange={handleChange('email')}
                             placeholder="Email"
                             className='form-control'
                             onKeyPress={handleKeyPress}
                         />
                         {!googleProfile && (
                             <>
-                                <input 
-                                    type="password" 
-                                    value={userData.password} 
-                                    onChange={handleChange('password')} 
+                                <input
+                                    type="password"
+                                    value={userData.password}
+                                    onChange={handleChange('password')}
                                     placeholder="Password"
                                     className='form-control mb-3'
                                 />
-                                <input 
-                                    type="password" 
-                                    value={userData.confirmPassword} 
-                                    onChange={handleChange('confirmPassword')} 
+                                <input
+                                    type="password"
+                                    value={userData.confirmPassword}
+                                    onChange={handleChange('confirmPassword')}
                                     placeholder="Confirm Password"
                                     className='form-control mb-3'
                                 />
@@ -249,19 +251,19 @@ const SignUpWizard = ({ googleProfile }) => {
                     <div>
                         <div className="row">
                             <div className="col-12 col-md-6">
-                                <input 
-                                    type="text" 
-                                    value={userData.firstName} 
-                                    onChange={handleChange('firstName')} 
+                                <input
+                                    type="text"
+                                    value={userData.firstName}
+                                    onChange={handleChange('firstName')}
                                     placeholder="First Name"
                                     className='form-control mb-2 mb-md-0'
                                 />
                             </div>
                             <div className="col-12 col-md-6">
-                                <input 
-                                    type="text" 
-                                    value={userData.lastName} 
-                                    onChange={handleChange('lastName')} 
+                                <input
+                                    type="text"
+                                    value={userData.lastName}
+                                    onChange={handleChange('lastName')}
                                     placeholder="Last Name"
                                     className='form-control'
                                     onKeyPress={handleKeyPress}
@@ -282,10 +284,10 @@ const SignUpWizard = ({ googleProfile }) => {
             {step === 4 && (
                 <>
                     <div>
-                        <input 
-                            type="tel" 
-                            value={userData.phone} 
-                            onChange={handleChange('phone')} 
+                        <input
+                            type="tel"
+                            value={userData.phone}
+                            onChange={handleChange('phone')}
                             placeholder="Enter Phone Number (XXX) XXX-XXXX"
                             className='form-control'
                             maxLength={14}
@@ -312,8 +314,8 @@ const SignUpWizard = ({ googleProfile }) => {
                         <p>Phone: {userData.phone}</p>
                         <div className="row">
                             <div className="col">
-                                <button 
-                                    className="btn btn-primary btn-block m-1" 
+                                <button
+                                    className="btn btn-primary btn-block m-1"
                                     onClick={handleSubmit}
                                     disabled={isNextButtonDisabled()}
                                 >
