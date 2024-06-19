@@ -88,13 +88,17 @@ exports.googleSignup = async (req, res) => {
         const salt = uuidv1();
         const hashedPassword = crypto.createHmac('sha1', salt).update(defaultPassword).digest('hex');
 
+        // Split the name into first and last names
+        const [firstName, ...lastNameArray] = name.split(' ');
+        const lastName = lastNameArray.join(' ');
+
         // Create a new user
         let newUser = new User({
             email,
             googleId,
             username,
-            firstName: name.split(' ')[0], // Assuming the name comes as "First Last"
-            lastName: name.split(' ').slice(1).join(' '),
+            firstName,
+            lastName,
             salt,
             hashed_password: hashedPassword,
         });

@@ -1,124 +1,60 @@
 import React, { useState } from "react";
 import NavbarMain from "./NavbarMain";
 import Footer from "./Footer";
-import { signup } from './api/auth'; // Adjust the path as necessary
+import SignUpWizard from "./signup/SignUpWizard";
+import { GoogleLogin } from '@react-oauth/google';
+import jwtDecode from 'jwt-decode';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const SignUp = () => {
-    const [userData, setUserData] = useState({
-        firstName: '',
-        lastName: '',
-        email: '',
-        password: '',
-        cellPhone: ''
-    });
+    const [googleProfile, setGoogleProfile] = useState(null);
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setUserData(prevData => ({
-            ...prevData,
-            [name]: name === 'cellPhone' ? formatPhoneNumber(value) : value
-        }));
+    const responseGoogleSuccess = (response) => {
+        console.log("Google sign-in successful", response);
+        const decodedProfile = jwtDecode(response.credential);
+        setGoogleProfile(decodedProfile);
+        toast.success("Google sign-in successful! Please complete the signup process.", {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        });
     };
-    
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        console.log('User data submitted:', userData);
-        
-        // Call the signup API function
-        try {
-            const response = await signup(userData);
-            console.log('Signup response:', response);
-            // Handle the response, e.g., show a message, redirect, etc.
-        } catch (error) {
-            console.error('Signup error:', error);
-            // Handle the error, e.g., show an error message
+    const responseGoogleFailure = (response) => {
+        console.error("Google sign-in failed", response);
+        if (response.error !== "popup_closed_by_user") {
+            toast.error("Google sign-in failed. Please try again.", {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
         }
     };
 
-    const formatPhoneNumber = (value) => {
-        if (!value) return value;
-    
-        // Remove all non-digits
-        const phoneNumber = value.replace(/[^\d]/g, '');
-    
-        // Check if the input is of correct length
-        const phoneNumberLength = phoneNumber.length;
-    
-        if (phoneNumberLength < 4) return phoneNumber;
-    
-        if (phoneNumberLength < 7) {
-            return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3)}`;
-        }
-    
-        return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3, 6)}-${phoneNumber.slice(6, 10)}`;
-    };
-    
     return (
         <>
             <NavbarMain />
+            <ToastContainer />
             <div className="container-fluid" style={{ backgroundColor: "white", color: "black", height: "73vh" }}>
                 <div className="row h-100 justify-content-center align-items-center">
                     <div className="col-md-6 col-lg-4">
-                        <h2 className="text-center m-1 p-1">Signup</h2>
-                        <form onSubmit={handleSubmit}>
-                            <div className="form-group m-1 p-1">
-                                <label>Email:</label>
-                                <input 
-                                    type="email" 
-                                    name="email" 
-                                    className="form-control"
-                                    value={userData.email} 
-                                    onChange={handleChange} 
-                                    required 
-                                />
-                            </div>
-                            <div className="form-group m-1 p-1">
-                                <label>Password:</label>
-                                <input 
-                                    type="password" 
-                                    name="password" 
-                                    className="form-control"
-                                    value={userData.password} 
-                                    onChange={handleChange} 
-                                    required 
-                                />
-                            </div>
-                            <div className="form-group m-1 p-1">
-                                <label>First Name:</label>
-                                <input 
-                                    type="text" 
-                                    name="firstName" 
-                                    className="form-control"
-                                    value={userData.firstName} 
-                                    onChange={handleChange} 
-                                    required 
-                                />
-                            </div>
-                            <div className="form-group m-1 p-1">
-                                <label>Last Name:</label>
-                                <input 
-                                    type="text" 
-                                    name="lastName" 
-                                    className="form-control"
-                                    value={userData.lastName} 
-                                    onChange={handleChange} 
-                                    required 
-                                />
-                            </div>
-                            <div className="form-group m-1 p-1">
-                                <label>Cell Phone:</label>
-                                <input 
-                                    type="tel" 
-                                    name="cellPhone" 
-                                    className="form-control"
-                                    value={userData.cellPhone} 
-                                    onChange={handleChange} 
-                                    required 
-                                />
-                            </div>
-                            <button className="btn btn-secondary btn-sm m-1 w-100" type="submit">Signup</button>
-                        </form>
+                        <h2 className="text-center mb-5 p-1">Signup</h2>
+                        <SignUpWizard googleProfile={googleProfile} />
+                        <div className="text-center mt-4">
+                            <GoogleLogin
+                                onSuccess={responseGoogleSuccess}
+                                onError={responseGoogleFailure}
+                            />
+                        </div>
                     </div>
                 </div>
             </div>

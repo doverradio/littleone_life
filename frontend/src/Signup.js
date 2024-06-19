@@ -54,7 +54,6 @@ const SignUp = () => {
                             <GoogleLogin
                                 onSuccess={responseGoogleSuccess}
                                 onError={responseGoogleFailure}
-                                useOneTap
                             />
                         </div>
                     </div>

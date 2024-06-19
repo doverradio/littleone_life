@@ -31,7 +31,12 @@ const userSchema = new mongoose.Schema({
     },
     hashed_password: {
         type: String,
-        required: true
+        // For Google sign-in, this field can be optional
+    },
+    googleId: {
+        type: String,
+        unique: true,
+        sparse: true // Allow null values but still ensure uniqueness
     },
     about: {
         type: String,
@@ -88,6 +93,5 @@ userSchema.plugin(fieldEncryption, {
         return salt;
     }
 });
-
 
 module.exports = mongoose.model('User', userSchema);

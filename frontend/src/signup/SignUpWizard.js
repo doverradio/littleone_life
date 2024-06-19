@@ -4,10 +4,12 @@ import { useNavigate } from 'react-router-dom';
 import { checkUsernameAvailability, signup, googleSignup } from '../api/auth';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+const log = console.log;
 
 const SignUpWizard = ({ googleProfile }) => {
     const navigate = useNavigate();
     const [step, setStep] = useState(1);
+    
     const [userData, setUserData] = useState({
         username: '',
         email: googleProfile ? googleProfile.email : '',
@@ -19,6 +21,11 @@ const SignUpWizard = ({ googleProfile }) => {
     });
     const [usernameEmpty, setUsernameEmpty] = useState(false);
     const [emailEmpty, setEmailEmpty] = useState(false);
+
+    if ( googleProfile )
+        {
+            log(`SignUpWizard googleProfile: `, googleProfile)
+        }
 
     // Calculate progress percentage
     const progress = step === 1 ? 1 : (step - 1) * (100 / 4);
