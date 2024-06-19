@@ -4,17 +4,21 @@ import Footer from "./Footer";
 import SignUpWizard from "./signup/SignUpWizard";
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import { toast, ToastContainer } from 'react-toastify';
+// import jwt_decode from "jwt-decode"; // Ensure correct import
 import { jwtDecode } from "jwt-decode";
+
 import 'react-toastify/dist/ReactToastify.css';
 
 const SignUp = () => {
     const [googleProfile, setGoogleProfile] = useState(null);
+    const [googleToken, setGoogleToken] = useState(null);
 
     const responseGoogleSuccess = (response) => {
         console.log("Google sign-in successful", response);
         const decoded = jwtDecode(response.credential);
         console.log("Decoded Google profile", decoded);
         setGoogleProfile(decoded);
+        setGoogleToken(response.credential); // Store the ID Token
         toast.success("Google sign-in successful! Please complete the signup process.", {
             position: "top-center",
             autoClose: 5000,
@@ -49,7 +53,7 @@ const SignUp = () => {
                 <div className="row h-100 justify-content-center align-items-center">
                     <div className="col-md-6 col-lg-4">
                         <h2 className="text-center mb-5 p-1">Signup</h2>
-                        <SignUpWizard googleProfile={googleProfile} />
+                        <SignUpWizard googleProfile={googleProfile} googleToken={googleToken} />
                         <div className="text-center mt-4">
                             <GoogleLogin
                                 onSuccess={responseGoogleSuccess}
