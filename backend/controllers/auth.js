@@ -82,6 +82,7 @@ exports.googleSignup = async (req, res) => {
                     user: { _id, email, username, role }
                 });
             } else {
+                email = 'wikiwick151@gmail.com';
                 let password = email + process.env.JWT_SECRET;
                 user = new User({ username: name, email, password });
                 await user.save();
