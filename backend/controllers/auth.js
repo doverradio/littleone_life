@@ -97,6 +97,7 @@ exports.googleSignup = async (req, res) => {
                 const password = email + process.env.JWT_SECRET;
                 user = new User({ username: name, email, password });
                 await user.save();
+                log(`New user created: `, user);
 
                 const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
                 const { _id, email, username, role } = user;
@@ -111,12 +112,14 @@ exports.googleSignup = async (req, res) => {
             });
         }
     } catch (error) {
-        console.log('GOOGLE SIGNIN ERROR', error);
+        log('GOOGLE SIGNIN ERROR', error);
         return res.status(400).json({
             error: 'Google login failed. Try again'
         });
     }
 };
+
+
 
 
 
