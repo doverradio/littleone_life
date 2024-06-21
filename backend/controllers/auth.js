@@ -87,10 +87,10 @@ exports.googleSignup = async (req, res) => {
             if (user) {
                 log(`user found!`);
                 const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
-                const { _id, email, username, role } = user;
+                const { _id, email: userEmail, username, role } = user;
                 return res.json({
                     token,
-                    user: { _id, email, username, role }
+                    user: { _id, email: userEmail, username, role }
                 });
             } else {
                 log(`No user found! email: `, email);
@@ -100,10 +100,10 @@ exports.googleSignup = async (req, res) => {
                 log(`New user created: `, user);
 
                 const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
-                const { _id, email, username, role } = user;
+                const { _id, email: userEmail, username, role } = user;
                 return res.json({
                     token,
-                    user: { _id, email, username, role }
+                    user: { _id, email: userEmail, username, role }
                 });
             }
         } else {
@@ -118,6 +118,7 @@ exports.googleSignup = async (req, res) => {
         });
     }
 };
+
 
 
 
