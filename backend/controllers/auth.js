@@ -60,6 +60,7 @@ exports.signup = async (req, res) => {
 
 // GOOGLE SIGN UP
 exports.googleSignup = async (req, res) => {
+    log(`Begin googleSignup! req.body: `, JSON.stringify(googleSignup, null, 2))
     const { idToken } = req.body;
     let email;
 
@@ -73,6 +74,7 @@ exports.googleSignup = async (req, res) => {
         const { email_verified, name, email } = payload;
 
         if (email_verified) {
+            log(`email_verified: `, email_verified)
             let user = await User.findOne({ email });
             if (user) {
                 const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
