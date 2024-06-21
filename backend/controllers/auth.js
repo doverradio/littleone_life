@@ -171,7 +171,7 @@ exports.signin = async (req, res) => {
 
 // GOOGLE SIGN IN
 exports.googleSignin = async (req, res) => {
-    console.log("Begin googleSignin! req.body: ", JSON.stringify(req.body, null, 2));
+    log(`Begin googleSignin! req.body: `, JSON.stringify(req.body, null, 2));
     const { idToken } = req.body;
 
     try {
@@ -181,14 +181,23 @@ exports.googleSignin = async (req, res) => {
         });
 
         const payload = ticket.getPayload();
-        console.log("payload: ", payload);
+        log(`payload: `, payload);
 
         const email = payload.email;
         const email_verified = payload.email_verified;
+        const username = payload.name; // Assuming the name field contains the username
+
+        log(`email: `, email);
+        log(`email_verified: `, email_verified);
+        log(`username: `, username);
 
         if (email_verified) {
-            let user = await User.findOne({ email });
+            log(`email_verified: `, email_verified);
+            let user = await User.findOne({ username }); // Search by username instead of email
+            log(`user: `, user);
+
             if (user) {
+                log(`user found!`);
                 const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
                 const { _id, email: userEmail, username, role } = user;
                 return res.json({
@@ -196,6 +205,7 @@ exports.googleSignin = async (req, res) => {
                     user: { _id, email: userEmail, username, role }
                 });
             } else {
+                log(`No user found! username: `, username);
                 return res.status(400).json({
                     error: 'User not found. Please sign up first.'
                 });
@@ -206,12 +216,13 @@ exports.googleSignin = async (req, res) => {
             });
         }
     } catch (error) {
-        console.log('GOOGLE SIGNIN ERROR', error);
+        log('GOOGLE SIGNIN ERROR', error);
         return res.status(400).json({
-            error: 'Google login failed. Try again.'
+            error: 'Google login failed. Try again'
         });
     }
 };
+
 
 exports.signout = async ( req, res ) =>  // a 
 {
