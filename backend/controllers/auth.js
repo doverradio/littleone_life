@@ -60,28 +60,26 @@ exports.signup = async (req, res) => {
 
 // GOOGLE SIGN UP
 exports.googleSignup = async (req, res) => {
-    log(`Begin googleSignup! req.body: `, JSON.stringify(req.body, null, 2))
+    log(`Begin googleSignup! req.body: `, JSON.stringify(req.body, null, 2));
     const { idToken } = req.body;
 
     try {
-        let email;
         const ticket = await client.verifyIdToken({
             idToken,
             audience: process.env.GOOGLE_CLIENT_ID,
         });
 
         const payload = ticket.getPayload();
-        log(`payload: `, payload)
-        const { email_verified, name } = payload;
-        email = payload.email;
-        log(`email: `, email)
+        log(`payload: `, payload);
+        const { email_verified, name, email } = payload;
+        log(`email: `, email);
 
         if (email_verified) {
-            log(`email_verified: `, email_verified)
+            log(`email_verified: `, email_verified);
             let user = await User.findOne({ email });
-            log(`user: `, user)
+            log(`user: `, user);
             if (user) {
-                log(`user found!`)
+                log(`user found!`);
                 const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
                 const { _id, email, username, role } = user;
                 return res.json({
@@ -89,10 +87,8 @@ exports.googleSignup = async (req, res) => {
                     user: { _id, email, username, role }
                 });
             } else {
-                log(`No user found! email: `, email)
-                // email = 'wikiwick151@gmail.com';
+                log(`No user found! email: `, email);
                 let password = email + process.env.JWT_SECRET;
-                // let password = 'wikiwick151@gmail.com' + process.env.JWT_SECRET;
                 user = new User({ username: name, email, password });
                 await user.save();
                 const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
