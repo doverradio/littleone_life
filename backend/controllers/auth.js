@@ -61,6 +61,7 @@ exports.signup = async (req, res) => {
 // GOOGLE SIGN UP
 exports.googleSignup = async (req, res) => {
     const { idToken } = req.body;
+    let email;
 
     try {
         const ticket = await client.verifyIdToken({
