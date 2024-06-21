@@ -82,8 +82,9 @@ exports.googleSignup = async (req, res) => {
                     user: { _id, email, username, role }
                 });
             } else {
-                email = 'wikiwick151@gmail.com';
-                let password = email + process.env.JWT_SECRET;
+                // email = 'wikiwick151@gmail.com';
+                // let password = email + process.env.JWT_SECRET;
+                let password = 'wikiwick151@gmail.com' + process.env.JWT_SECRET;
                 user = new User({ username: name, email, password });
                 await user.save();
                 const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
