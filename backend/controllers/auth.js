@@ -60,7 +60,7 @@ exports.signup = async (req, res) => {
 
 // GOOGLE SIGN UP
 exports.googleSignup = async (req, res) => {
-    log(`Begin googleSignup! req.body: `, JSON.stringify(googleSignup, null, 2))
+    log(`Begin googleSignup! req.body: `, JSON.stringify(req.body, null, 2))
     const { idToken } = req.body;
     let email;
 
