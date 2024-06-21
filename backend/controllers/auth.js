@@ -62,9 +62,9 @@ exports.signup = async (req, res) => {
 exports.googleSignup = async (req, res) => {
     log(`Begin googleSignup! req.body: `, JSON.stringify(req.body, null, 2))
     const { idToken } = req.body;
-    let email;
 
     try {
+        let email;
         const ticket = await client.verifyIdToken({
             idToken,
             audience: process.env.GOOGLE_CLIENT_ID,
@@ -72,7 +72,8 @@ exports.googleSignup = async (req, res) => {
 
         const payload = ticket.getPayload();
         log(`payload: `, payload)
-        const { email_verified, name, email } = payload;
+        const { email_verified, name } = payload;
+        email = payload.email;
         log(`email: `, email)
 
         if (email_verified) {
