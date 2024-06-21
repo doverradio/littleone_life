@@ -71,13 +71,7 @@ exports.googleSignup = async (req, res) => {
 
         const payload = ticket.getPayload();
         log(`payload: `, payload);
-
-        const email = payload.email;
-        const email_verified = payload.email_verified;
-        const name = payload.name;
-
-        log(`email: `, email);
-        log(`email_verified: `, email_verified);
+        const { email_verified, name, email } = payload;
 
         if (email_verified) {
             log(`email_verified: `, email_verified);
@@ -87,37 +81,43 @@ exports.googleSignup = async (req, res) => {
             if (user) {
                 log(`user found!`);
                 const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
-                const { _id, email: userEmail, username, role } = user;
+                const { _id, email, username, role } = user;
                 return res.json({
                     token,
-                    user: { _id, email: userEmail, username, role }
+                    user: { _id, email, username, role },
                 });
             } else {
                 log(`No user found! email: `, email);
-                const password = email + process.env.JWT_SECRET;
+                let existingUsername = await User.findOne({ username: name });
+                if (existingUsername) {
+                    return res.status(400).json({
+                        error: 'Username already exists. Please choose a different username.',
+                    });
+                }
+                let password = email + process.env.JWT_SECRET;
                 user = new User({ username: name, email, password });
                 await user.save();
                 log(`New user created: `, user);
-
                 const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
-                const { _id, email: userEmail, username, role } = user;
+                const { _id, email, username, role } = user;
                 return res.json({
                     token,
-                    user: { _id, email: userEmail, username, role }
+                    user: { _id, email, username, role },
                 });
             }
         } else {
             return res.status(400).json({
-                error: 'Google login failed. Try again'
+                error: 'Google login failed. Try again',
             });
         }
     } catch (error) {
-        log('GOOGLE SIGNIN ERROR', error);
+        console.log('GOOGLE SIGNIN ERROR', error);
         return res.status(400).json({
-            error: 'Google login failed. Try again'
+            error: 'Google login failed. Try again',
         });
     }
 };
+
 
 
 
