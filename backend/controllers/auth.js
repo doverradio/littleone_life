@@ -71,12 +71,15 @@ exports.googleSignup = async (req, res) => {
         });
 
         const payload = ticket.getPayload();
+        log(`payload: `, payload)
         const { email_verified, name, email } = payload;
 
         if (email_verified) {
             log(`email_verified: `, email_verified)
             let user = await User.findOne({ email });
+            log(`user: `, user)
             if (user) {
+                log(`user found!`)
                 const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
                 const { _id, email, username, role } = user;
                 return res.json({
@@ -84,6 +87,7 @@ exports.googleSignup = async (req, res) => {
                     user: { _id, email, username, role }
                 });
             } else {
+                log(`No user found!`)
                 // email = 'wikiwick151@gmail.com';
                 // let password = email + process.env.JWT_SECRET;
                 let password = 'wikiwick151@gmail.com' + process.env.JWT_SECRET;
