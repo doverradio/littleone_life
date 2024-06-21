@@ -46,11 +46,22 @@ app.use(express.json({
 app.use(cookieParser());
 // cors
 if (process.env.NODE_ENV === 'production') {
-  app.use(cors({ origin: `${process.env.CLIENT_URL}` }));
-} 
-else {
-  app.use(cors({ origin: `${process.env.CLIENT_URL}` }));
+  app.use(cors({ 
+    origin: `${process.env.CLIENT_URL}`,
+    credentials: true
+  }));
+} else {
+  app.use(cors({ 
+    origin: `${process.env.CLIENT_URL}`,
+    credentials: true
+  }));
 }
+// if (process.env.NODE_ENV === 'production') {
+//   app.use(cors({ origin: `${process.env.CLIENT_URL}` }));
+// } 
+// else {
+//   app.use(cors({ origin: `${process.env.CLIENT_URL}` }));
+// }
 
 // // Add this middleware for debugging
 // app.use((req, res, next) => {
