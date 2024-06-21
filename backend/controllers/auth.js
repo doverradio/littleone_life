@@ -59,6 +59,51 @@ exports.signup = async (req, res) => {
 
 // GOOGLE SIGN UP
 exports.googleSignup = async (req, res) => {
+    const { idToken } = req.body;
+
+    try {
+        const ticket = await client.verifyIdToken({
+            idToken,
+            audience: process.env.GOOGLE_CLIENT_ID,
+        });
+
+        const payload = ticket.getPayload();
+        const { email_verified, name, email } = payload;
+
+        if (email_verified) {
+            let user = await User.findOne({ email });
+            if (user) {
+                const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
+                const { _id, email, username, role } = user;
+                return res.json({
+                    token,
+                    user: { _id, email, username, role }
+                });
+            } else {
+                let password = email + process.env.JWT_SECRET;
+                user = new User({ name, email, password });
+                await user.save();
+                const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
+                const { _id, email, username, role } = user;
+                return res.json({
+                    token,
+                    user: { _id, email, username, role }
+                });
+            }
+        } else {
+            return res.status(400).json({
+                error: 'Google login failed. Try again'
+            });
+        }
+    } catch (error) {
+        console.log('GOOGLE SIGNIN ERROR', error);
+        return res.status(400).json({
+            error: 'Google login failed. Try again'
+        });
+    }
+};
+
+exports.googleSignup0 = async (req, res) => {
     const { tokenId, username } = req.body;
 
     try {
