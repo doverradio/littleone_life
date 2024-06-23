@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import NavbarMain from "../NavbarMain";
 import Footer from "../Footer";
 import SignUpWizard from "./SignUpWizard";
-import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 import { toast, ToastContainer } from 'react-toastify';
 import GoogleLoginButton from "./GoogleLoginButton";
-import { jwtDecode } from "jwt-decode";
+import jwtDecode from "jwt-decode";
 
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -15,7 +15,11 @@ const SignUp = () => {
 
     const informParent = (response) => {
         const decoded = jwtDecode(response.token);
-        setGoogleProfile(decoded);
+        setGoogleProfile({
+            given_name: response.user.username,
+            email: response.user.email,
+            role: decoded.role
+        });
         setGoogleToken(response.token);
         toast.success("Google sign-in successful! Please complete the signup process.", {
             position: "top-center",
@@ -28,38 +32,6 @@ const SignUp = () => {
         });
     };
 
-    const responseGoogleSuccess = (response) => {
-        console.log("Google sign-in successful", response);
-        const decoded = jwtDecode(response.credential);
-        console.log("Decoded Google profile", decoded);
-        setGoogleProfile(decoded);
-        setGoogleToken(response.credential); // Store the ID Token
-        toast.success("Google sign-in successful! Please complete the signup process.", {
-            position: "top-center",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-        });
-    };
-
-    const responseGoogleFailure = (response) => {
-        console.error("Google sign-in failed", response);
-        if (response.error !== "popup_closed_by_user") {
-            toast.error("Google sign-in failed. Please try again.", {
-                position: "top-center",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-            });
-        }
-    };
-
     return (
         <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
             <NavbarMain />
@@ -69,12 +41,6 @@ const SignUp = () => {
                     <div className="col-md-6 col-lg-4">
                         <h2 className="text-center mb-5 p-1">Signup</h2>
                         <SignUpWizard googleProfile={googleProfile} googleToken={googleToken} />
-                        {/* <div className="text-center mt-4">
-                            <GoogleLogin
-                                onSuccess={responseGoogleSuccess}
-                                onError={responseGoogleFailure}
-                            />
-                        </div> */}
                         <div className="text-center mt-4">
                             <GoogleLoginButton informParent={informParent} />
                         </div>

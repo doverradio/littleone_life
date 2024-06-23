@@ -60,6 +60,7 @@ exports.signup = async (req, res) => {
 
 // GOOGLE SIGN UP
 exports.googleSignup = async (req, res) => {
+    log(`Begin googleSignup! req.body: `, JSON.stringify(req.body, null, 2));
     const { idToken } = req.body;
 
     try {
@@ -69,37 +70,64 @@ exports.googleSignup = async (req, res) => {
         });
 
         const payload = ticket.getPayload();
+        log(`payload: `, payload);
+
         const email = payload.email;
         const email_verified = payload.email_verified;
         const name = payload.name;
 
+        log(`email: `, email);
+        log(`email_verified: `, email_verified);
+
         if (email_verified) {
+            log(`email_verified: `, email_verified);
             let user = await User.findOne({ email });
+            log(`user: `, user);
 
             if (user) {
-                const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
-                res.cookie('token', token, { httpOnly: true, secure: true });
+                log(`user found!`);
+                const token = jwt.sign({ _id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '7d' });
+                res.cookie('token', token, {
+                    httpOnly: true,
+                    secure: process.env.NODE_ENV === 'production',
+                    maxAge: 7 * 24 * 60 * 60 * 1000, // 1 week
+                });
+                const { _id, email: userEmail, username, role } = user;
                 return res.json({
-                    user: { _id: user._id, email: user.email, username: user.username, role: user.role }
+                    user: { _id, email: userEmail, username, role }
                 });
             } else {
+                log(`No user found! email: `, email);
                 const password = email + process.env.JWT_SECRET;
                 user = new User({ username: name, email, password });
                 await user.save();
+                log(`New user created: `, user);
 
-                const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
-                res.cookie('token', token, { httpOnly: true, secure: true });
+                const token = jwt.sign({ _id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '7d' });
+                res.cookie('token', token, {
+                    httpOnly: true,
+                    secure: process.env.NODE_ENV === 'production',
+                    maxAge: 7 * 24 * 60 * 60 * 1000, // 1 week
+                });
+                const { _id, email: userEmail, username, role } = user;
                 return res.json({
-                    user: { _id: user._id, email: user.email, username: user.username, role: user.role }
+                    user: { _id, email: userEmail, username, role }
                 });
             }
         } else {
-            return res.status(400).json({ error: 'Google login failed. Try again' });
+            return res.status(400).json({
+                error: 'Google login failed. Try again'
+            });
         }
     } catch (error) {
-        return res.status(400).json({ error: 'Google login failed. Try again' });
+        log('GOOGLE SIGNIN ERROR', error);
+        return res.status(400).json({
+            error: 'Google login failed. Try again'
+        });
     }
 };
+
+
 
 exports.googleSignup0 = async (req, res) => {
     log(`Begin googleSignup! req.body: `, JSON.stringify(req.body, null, 2));
@@ -227,34 +255,37 @@ exports.googleSignin = async (req, res) => {
 
         const email = payload.email;
         const email_verified = payload.email_verified;
-        const username = payload.name; // Assuming the name field contains the username
+        const name = payload.name;
 
         log(`email: `, email);
         log(`email_verified: `, email_verified);
-        log(`username: `, username);
 
         if (email_verified) {
             log(`email_verified: `, email_verified);
-            let user = await User.findOne({ username }); // Search by username instead of email
+            let user = await User.findOne({ email });
             log(`user: `, user);
 
             if (user) {
                 log(`user found!`);
-                const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
+                const token = jwt.sign({ _id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '7d' });
+                res.cookie('token', token, {
+                    httpOnly: true,
+                    secure: process.env.NODE_ENV === 'production',
+                    maxAge: 7 * 24 * 60 * 60 * 1000, // 1 week
+                });
                 const { _id, email: userEmail, username, role } = user;
                 return res.json({
                     token,
                     user: { _id, email: userEmail, username, role }
                 });
             } else {
-                log(`No user found! username: `, username);
                 return res.status(400).json({
                     error: 'User not found. Please sign up first.'
                 });
             }
         } else {
             return res.status(400).json({
-                error: 'Google login failed. Email not verified.'
+                error: 'Google login failed. Try again'
             });
         }
     } catch (error) {
@@ -264,6 +295,8 @@ exports.googleSignin = async (req, res) => {
         });
     }
 };
+
+
 
 
 exports.signout = async ( req, res ) =>  // a 

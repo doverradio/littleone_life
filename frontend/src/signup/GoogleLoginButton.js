@@ -19,7 +19,7 @@ const GoogleLoginButton = ({ informParent = f => f }) => {
                 toast.error('Google sign-in failed. Please try again.');
             } else {
                 console.log('GOOGLE SIGNIN SUCCESS', data);
-                informParent(data);
+                informParent(data);  // Inform parent with user data
                 toast.success('Google sign-in successful! Please complete the signup process.');
             }
         } catch (error) {
