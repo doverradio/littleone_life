@@ -5,7 +5,7 @@ import SignUpWizard from "./SignUpWizard";
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { toast, ToastContainer } from 'react-toastify';
 import GoogleLoginButton from "./GoogleLoginButton";
-import jwtDecode from "jwt-decode";
+import { jwtDecode } from "jwt-decode";  // Correct import statement
 
 import 'react-toastify/dist/ReactToastify.css';
 
