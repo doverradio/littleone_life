@@ -1,10 +1,9 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import NavbarMain from "./NavbarMain";
 import Footer from "./Footer";
 import { signin, authenticate, isAuthenticated, googleSignIn } from './api/auth';
-// import { GoogleLogin } from 'react-google-login'; // Import GoogleLogin
-import { GoogleLogin } from '@react-oauth/google'; // Use the new GIS component
+import { GoogleLogin } from '@react-oauth/google';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -22,7 +21,6 @@ const SignIn = () => {
     const { user } = isAuthenticated();
     const navigate = useNavigate();
 
-    
     // Google Login Success Handler
     const responseGoogleSuccess = async (response) => {
         try {
@@ -92,8 +90,8 @@ const SignIn = () => {
             <button onClick={clickSubmit} className="btn btn-primary m-1">Submit</button>
             {/* Google Login Button */}
             <GoogleLogin
-                clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID} // Replace with your Google Client ID
-                buttonText="Login with Google"
+                clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
+                buttonText="Sign in with Google"
                 onSuccess={responseGoogleSuccess}
                 onFailure={responseGoogleFailure}
                 cookiePolicy={'single_host_origin'}
@@ -127,12 +125,15 @@ const SignIn = () => {
             <NavbarMain />
             <ToastContainer />
             <div className="container" style={{ height: '73vh' }}>
-                <h2 className="mt-5 mb-5">SignIn</h2>
+                <h2 className="mt-5 mb-5">Sign In</h2>
                 <div className="col-md-4 offset-md-4">
                     {showLoading()}
                     {showError()}
                     {signInForm()}
                     {redirectUser()}
+                    <p className="mt-3">
+                        Don't have an account? <Link to="/signup">Please click here to sign up</Link>
+                    </p>
                 </div>
             </div>
             <Footer />

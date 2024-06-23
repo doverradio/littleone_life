@@ -2,7 +2,7 @@ import React from 'react';
 import { GoogleLogin } from '@react-oauth/google';
 import { toast } from 'react-toastify';
 
-const GoogleLoginButton = ({ informParent = f => f }) => {
+const GoogleSignupButton = ({ informParent = f => f }) => {
     const responseGoogleSuccess = async (response) => {
         console.log('Google credential:', response.credential);
         try {
@@ -15,22 +15,22 @@ const GoogleLoginButton = ({ informParent = f => f }) => {
             });
             const data = await res.json();
             if (data.error) {
-                console.log('GOOGLE SIGNIN ERROR', data.error);
-                toast.error('Google sign-in failed. Please try again.');
+                console.log('GOOGLE SIGNUP ERROR', data.error);
+                toast.error('Google sign-up failed. Please try again.');
             } else {
-                console.log('GOOGLE SIGNIN SUCCESS', data);
-                informParent(data); // Ensure the token is correctly passed here
-                toast.success('Google sign-in successful! Please complete the signup process.');
+                console.log('GOOGLE SIGNUP SUCCESS', data);
+                informParent(data);
+                toast.success('Google sign-up successful! Please complete the signup process.');
             }
         } catch (error) {
-            console.error('GOOGLE SIGNIN ERROR', error);
-            toast.error('Google sign-in failed. Please try again.');
+            console.error('GOOGLE SIGNUP ERROR', error);
+            toast.error('Google sign-up failed. Please try again.');
         }
     };
 
     const responseGoogleFailure = (response) => {
-        console.error("Google sign-in failed", response);
-        toast.error("Google sign-in failed. Please try again.");
+        console.error("Google sign-up failed", response);
+        toast.error("Google sign-up failed. Please try again.");
     };
 
     return (
@@ -38,9 +38,10 @@ const GoogleLoginButton = ({ informParent = f => f }) => {
             <GoogleLogin
                 onSuccess={responseGoogleSuccess}
                 onError={responseGoogleFailure}
+                text="Sign up with Google"
             />
         </div>
     );
 };
 
-export default GoogleLoginButton;
+export default GoogleSignupButton;

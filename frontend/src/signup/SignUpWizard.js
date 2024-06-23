@@ -1,19 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import Step1Username from "./wizard/Step1Username";
-import Step2EmailPassword from "./wizard/Step2EmailPassword";
-import Step3Names from "./wizard/Step3Names";
-import Step4Phone from "./wizard/Step4Phone";
-import Step5Summary from "./wizard/Step5Summary";
+import SignUpOptions from './SignUpOptions';
+import Step1Username from './wizard/Step1Username';
+import Step2EmailPassword from './wizard/Step2EmailPassword';
+import Step3Names from './wizard/Step3Names';
+import Step4Phone from './wizard/Step4Phone';
+import Step5Summary from './wizard/Step5Summary';
 import { checkUsernameAvailability, signup, googleSignup } from '../api/auth';
 
-const log = console.log;
-
-const SignUpWizard = ({ googleProfile, googleToken }) => {
+const SignUpWizard = ({ googleProfile, googleToken, informParent }) => {
     const navigate = useNavigate();
     const [step, setStep] = useState(1);
+    const [signUpMethod, setSignUpMethod] = useState(null);
     const [userData, setUserData] = useState({
         username: googleProfile ? googleProfile.given_name : '',
         email: googleProfile ? googleProfile.email : '',
@@ -151,50 +150,56 @@ const SignUpWizard = ({ googleProfile, googleToken }) => {
                     Step {step} of 5
                 </div>
             </div>
-            {step === 1 && (
-                <Step1Username 
-                    userData={userData} 
-                    setUserData={setUserData} 
-                    nextStep0={nextStep0} 
-                    usernameEmpty={usernameEmpty} 
-                    setUsernameEmpty={setUsernameEmpty} 
-                    handleKeyPress={handleKeyPress} 
-                    checkUsername={checkUsername}
-                />
-            )}
-            {step === 2 && (
-                <Step2EmailPassword 
-                    userData={userData} 
-                    setUserData={setUserData} 
-                    nextStep={nextStep} 
-                    prevStep={prevStep} 
-                    handleKeyPress={handleKeyPress} 
-                    googleProfile={googleProfile}
-                />
-            )}
-            {step === 3 && (
-                <Step3Names 
-                    userData={userData} 
-                    setUserData={setUserData} 
-                    nextStep={nextStep} 
-                    prevStep={prevStep} 
-                    handleKeyPress={handleKeyPress} 
-                />
-            )}
-            {step === 4 && (
-                <Step4Phone 
-                    userData={userData} 
-                    setUserData={setUserData} 
-                    nextStep={nextStep} 
-                    prevStep={prevStep} 
-                    handleKeyPress={handleKeyPress} 
-                />
-            )}
-            {step === 5 && (
-                <Step5Summary 
-                    userData={userData} 
-                    handleSubmit={handleSubmit} 
-                />
+            {signUpMethod ? (
+                <>
+                    {step === 1 && (
+                        <Step1Username 
+                            userData={userData} 
+                            setUserData={setUserData} 
+                            nextStep0={nextStep0} 
+                            usernameEmpty={usernameEmpty} 
+                            setUsernameEmpty={setUsernameEmpty} 
+                            handleKeyPress={handleKeyPress} 
+                            checkUsername={checkUsername}
+                        />
+                    )}
+                    {step === 2 && (
+                        <Step2EmailPassword 
+                            userData={userData} 
+                            setUserData={setUserData} 
+                            nextStep={nextStep} 
+                            prevStep={prevStep} 
+                            handleKeyPress={handleKeyPress} 
+                            googleProfile={googleProfile}
+                        />
+                    )}
+                    {step === 3 && (
+                        <Step3Names 
+                            userData={userData} 
+                            setUserData={setUserData} 
+                            nextStep={nextStep} 
+                            prevStep={prevStep} 
+                            handleKeyPress={handleKeyPress} 
+                        />
+                    )}
+                    {step === 4 && (
+                        <Step4Phone 
+                            userData={userData} 
+                            setUserData={setUserData} 
+                            nextStep={nextStep} 
+                            prevStep={prevStep} 
+                            handleKeyPress={handleKeyPress} 
+                        />
+                    )}
+                    {step === 5 && (
+                        <Step5Summary 
+                            userData={userData} 
+                            handleSubmit={handleSubmit} 
+                        />
+                    )}
+                </>
+            ) : (
+                <SignUpOptions setSignUpMethod={setSignUpMethod} informParent={informParent} />
             )}
         </div>
     );
