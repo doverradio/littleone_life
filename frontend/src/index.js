@@ -4,6 +4,7 @@ import './index.css';
 import reportWebVitals from './reportWebVitals';
 import RoutesComponent from './Routes';
 import { GoogleOAuthProvider } from '@react-oauth/google';
+import { UserProvider } from './context/UserContext';
 
 console.log('Google Client ID:', process.env.REACT_APP_GOOGLE_CLIENT_ID);
 
@@ -13,11 +14,11 @@ if (module.hot) {
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
-    <React.StrictMode>
+  <UserProvider>
+    <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
       <RoutesComponent />
-    </React.StrictMode>
-  </GoogleOAuthProvider>
+    </GoogleOAuthProvider>
+  </UserProvider>
 );
 
 reportWebVitals();

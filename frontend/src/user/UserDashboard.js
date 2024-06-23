@@ -1,17 +1,17 @@
-import React, { useState, useEffect }  from "react";
+import React, { useState, useEffect } from "react";
 import NavbarMain from "../NavbarMain";
 import Footer from "../Footer";
 import Modal from "./Modal";
 import Rosary from "../components/rosary/Rosary";
-import rosaryIcon from '../components/rosary/rosary_icon.png'
+import rosaryIcon from '../components/rosary/rosary_icon.png';
 import Mass from "../components/mass/Mass";
-import massIcon from '../components/mass/mass_icon.png'
-import Confession from "../components/confession/Confession"; // Import the Confession component
-import confessionIcon from '../components/confession/confession_icon.png'; // Path to your confession icon
+import massIcon from '../components/mass/mass_icon.png';
+import Confession from "../components/confession/Confession";
+import confessionIcon from '../components/confession/confession_icon.png';
 import DivineMercy from "../components/otherprayers/divinemercy/DivineMercy";
-import divineMercyIcon from '../components/otherprayers/divinemercy/divinemercy_icon.png'; // Path to your Divine Mercy icon
-import prayerSettingsIcon from '../components/otherprayers/prayersettings_icon.png'
-import './styles.css'
+import divineMercyIcon from '../components/otherprayers/divinemercy/divinemercy_icon.png';
+import prayerSettingsIcon from '../components/otherprayers/prayersettings_icon.png';
+import './styles.css';
 import { useModal } from "../context/ModalContext";
 import { isAuthenticated } from "../api/auth";
 import { getPrayerSettings, updatePrayerSettings } from "../api/user";
@@ -20,14 +20,13 @@ import StMichaelPrayer from "../components/otherprayers/stmichaelprayer/StMichae
 import stMichaelIcon from '../components/otherprayers/stmichaelprayer/stmichael_icon.png';
 import StFrancisPrayer from "../components/otherprayers/stfrancis/StFrancisPrayer";
 import stFrancisIcon from "../components/otherprayers/stfrancis/stfrancis_icon.png";
-
 import StLeandroRuizPrayer from "../components/otherprayers/stleandroruiz/StLeandroRuiz";
 import stLeandroRuizIcon from "../components/otherprayers/stleandroruiz/stleandroruiz_icon.png";
+import { useUser } from '../context/UserContext';
 
 const UserDashboard = () => {
-    
     const { modalState, toggleModal } = useModal(); // Import from context
-
+    const { user } = useUser(); // Access user from UserContext
     const {
         user: { firstName, _id: userId },
         token
@@ -45,9 +44,8 @@ const UserDashboard = () => {
         { id: 'stfrancis', name: 'St. Francis Prayer', isVisible: false },
         { id: 'stleandroruiz', name: 'St. Leandro Ruiz Prayer', isVisible: false },
         // Add other prayers here
-    ]
+    ];
 
-    
     const fetchPrayerSettings = async () => {
         try {
             const settings = await getPrayerSettings(userId, token);
@@ -66,17 +64,14 @@ const UserDashboard = () => {
         }
     };
 
-    
     useEffect(() => {
-
         fetchPrayerSettings();
     }, []); // Empty dependency array to run only once on component mount
-
 
     // Function to update prayer settings in the database
     const persistPrayerSettings = async (updatedPrayers) => {
         try {
-            const response = await updatePrayerSettings(userId, updatedPrayers);
+            const response = await updatePrayerSettings(userId, updatedPrayers, token);
             // console.log(response); // Handle the response appropriately
         } catch (error) {
             console.error('Error updating prayer settings:', error);
@@ -110,10 +105,6 @@ const UserDashboard = () => {
             component: <PrayerSettings availablePrayers={availablePrayers} setAvailablePrayers={setAvailablePrayers} />
         },
     ]);
-    
-    
-    
-    
 
     const onDragStart = (e, id) => {
         e.dataTransfer.setData('id', id);
@@ -155,11 +146,12 @@ const UserDashboard = () => {
             <div className="container" style={{ height: '73vh' }}>
                 <div className="row justify-content-center align-items-center">
                     <h2 className="header-font mt-2">{firstName}'s Faith Journey</h2>
+                    {/* Display the user role */}
+                    <p>User Role: {user?.role}</p>
                     {/* Add your user dashboard content here */}
                 </div>
                 <div className="d-flex flex-wrap justify-content-start">
                     {icons.map(icon => {
-                                        
                         // Check if the prayer is visible
                         const isVisible = availablePrayers.find(prayer => prayer.id === icon.id)?.isVisible ?? true;
 
@@ -194,8 +186,7 @@ const UserDashboard = () => {
                                 )}
                             </div>
                         )
-                    }
-                    )}
+                    })}
                 </div>
             </div>
             {/* Modal for Prayer Settings */}
