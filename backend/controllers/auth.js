@@ -59,6 +59,7 @@ exports.signup = async (req, res) => {
 };
 
 // GOOGLE SIGN UP
+// In your auth controller
 exports.googleSignup = async (req, res) => {
     log(`Begin googleSignup! req.body: `, JSON.stringify(req.body, null, 2));
     const { idToken } = req.body;
@@ -85,16 +86,10 @@ exports.googleSignup = async (req, res) => {
             log(`user: `, user);
 
             if (user) {
-                log(`user found!`);
-                const token = jwt.sign({ _id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '7d' });
-                res.cookie('token', token, {
-                    httpOnly: true,
-                    secure: process.env.NODE_ENV === 'production',
-                    maxAge: 7 * 24 * 60 * 60 * 1000, // 1 week
-                });
-                const { _id, email: userEmail, username, role } = user;
-                return res.json({
-                    user: { _id, email: userEmail, username, role }
+                log(`User already exists!`);
+                return res.status(200).json({
+                    message: 'User already exists. Please sign in.',
+                    userExists: true
                 });
             } else {
                 log(`No user found! email: `, email);
@@ -103,14 +98,10 @@ exports.googleSignup = async (req, res) => {
                 await user.save();
                 log(`New user created: `, user);
 
-                const token = jwt.sign({ _id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '7d' });
-                res.cookie('token', token, {
-                    httpOnly: true,
-                    secure: process.env.NODE_ENV === 'production',
-                    maxAge: 7 * 24 * 60 * 60 * 1000, // 1 week
-                });
+                const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
                 const { _id, email: userEmail, username, role } = user;
-                return res.json({
+                return res.status(200).json({
+                    token,
                     user: { _id, email: userEmail, username, role }
                 });
             }
@@ -126,6 +117,7 @@ exports.googleSignup = async (req, res) => {
         });
     }
 };
+
 
 
 
