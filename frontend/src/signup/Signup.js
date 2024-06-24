@@ -4,6 +4,7 @@ import Footer from "../Footer";
 import SignUpWizard from "./SignUpWizard";
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { toast, ToastContainer } from 'react-toastify';
+import GoogleSignupButton from "./GoogleSignupButton";
 import {jwtDecode} from "jwt-decode";
 import { useUser } from "../context/UserContext";
 
