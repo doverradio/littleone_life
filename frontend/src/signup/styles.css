@@ -1,0 +1,36 @@
+.signup-options-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.signup-option {
+    cursor: pointer;
+    padding: 15px 30px;
+    margin: 0;
+    width: 100%;
+    max-width: 300px;
+    background-color: #007bff;
+    color: white;
+    border-left: 0.2px solid grey;
+    border-right: 0.2px solid grey;
+    border-top: 0.2px solid grey;
+    transition: background-color 0.3s;
+}
+
+.signup-option:hover,
+.signup-option.selected {
+    background-color: #0056b3;
+}
+
+.signup-option:last-child {
+    border-bottom: 0.2px solid grey;
+}
+
+.signin-message {
+    margin-top: 20px;
+    text-align: center;
+}

@@ -17,9 +17,6 @@ const GoogleSignupButton = ({ informParent = f => f }) => {
             if (data.error) {
                 console.log('GOOGLE SIGNUP ERROR', data.error);
                 toast.error('Google sign-up failed. Please try again.');
-            } else if (data.userExists) {
-                toast.info('User already exists. Redirecting to sign in.');
-                window.location.href = '/signin';
             } else {
                 console.log('GOOGLE SIGNUP SUCCESS', data);
                 informParent(data);
@@ -41,7 +38,7 @@ const GoogleSignupButton = ({ informParent = f => f }) => {
             <GoogleLogin
                 onSuccess={responseGoogleSuccess}
                 onError={responseGoogleFailure}
-                text="Sign up with Google"
+                text="Sign up with your Google Account" // Ensure the button text is correct
             />
         </div>
     );
