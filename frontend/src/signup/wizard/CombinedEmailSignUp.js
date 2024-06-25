@@ -1,10 +1,13 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import debounce from "lodash.debounce";
 
 const CombinedEmailSignUp = ({ userData, setUserData, nextStep, prevStep, handleKeyPress, checkUsername }) => {
+    const [lastCheckedUsername, setLastCheckedUsername] = useState('');
+
     const debouncedCheckUsername = debounce((value) => {
-        if (value) {
+        if (value && value !== lastCheckedUsername) {
             checkUsername(value);
+            setLastCheckedUsername(value);
         }
     }, 1000);
 
@@ -31,7 +34,7 @@ const CombinedEmailSignUp = ({ userData, setUserData, nextStep, prevStep, handle
     const handleChange = (input) => (e) => {
         let value = e.target.value;
         setUserData({ ...userData, [input]: value });
-        if (input === 'username') {
+        if (input === 'username' && value !== lastCheckedUsername) {
             debouncedCheckUsername(value);
         }
     };

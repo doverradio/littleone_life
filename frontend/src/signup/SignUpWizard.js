@@ -7,7 +7,7 @@ import Step1Username from './wizard/Step1Username';  // For Google signup after 
 import Step5Summary from './wizard/Step5Summary';
 import { checkUsernameAvailability, signup, googleSignup } from '../api/auth';
 import ProgressBar from './wizard/ProgressBar';
-import GoogleSignupButton from '../signin/GoogleSigninButton';
+import GoogleSignupButton from './GoogleSignupButton';
 
 const SignUpWizard = ({ googleProfile, googleToken, informParent }) => {
     const navigate = useNavigate();
