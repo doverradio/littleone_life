@@ -6,7 +6,7 @@ import { googleSignup } from '../api/auth'; // Import the googleSignup function
 const GoogleSignupButton = ({ informParent = f => f }) => {
     const responseGoogleSuccess = async (response) => {
         try {
-            const googleToken = response.credential;
+            const googleToken = response.credential; // Extract the token directly
             const result = await googleSignup({ idToken: googleToken });
             if (result.error) {
                 toast.error(result.error);

@@ -64,10 +64,6 @@ exports.googleSignup = async (req, res) => {
     log(`Begin googleSignup! req.body: `, JSON.stringify(req.body, null, 2));
     const { idToken } = req.body;
 
-    if (!idToken) {
-        return res.status(400).json({ error: 'No ID token provided' });
-    }
-
     try {
         const ticket = await client.verifyIdToken({
             idToken,
@@ -95,7 +91,6 @@ exports.googleSignup = async (req, res) => {
                 res.cookie('token', token, {
                     httpOnly: true,
                     secure: process.env.NODE_ENV === 'production',
-                    sameSite: 'Strict', // prevents CSRF attacks
                     maxAge: 7 * 24 * 60 * 60 * 1000, // 1 week
                 });
                 const { _id, email: userEmail, username, role } = user;
@@ -104,19 +99,20 @@ exports.googleSignup = async (req, res) => {
                     user: { _id, email: userEmail, username, role }
                 });
             } else {
+                // Create new user if not found
                 const newUser = new User({
                     username: name,
-                    email, // Ensure this is encrypted if required
-                    hashed_password: '',
-                    salt: '',
-                    role: 0
+                    email: encryptEmail(email), // Assume you have a function to encrypt email
+                    password: generateRandomPassword(), // You may need to set a password or handle it differently
+                    role: 0,
                 });
+
                 await newUser.save();
+
                 const token = jwt.sign({ _id: newUser._id, role: newUser.role }, process.env.JWT_SECRET, { expiresIn: '7d' });
                 res.cookie('token', token, {
                     httpOnly: true,
                     secure: process.env.NODE_ENV === 'production',
-                    sameSite: 'Strict', // prevents CSRF attacks
                     maxAge: 7 * 24 * 60 * 60 * 1000, // 1 week
                 });
                 const { _id, email: userEmail, username, role } = newUser;
@@ -137,6 +133,7 @@ exports.googleSignup = async (req, res) => {
         });
     }
 };
+
 
 
 
