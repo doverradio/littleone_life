@@ -5,9 +5,7 @@ import SignUpWizard from "./SignUpWizard";
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { toast, ToastContainer } from 'react-toastify';
 import GoogleSignupButton from "./GoogleSignupButton";
-import {jwtDecode} from "jwt-decode";
 import { useUser } from "../context/UserContext";
-
 import 'react-toastify/dist/ReactToastify.css';
 
 const SignUp = () => {
@@ -17,11 +15,12 @@ const SignUp = () => {
 
     const informParent = (response) => {
         try {
-            const decoded = jwtDecode(response.token);
-            setGoogleProfile(decoded);
-            setGoogleToken(response.token);
-            setUser({ ...decoded, token: response.token, role: response.user.role }); // Set user in context
-            toast.success("Google sign-in successful! Please complete the signup process.", {
+            const { token, user } = response;
+            setGoogleProfile(user);
+            setGoogleToken(token);
+            setUser({ ...user, token, role: user.role }); // Set user in context
+
+            toast.success("Google sign-up successful! Please complete the signup process.", {
                 position: "top-center",
                 autoClose: 5000,
                 hideProgressBar: false,
@@ -32,7 +31,7 @@ const SignUp = () => {
             });
         } catch (error) {
             console.error('Invalid token:', error);
-            toast.error("Google sign-in failed. Please try again.", {
+            toast.error("Google sign-up failed. Please try again.", {
                 position: "top-center",
                 autoClose: 5000,
                 hideProgressBar: false,

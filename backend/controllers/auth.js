@@ -64,66 +64,9 @@ exports.googleSignup = async (req, res) => {
     log(`Begin googleSignup! req.body: `, JSON.stringify(req.body, null, 2));
     const { idToken } = req.body;
 
-    try {
-        const ticket = await client.verifyIdToken({
-            idToken,
-            audience: process.env.GOOGLE_CLIENT_ID,
-        });
-
-        const payload = ticket.getPayload();
-        log(`payload: `, payload);
-
-        const email = payload.email;
-        const email_verified = payload.email_verified;
-        const name = payload.name;
-
-        log(`email: `, email);
-        log(`email_verified: `, email_verified);
-
-        if (email_verified) {
-            log(`email_verified: `, email_verified);
-            let user = await User.findOne({ email });
-            log(`user: `, user);
-
-            if (user) {
-                log(`User already exists!`);
-                return res.status(200).json({
-                    message: 'User already exists. Please sign in.',
-                    userExists: true
-                });
-            } else {
-                log(`No user found! email: `, email);
-                const password = email + process.env.JWT_SECRET;
-                user = new User({ username: name, email, password });
-                await user.save();
-                log(`New user created: `, user);
-
-                const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
-                const { _id, email: userEmail, username, role } = user;
-                return res.status(200).json({
-                    token,
-                    user: { _id, email: userEmail, username, role }
-                });
-            }
-        } else {
-            return res.status(400).json({
-                error: 'Google login failed. Try again'
-            });
-        }
-    } catch (error) {
-        log('GOOGLE SIGNIN ERROR', error);
-        return res.status(400).json({
-            error: 'Google login failed. Try again'
-        });
+    if (!idToken) {
+        return res.status(400).json({ error: 'No ID token provided' });
     }
-};
-
-
-
-
-exports.googleSignup0 = async (req, res) => {
-    log(`Begin googleSignup! req.body: `, JSON.stringify(req.body, null, 2));
-    const { idToken } = req.body;
 
     try {
         const ticket = await client.verifyIdToken({
@@ -148,28 +91,35 @@ exports.googleSignup0 = async (req, res) => {
 
             if (user) {
                 log(`user found!`);
-                const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
+                const token = jwt.sign({ _id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '7d' });
+                res.cookie('token', token, {
+                    httpOnly: true,
+                    secure: process.env.NODE_ENV === 'production',
+                    sameSite: 'Strict', // prevents CSRF attacks
+                    maxAge: 7 * 24 * 60 * 60 * 1000, // 1 week
+                });
                 const { _id, email: userEmail, username, role } = user;
                 return res.json({
                     token,
                     user: { _id, email: userEmail, username, role }
                 });
             } else {
-                log(`No user found! email: `, email);
-                // Check if the username already exists
-                let existingUsername = await User.findOne({ username: name });
-                if (existingUsername) {
-                    return res.status(400).json({
-                        error: 'Username already exists. Please choose a different username.',
-                    });
-                }
-                const password = email + process.env.JWT_SECRET;
-                user = new User({ username: name, email, password });
-                await user.save();
-                log(`New user created: `, user);
-
-                const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
-                const { _id, email: userEmail, username, role } = user;
+                const newUser = new User({
+                    username: name,
+                    email, // Ensure this is encrypted if required
+                    hashed_password: '',
+                    salt: '',
+                    role: 0
+                });
+                await newUser.save();
+                const token = jwt.sign({ _id: newUser._id, role: newUser.role }, process.env.JWT_SECRET, { expiresIn: '7d' });
+                res.cookie('token', token, {
+                    httpOnly: true,
+                    secure: process.env.NODE_ENV === 'production',
+                    sameSite: 'Strict', // prevents CSRF attacks
+                    maxAge: 7 * 24 * 60 * 60 * 1000, // 1 week
+                });
+                const { _id, email: userEmail, username, role } = newUser;
                 return res.json({
                     token,
                     user: { _id, email: userEmail, username, role }
@@ -181,7 +131,7 @@ exports.googleSignup0 = async (req, res) => {
             });
         }
     } catch (error) {
-        log('GOOGLE SIGNIN ERROR', error);
+        log('GOOGLE SIGNUP ERROR', error);
         return res.status(400).json({
             error: 'Google login failed. Try again'
         });
