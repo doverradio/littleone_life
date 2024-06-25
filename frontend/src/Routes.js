@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client'; // Add this import
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import MainPage from './MainPage';
 import AboutUs from './AboutUs';
-import SignIn from './SignIn';
+import SignIn from './signin/SignIn';
 import SignUp from './signup/Signup';
 import TermsOfService from './TermsOfService';
 import Contact from './Contact';
