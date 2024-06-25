@@ -5,7 +5,7 @@ const Step1Username = ({ userData, setUserData, nextStep0, usernameEmpty, setUse
     const debouncedCheckUsername = debounce(checkUsername, 1000);
 
     useEffect(() => {
-        if (userData && userData.username.length > 0) {
+        if (userData.username && userData.username.length > 0) {
             debouncedCheckUsername();
         }
         return () => {
@@ -14,7 +14,7 @@ const Step1Username = ({ userData, setUserData, nextStep0, usernameEmpty, setUse
     }, [userData.username, debouncedCheckUsername]);
 
     const renderUsernameAvailabilityMessage = () => {
-        if (userData.username.length > 0) {
+        if (userData.username && userData.username.length > 0) {
             if (userData.usernameAvailable === false) {
                 return <p style={{ color: 'red' }}>{userData.username} is not available</p>;
             } else if (userData.usernameAvailable === true) {

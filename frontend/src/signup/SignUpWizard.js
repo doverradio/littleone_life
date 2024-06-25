@@ -3,11 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import SignUpOptions from './SignUpOptions';
 import CombinedEmailSignUp from './wizard/CombinedEmailSignUp';
-import Step1Username from './wizard/Step1Username';  // For Google signup after getting username
+import Step1Username from './wizard/Step1Username';
 import Step5Summary from './wizard/Step5Summary';
 import { checkUsernameAvailability, signup, googleSignup } from '../api/auth';
 import ProgressBar from './wizard/ProgressBar';
-import GoogleSignupButton from './GoogleSignupButton';
 
 const SignUpWizard = ({ googleProfile, googleToken, informParent }) => {
     const navigate = useNavigate();
@@ -25,6 +24,8 @@ const SignUpWizard = ({ googleProfile, googleToken, informParent }) => {
         canProceed: false
     });
 
+    const [usernameEmpty, setUsernameEmpty] = useState(false);
+
     useEffect(() => {
         if (googleProfile) {
             setUserData(prevData => ({
@@ -38,39 +39,28 @@ const SignUpWizard = ({ googleProfile, googleToken, informParent }) => {
         }
     }, [googleProfile]);
 
-    const checkUsername = async (value) => {
-        if (value && value.length > 0) {
+    const checkUsername = async () => {
+        if (userData.username && userData.username.length > 0) {
             try {
-                const result = await checkUsernameAvailability(value);
-                setUserData(prevData => ({ 
-                    ...prevData, 
-                    username: value,
+                const result = await checkUsernameAvailability(userData.username);
+                setUserData({ 
+                    ...userData, 
                     usernameAvailable: result.isAvailable,
                     canProceed: result.isAvailable
-                }));
+                });
             } catch (error) {
                 console.error('Error checking username:', error);
-                setUserData(prevData => ({ ...prevData, canProceed: false }));
+                setUserData({ ...userData, canProceed: false });
             }
         } else {
-            setUserData(prevData => ({ ...prevData, usernameAvailable: null, canProceed: false }));
+            setUserData({ ...userData, usernameAvailable: null, canProceed: false });
         }
     };
 
-    const nextStep = () => {
-        if (userData.canProceed || step === 1) { // Allow initial step to proceed
-            setStep(step + 1);
-        }
-    };
-
-    const prevStep = () => {
-        setStep(step - 1);
-    };
-
-    const handleChange = input => e => {
+    const handleChange = (input) => (e) => {
         let value = e.target.value;
-        if (input === 'username') {
-            checkUsername(value); // Check username availability when user types
+        if (input === 'username' && usernameEmpty) {
+            setUsernameEmpty(false);
         }
         setUserData({ ...userData, [input]: value });
     };
@@ -101,46 +91,77 @@ const SignUpWizard = ({ googleProfile, googleToken, informParent }) => {
         }
     };
 
+    
+    const nextStep = () => {
+        if (userData.canProceed || step === 1) { // Allow initial step to proceed
+            setStep(step + 1);
+        }
+    };
+
+    const prevStep = () => {
+        setStep(step - 1);
+    };
+
+
+    const handleKeyPress = (event) => {
+        if (event.key === 'Enter') {
+            if (step === 1 && userData.username.trim() === '') {
+                setUsernameEmpty(true);
+            } else {
+                nextStep();
+            }
+        }
+    };
+
     return (
         <div>
             <ToastContainer />
-            {step > 1 && <ProgressBar step={step} totalSteps={3} />} {/* Conditionally render ProgressBar */}
+            {step > 1 && <ProgressBar step={step} />}
+            <div className="progress mb-3">
+                <div 
+                    className="progress-bar" 
+                    role="progressbar" 
+                    style={{ width: `${(step - 1) * (100 / 4)}%` }} 
+                    aria-valuenow={(step - 1) * (100 / 4)} 
+                    aria-valuemin="0" 
+                    aria-valuemax="100">
+                    Step {step} of 5
+                </div>
+            </div>
             {signUpMethod ? (
                 <>
-                    {step === 1 && signUpMethod === 'email' && (
+                    {signUpMethod === 'email' && step === 1 && (
                         <CombinedEmailSignUp
                             userData={userData}
                             setUserData={setUserData}
                             nextStep={nextStep}
                             prevStep={prevStep}
-                            handleKeyPress={() => {}}
+                            checkUsername={checkUsername}
+                            handleKeyPress={handleKeyPress}
+                            setUsernameEmpty={setUsernameEmpty}
+                            usernameEmpty={usernameEmpty}
+                        />
+                    )}
+                    {signUpMethod === 'google-signup' && step === 1 && (
+                        <Step1Username
+                            userData={userData}
+                            setUserData={setUserData}
+                            nextStep0={nextStep}
+                            usernameEmpty={usernameEmpty}
+                            setUsernameEmpty={setUsernameEmpty}
+                            handleKeyPress={handleKeyPress}
                             checkUsername={checkUsername}
                         />
                     )}
-                    {step === 1 && signUpMethod === 'google-signup' && (
-                        <div className="google-signup-form">
-                            <GoogleSignupButton informParent={informParent} />
-                        </div>
-                    )}
-                    {step === 2 && signUpMethod === 'google-signup' && (
-                        <Step1Username 
-                            userData={userData} 
-                            setUserData={setUserData} 
-                            nextStep={nextStep} 
-                            prevStep={prevStep}
-                            handleKeyPress={() => {}} 
-                            checkUsername={checkUsername}
-                        />
-                    )}
-                    {step === 3 && (
-                        <Step5Summary 
-                            userData={userData} 
-                            handleSubmit={handleSubmit} 
+                    {step === 5 && (
+                        <Step5Summary
+                            userData={userData}
+                            handleSubmit={handleSubmit}
                         />
                     )}
                 </>
             ) : (
-                <SignUpOptions setSignUpMethod={setSignUpMethod} informParent={informParent} setStep={setStep} step={step} />
+                <SignUpOptions setSignUpMethod={setSignUpMethod} informParent={informParent} />
             )}
         </div>
     );
