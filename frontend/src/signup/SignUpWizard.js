@@ -161,7 +161,7 @@ const SignUpWizard = ({ googleProfile, googleToken, informParent }) => {
                     )}
                 </>
             ) : (
-                <SignUpOptions setSignUpMethod={setSignUpMethod} informParent={informParent} />
+                <SignUpOptions setSignUpMethod={setSignUpMethod} setStep={setStep} informParent={informParent} />
             )}
         </div>
     );
