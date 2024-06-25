@@ -5,8 +5,9 @@ import SignUpOptions from './SignUpOptions';
 import CombinedEmailSignUp from './wizard/CombinedEmailSignUp';
 import Step1Username from './wizard/Step1Username';
 import Step5Summary from './wizard/Step5Summary';
-import { checkUsernameAvailability, signup, googleSignup } from '../api/auth';
+import { checkUsernameAvailability, signup } from '../api/auth';
 import ProgressBar from './wizard/ProgressBar';
+import GoogleSignupButton from './GoogleSignupButton';
 
 const SignUpWizard = ({ googleProfile, googleToken, informParent }) => {
     const navigate = useNavigate();
@@ -67,42 +68,22 @@ const SignUpWizard = ({ googleProfile, googleToken, informParent }) => {
 
     const handleSubmit = async () => {
         try {
-            if (googleProfile) {
-                const response = await googleSignup({ idToken: googleToken });
-                if (response.error) {
-                    toast.error(response.error);
-                } else {
-                    toast.success("Signup successful! Redirecting to Sign In...", {
-                        position: "top-center",
-                        autoClose: 2000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                    });
-                    setTimeout(() => {
-                        navigate('/signin');
-                    }, 2000);
-                }
+            const response = await signup(userData);
+            if (response.error) {
+                toast.error(response.error);
             } else {
-                const response = await signup(userData);
-                if (response.error) {
-                    toast.error(response.error);
-                } else {
-                    toast.success("Signup successful! Redirecting to Sign In...", {
-                        position: "top-center",
-                        autoClose: 2000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                    });
-                    setTimeout(() => {
-                        navigate('/signin');
-                    }, 2000);
-                }
+                toast.success("Signup successful! Redirecting to Sign In...", {
+                    position: "top-center",
+                    autoClose: 2000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+                setTimeout(() => {
+                    navigate('/signin');
+                }, 2000);
             }
         } catch (error) {
             console.error('Error signing up user:', error);
@@ -149,6 +130,20 @@ const SignUpWizard = ({ googleProfile, googleToken, informParent }) => {
                         />
                     )}
                     {signUpMethod === 'google-signup' && step === 1 && (
+                        <GoogleSignupButton
+                            informParent={(data) => {
+                                setUserData({
+                                    ...userData,
+                                    username: data.user.username,
+                                    email: data.user.email,
+                                    firstName: data.user.firstName,
+                                    lastName: data.user.lastName,
+                                });
+                                setStep(2);
+                            }}
+                        />
+                    )}
+                    {signUpMethod === 'google-signup' && step === 2 && (
                         <Step1Username
                             userData={userData}
                             setUserData={setUserData}

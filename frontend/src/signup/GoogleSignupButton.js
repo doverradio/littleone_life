@@ -1,26 +1,17 @@
 import React from 'react';
 import { GoogleLogin } from '@react-oauth/google';
 import { toast } from 'react-toastify';
+import { googleSignup } from '../api/auth'; // Import the googleSignup function
 
 const GoogleSignupButton = ({ informParent = f => f }) => {
     const responseGoogleSuccess = async (response) => {
-        console.log('Google credential:', response.credential);
         try {
-            const res = await fetch(`${process.env.REACT_APP_API}/google-signup`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ idToken: response.credential })
-            });
-            const data = await res.json();
-            if (data.error) {
-                console.log('GOOGLE SIGNUP ERROR', data.error);
-                toast.error('Google sign-up failed. Please try again.');
+            const googleToken = response.credential;
+            const result = await googleSignup({ idToken: googleToken });
+            if (result.error) {
+                toast.error(result.error);
             } else {
-                console.log('GOOGLE SIGNUP SUCCESS', data);
-                informParent(data);
-                toast.success('Google sign-up successful! Please complete the signup process.');
+                informParent(result);
             }
         } catch (error) {
             console.error('GOOGLE SIGNUP ERROR', error);
