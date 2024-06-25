@@ -12,7 +12,7 @@ const CombinedEmailSignUp = ({ userData, setUserData, nextStep, prevStep, handle
     }, 1000);
 
     useEffect(() => {
-        if (userData.username && userData.username.length > 0) {
+        if (userData && userData.username && userData.username.length > 0) {
             debouncedCheckUsername(userData.username);
         }
         return () => {

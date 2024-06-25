@@ -5,7 +5,7 @@ const Step1Username = ({ userData, setUserData, nextStep0, usernameEmpty, setUse
     const debouncedCheckUsername = debounce(checkUsername, 1000);
 
     useEffect(() => {
-        if (userData.username.length > 0) {
+        if (userData && userData.username.length > 0) {
             debouncedCheckUsername();
         }
         return () => {
