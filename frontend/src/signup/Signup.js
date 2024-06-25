@@ -7,6 +7,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import GoogleSignupButton from "./GoogleSignupButton";
 import { useUser } from "../context/UserContext";
 import 'react-toastify/dist/ReactToastify.css';
+import { googleSignup } from '../api/auth';
 
 const SignUp = () => {
     const { setUser } = useUser();

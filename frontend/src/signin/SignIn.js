@@ -12,11 +12,10 @@ const SignIn = () => {
     const navigate = useNavigate();
     const { user } = isAuthenticated();
 
-    // Google Login Success Handler
     const responseGoogleSuccess = async (response) => {
         try {
             const googleToken = response.credential;
-            const result = await googleSignIn({ idToken: googleToken });
+            const result = await googleSignIn(googleToken);
             if (result.error) {
                 toast.error(result.error);
             } else if (result.user) {
@@ -30,7 +29,6 @@ const SignIn = () => {
         }
     };
 
-    // Google Login Failure Handler
     const responseGoogleFailure = (response) => {
         console.log("Google sign in failed", response);
         toast.error('Google sign-in failed. Please try again.');

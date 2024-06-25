@@ -13,10 +13,10 @@ const SignUpWizard = ({ googleProfile, googleToken, informParent }) => {
     const [step, setStep] = useState(1);
     const [signUpMethod, setSignUpMethod] = useState(null);
     const [userData, setUserData] = useState({
-        username: googleProfile ? googleProfile.given_name : '',
-        email: googleProfile ? googleProfile.email : '',
-        firstName: googleProfile ? googleProfile.given_name : '',
-        lastName: googleProfile ? googleProfile.family_name : '',
+        username: '',
+        email: '',
+        firstName: '',
+        lastName: '',
         phone: '',
         password: '',
         confirmPassword: '',
@@ -40,7 +40,7 @@ const SignUpWizard = ({ googleProfile, googleToken, informParent }) => {
     }, [googleProfile]);
 
     const checkUsername = async () => {
-        if (userData.username && userData.username.length > 0) {
+        if (userData.username.length > 0) {
             try {
                 const result = await checkUsernameAvailability(userData.username);
                 setUserData({ 
@@ -68,30 +68,48 @@ const SignUpWizard = ({ googleProfile, googleToken, informParent }) => {
     const handleSubmit = async () => {
         try {
             if (googleProfile) {
-                const response = await googleSignup({ ...userData, tokenId: googleToken });
-                console.log('Google signup response:', response);
+                const response = await googleSignup({ idToken: googleToken });
+                if (response.error) {
+                    toast.error(response.error);
+                } else {
+                    toast.success("Signup successful! Redirecting to Sign In...", {
+                        position: "top-center",
+                        autoClose: 2000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                    });
+                    setTimeout(() => {
+                        navigate('/signin');
+                    }, 2000);
+                }
             } else {
                 const response = await signup(userData);
-                console.log('Normal signup response:', response);
+                if (response.error) {
+                    toast.error(response.error);
+                } else {
+                    toast.success("Signup successful! Redirecting to Sign In...", {
+                        position: "top-center",
+                        autoClose: 2000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                    });
+                    setTimeout(() => {
+                        navigate('/signin');
+                    }, 2000);
+                }
             }
-            toast.success("Signup successful! Redirecting to Sign In...", {
-                position: "top-center",
-                autoClose: 2000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-            });
-            setTimeout(() => {
-                navigate('/signin');
-            }, 2000);
         } catch (error) {
             console.error('Error signing up user:', error);
+            toast.error("Signup failed. Please try again.");
         }
     };
 
-    
     const nextStep = () => {
         if (userData.canProceed || step === 1) { // Allow initial step to proceed
             setStep(step + 1);
@@ -101,7 +119,6 @@ const SignUpWizard = ({ googleProfile, googleToken, informParent }) => {
     const prevStep = () => {
         setStep(step - 1);
     };
-
 
     const handleKeyPress = (event) => {
         if (event.key === 'Enter') {
@@ -117,17 +134,6 @@ const SignUpWizard = ({ googleProfile, googleToken, informParent }) => {
         <div>
             <ToastContainer />
             {step > 1 && <ProgressBar step={step} />}
-            <div className="progress mb-3">
-                <div 
-                    className="progress-bar" 
-                    role="progressbar" 
-                    style={{ width: `${(step - 1) * (100 / 4)}%` }} 
-                    aria-valuenow={(step - 1) * (100 / 4)} 
-                    aria-valuemin="0" 
-                    aria-valuemax="100">
-                    Step {step} of 5
-                </div>
-            </div>
             {signUpMethod ? (
                 <>
                     {signUpMethod === 'email' && step === 1 && (
