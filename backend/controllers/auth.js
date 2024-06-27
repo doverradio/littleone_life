@@ -65,6 +65,7 @@ exports.googleSignup = async (req, res) => {
     const { idToken } = req.body;
 
     try {
+        log(`Verifying ID Token: ${idToken}`);
         const ticket = await client.verifyIdToken({
             idToken,
             audience: process.env.GOOGLE_CLIENT_ID,
@@ -99,6 +100,7 @@ exports.googleSignup = async (req, res) => {
                     user: { _id, email: userEmail, username, role }
                 });
             } else {
+                log(`No user found! email: `, email);
                 // Create new user if not found
                 const newUser = new User({
                     username: name,
@@ -108,6 +110,7 @@ exports.googleSignup = async (req, res) => {
                 });
 
                 await newUser.save();
+                log(`New user created: `, newUser);
 
                 const token = jwt.sign({ _id: newUser._id, role: newUser.role }, process.env.JWT_SECRET, { expiresIn: '7d' });
                 res.cookie('token', token, {
@@ -133,7 +136,6 @@ exports.googleSignup = async (req, res) => {
         });
     }
 };
-
 
 
 

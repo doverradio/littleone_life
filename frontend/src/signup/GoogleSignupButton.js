@@ -11,6 +11,8 @@ const GoogleSignupButton = ({ informParent = f => f }) => {
             if (result.error) {
                 toast.error(result.error);
             } else {
+                // Display the response as a JSON string
+                alert(`Google Signup Response: ${JSON.stringify(result)}`);
                 informParent(result);
             }
         } catch (error) {
