@@ -1,10 +1,14 @@
 import React from 'react';
 import { GoogleLogin } from '@react-oauth/google';
 import { toast } from 'react-toastify';
-import { googleSignup } from '../api/auth'; // Import the googleSignup function
+import { googleSignup, authenticate } from '../api/auth'; // Import the googleSignup and authenticate functions
+import { useNavigate } from "react-router-dom";
+
 const log = console.log;
 
 const GoogleSignupButton = ({ informParent = f => f }) => {
+    const navigate = useNavigate();
+
     const responseGoogleSuccess = async (response) => {
         try {
             const googleToken = response.credential; // Extract the token directly
@@ -13,9 +17,15 @@ const GoogleSignupButton = ({ informParent = f => f }) => {
             if (result.error) {
                 toast.error(result.error);
             } else {
-                // Display the response as a JSON string
-                alert(`Google Signup Response: ${JSON.stringify(result)}`);
-                informParent(result);
+                authenticate(result, () => {
+                    informParent(result);
+                    const { user } = result;
+                    if (user && user.role === 1) {
+                        navigate('/admin/dashboard');
+                    } else {
+                        navigate('/user/dashboard');
+                    }
+                });
             }
         } catch (error) {
             console.error('GOOGLE SIGNUP ERROR', error);
