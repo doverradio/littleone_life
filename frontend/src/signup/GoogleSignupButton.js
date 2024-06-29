@@ -2,6 +2,7 @@ import React from 'react';
 import { GoogleLogin } from '@react-oauth/google';
 import { toast } from 'react-toastify';
 import { googleSignup } from '../api/auth'; // Import the googleSignup function
+const log = console.log;
 
 const GoogleSignupButton = ({ informParent = f => f }) => {
     const responseGoogleSuccess = async (response) => {
@@ -9,6 +10,7 @@ const GoogleSignupButton = ({ informParent = f => f }) => {
             const googleToken = response.credential; // Extract the token directly
             const result = await googleSignup(googleToken);
             // const result = await googleSignup({ idToken: googleToken });
+            log(`result: `, result);
             if (result.error) {
                 toast.error(result.error);
             } else {
