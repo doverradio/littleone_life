@@ -10,6 +10,17 @@ const { generateRandomPassword } = require('../utils/password'); // Adjust the p
 const log = console.log;
 
 
+const generateUniqueUsername = async (username) => {
+    let uniqueUsername = username;
+    let user = await User.findOne({ username: uniqueUsername });
+    while (user) {
+        uniqueUsername = `${username}_${Math.floor(Math.random() * 10000)}`;
+        user = await User.findOne({ username: uniqueUsername });
+    }
+    return uniqueUsername;
+};
+
+
 exports.checkUsernameAvailability = async (req, res) => {
     const { username } = req.body;
 
@@ -62,6 +73,86 @@ exports.signup = async (req, res) => {
 // GOOGLE SIGN UP
 // In your auth controller
 exports.googleSignup = async (req, res) => {
+    log(`Begin googleSignup! req.body: `, JSON.stringify(req.body, null, 2));
+    const { idToken } = req.body;
+
+    try {
+        log(`Verifying ID Token: ${idToken}`);
+        const ticket = await client.verifyIdToken({
+            idToken,
+            audience: process.env.GOOGLE_CLIENT_ID,
+        });
+
+        const payload = ticket.getPayload();
+        log(`payload: `, payload);
+
+        const email = payload.email;
+        const email_verified = payload.email_verified;
+        const name = payload.name;
+
+        log(`email: `, email);
+        log(`email_verified: `, email_verified);
+
+        if (email_verified) {
+            log(`email_verified: `, email_verified);
+            let user = await User.findOne({ email });
+            log(`user: `, user);
+
+            if (user) {
+                // User exists, sign them in
+                log(`User found, signing in.`);
+                const token = jwt.sign({ _id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '7d' });
+                res.cookie('token', token, {
+                    httpOnly: true,
+                    secure: process.env.NODE_ENV === 'production',
+                    maxAge: 7 * 24 * 60 * 60 * 1000, // 1 week
+                });
+                const { _id, email: userEmail, username, role } = user;
+                return res.json({
+                    token,
+                    user: { _id, email: userEmail, username, role }
+                });
+            } else {
+                log(`No user found! email: `, email);
+                // Create new user if not found
+                const password = generateRandomPassword(); // Generate a random password
+                const uniqueUsername = await generateUniqueUsername(name); // Ensure unique username
+                const newUser = new User({
+                    username: uniqueUsername,
+                    email: email, // Directly assign the email
+                    password: password, // Store the generated password securely
+                    role: 0,
+                });
+
+                await newUser.save();
+                log(`New user created: `, newUser);
+
+                const token = jwt.sign({ _id: newUser._id, role: newUser.role }, process.env.JWT_SECRET, { expiresIn: '7d' });
+                res.cookie('token', token, {
+                    httpOnly: true,
+                    secure: process.env.NODE_ENV === 'production',
+                    maxAge: 7 * 24 * 60 * 60 * 1000, // 1 week
+                });
+                const { _id, email: userEmail, username, role } = newUser;
+                return res.json({
+                    token,
+                    user: { _id, email: userEmail, username, role }
+                });
+            }
+        } else {
+            return res.status(400).json({
+                error: 'Google login failed. Try again'
+            });
+        }
+    } catch (error) {
+        log('GOOGLE SIGNUP ERROR', error);
+        return res.status(400).json({
+            error: 'Google login failed. Try again'
+        });
+    }
+};
+
+exports.googleSignup0 = async (req, res) => {
     log(`Begin googleSignup! req.body: `, JSON.stringify(req.body, null, 2));
     const { idToken } = req.body;
 
