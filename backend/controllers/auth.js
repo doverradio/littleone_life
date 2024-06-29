@@ -104,7 +104,7 @@ exports.googleSignup = async (req, res) => {
                 // Create new user if not found
                 const newUser = new User({
                     username: name,
-                    email: encryptEmail(email), // Assume you have a function to encrypt email
+                    email: email, // Directly assign the email
                     password: generateRandomPassword(), // You may need to set a password or handle it differently
                     role: 0,
                 });
