@@ -6,6 +6,7 @@ const { expressjwt: expressJwt } = require('express-jwt');
 const _ = require("lodash");
 const { OAuth2Client } = require('google-auth-library');
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+const { generateRandomPassword } = require('../utils/password'); // Adjust the path if necessary
 const log = console.log;
 
 
