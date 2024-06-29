@@ -56,6 +56,6 @@ const SignIn = () => {
             <Footer />
         </>
     );
-}
+};
 
 export default SignIn;

@@ -77,7 +77,6 @@ exports.googleSignup = async (req, res) => {
     const { idToken } = req.body;
 
     try {
-        log(`Verifying ID Token: ${idToken}`);
         const ticket = await client.verifyIdToken({
             idToken,
             audience: process.env.GOOGLE_CLIENT_ID,
@@ -86,75 +85,59 @@ exports.googleSignup = async (req, res) => {
         const payload = ticket.getPayload();
         log(`payload: `, payload);
 
-        const email = payload.email;
+        const username = payload.name; // Use 'name' as the username
         const email_verified = payload.email_verified;
-        const name = payload.name;
 
-        log(`email: `, email);
+        log(`username: `, username);
         log(`email_verified: `, email_verified);
 
         if (email_verified) {
             log(`email_verified: `, email_verified);
-            let user = await User.findOne({ email });
+            let user = await User.findOne({ username });
             log(`user: `, user);
 
             if (user) {
-                log(`user found! Logging in user...`);
+                log(`user found!`);
                 const token = jwt.sign({ _id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '7d' });
                 res.cookie('token', token, {
                     httpOnly: true,
                     secure: process.env.NODE_ENV === 'production',
                     maxAge: 7 * 24 * 60 * 60 * 1000, // 1 week
                 });
-                const { _id, email: userEmail, username, role } = user;
+                const { _id, username, role } = user;
                 return res.json({
                     token,
-                    user: { _id, email: userEmail, username, role }
+                    user: { _id, username, role }
                 });
             } else {
-                log(`No user found! email: ${email}`);
-                // Check if the username is taken
-                const existingUser = await User.findOne({ username: name });
-                if (existingUser) {
-                    return res.status(400).json({
-                        error: 'Username is already taken'
-                    });
-                }
-                // Create new user if not found
-                const newUser = new User({
-                    username: name,
-                    email: email, // Directly assign the email
-                    password: generateRandomPassword(), // You may need to set a password or handle it differently
-                    role: 0,
-                });
-
-                await newUser.save();
-                log(`New user created: `, newUser);
-
-                const token = jwt.sign({ _id: newUser._id, role: newUser.role }, process.env.JWT_SECRET, { expiresIn: '7d' });
+                // Create a new user if not found
+                user = new User({ username, method: 'google' });
+                await user.save();
+                const token = jwt.sign({ _id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '7d' });
                 res.cookie('token', token, {
                     httpOnly: true,
                     secure: process.env.NODE_ENV === 'production',
                     maxAge: 7 * 24 * 60 * 60 * 1000, // 1 week
                 });
-                const { _id, email: userEmail, username, role } = newUser;
+                const { _id, username, role } = user;
                 return res.json({
                     token,
-                    user: { _id, email: userEmail, username, role }
+                    user: { _id, username, role }
                 });
             }
         } else {
             return res.status(400).json({
-                error: 'Google login failed. Please try again.'
+                error: 'Google login failed. Try again'
             });
         }
     } catch (error) {
         log('GOOGLE SIGNUP ERROR', error);
         return res.status(400).json({
-            error: 'Google login failed. Please try again.'
+            error: 'Google login failed. Try again'
         });
     }
 };
+
 
 
 exports.googleSignup1 = async (req, res) => {
