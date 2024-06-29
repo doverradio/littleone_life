@@ -8,7 +8,7 @@ const GoogleSignupButton = ({ informParent = f => f }) => {
     const responseGoogleSuccess = async (response) => {
         try {
             const googleToken = response.credential; // Extract the token directly
-            const result = await googleSignup({ idToken: googleToken });
+            const result = await googleSignup(googleToken);
             log(`result: `, result);
             if (result.error) {
                 toast.error(result.error);
