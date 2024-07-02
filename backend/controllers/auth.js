@@ -91,7 +91,7 @@ exports.googleSignup = async (req, res) => {
         log(`username: `, username);
         log(`email_verified: `, email_verified);
 
-        if (email_verified) {
+        if (email_verified && username) {
             log(`email_verified: `, email_verified);
             let user = await User.findOne({ username });
             log(`user: `, user);

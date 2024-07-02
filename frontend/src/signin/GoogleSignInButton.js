@@ -3,6 +3,7 @@ import { GoogleLogin } from '@react-oauth/google';
 import { toast } from 'react-toastify';
 
 export const GoogleSignInButton = ({ responseGoogleSuccess, responseGoogleFailure }) => {
+    
     const handleSuccess = async (response) => {
         console.log('Google credential:', response.credential);
         try {
