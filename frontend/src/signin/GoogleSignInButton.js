@@ -10,8 +10,13 @@ export const GoogleSignInButton = ({ responseGoogleSuccess, responseGoogleFailur
 
     // Log to check if the component re-renders
     useEffect(() => {
-        console.log('GoogleSignInButton component rendered');
+        console.log('GoogleSignInButton component mounted');
+
+        return () => {
+            console.log('GoogleSignInButton component unmounted');
+        };
     }, []);
+
 
     const handleSuccess = async (response) => {
         if (isRequestPending) {
