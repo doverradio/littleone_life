@@ -1,14 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { GoogleLogin } from '@react-oauth/google';
 import { toast } from 'react-toastify';
 import { useNavigate } from "react-router-dom";
 import { authenticate } from '../api/auth';
 
 export const GoogleSignInButton = ({ responseGoogleSuccess, responseGoogleFailure }) => {
+    const [isRequestPending, setIsRequestPending] = useState(false); // To prevent multiple requests
     const navigate = useNavigate();
 
     const handleSuccess = async (response) => {
-        console.log('Google credential:', response.credential);
+        if (isRequestPending) return; // Prevent multiple requests
+        setIsRequestPending(true);
+
+        console.log('Google credential (GoogleSignInButton):', response.credential);
         try {
             const res = await fetch(`${process.env.REACT_APP_API}/google-login`, {
                 method: 'POST',
@@ -22,6 +26,7 @@ export const GoogleSignInButton = ({ responseGoogleSuccess, responseGoogleFailur
                 console.log('GOOGLE SIGNIN ERROR', data.error);
                 toast.error('Google sign-in failed. Please try again.');
                 responseGoogleFailure(data.error);
+                setIsRequestPending(false);
             } else {
                 console.log('GOOGLE SIGNIN SUCCESS', data);
                 authenticate(data, () => {
@@ -39,6 +44,7 @@ export const GoogleSignInButton = ({ responseGoogleSuccess, responseGoogleFailur
             console.error('GOOGLE SIGNIN ERROR', error);
             toast.error('Google sign-in failed. Please try again.');
             responseGoogleFailure(error);
+            setIsRequestPending(false);
         }
     };
 
