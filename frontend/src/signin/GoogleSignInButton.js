@@ -1,9 +1,12 @@
 import React from 'react';
 import { GoogleLogin } from '@react-oauth/google';
 import { toast } from 'react-toastify';
+import { useNavigate } from "react-router-dom";
+import { authenticate } from '../api/auth';
 
 export const GoogleSignInButton = ({ responseGoogleSuccess, responseGoogleFailure }) => {
-    
+    const navigate = useNavigate();
+
     const handleSuccess = async (response) => {
         console.log('Google credential:', response.credential);
         try {
@@ -21,7 +24,15 @@ export const GoogleSignInButton = ({ responseGoogleSuccess, responseGoogleFailur
                 responseGoogleFailure(data.error);
             } else {
                 console.log('GOOGLE SIGNIN SUCCESS', data);
-                responseGoogleSuccess(data);
+                authenticate(data, () => {
+                    responseGoogleSuccess(data);
+                    const { user } = data;
+                    if (user && user.role === 1) {
+                        navigate('/admin/dashboard');
+                    } else {
+                        navigate('/user/dashboard');
+                    }
+                });
                 toast.success('Google sign-in successful!');
             }
         } catch (error) {

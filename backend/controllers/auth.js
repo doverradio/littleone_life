@@ -355,16 +355,15 @@ exports.googleSignin = async (req, res) => {
         const payload = ticket.getPayload();
         log(`payload: `, payload);
 
-        const email = payload.email;
+        const username = payload.name; // Use 'name' as the username
         const email_verified = payload.email_verified;
-        const name = payload.name;
 
-        log(`email: `, email);
+        log(`username: `, username);
         log(`email_verified: `, email_verified);
 
-        if (email_verified) {
+        if (email_verified && username) {
             log(`email_verified: `, email_verified);
-            let user = await User.findOne({ email });
+            let user = await User.findOne({ username });
             log(`user: `, user);
 
             if (user) {
@@ -375,14 +374,14 @@ exports.googleSignin = async (req, res) => {
                     secure: process.env.NODE_ENV === 'production',
                     maxAge: 7 * 24 * 60 * 60 * 1000, // 1 week
                 });
-                const { _id, email: userEmail, username, role } = user;
+                const { _id, username, role } = user;
                 return res.json({
                     token,
-                    user: { _id, email: userEmail, username, role }
+                    user: { _id, username, role }
                 });
             } else {
                 // Create a new user if not found
-                user = new User({ email, username: name, method: 'google' });
+                user = new User({ username, email: payload.email_verified, method: 'google' });
                 await user.save();
                 const token = jwt.sign({ _id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '7d' });
                 res.cookie('token', token, {
@@ -390,10 +389,10 @@ exports.googleSignin = async (req, res) => {
                     secure: process.env.NODE_ENV === 'production',
                     maxAge: 7 * 24 * 60 * 60 * 1000, // 1 week
                 });
-                const { _id, email: userEmail, username, role } = user;
+                const { _id, username, role } = user;
                 return res.json({
                     token,
-                    user: { _id, email: userEmail, username, role }
+                    user: { _id, username, role }
                 });
             }
         } else {
@@ -408,6 +407,7 @@ exports.googleSignin = async (req, res) => {
         });
     }
 };
+
 
 
 exports.signout = async ( req, res ) =>  // a 
