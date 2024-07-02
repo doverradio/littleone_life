@@ -12,10 +12,9 @@ const churchRoutes = require('./routes/church');
 const confessionRoutes = require('./routes/confession');
 const intentionRoutes = require('./routes/intentions');
 const massAttendanceRoutes = require('./routes/massAttendance');
-const prayerRoutes = require('./routes/prayer')
+const prayerRoutes = require('./routes/prayer');
 const rosaryRoutes = require('./routes/rosary');
 const userRoutes = require('./routes/user');
-
 
 // app
 const app = express();
@@ -23,12 +22,7 @@ app.set('trust proxy', true);
 
 // db
 mongoose
-  .connect(process.env.DATABASE, {
-    // useNewUrlParser: true,
-    // useCreateIndex: true,
-    // useUnifiedTopology: true,
-    // useFindAndModify: false
-})
+  .connect(process.env.DATABASE, {})
   .then(() => console.log('DB connected'))
   .catch(err => {
     console.log(err);
@@ -42,32 +36,24 @@ app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(express.json({
   type: ['application/json', 'text/plain']
- }))
+}));
 app.use(cookieParser());
-// cors
-if (process.env.NODE_ENV === 'production') {
-  app.use(cors({ 
-    origin: `${process.env.CLIENT_URL}`,
-    credentials: true
-  }));
-} else {
-  app.use(cors({ 
-    origin: `${process.env.CLIENT_URL}`,
-    credentials: true
-  }));
-}
-// if (process.env.NODE_ENV === 'production') {
-//   app.use(cors({ origin: `${process.env.CLIENT_URL}` }));
-// } 
-// else {
-//   app.use(cors({ origin: `${process.env.CLIENT_URL}` }));
-// }
 
-// // Add this middleware for debugging
-// app.use((req, res, next) => {
-//   console.log('Received token:', req.headers.authorization);
-//   next();
-// });
+// cors
+app.use(cors({ 
+  origin: `${process.env.CLIENT_URL}`,
+  credentials: true
+}));
+
+// Custom request logger middleware for debugging
+const requestLogger = (req, res, next) => {
+    console.log(`Received ${req.method} request for ${req.originalUrl}`);
+    console.log('Request Headers:', JSON.stringify(req.headers, null, 2));
+    console.log('Request Body:', JSON.stringify(req.body, null, 2));
+    next();
+};
+
+app.use(requestLogger);
 
 app.use('/api', authRoutes);
 app.use('/api', churchRoutes);

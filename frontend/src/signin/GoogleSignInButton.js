@@ -1,22 +1,23 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { GoogleLogin } from '@react-oauth/google';
 import { toast } from 'react-toastify';
 import { useNavigate } from "react-router-dom";
 import { googleSignIn, authenticate } from '../api/auth';
 
 export const GoogleSignInButton = ({ responseGoogleSuccess, responseGoogleFailure }) => {
-    const [isRequestPending, setIsRequestPending] = useState(false); // To prevent multiple requests
+    const [isRequestPending, setIsRequestPending] = useState(false);
     const navigate = useNavigate();
+    const isMountedRef = useRef(true); // Track if the component is mounted
 
-    // Log to check if the component re-renders
     useEffect(() => {
         console.log('GoogleSignInButton component mounted');
+        isMountedRef.current = true;
 
         return () => {
             console.log('GoogleSignInButton component unmounted');
+            isMountedRef.current = false;
         };
     }, []);
-
 
     const handleSuccess = async (response) => {
         if (isRequestPending) {
@@ -33,16 +34,17 @@ export const GoogleSignInButton = ({ responseGoogleSuccess, responseGoogleFailur
                 console.log('GOOGLE SIGNIN ERROR', result.error);
                 toast.error('Google sign-in failed. Please try again.');
                 responseGoogleFailure(result.error);
-                setIsRequestPending(false);
             } else {
                 console.log('GOOGLE SIGNIN SUCCESS', result);
                 authenticate(result, () => {
-                    responseGoogleSuccess(result);
-                    const { user } = result;
-                    if (user && user.role === 1) {
-                        navigate('/admin/dashboard');
-                    } else {
-                        navigate('/user/dashboard');
+                    if (isMountedRef.current) {
+                        responseGoogleSuccess(result);
+                        const { user } = result;
+                        if (user && user.role === 1) {
+                            navigate('/admin/dashboard');
+                        } else {
+                            navigate('/user/dashboard');
+                        }
                     }
                 });
                 toast.success('Google sign-in successful!');
@@ -51,7 +53,10 @@ export const GoogleSignInButton = ({ responseGoogleSuccess, responseGoogleFailur
             console.error('GOOGLE SIGNIN ERROR', error);
             toast.error('Google sign-in failed. Please try again.');
             responseGoogleFailure(error);
-            setIsRequestPending(false);
+        } finally {
+            if (isMountedRef.current) {
+                setIsRequestPending(false);
+            }
         }
     };
 
