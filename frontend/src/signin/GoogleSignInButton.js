@@ -7,7 +7,7 @@ import { googleSignIn, authenticate } from '../api/auth';
 export const GoogleSignInButton = ({ responseGoogleSuccess, responseGoogleFailure }) => {
     const [isRequestPending, setIsRequestPending] = useState(false);
     const navigate = useNavigate();
-    const isMountedRef = useRef(true); // Track if the component is mounted
+    const isMountedRef = useRef(true);
 
     useEffect(() => {
         console.log('GoogleSignInButton component mounted');
