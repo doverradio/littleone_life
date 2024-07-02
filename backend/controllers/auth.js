@@ -84,7 +84,7 @@ exports.googleSignup = async (req, res) => {
 
         const payload = ticket.getPayload();
         log(`payload: `, payload);
-        
+
 
         const username = payload.name; // Use 'name' as the username
         const email_verified = payload.email_verified;
@@ -112,7 +112,7 @@ exports.googleSignup = async (req, res) => {
                 });
             } else {
                 // Create a new user if not found
-                user = new User({ username, method: 'google' });
+                user = new User({ username: payload.name, method: 'google' });
                 await user.save();
                 const token = jwt.sign({ _id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '7d' });
                 res.cookie('token', token, {
