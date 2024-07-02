@@ -145,9 +145,13 @@ const UserDashboard = () => {
             <NavbarMain />
             <div className="container" style={{ height: '73vh' }}>
                 <div className="row justify-content-center align-items-center">
-                    <h2 className="header-font mt-2">{firstName}'s Faith Journey</h2>
+                    {
+                        firstName ?
+                        <><h2 className="header-font mt-2">{firstName}'s Faith Journey</h2></>
+                        : <><h2 className="header-font mt-2">My Faith Journey</h2></>
+                    }
                     {/* Display the user role */}
-                    <p>User Role: {user?.role}</p>
+                    {/* <p>User Role: {user?.role}</p> */}
                     {/* Add your user dashboard content here */}
                 </div>
                 <div className="d-flex flex-wrap justify-content-start">
