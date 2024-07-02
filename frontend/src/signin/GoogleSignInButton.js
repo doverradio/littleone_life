@@ -1,37 +1,39 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { GoogleLogin } from '@react-oauth/google';
 import { toast } from 'react-toastify';
 import { useNavigate } from "react-router-dom";
-import { authenticate } from '../api/auth';
+import { googleSignIn, authenticate } from '../api/auth';
 
 export const GoogleSignInButton = ({ responseGoogleSuccess, responseGoogleFailure }) => {
     const [isRequestPending, setIsRequestPending] = useState(false); // To prevent multiple requests
     const navigate = useNavigate();
 
+    // Log to check if the component re-renders
+    useEffect(() => {
+        console.log('GoogleSignInButton component rendered');
+    }, []);
+
     const handleSuccess = async (response) => {
-        if (isRequestPending) return; // Prevent multiple requests
+        if (isRequestPending) {
+            console.log('Request already pending, skipping this call');
+            return; // Prevent multiple requests
+        }
+
         setIsRequestPending(true);
 
         console.log('Google credential (GoogleSignInButton):', response.credential);
         try {
-            const res = await fetch(`${process.env.REACT_APP_API}/google-login`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ idToken: response.credential })
-            });
-            const data = await res.json();
-            if (data.error) {
-                console.log('GOOGLE SIGNIN ERROR', data.error);
+            const result = await googleSignIn(response.credential);
+            if (result.error) {
+                console.log('GOOGLE SIGNIN ERROR', result.error);
                 toast.error('Google sign-in failed. Please try again.');
-                responseGoogleFailure(data.error);
+                responseGoogleFailure(result.error);
                 setIsRequestPending(false);
             } else {
-                console.log('GOOGLE SIGNIN SUCCESS', data);
-                authenticate(data, () => {
-                    responseGoogleSuccess(data);
-                    const { user } = data;
+                console.log('GOOGLE SIGNIN SUCCESS', result);
+                authenticate(result, () => {
+                    responseGoogleSuccess(result);
+                    const { user } = result;
                     if (user && user.role === 1) {
                         navigate('/admin/dashboard');
                     } else {
