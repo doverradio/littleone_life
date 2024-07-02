@@ -84,6 +84,7 @@ exports.googleSignup = async (req, res) => {
 
         const payload = ticket.getPayload();
         log(`payload: `, payload);
+        
 
         const username = payload.name; // Use 'name' as the username
         const email_verified = payload.email_verified;
