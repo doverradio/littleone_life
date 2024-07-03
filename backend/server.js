@@ -46,14 +46,14 @@ app.use(cors({
 }));
 
 // Custom request logger middleware for debugging
-const requestLogger = (req, res, next) => {
-    console.log(`Received ${req.method} request for ${req.originalUrl}`);
-    console.log('Request Headers:', JSON.stringify(req.headers, null, 2));
-    console.log('Request Body:', JSON.stringify(req.body, null, 2));
-    next();
-};
+// const requestLogger = (req, res, next) => {
+//     console.log(`Received ${req.method} request for ${req.originalUrl}`);
+//     console.log('Request Headers:', JSON.stringify(req.headers, null, 2));
+//     console.log('Request Body:', JSON.stringify(req.body, null, 2));
+//     next();
+// };
 
-app.use(requestLogger);
+// app.use(requestLogger);
 
 app.use('/api', authRoutes);
 app.use('/api', churchRoutes);

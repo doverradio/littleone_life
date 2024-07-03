@@ -33,3 +33,39 @@ export const getPrayerSettings = async (userId, token) => {
         throw error;
     }
 };
+
+export const getUserSettings = async (token, _id) => {
+    try {
+        const response = await fetch(`${API}/user/settings`, {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify({ _id })
+        });
+        return await response.json();
+    } catch (err) {
+        console.error('Error fetching user settings:', err);
+        return { error: 'Error fetching user settings' };
+    }
+};
+
+export const updateUserSettings = async (token, settings) => {
+    try {
+        const response = await fetch(`${API}/user/settings`, {
+            method: 'PUT',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify(settings)
+        });
+        return await response.json();
+    } catch (err) {
+        console.error('Error updating user settings:', err);
+        return { error: 'Error updating user settings' };
+    }
+};
