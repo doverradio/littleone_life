@@ -1,9 +1,10 @@
 .fancy-font {
     /* font-family: 'Georgia', serif; Replace 'Georgia' with your preferred web safe font */
-    font-family: 'Handlee', cursive; /* Replace 'Georgia' with your preferred web safe font */
+    /* font-family: 'Cormorant', serif; Replace 'Georgia' with your preferred web safe font */
+    font-family: 'Cormorant', serif;
 }
 .header-font {
-    font-family: 'Georgia', serif; 
+    font-family: 'Cormorant', serif;
 }
 
 .rosary-header {
