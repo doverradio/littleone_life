@@ -72,3 +72,34 @@ footer {
       padding: 0 10px;
   }
 }
+
+.dashboard-link {
+  /* Adjust the margin-top to control the vertical position */
+  margin-top: 1px; /* Adjust the value as needed */
+}
+
+.logo-img {
+  border-radius: 50%;
+  width: 90px;
+  height: 90px;
+}
+
+.navbar-nav {
+  display: flex;
+  align-items: center;
+  margin-left: 1rem; /* Adjust as needed */
+}
+
+.navbar-icon {
+  margin-left: 1rem; /* Adjust as needed */
+}
+
+@media (max-width: 768px) {
+  .navbar-nav {
+      flex-direction: row; /* Ensure nav items are in a row */
+  }
+
+  .navbar-icon, .btn-link {
+      margin-left: 0.5rem; /* Adjust as needed */
+  }
+}

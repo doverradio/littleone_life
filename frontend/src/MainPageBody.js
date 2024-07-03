@@ -17,7 +17,7 @@ const MainPageBody = () => {
         >
             {/* Add your content here */}
             <div className="content-container">
-                <h1>Counted Prayers, Counted Blessings.</h1>
+                <h1>Counting Prayers, Counting Blessings.</h1>
                 <p>Your spiritual journey begins <Link to="/about" style={{ color: 'lightblue' }}>here</Link>.</p>
                 {/* <Link to="/about" className="btn btn-light">Learn More</Link> */}
                 {/* More content can be added here */}

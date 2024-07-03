@@ -448,7 +448,7 @@ const Rosary = () => {
                         </div>
                         
                     {/* Conditionally render Virtual Rosary */}
-                    {showVirtualRosary && <VirtualRosary selectedMystery={selectedMystery} />}
+                    {/* {showVirtualRosary && <VirtualRosary selectedMystery={selectedMystery} />} */}
 
                         <div className="row justify-content-center">
                             <div className="col-12 col-lg-4">

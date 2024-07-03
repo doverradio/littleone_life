@@ -3,6 +3,7 @@ import { NavLink, useNavigate, useLocation  } from 'react-router-dom';
 import { isAuthenticated, signout } from './api/auth'
 import { FaCog } from 'react-icons/fa'; // Example using react-icons
 import { Link } from 'react-router-dom';
+import './index.css'
 
 const NavbarMain = ({ backgroundColor }) => {
     const navigate = useNavigate();
@@ -21,9 +22,9 @@ const NavbarMain = ({ backgroundColor }) => {
         <nav className="navbar navbar-light" 
              style={{ backgroundColor: backgroundColor, color: 'black', transition: 'background-color 4s ease' }}>
             
-            <div className="container-fluid"> {/* Use container-fluid for full width */}
+            <div className="container-fluid d-flex justify-content-between align-items-center"> {/* Use Flexbox for alignment */}
                 <NavLink to="/" className="navbar-brand">
-                    <img src="/logo.png" alt="logo" style={{ borderRadius: '50%', width: '90px', height: '90px' }} />
+                    <img src="/logo.png" alt="logo" className="logo-img" />
                 </NavLink>
 
                 <div className="d-flex align-items-center"> {/* Flexbox container */}
@@ -32,6 +33,21 @@ const NavbarMain = ({ backgroundColor }) => {
                         <NavLink to={`/${isAuthenticated().user.role === 0 ? 'user' : 'admin'}/dashboard`} className="nav-link d-lg-none" activeClassName="active" style={{ color: 'black', fontSize: '' }}>
                             {isAuthenticated().user.role === 0 ? 'User Dashboard' : 'Admin Dashboard'}
                         </NavLink>
+                    )}
+
+                    {isAuthenticated() && isAuthenticated().user.role === 0 && (
+                        <ul className="navbar-nav"> {/* Use navbar-nav class */}
+                            <li className="nav-item">
+                                <NavLink to="/user/dashboard" className="nav-link dashboard-link" style={{ color: 'black' }}>Dashboard</NavLink>
+                            </li>
+                        </ul>
+                    )}
+                    {isAuthenticated() && isAuthenticated().user.role === 1 && (
+                        <ul className="navbar-nav"> {/* Use navbar-nav class */}
+                            <li className="nav-item">
+                                <NavLink to="/admin/dashboard" className="nav-link dashboard-link" style={{ color: 'black' }}>Dashboard</NavLink>
+                            </li>
+                        </ul>
                     )}
 
                     {/* Settings and Sign Out */}
