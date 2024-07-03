@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client'; // Add this import
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import MainPage from './MainPage';
-import AboutUs from './AboutUs';
+// import AboutUs from './AboutUs';
 import SignIn from './signin/SignIn';
 import SignUp from './signup/Signup';
 import TermsOfService from './TermsOfService';
@@ -14,6 +14,7 @@ import UserDashboard from "./user/UserDashboard";
 import AdminDashboard from "./admin/AdminDashboard";
 import Settings from "./components/settings/Settings";
 import { ModalProvider } from "./context/ModalContext";
+import AboutPage from './AboutPage';
 
 const RoutesComponent = () => {
     return (
@@ -21,7 +22,7 @@ const RoutesComponent = () => {
             <Router>
                 <Routes>
                     <Route path="/" element={<MainPage />} exact />
-                    <Route path="/about" element={<AboutUs />} exact />
+                    <Route path="/about" element={<AboutPage />} exact />
                     <Route path="/signin" element={<SignIn />} exact />
                     <Route path="/signup" element={<SignUp />} exact />
                     <Route path="/terms" element={<TermsOfService />} exact />
