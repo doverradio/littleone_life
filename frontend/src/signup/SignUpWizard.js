@@ -4,7 +4,9 @@ import { ToastContainer, toast } from 'react-toastify';
 import SignUpOptions from './SignUpOptions';
 import CombinedEmailSignUp from './wizard/CombinedEmailSignUp';
 import Step1Username from './wizard/Step1Username';
+import Step4Phone from './wizard/Step4Phone';
 import Step5Summary from './wizard/Step5Summary';
+import Step3Names from './wizard/Step3Names';
 import { checkUsernameAvailability, signup } from '../api/auth';
 import ProgressBar from './wizard/ProgressBar';
 import GoogleSignupButton from './GoogleSignupButton';
@@ -44,17 +46,17 @@ const SignUpWizard = ({ googleProfile, googleToken, informParent }) => {
         if (userData.username.length > 0) {
             try {
                 const result = await checkUsernameAvailability(userData.username);
-                setUserData({ 
-                    ...userData, 
+                setUserData(prevData => ({ 
+                    ...prevData, 
                     usernameAvailable: result.isAvailable,
                     canProceed: result.isAvailable
-                });
+                }));
             } catch (error) {
                 console.error('Error checking username:', error);
-                setUserData({ ...userData, canProceed: false });
+                setUserData(prevData => ({ ...prevData, canProceed: false }));
             }
         } else {
-            setUserData({ ...userData, usernameAvailable: null, canProceed: false });
+            setUserData(prevData => ({ ...prevData, usernameAvailable: null, canProceed: false }));
         }
     };
 
@@ -63,7 +65,7 @@ const SignUpWizard = ({ googleProfile, googleToken, informParent }) => {
         if (input === 'username' && usernameEmpty) {
             setUsernameEmpty(false);
         }
-        setUserData({ ...userData, [input]: value });
+        setUserData(prevData => ({ ...prevData, [input]: value }));
     };
 
     const handleSubmit = async () => {
@@ -93,12 +95,12 @@ const SignUpWizard = ({ googleProfile, googleToken, informParent }) => {
 
     const nextStep = () => {
         if (userData.canProceed || step === 1) { // Allow initial step to proceed
-            setStep(step + 1);
+            setStep(prevStep => prevStep + 1);
         }
     };
 
     const prevStep = () => {
-        setStep(step - 1);
+        setStep(prevStep => prevStep - 1);
     };
 
     const handleKeyPress = (event) => {
@@ -147,19 +149,46 @@ const SignUpWizard = ({ googleProfile, googleToken, informParent }) => {
                         <Step1Username
                             userData={userData}
                             setUserData={setUserData}
-                            nextStep0={nextStep}
+                            nextStep={nextStep}
                             usernameEmpty={usernameEmpty}
                             setUsernameEmpty={setUsernameEmpty}
                             handleKeyPress={handleKeyPress}
                             checkUsername={checkUsername}
                         />
                     )}
+                    {signUpMethod === 'email' && step === 2 && (
+                        <Step3Names
+                            userData={userData}
+                            setUserData={setUserData}
+                            nextStep={nextStep}
+                            prevStep={prevStep}
+                            handleKeyPress={handleKeyPress}
+                        />
+                    )}
+                    {signUpMethod === 'email' && step === 3 && (
+                        <Step4Phone
+                            userData={userData}
+                            setUserData={setUserData}
+                            nextStep={nextStep}
+                            prevStep={prevStep}
+                            handleKeyPress={handleKeyPress}
+                        />
+                    )}
+                    {signUpMethod === 'email' && step === 4 && (
+                        <Step5Summary
+                            userData={userData}
+                            handleSubmit={handleSubmit}
+                            prevStep={prevStep} // Pass the prevStep function here
+                        />
+                    )}
                     {step === 5 && (
                         <Step5Summary
                             userData={userData}
                             handleSubmit={handleSubmit}
+                            prevStep={prevStep} // Pass the prevStep function here
                         />
                     )}
+
                 </>
             ) : (
                 <SignUpOptions setSignUpMethod={setSignUpMethod} setStep={setStep} informParent={informParent} />

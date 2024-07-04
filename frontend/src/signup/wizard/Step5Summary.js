@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Step5Summary = ({ userData, handleSubmit }) => {
+const Step5Summary = ({ userData, handleSubmit, prevStep }) => {
     return (
         <div>
             <p>Username: {userData.username}</p>
@@ -9,6 +9,14 @@ const Step5Summary = ({ userData, handleSubmit }) => {
             <p>Last Name: {userData.lastName}</p>
             <p>Phone: {userData.phone}</p>
             <div className="row">
+                <div className="col">
+                    <button 
+                        className="btn btn-secondary btn-block m-1" 
+                        onClick={prevStep}
+                    >
+                        Back
+                    </button>
+                </div>
                 <div className="col">
                     <button 
                         className="btn btn-primary btn-block m-1" 
