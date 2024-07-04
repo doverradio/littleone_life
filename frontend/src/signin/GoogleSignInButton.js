@@ -10,11 +10,11 @@ export const GoogleSignInButton = ({ responseGoogleSuccess, responseGoogleFailur
     const isMountedRef = useRef(true);
 
     useEffect(() => {
-        console.log('GoogleSignInButton component mounted');
+        // console.log('GoogleSignInButton component mounted');
         isMountedRef.current = true;
 
         return () => {
-            console.log('GoogleSignInButton component unmounted');
+            // console.log('GoogleSignInButton component unmounted');
             isMountedRef.current = false;
         };
     }, []);
@@ -27,7 +27,7 @@ export const GoogleSignInButton = ({ responseGoogleSuccess, responseGoogleFailur
 
         setIsRequestPending(true);
 
-        console.log('Google credential (GoogleSignInButton):', response.credential);
+        // console.log('Google credential (GoogleSignInButton):', response.credential);
         try {
             const result = await googleSignIn(response.credential);
             if (result.error) {
@@ -35,7 +35,7 @@ export const GoogleSignInButton = ({ responseGoogleSuccess, responseGoogleFailur
                 toast.error('Google sign-in failed. Please try again.');
                 responseGoogleFailure(result.error);
             } else {
-                console.log('GOOGLE SIGNIN SUCCESS', result);
+                // console.log('GOOGLE SIGNIN SUCCESS', result);
                 authenticate(result, () => {
                     if (isMountedRef.current) {
                         responseGoogleSuccess(result);

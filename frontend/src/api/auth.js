@@ -66,7 +66,7 @@ export const signout = next => {
       method: "POST"
     })
       .then(response => {
-        console.log("signout", response);
+        // console.log("signout", response);
       })
       .catch(err => console.log(err));
   }
@@ -112,37 +112,44 @@ export const resetPassword = resetInfo => {
     })
     .catch(err => console.log(err));
 };
-
 export const googleSignIn = async (token) => {
-  try {
-    const response = await fetch(`${API}/google-login`, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ idToken: token }),
-    });
-    return await response.json();
-  } catch (err) {
-    console.error('Google Sign-In error:', err);
+  if (token) {
+    try {
+      const response = await fetch(`${API}/google-login`, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ idToken: token }),
+      });
+      return await response.json();
+    } catch (err) {
+      console.error('Google Sign-In error:', err);
+      return { error: 'Google sign-in failed. Please try again.' };
+    }
+  } else {
     return { error: 'Google sign-in failed. Please try again.' };
   }
 };
 
 export const googleSignup = async (token) => {
-  try {
-    const response = await fetch(`${API}/google-signup`, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ idToken: token }),
-    });
-    return await response.json();
-  } catch (err) {
-    console.error('Google Sign-Up error:', err);
+  if (token) {
+    try {
+      const response = await fetch(`${API}/google-signup`, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ idToken: token }),
+      });
+      return await response.json();
+    } catch (err) {
+      console.error('Google Sign-Up error:', err);
+      return { error: 'Google sign-up failed. Please try again.' };
+    }
+  } else {
     return { error: 'Google sign-up failed. Please try again.' };
   }
 };

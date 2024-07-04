@@ -16,6 +16,7 @@ import PieChartMysteries from './PieChartMysteries';
 import ToggleSlider from '../utils/ToggleSlider';
 import ReusableDatatable from '../utils/datatable/ReusableDatatable';
 import VirtualRosary from './virtualrosary/VirtualRosary';
+import PrayerButton from '../prayerbutton/PrayerButton';
 
 // Define the Rosary component
 const Rosary = () => {
@@ -572,18 +573,23 @@ const Rosary = () => {
                             </div>
                         </div>
                         <hr />
-                        <div className="row">
-                            <div className="col-12">
+                        <div className="row mt-3">
+                            <div className="col-12 text-center">
                                 <button 
                                     onClick={handlePrayRosary} 
-                                    className="pray-rosary-btn btn btn-primary btn-block"
+                                    className="pray-rosary-btn btn btn-primary"
                                 >
                                     {
                                         isSubmitting ?
                                         <ButtonLoader />
-                                        : `Submit`
+                                        : `Submit Rosary`
                                     }
                                 </button>
+                            </div>
+                        </div>
+                        <div className="row mt-3">
+                            <div className="col-12 text-center">
+                                <PrayerButton prayerType="Rosary" /> {/* Include the PrayerButton */}
                             </div>
                         </div>
                         <div className="row mb-4">
