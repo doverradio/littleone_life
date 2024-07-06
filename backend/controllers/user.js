@@ -86,6 +86,8 @@ exports.updateUserSettings = async (req, res) => {
         user = await user.save();
 
         // Select the fields to return
+        // user = user.toObject();
+        user = await User.findById(_id);
         user = user.toObject();
         delete user.hashed_password;
         delete user.salt;
