@@ -12,17 +12,21 @@ const SignIn = () => {
     const navigate = useNavigate();
     const { user } = isAuthenticated();
 
+    const handleGoogleSignin = async (response) => {
+        const googleToken = response.credential;
+        const result = await googleSignIn(googleToken);
+        if (result.error) {
+            toast.error(result.error);
+        } else {
+            authenticate(result, () => {
+                navigate(result.user.role === 1 ? '/admin/dashboard' : '/user/dashboard');
+            });
+        }
+    };
+
     const responseGoogleSuccess = async (response) => {
         try {
-            const googleToken = response.credential;
-            const result = await googleSignIn(googleToken);
-            if (result.error) {
-                toast.error(result.error);
-            } else if (result.user) {
-                authenticate(result, () => {
-                    navigate(result.user.role === 1 ? '/admin/dashboard' : '/user/dashboard');
-                });
-            }
+            await handleGoogleSignin(response);
         } catch (error) {
             console.error('Error processing Google sign in:', error);
             toast.error('Google sign in failed');

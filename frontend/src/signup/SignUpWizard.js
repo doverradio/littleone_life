@@ -7,7 +7,7 @@ import Step1Username from './wizard/Step1Username';
 import Step4Phone from './wizard/Step4Phone';
 import Step5Summary from './wizard/Step5Summary';
 import Step3Names from './wizard/Step3Names';
-import { checkUsernameAvailability, signup } from '../api/auth';
+import { checkUsernameAvailability, signup, googleSignup, authenticate } from '../api/auth';
 import ProgressBar from './wizard/ProgressBar';
 import GoogleSignupButton from './GoogleSignupButton';
 
@@ -24,7 +24,8 @@ const SignUpWizard = ({ googleProfile, googleToken, informParent }) => {
         password: '',
         confirmPassword: '',
         usernameAvailable: null,
-        canProceed: false
+        canProceed: false,
+        preferredLoginType: ''
     });
 
     const [usernameEmpty, setUsernameEmpty] = useState(false);
@@ -36,7 +37,8 @@ const SignUpWizard = ({ googleProfile, googleToken, informParent }) => {
                 username: googleProfile.given_name,
                 email: googleProfile.email,
                 firstName: googleProfile.given_name,
-                lastName: googleProfile.family_name
+                lastName: googleProfile.family_name,
+                preferredLoginType: 'google-account'
             }));
             setStep(2); // Skip username step if Google Profile is available
         }
@@ -46,17 +48,17 @@ const SignUpWizard = ({ googleProfile, googleToken, informParent }) => {
         if (userData.username.length > 0) {
             try {
                 const result = await checkUsernameAvailability(userData.username);
-                setUserData(prevData => ({ 
-                    ...prevData, 
+                setUserData({ 
+                    ...userData, 
                     usernameAvailable: result.isAvailable,
                     canProceed: result.isAvailable
-                }));
+                });
             } catch (error) {
                 console.error('Error checking username:', error);
-                setUserData(prevData => ({ ...prevData, canProceed: false }));
+                setUserData({ ...userData, canProceed: false });
             }
         } else {
-            setUserData(prevData => ({ ...prevData, usernameAvailable: null, canProceed: false }));
+            setUserData({ ...userData, usernameAvailable: null, canProceed: false });
         }
     };
 
@@ -65,7 +67,7 @@ const SignUpWizard = ({ googleProfile, googleToken, informParent }) => {
         if (input === 'username' && usernameEmpty) {
             setUsernameEmpty(false);
         }
-        setUserData(prevData => ({ ...prevData, [input]: value }));
+        setUserData({ ...userData, [input]: value });
     };
 
     const handleSubmit = async () => {
@@ -95,12 +97,12 @@ const SignUpWizard = ({ googleProfile, googleToken, informParent }) => {
 
     const nextStep = () => {
         if (userData.canProceed || step === 1) { // Allow initial step to proceed
-            setStep(prevStep => prevStep + 1);
+            setStep(step + 1);
         }
     };
 
     const prevStep = () => {
-        setStep(prevStep => prevStep - 1);
+        setStep(step - 1);
     };
 
     const handleKeyPress = (event) => {
@@ -110,6 +112,26 @@ const SignUpWizard = ({ googleProfile, googleToken, informParent }) => {
             } else {
                 nextStep();
             }
+        }
+    };
+
+    const handleGoogleSignup = async (response) => {
+        const googleToken = response.credential;
+        const result = await googleSignup(googleToken);
+        if (result.error) {
+            toast.error(result.error);
+        } else {
+            authenticate(result, () => {
+                setUserData({
+                    ...userData,
+                    username: result.user.username,
+                    email: result.user.email,
+                    firstName: result.user.firstName,
+                    lastName: result.user.lastName,
+                    preferredLoginType: 'google-account',
+                });
+            });
+            navigate('/dashboard');
         }
     };
 
@@ -140,6 +162,7 @@ const SignUpWizard = ({ googleProfile, googleToken, informParent }) => {
                                     email: data.user.email,
                                     firstName: data.user.firstName,
                                     lastName: data.user.lastName,
+                                    preferredLoginType: 'google-account',
                                 });
                                 setStep(2);
                             }}
@@ -161,8 +184,10 @@ const SignUpWizard = ({ googleProfile, googleToken, informParent }) => {
                             userData={userData}
                             setUserData={setUserData}
                             nextStep={nextStep}
-                            prevStep={prevStep}
+                            usernameEmpty={usernameEmpty}
+                            setUsernameEmpty={setUsernameEmpty}
                             handleKeyPress={handleKeyPress}
+                            checkUsername={checkUsername}
                         />
                     )}
                     {signUpMethod === 'email' && step === 3 && (
@@ -170,25 +195,19 @@ const SignUpWizard = ({ googleProfile, googleToken, informParent }) => {
                             userData={userData}
                             setUserData={setUserData}
                             nextStep={nextStep}
-                            prevStep={prevStep}
+                            usernameEmpty={usernameEmpty}
+                            setUsernameEmpty={setUsernameEmpty}
                             handleKeyPress={handleKeyPress}
+                            checkUsername={checkUsername}
                         />
                     )}
                     {signUpMethod === 'email' && step === 4 && (
                         <Step5Summary
                             userData={userData}
                             handleSubmit={handleSubmit}
-                            prevStep={prevStep} // Pass the prevStep function here
+                            prevStep={prevStep} // Add prevStep here
                         />
                     )}
-                    {step === 5 && (
-                        <Step5Summary
-                            userData={userData}
-                            handleSubmit={handleSubmit}
-                            prevStep={prevStep} // Pass the prevStep function here
-                        />
-                    )}
-
                 </>
             ) : (
                 <SignUpOptions setSignUpMethod={setSignUpMethod} setStep={setStep} informParent={informParent} />
