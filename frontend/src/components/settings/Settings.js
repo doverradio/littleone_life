@@ -35,7 +35,7 @@ const Settings = () => {
                     firstName: result.firstName || '',
                     lastName: result.lastName || '',
                     phoneNumber: result.phone || '',
-                    preferredLoginType: result.googleId ? 'google' : 'username-password',
+                    preferredLoginType: result.preferredLoginType || 'username-password',
                     allowInstantPrayerArmy: result.allowInstantPrayerArmy || false,
                     allowNotifications: result.allowNotifications || false,
                     autoSendPrayerGroupRequest: result.autoSendPrayerGroupRequest || false,
@@ -173,16 +173,18 @@ const Settings = () => {
                             className="form-control"
                         />
                     </div>
-                    <div className="form-group">
-                        <label>Change Password:</label>
-                        <input 
-                            type="password" 
-                            name="password" 
-                            value={settings.password} 
-                            onChange={handleChange}
-                            className="form-control"
-                        />
-                    </div>
+                    {settings.preferredLoginType === 'username-password' && (
+                        <div className="form-group">
+                            <label>Change Password:</label>
+                            <input 
+                                type="password" 
+                                name="password" 
+                                value={settings.password} 
+                                onChange={handleChange}
+                                className="form-control"
+                            />
+                        </div>
+                    )}
                     <button type="submit" className="btn btn-primary">Save Settings</button>
                 </form>
             </div>

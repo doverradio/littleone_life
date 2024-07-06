@@ -52,6 +52,22 @@ const userSchema = new mongoose.Schema({
     role: {
         type: Number,
         default: 0
+    },
+    preferredLoginType: {
+        type: String,
+        default: 'username-password'
+    },
+    allowInstantPrayerArmy: {
+        type: Boolean,
+        default: false
+    },
+    allowNotifications: {
+        type: Boolean,
+        default: false
+    },
+    autoSendPrayerGroupRequest: {
+        type: Boolean,
+        default: false
     }
 }, { timestamps: true });
 

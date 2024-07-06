@@ -64,7 +64,7 @@ exports.getUserSettings = async (req, res) => {
 
 exports.updateUserSettings = async (req, res) => {
     try {
-        const { _id, firstName, lastName, phoneNumber, username, email, prayerSettings, role } = req.body;
+        const { _id, firstName, lastName, phoneNumber, username, email, prayerSettings, role, preferredLoginType, allowInstantPrayerArmy, allowNotifications, autoSendPrayerGroupRequest } = req.body;
 
         // Find the user by ID
         let user = await User.findById(_id);
@@ -81,16 +81,16 @@ exports.updateUserSettings = async (req, res) => {
         if (email !== undefined) user.email = email;
         if (prayerSettings !== undefined) user.prayerSettings = prayerSettings;
         if (role !== undefined) user.role = role;
+        if (preferredLoginType !== undefined) user.preferredLoginType = preferredLoginType;
+        if (allowInstantPrayerArmy !== undefined) user.allowInstantPrayerArmy = allowInstantPrayerArmy;
+        if (allowNotifications !== undefined) user.allowNotifications = allowNotifications;
+        if (autoSendPrayerGroupRequest !== undefined) user.autoSendPrayerGroupRequest = autoSendPrayerGroupRequest;
 
         // Save the updated user to trigger encryption
         user = await user.save();
 
         // Select the fields to return
-        // user = user.toObject();
-        user = await User.findById(_id);
-        user = user.toObject();
-        delete user.hashed_password;
-        delete user.salt;
+        user = await User.findById(_id).select('-hashed_password -salt');
 
         res.json(user);
     } catch (error) {
