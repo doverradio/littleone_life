@@ -64,21 +64,35 @@ exports.getUserSettings = async (req, res) => {
 
 exports.updateUserSettings = async (req, res) => {
     try {
-        const userId = req.user._id; // Use authenticated user ID
-        const updates = req.body;
+        const { _id, firstName, lastName, phoneNumber, username, email, prayerSettings, role } = req.body;
 
-        const user = await User.findByIdAndUpdate(userId, updates, { new: true }).select('-hashed_password -salt'); // Exclude hashed_password and salt
-
+        // Find the user by ID
+        let user = await User.findById(_id);
+        
         if (!user) {
-            return res.status(404).json({
-                error: 'User not found'
-            });
+            return res.status(404).json({ error: 'User not found' });
         }
+
+        // Update the fields
+        if (firstName !== undefined) user.firstName = firstName;
+        if (lastName !== undefined) user.lastName = lastName;
+        if (phoneNumber !== undefined) user.phone = phoneNumber;
+        if (username !== undefined) user.username = username;
+        if (email !== undefined) user.email = email;
+        if (prayerSettings !== undefined) user.prayerSettings = prayerSettings;
+        if (role !== undefined) user.role = role;
+
+        // Save the updated user to trigger encryption
+        user = await user.save();
+
+        // Select the fields to return
+        user = user.toObject();
+        delete user.hashed_password;
+        delete user.salt;
 
         res.json(user);
     } catch (error) {
-        res.status(500).json({
-            error: 'Error updating user settings'
-        });
+        console.error('updateUserSettings - error: ', error);
+        res.status(500).json({ error: 'Error updating user settings' });
     }
 };

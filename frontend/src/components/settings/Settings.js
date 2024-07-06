@@ -4,24 +4,29 @@ import Footer from '../../Footer';
 import { getUserSettings, updateUserSettings } from '../../api/user';
 import { isAuthenticated } from '../../api/auth';
 import { toast } from 'react-toastify';
+const log = console.log;
 
 const Settings = () => {
     const [settings, setSettings] = useState({
         firstName: '',
         lastName: '',
         phoneNumber: '',
+        role: '',
         preferredLoginType: 'username-password',
         allowInstantPrayerArmy: false,
         allowNotifications: false,
         autoSendPrayerGroupRequest: false,
         username: '',
-        password: ''
+        password: '',
+        _id: '',
+        prayerSettings: []
     });
 
     useEffect(() => {
         const fetchSettings = async () => {
             const { token, user } = isAuthenticated();
             const result = await getUserSettings(token, user._id);
+            log(`result: `, result)
             if (result.error) {
                 toast.error(result.error);
             } else {
@@ -35,6 +40,9 @@ const Settings = () => {
                     allowNotifications: result.allowNotifications || false,
                     autoSendPrayerGroupRequest: result.autoSendPrayerGroupRequest || false,
                     username: result.username || '',
+                    _id: user._id || '',
+                    role: result.role || 0,
+                    prayerSettings: result.prayerSettings || [],
                 });
             }
         };
