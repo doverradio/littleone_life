@@ -237,33 +237,6 @@ const GenericPrayer = ({ prayerTitle, prayerText, iconSrc, onIntentionChange, pr
         }
     };
 
-    const handleNextPage = async () => {
-        const nextPage = currentPage + 1;
-        // console.log("Next page:", nextPage); // Add this to check
-        setCurrentPage(nextPage);
-    
-        const data = await getUserPrayers(userId, prayerType, token, nextPage, pageSize);
-        // console.log("Data fetched for page", nextPage, data); // Add this to check
-    
-        if (data) {
-            setPrayers(data.prayers);
-            setTotalPages(Math.ceil(data.total / pageSize));
-        }
-    };
-    
-    const handlePreviousPage = async () => {
-        const previousPage = Math.max(currentPage - 1, 1);
-        setCurrentPage(previousPage);
-    
-        const data = await getUserPrayers(userId, prayerType, token, previousPage, pageSize);
-    
-        if (data) {
-            setPrayers(data.prayers);
-            setTotalPages(Math.ceil(data.total / pageSize));
-        }
-    };
-    
-
     
     const renderContent = () => {
         switch (activeTab) {
@@ -349,7 +322,6 @@ const GenericPrayer = ({ prayerTitle, prayerText, iconSrc, onIntentionChange, pr
                                 <div className="row">
                                     <div className="col-12">
                                         <ReusableDatatable
-                                            key={currentPage}
                                             data={prayers}
                                             columns={responsesColumns}
                                             pageSize={pageSize}
@@ -359,8 +331,7 @@ const GenericPrayer = ({ prayerTitle, prayerText, iconSrc, onIntentionChange, pr
                                             onRowSelect={onRowSelect}
                                             onDelete={handleDelete}
                                             refreshTrigger={refreshTrigger}
-                                            onNextPage={handleNextPage}
-                                            onPreviousPage={handlePreviousPage}
+                                            // Add other necessary props here
                                         />
                                     </div>
                                 </div>
@@ -441,10 +412,10 @@ const GenericPrayer = ({ prayerTitle, prayerText, iconSrc, onIntentionChange, pr
     
     const fetchData = async () => {
         const data = await getUserPrayers(userId, prayerType, token, currentPage, pageSize);
-        // console.log(`fetchData ran.  data: `, data)
 
         if (data) {
             setPrayers(data.prayers);
+            // setMasses(data.masses);
             setTotalPages(Math.ceil(data.total / pageSize));
         }
     };
