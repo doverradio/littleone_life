@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import './styles.css'
-const log = console.log;
 
-const ReusableDatatable = ({ data, columns, pageSize, checkbox, currentPage, onRowSelect, onDelete, refreshTrigger, onNextPage, onPreviousPage, totalPages }) => {
-    
+const ReusableDatatable = ({ data, columns, pageSize, checkbox, onRowSelect, onDelete, refreshTrigger }) => {
+    const [currentPage, setCurrentPage] = useState(1);
     const [sortedData, setSortedData] = useState([]);
     const [selectedRows, setSelectedRows] = useState([]);
 
@@ -16,6 +15,7 @@ const ReusableDatatable = ({ data, columns, pageSize, checkbox, currentPage, onR
         const sorted = [...data].sort((a, b) => {
             return new Date(b[dateField]) - new Date(a[dateField]);
         });
+
         setSortedData(sorted); // Replace with actual sorting logic if needed
         setSelectedRows([]);
     }, [data, refreshTrigger]);
@@ -40,18 +40,24 @@ const ReusableDatatable = ({ data, columns, pageSize, checkbox, currentPage, onR
         }
     };
     
-    
-    // log(`ReusableDatatable.js - currentPage: `, currentPage)
-    // log(`ReusableDatatable.js - pageSize: `, pageSize)
-    // log(`ReusableDatatable.js - sortedData: `, sortedData)
-    // Get current page data
-    let currentPageData = sortedData.slice((currentPage - 1) * pageSize, currentPage * pageSize);
-    if ( currentPageData.length === 0)
-    {
-        currentPageData = sortedData;
-    }
 
-    // log(`ReusableDatatable.js - currentPageData: `, currentPageData)
+    // Function to handle delete click
+    const handleDeleteClick = () => {
+        if(window.confirm('Are you sure you want to delete the selected rows?')) {
+            onDelete(selectedRows);
+        }
+    };    
+
+    // Calculate the number of total pages
+    const totalPages = Math.ceil(data.length / pageSize);
+
+    // Handle the logic to change page
+    const goToPage = (pageNumber) => {
+        setCurrentPage(pageNumber);
+    };
+
+    // Get current page data
+    const currentPageData = sortedData.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
     // Handle row selection
     const handleCheckboxChange = (row) => {
@@ -81,9 +87,6 @@ const ReusableDatatable = ({ data, columns, pageSize, checkbox, currentPage, onR
                     </button>
                 </div>
             )}
-            <div>
-                {/* {JSON.stringify(data)} */}
-            </div>
             <table className='datatable'>
                 <thead>
                     <tr>
@@ -117,24 +120,15 @@ const ReusableDatatable = ({ data, columns, pageSize, checkbox, currentPage, onR
 
             {/* Pagination Controls */}
             <div className="datatable-pagination">
-                <button 
-                    onClick={onPreviousPage}
-                    className='btn btn-outline-primary btn-sm m-1'
-                    disabled={currentPage === 1}
-                >
-                    &#8592; Back
-                </button>
-
-                {/* Display current page number and total pages */}
-                <span className='m-2'>Page {currentPage} of {totalPages}</span>
-
-                <button 
-                    onClick={onNextPage}
-                    className='btn btn-outline-primary btn-sm m-1'
-                    disabled={currentPage === totalPages}
-                >
-                    Next &#8594;
-                </button>
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map(pageNumber => (
+                    <button 
+                        key={pageNumber} 
+                        onClick={() => goToPage(pageNumber)}
+                        className='btn btn-outline-primary btn-sm m-1'
+                    >
+                        {pageNumber}
+                    </button>
+                ))}
             </div>
         </div>
     );
