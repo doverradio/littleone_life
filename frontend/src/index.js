@@ -14,17 +14,11 @@ if (module.hot) {
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-<<<<<<< HEAD
   <UserProvider>
     <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
       <RoutesComponent />
     </GoogleOAuthProvider>
   </UserProvider>
-=======
-  <React.StrictMode>
-    <RoutesComponent />
-  </React.StrictMode>
->>>>>>> parent of 691af95... Removed React.StrictMode, solved bug in ReusableDatatable that failed to Next data
 );
 
 reportWebVitals();
