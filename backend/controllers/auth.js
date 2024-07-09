@@ -22,19 +22,21 @@ const generateUniqueUsername = async (username) => {
 
 
 exports.checkUsernameAvailability = async (req, res) => {
-    const { username } = req.body;
+    const { username, userId } = req.body;
 
     try {
-        const userExists = await User.findOne({ username });
+        // Find any user with the given username excluding the current user's ID
+        const userExists = await User.findOne({ username, _id: { $ne: userId } });
         if (userExists) {
             return res.json({ isAvailable: false });
         }
         return res.json({ isAvailable: true });
     } catch (error) {
-        log('Error in checking username availability:', error);
+        console.error('Error in checking username availability:', error);
         return res.status(500).json({ error: 'Server error while checking username' });
     }
 };
+
 
 
 // USERNAME / PASSWORD SIGN UP

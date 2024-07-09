@@ -4,8 +4,6 @@ import Footer from '../../Footer';
 import { getUserSettings, updateUserSettings } from '../../api/user';
 import { isAuthenticated, checkUsernameAvailability } from '../../api/auth';
 import { toast } from 'react-toastify';
-import debounce from "lodash.debounce";
-const log = console.log;
 
 const Settings = () => {
     const [settings, setSettings] = useState({
@@ -22,25 +20,14 @@ const Settings = () => {
         _id: '',
         prayerSettings: []
     });
-    const [originalUsername, setOriginalUsername] = useState('');
-    const [usernameAvailability, setUsernameAvailability] = useState(null);
 
-    const debouncedCheckUsername = debounce(async (username) => {
-        if (username && username !== originalUsername) {
-            const result = await checkUsernameAvailability(username);
-            setUsernameAvailability(result.isAvailable);
-        } else if (username === originalUsername) {
-            setUsernameAvailability('current');
-        } else {
-            setUsernameAvailability(null);
-        }
-    }, 500);
+    const [usernameAvailable, setUsernameAvailable] = useState(true);
+    const [originalUsername, setOriginalUsername] = useState('');
 
     useEffect(() => {
         const fetchSettings = async () => {
             const { token, user } = isAuthenticated();
             const result = await getUserSettings(token, user._id);
-            log(`result: `, result)
             if (result.error) {
                 toast.error(result.error);
             } else {
@@ -49,7 +36,7 @@ const Settings = () => {
                     firstName: result.firstName || '',
                     lastName: result.lastName || '',
                     phoneNumber: result.phone || '',
-                    preferredLoginType: result.googleId ? 'google' : 'username-password',
+                    preferredLoginType: result.preferredLoginType || 'username-password',
                     allowInstantPrayerArmy: result.allowInstantPrayerArmy || false,
                     allowNotifications: result.allowNotifications || false,
                     autoSendPrayerGroupRequest: result.autoSendPrayerGroupRequest || false,
@@ -59,16 +46,11 @@ const Settings = () => {
                     prayerSettings: result.prayerSettings || [],
                 });
                 setOriginalUsername(result.username || '');
-                setUsernameAvailability('current');
             }
         };
 
         fetchSettings();
     }, []);
-
-    useEffect(() => {
-        debouncedCheckUsername(settings.username);
-    }, [settings.username]);
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
@@ -78,8 +60,28 @@ const Settings = () => {
         }));
     };
 
+    const handleUsernameChange = async (e) => {
+        const value = e.target.value;
+        setSettings(prevSettings => ({
+            ...prevSettings,
+            username: value
+        }));
+
+        if (value !== originalUsername) {
+            const result = await checkUsernameAvailability({ username: value });
+            setUsernameAvailable(result.isAvailable);
+        } else {
+            setUsernameAvailable(true); // It's their original username, so it's valid
+        }
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        if (settings.preferredLoginType === 'username-password' && !settings.password) {
+            return toast.error('You must set a password when using username-password as your login type.');
+        }
+
         const { token } = isAuthenticated();
         const result = await updateUserSettings(token, settings);
         if (result.error) {
@@ -88,6 +90,17 @@ const Settings = () => {
             toast.success('Settings updated successfully');
             setSettings(result);
         }
+    };
+
+    const handlePreferredLoginTypeChange = (e) => {
+        const value = e.target.value;
+        if (value === 'username-password' && settings.preferredLoginType === 'google') {
+            alert('Changing login type to username-password requires you to set a password.');
+        }
+        setSettings(prevSettings => ({
+            ...prevSettings,
+            preferredLoginType: value
+        }));
     };
 
     return (
@@ -135,7 +148,7 @@ const Settings = () => {
                                     name="preferredLoginType" 
                                     value="username-password" 
                                     checked={settings.preferredLoginType === 'username-password'} 
-                                    onChange={handleChange}
+                                    onChange={handlePreferredLoginTypeChange}
                                 /> Username/Password
                             </label>
                             <label className="ml-3">
@@ -144,7 +157,7 @@ const Settings = () => {
                                     name="preferredLoginType" 
                                     value="google" 
                                     checked={settings.preferredLoginType === 'google'} 
-                                    onChange={handleChange}
+                                    onChange={handlePreferredLoginTypeChange}
                                 /> Google Account
                             </label>
                         </div>
@@ -189,17 +202,15 @@ const Settings = () => {
                             type="text" 
                             name="username" 
                             value={settings.username} 
-                            onChange={handleChange}
+                            onChange={handleUsernameChange}
                             className="form-control"
+                            disabled={settings.preferredLoginType === 'google'}
+                            style={{ backgroundColor: settings.preferredLoginType === 'google' ? '#e9ecef' : 'white' }}
                         />
-                        {usernameAvailability === 'current' && (
+                        {usernameAvailable ? (
                             <p style={{ color: 'green' }}>Current username</p>
-                        )}
-                        {usernameAvailability === false && (
+                        ) : (
                             <p style={{ color: 'red' }}>Username is not available</p>
-                        )}
-                        {usernameAvailability === true && (
-                            <p style={{ color: 'green' }}>Username is available</p>
                         )}
                     </div>
                     {settings.preferredLoginType === 'username-password' && (
