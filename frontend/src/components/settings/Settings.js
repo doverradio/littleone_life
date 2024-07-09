@@ -4,6 +4,7 @@ import Footer from '../../Footer';
 import { getUserSettings, updateUserSettings } from '../../api/user';
 import { isAuthenticated, checkUsernameAvailability } from '../../api/auth';
 import { toast } from 'react-toastify';
+import debounce from "lodash.debounce";
 const log = console.log;
 
 const Settings = () => {
@@ -19,9 +20,21 @@ const Settings = () => {
         username: '',
         password: '',
         _id: '',
-        prayerSettings: [],
-        usernameAvailable: null, // Add this to track username availability
+        prayerSettings: []
     });
+    const [originalUsername, setOriginalUsername] = useState('');
+    const [usernameAvailability, setUsernameAvailability] = useState(null);
+
+    const debouncedCheckUsername = debounce(async (username) => {
+        if (username && username !== originalUsername) {
+            const result = await checkUsernameAvailability(username);
+            setUsernameAvailability(result.isAvailable);
+        } else if (username === originalUsername) {
+            setUsernameAvailability('current');
+        } else {
+            setUsernameAvailability(null);
+        }
+    }, 500);
 
     useEffect(() => {
         const fetchSettings = async () => {
@@ -45,40 +58,28 @@ const Settings = () => {
                     role: result.role || 0,
                     prayerSettings: result.prayerSettings || [],
                 });
+                setOriginalUsername(result.username || '');
+                setUsernameAvailability('current');
             }
         };
 
         fetchSettings();
     }, []);
 
-    const handleChange = async (e) => {
+    useEffect(() => {
+        debouncedCheckUsername(settings.username);
+    }, [settings.username]);
+
+    const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
-        
-        if (name === 'username') {
-            const result = await checkUsernameAvailability(value);
-            if (result.error) {
-                toast.error(result.error);
-            } else {
-                setSettings(prevSettings => ({
-                    ...prevSettings,
-                    [name]: value,
-                    usernameAvailable: result.isAvailable,
-                }));
-            }
-        } else {
-            setSettings(prevSettings => ({
-                ...prevSettings,
-                [name]: type === 'checkbox' ? checked : value,
-            }));
-        }
+        setSettings(prevSettings => ({
+            ...prevSettings,
+            [name]: type === 'checkbox' ? checked : value
+        }));
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (settings.usernameAvailable === false) {
-            toast.error('Username is not available.');
-            return;
-        }
         const { token } = isAuthenticated();
         const result = await updateUserSettings(token, settings);
         if (result.error) {
@@ -191,7 +192,15 @@ const Settings = () => {
                             onChange={handleChange}
                             className="form-control"
                         />
-                        {settings.usernameAvailable === false && <p style={{ color: 'red' }}>Username is not available</p>}
+                        {usernameAvailability === 'current' && (
+                            <p style={{ color: 'green' }}>Current username</p>
+                        )}
+                        {usernameAvailability === false && (
+                            <p style={{ color: 'red' }}>Username is not available</p>
+                        )}
+                        {usernameAvailability === true && (
+                            <p style={{ color: 'green' }}>Username is available</p>
+                        )}
                     </div>
                     {settings.preferredLoginType === 'username-password' && (
                         <div className="form-group">

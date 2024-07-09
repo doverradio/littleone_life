@@ -18,21 +18,39 @@ export const signup = async (user) => {
   }
 };
 
-export const checkUsernameAvailability = async (username) => {
+// export const checkUsernameAvailability = async (username) => {
+//   try {
+//     const response = await fetch(`${API}/check-username`, {
+//       method: 'POST',
+//       headers: {
+//         'Content-Type': 'application/json',
+//       },
+//       body: JSON.stringify({ username }),
+//     });
+//     return await response.json();
+//   } catch (error) {
+//     console.error('Error in checking username availability:', error);
+//     throw error;
+//   }
+// };
+
+export const checkUsernameAvailability = async (username, userId) => {
   try {
-    const response = await fetch(`${API}/check-username`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ username }),
-    });
-    return await response.json();
-  } catch (error) {
-    console.error('Error in checking username availability:', error);
-    throw error;
+      const response = await fetch(`${API}/check-username`, {
+          method: 'POST',
+          headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ username, userId })
+      });
+      return await response.json();
+  } catch (err) {
+      console.error('Error checking username availability:', err);
+      return { error: 'Error checking username availability' };
   }
 };
+
 
 export const signin = async (user) => {
   try {

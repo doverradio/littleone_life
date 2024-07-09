@@ -36,6 +36,7 @@ exports.checkUsernameAvailability = async (req, res) => {
     }
 };
 
+
 // USERNAME / PASSWORD SIGN UP
 exports.signup = async (req, res) => {
     const { username, password } = req.body;
