@@ -203,24 +203,10 @@ exports.googleSignin = async (req, res) => {
                     user: { _id, username, role }
                 });
             } else {
-                
+                // // Return error if user not found
                 return res.status(400).json({
                     error: 'Google login failed. Try again'
                 });
-                // // Create a new user if not found
-                // user = new User({ username, email: payload.email_verified, method: 'google' });
-                // await user.save();
-                // const token = jwt.sign({ _id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '7d' });
-                // res.cookie('token', token, {
-                //     httpOnly: true,
-                //     secure: process.env.NODE_ENV === 'production',
-                //     maxAge: 7 * 24 * 60 * 60 * 1000, // 1 week
-                // });
-                // const { _id, username, role } = user;
-                // return res.json({
-                //     token,
-                //     user: { _id, username, role }
-                // });
             }
         } else {
             return res.status(400).json({
