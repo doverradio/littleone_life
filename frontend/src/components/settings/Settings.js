@@ -4,6 +4,7 @@ import Footer from '../../Footer';
 import { getUserSettings, updateUserSettings } from '../../api/user';
 import { isAuthenticated, checkUsernameAvailability } from '../../api/auth';
 import { toast } from 'react-toastify';
+const log = console.log;
 
 const Settings = () => {
     const [settings, setSettings] = useState({
@@ -23,6 +24,7 @@ const Settings = () => {
 
     const [usernameAvailable, setUsernameAvailable] = useState(true);
     const [originalUsername, setOriginalUsername] = useState('');
+    const [checkUsername, setCheckUsername] = useState(false);
 
     useEffect(() => {
         const fetchSettings = async () => {
@@ -67,11 +69,11 @@ const Settings = () => {
             username: value
         }));
 
-        if (value !== originalUsername) {
-            const result = await checkUsernameAvailability({ username: value });
+        if (value !== originalUsername && checkUsername) {
+            const result = await checkUsernameAvailability(value, settings._id);
             setUsernameAvailable(result.isAvailable);
         } else {
-            setUsernameAvailable(true); // It's their original username, so it's valid
+            setUsernameAvailable(true); // It's their original username or not checking yet, so it's valid
         }
     };
 
@@ -95,7 +97,11 @@ const Settings = () => {
     const handlePreferredLoginTypeChange = (e) => {
         const value = e.target.value;
         if (value === 'username-password' && settings.preferredLoginType === 'google') {
-            alert('Changing login type to username-password requires you to set a password.');
+            const confirmChange = window.confirm('Changing login type to username-password requires you to set a password. Do you want to proceed?');
+            if (!confirmChange) {
+                return;
+            }
+            setCheckUsername(true); // Allow username check after confirmation
         }
         setSettings(prevSettings => ({
             ...prevSettings,
@@ -207,10 +213,14 @@ const Settings = () => {
                             disabled={settings.preferredLoginType === 'google'}
                             style={{ backgroundColor: settings.preferredLoginType === 'google' ? '#e9ecef' : 'white' }}
                         />
-                        {usernameAvailable ? (
-                            <p style={{ color: 'green' }}>Current username</p>
-                        ) : (
-                            <p style={{ color: 'red' }}>Username is not available</p>
+                        {settings.preferredLoginType === 'username-password' && (
+                            <>
+                                {usernameAvailable ? (
+                                    <p style={{ color: 'green' }}>Current username</p>
+                                ) : (
+                                    <p style={{ color: 'red' }}>Username is not available</p>
+                                )}
+                            </>
                         )}
                     </div>
                     {settings.preferredLoginType === 'username-password' && (
