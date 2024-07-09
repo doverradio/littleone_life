@@ -166,6 +166,7 @@ exports.signin = async (req, res) => {
 
 // GOOGLE SIGN IN
 exports.googleSignin = async (req, res) => {
+    log(`Begin googleSignin! req.body: `, JSON.stringify(req.body, null, 2));
     const { idToken } = req.body;
 
     try {
@@ -175,41 +176,64 @@ exports.googleSignin = async (req, res) => {
         });
 
         const payload = ticket.getPayload();
-        const { email, email_verified, name } = payload;
+        log(`payload: `, payload);
 
-        if (email_verified) {
-            let user = await User.findOne({ email });
-            if (!user) {
-                return res.status(400).json({
-                    error: 'Google login failed. User not found.',
+        const username = payload.name; // Use 'name' as the username
+        const email_verified = payload.email_verified;
+
+        log(`username: `, username);
+        log(`email_verified: `, email_verified);
+
+        if (email_verified && username) {
+            // log(`email_verified: `, email_verified);
+            let user = await User.findOne({ username });
+            // log(`user: `, user);
+
+            if (user) {
+                // log(`user found!`);
+                const token = jwt.sign({ _id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '7d' });
+                res.cookie('token', token, {
+                    httpOnly: true,
+                    secure: process.env.NODE_ENV === 'production',
+                    maxAge: 7 * 24 * 60 * 60 * 1000, // 1 week
                 });
+                const { _id, username, role } = user;
+                return res.json({
+                    token,
+                    user: { _id, username, role }
+                });
+            } else {
+                
+                return res.status(400).json({
+                    error: 'Google login failed. Try again'
+                });
+                // // Create a new user if not found
+                // user = new User({ username, email: payload.email_verified, method: 'google' });
+                // await user.save();
+                // const token = jwt.sign({ _id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '7d' });
+                // res.cookie('token', token, {
+                //     httpOnly: true,
+                //     secure: process.env.NODE_ENV === 'production',
+                //     maxAge: 7 * 24 * 60 * 60 * 1000, // 1 week
+                // });
+                // const { _id, username, role } = user;
+                // return res.json({
+                //     token,
+                //     user: { _id, username, role }
+                // });
             }
-
-            const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
-            res.cookie('token', token, {
-                httpOnly: true,
-                secure: process.env.NODE_ENV === 'production',
-                maxAge: 7 * 24 * 60 * 60 * 1000, // 1 week
-            });
-
-            const { _id, username, role } = user;
-            return res.json({
-                token,
-                user: { _id, username, role },
-            });
         } else {
             return res.status(400).json({
-                error: 'Google login failed. Email not verified.',
+                error: 'Google login failed. Try again'
             });
         }
     } catch (error) {
-        console.error('GOOGLE SIGNIN ERROR', error);
+        log('GOOGLE SIGNIN ERROR', error);
         return res.status(400).json({
-            error: 'Google login failed. Try again.',
+            error: 'Google login failed. Try again'
         });
     }
 };
-
 
 
 exports.signout = async ( req, res ) =>  // a 
