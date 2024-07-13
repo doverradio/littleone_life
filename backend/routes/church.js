@@ -6,7 +6,9 @@ const {
     getAllChurches,
     getChurchById,
     updateChurch,
-    deleteChurch
+    deleteChurch,
+    addChurchesToUser,
+    getChurchesByZipCode
 } = require('../controllers/church');
 
 router.post('/church/create', requireSignin, authMiddleware, isAuth, createChurch);
@@ -14,5 +16,9 @@ router.post('/churches', requireSignin, authMiddleware, isAuth, getAllChurches);
 router.post('/church/get', requireSignin, authMiddleware, isAuth, getChurchById);
 router.put('/church/update', requireSignin, authMiddleware, isAuth, updateChurch);
 router.delete('/church/delete', requireSignin, authMiddleware, isAuth, deleteChurch);
+router.post('/churches/addToUser', requireSignin, authMiddleware, isAuth, addChurchesToUser); // New route
+router.post('/churches/by-zip', requireSignin, authMiddleware, isAuth, getChurchesByZipCode);
+router.post('/church/zipcode', getChurchesByZipCode);
+
 
 module.exports = router;

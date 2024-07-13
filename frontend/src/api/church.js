@@ -59,3 +59,28 @@ export const deleteChurch = async (churchId, token) => {
     });
     return response.json();
 };
+
+// New API call
+export const addChurchesToUser = async (userId, churches, token) => {
+    const response = await fetch(`${API}/churches/addToUser`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ userId, churches })
+    });
+    return response.json();
+};
+
+export const getChurchesByZipCode = async (zipCode, token) => {
+    const response = await fetch(`${API}/churches/by-zip`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ zipCode })
+    });
+    return response.json();
+};

@@ -2,22 +2,20 @@ import React, { useState, useEffect } from 'react';
 import Map from '../../map/Map';
 import ReusableDatatable from '../../utils/datatable/ReusableDatatable';
 
-const MapSection = ({ addChurchToMassOptions, distance, setDistance, nearbyChurches, setNearbyChurches }) => {
-    const [inputValue, setInputValue] = useState(distance);
+const MapSection = ({ addChurchToPendingList, distance, setDistance, nearbyChurches, setNearbyChurches }) => {
+    const [inputValue, setInputValue] = useState('');
     const [isValid, setIsValid] = useState(true);
-    const [unit, setUnit] = useState('meters');
+    const [unit, setUnit] = useState('miles');
 
     useEffect(() => {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition((position) => {
                 const { latitude, longitude } = position.coords;
-                fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=YOUR_API_KEY`)
+                fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=AIzaSyAHbrprZ2-514b9KtV5ixaoBaQLgYq_oM0`)
                     .then(response => response.json())
                     .then(data => {
                         const country = data.results[0].address_components.find(component => component.types.includes("country")).short_name;
-                        if (country === "US") {
-                            setUnit('miles');
-                        } else {
+                        if (country !== "US") {
                             setUnit('kilometers');
                         }
                     })
@@ -59,7 +57,7 @@ const MapSection = ({ addChurchToMassOptions, distance, setDistance, nearbyChurc
                 pageSize={10}
                 checkbox={true}
                 onRowSelect={(selectedRows) => {
-                    selectedRows.forEach(church => addChurchToMassOptions(church));
+                    selectedRows.forEach(church => addChurchToPendingList(church));
                 }}
                 onDelete={() => {}}
             />

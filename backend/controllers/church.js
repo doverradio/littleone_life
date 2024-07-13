@@ -1,5 +1,5 @@
 const Church = require('../models/church');
-// Include other models if needed, e.g., User
+const User = require('../models/user'); // Assuming you have a User model
 
 exports.createChurch = async (req, res) => {
     try {
@@ -54,3 +54,44 @@ exports.deleteChurch = async (req, res) => {
     }
 };
 
+exports.getChurchesByZipCode = async (req, res) => {
+    const { zipCode } = req.body;
+    try {
+        const churches = await Church.find({ zipCode });
+        res.json(churches);
+    } catch (error) {
+        res.status(400).json({ error: "Unable to retrieve churches by zip code" });
+    }
+};
+
+exports.addChurchesToUser = async (req, res) => {
+    const { userId, churches } = req.body;
+    try {
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ error: "User not found" });
+        }
+
+        const savedChurches = [];
+        for (const churchData of churches) {
+            let church = await Church.findOne({ name: churchData.name, address: churchData.address });
+            if (!church) {
+                church = new Church({ ...churchData, users: [userId] });
+                await church.save();
+            } else {
+                if (!church.users.includes(userId)) {
+                    church.users.push(userId);
+                    await church.save();
+                }
+            }
+            savedChurches.push(church);
+        }
+
+        user.churches.push(...savedChurches.map(ch => ch._id));
+        await user.save();
+
+        res.json({ churches: savedChurches });
+    } catch (error) {
+        res.status(400).json({ error: "Unable to add churches to user" });
+    }
+};
