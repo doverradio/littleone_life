@@ -1,0 +1,32 @@
+/* UserDashboard.css */
+.dashboard-container {
+    display: flex;
+    justify-content: center; /* Center the content horizontally */
+    padding: 20px; /* Add some padding around the container */
+}
+
+.dashboard-content {
+    max-width: 1000px; /* Add a max-width to center the content better */
+    width: 100%;
+    box-sizing: border-box; /* Ensure padding doesn't add to the width */
+    padding: 20px;
+    margin: 0 20px; /* Add margin to prevent it from touching the sides */
+    background-color: #fff; /* Add a background color if needed */
+    border-radius: 8px; /* Optional: add border radius for better appearance */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Optional: add box shadow for better appearance */
+}
+
+.user-stats {
+    text-align: left; /* Ensure stats are aligned to the left */
+}
+
+@media (max-width: 768px) {
+    .dashboard-container {
+        padding: 10px; /* Reduce padding for mobile view */
+    }
+
+    .dashboard-content {
+        margin-left: 0; /* Remove the left margin */
+        padding: 10px; /* Adjust padding for mobile view */
+    }
+}

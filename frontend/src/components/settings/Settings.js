@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import NavbarMain from '../../NavbarMain';
-import Footer from '../../Footer';
 import { getUserSettings, updateUserSettings } from '../../api/user';
 import { isAuthenticated, checkUsernameAvailability } from '../../api/auth';
 import { toast } from 'react-toastify';
-const log = console.log;
 
 const Settings = () => {
     const [settings, setSettings] = useState({
@@ -111,7 +108,6 @@ const Settings = () => {
 
     return (
         <>
-            <NavbarMain />
             <div className="container" style={{ minHeight: '80vh' }}>
                 <h2>Settings</h2>
                 <form onSubmit={handleSubmit}>
@@ -238,7 +234,6 @@ const Settings = () => {
                     <button type="submit" className="btn btn-primary">Save Settings</button>
                 </form>
             </div>
-            <Footer />
         </>
     );
 };

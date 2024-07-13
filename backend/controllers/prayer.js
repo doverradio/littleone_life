@@ -1,5 +1,6 @@
 const Prayer = require("../models/prayer"); // Adjust the path according to your structure
 const mongoose = require('mongoose');
+const { ObjectId } = require('mongoose').Types;
 const log = console.log;
 
 // Create a new Prayer
@@ -131,3 +132,28 @@ exports.deletePrayers = async (req, res) => {
     }
 };
 
+// Get the number of prayers by type for a user
+exports.getUserPrayerStats = async (req, res) => {
+    const userId = req.body.userId;
+
+    try {
+        const prayerStats = await Prayer.aggregate([
+            { $match: { user: new ObjectId(userId) } },
+            { $group: { _id: "$type", count: { $sum: 1 } } }
+        ]);
+
+        const stats = prayerStats.reduce((acc, curr) => {
+            acc[curr._id] = curr.count;
+            return acc;
+        }, {});
+
+        res.json({
+            rosaries: stats.rosary || 0,
+            masses: stats.mass || 0,
+            confessions: stats.confession || 0,
+            divineMercies: stats.divineMercy || 0
+        });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+};

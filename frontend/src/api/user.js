@@ -69,3 +69,21 @@ export const updateUserSettings = async (token, settings) => {
         return { error: 'Error updating user settings' };
     }
 };
+
+// New API call to get user prayer stats
+export const getUserPrayerStats = async (userId, token) => {
+    try {
+        const response = await fetch(`${API}/prayer/user-stats`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ userId })
+        });
+        return await response.json();
+    } catch (error) {
+        console.error('Error fetching user prayer stats:', error);
+        throw error;
+    }
+};

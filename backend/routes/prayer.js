@@ -10,7 +10,8 @@ const {
     deletePrayer,
     getTypeCount,
     getUserPrayers,
-    deletePrayers
+    deletePrayers,
+    getUserPrayerStats
 } = require('../controllers/prayer');
 
 router.post('/prayer/create', requireSignin, authMiddleware, isAuth, createPrayer);
@@ -26,5 +27,8 @@ router.post('/prayer/prayer-count', requireSignin, authMiddleware, isAuth, getTy
 // For Data Table
 router.post('/prayer/user-prayers', requireSignin, authMiddleware, isAuth, getUserPrayers);
 router.delete('/prayer/delete-prayers', requireSignin, authMiddleware, isAuth, deletePrayers); // Route for deleting prayers from data table
+
+// New route for user prayer stats
+router.post('/prayer/user-stats', requireSignin, authMiddleware, isAuth, getUserPrayerStats);
 
 module.exports = router;

@@ -1,5 +1,5 @@
 import React from "react";
-import { NavLink, useNavigate, useLocation  } from 'react-router-dom';
+import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { isAuthenticated, signout } from './api/auth'
 import { FaCog } from 'react-icons/fa'; // Example using react-icons
 import { Link } from 'react-router-dom';
@@ -28,13 +28,6 @@ const NavbarMain = ({ backgroundColor }) => {
                 </NavLink>
 
                 <div className="d-flex align-items-center"> {/* Flexbox container */}
-                    {/* Conditionally render User Dashboard link */}
-                    {/* {!isDashboardRoute && isAuthenticated() && (
-                        <NavLink to={`/${isAuthenticated().user.role === 0 ? 'user' : 'admin'}/dashboard`} className="nav-link d-lg-none" activeClassName="active" style={{ color: 'black', fontSize: '' }}>
-                            {isAuthenticated().user.role === 0 ? 'User Dashboard' : 'Admin Dashboard'}
-                        </NavLink>
-                    )} */}
-
                     {isAuthenticated() && isAuthenticated().user.role === 0 && (
                         <ul className="navbar-nav"> {/* Use navbar-nav class */}
                             <li className="nav-item">
@@ -50,7 +43,6 @@ const NavbarMain = ({ backgroundColor }) => {
                         </ul>
                     )}
 
-                    {/* Settings and Sign Out */}
                     {isAuthenticated() && (
                         <>
                             <Link to="/user/settings" className="navbar-icon">
@@ -60,7 +52,6 @@ const NavbarMain = ({ backgroundColor }) => {
                         </>
                     )}
 
-                    {/* Sign Up and Sign In Links */}
                     {!isAuthenticated() && (
                         <>
                             <NavLink to="/signup" className="nav-link" activeClassName="active" style={{ color: 'black' }}>Sign Up</NavLink>
