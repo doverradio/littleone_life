@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { countMassesByUser, getAllMassAttendances, createMassAttendance } from '../../api/massAttendance';
+import { countMassesByUser, getAllMassAttendances, createMassAttendance, deleteMassAttendances } from '../../api/massAttendance';
 import { getAllIntentions, createIntention, updateIntention, deleteIntention } from '../../api/intentions';
 import { createChurch, getAllChurches } from '../../api/church';
 import { isAuthenticated } from '../../api/auth';
@@ -282,10 +282,10 @@ const Mass = () => {
             {/* Header section with Mass icon and title */}
             <div className="row">
                 <div className="col-3">
-                    <img 
-                        src={massIcon} 
-                        alt="Mass" 
-                        className="mass-icon" 
+                    <img
+                        src={massIcon}
+                        alt="Mass"
+                        className="mass-icon"
                         style={{ height: '55px', width: '55px', cursor: 'pointer' }}
                     />
                 </div>
@@ -307,7 +307,7 @@ const Mass = () => {
             {/* Tab content rendering based on the active tab */}
             <div>
                 {activeTab === 'Questions' && (
-                    <MassQuestions 
+                    <MassQuestions
                         userChurches={userChurches}
                         showChurchForm={showChurchForm}
                         setShowChurchForm={setShowChurchForm}
@@ -350,7 +350,6 @@ const Mass = () => {
                         editContent={editContent}
                         showMap={showMap}
                         setShowMap={setShowMap}
-                        setSelectedChurch={setSelectedChurch} // Pass the setSelectedChurch function
                     />
                 )}
                 {activeTab === 'Prayers' && (
@@ -363,7 +362,7 @@ const Mass = () => {
                     />
                 )}
                 {activeTab === 'Responses' && (
-                    <MassResponses 
+                    <MassResponses
                         massAttendances={massAttendances}
                         pieChartData={pieChartData}
                         massesPerPage={massesPerPage}
@@ -374,7 +373,7 @@ const Mass = () => {
                     />
                 )}
                 {activeTab === 'Settings' && (
-                    <MassSettings 
+                    <MassSettings
                         isEmailEnabled={isEmailEnabled}
                         handleEmailToggle={() => setIsEmailEnabled(!isEmailEnabled)}
                     />

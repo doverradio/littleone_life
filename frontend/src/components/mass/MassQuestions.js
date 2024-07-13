@@ -1,12 +1,13 @@
-import React from "react";
-import { MdOutlineModeEdit } from "react-icons/md";
-import ButtonLoader from "../../loaders/ButtonLoader";
-import MassForm from "./MassForm"; // Make sure MassForm is correctly imported
+import React, { useState } from 'react';
+import ChurchForm from './form/ChurchForm';
+import MapSection from './form/MapSection';
+import { MdOutlineModeEdit } from 'react-icons/md';
+import ButtonLoader from '../../loaders/ButtonLoader';
 
-const MassQuestions = ({ 
-    userChurches, 
-    showChurchForm, 
-    setShowChurchForm, 
+const MassQuestions = ({
+    userChurches,
+    showChurchForm,
+    setShowChurchForm,
     submitNewChurch,
     handleChurchChange,
     newChurch,
@@ -34,13 +35,14 @@ const MassQuestions = ({
     count,
     handleChurchSelection,
     editContent,
-    showMap, 
-    setShowMap,
-    setSelectedChurch
+    addChurchToMassOptions
 }) => {
-    return(
+    const [distance, setDistance] = useState(8046.72); // default 5 miles in meters
+    const [nearbyChurches, setNearbyChurches] = useState([]); // add this state
+
+    return (
         <div>
-            {/* Content of the Mass component */}            
+            {/* Content of the Mass component */}
             <div className="row justify-content-center">
                 <div className="col-12 col-lg-4">
                     <form>
@@ -61,14 +63,19 @@ const MassQuestions = ({
                         <div className="col-12">
                             <button 
                                 className='btn btn-outline-secondary btn-sm m-1' 
-                                onClick={() => setShowMap(true)}
+                                onClick={() => setShowChurchForm(true)}
                                 title='Add new church'
                             >
                                 <span style={{ fontSize: '10px' }}>Add New Church</span>
                             </button>
                             <div className="form-container">
-                                {showMap && (
-                                    <MassForm setSelectedChurch={setSelectedChurch} />
+                                {showChurchForm && (
+                                    <ChurchForm
+                                        newChurch={newChurch}
+                                        handleChurchChange={handleChurchChange}
+                                        submitNewChurch={submitNewChurch}
+                                        setShowChurchForm={setShowChurchForm}
+                                    />
                                 )}
                             </div>
                         </div>
@@ -83,7 +90,6 @@ const MassQuestions = ({
                 </div>
             </div>
             <hr />
-            
             <div className="row">
                 <div className="col-md-5 offset-md-2">
                     <select value={selectedMassTime} onChange={handleMassTimeChange} className="form-control">
@@ -95,7 +101,18 @@ const MassQuestions = ({
                 </div>
             </div>
             <hr />
-
+            <div className="row">
+                <div className="col-12">
+                    <MapSection
+                        addChurchToMassOptions={addChurchToMassOptions}
+                        distance={distance}
+                        setDistance={setDistance}
+                        nearbyChurches={nearbyChurches} // pass this state
+                        setNearbyChurches={setNearbyChurches} // pass this state
+                    />
+                </div>
+            </div>
+            <hr />
             {/* Intentions Section */}
             <div className="row">
                 <div className="col-12">
@@ -132,33 +149,33 @@ const MassQuestions = ({
                                                             </div>
                                                         </div>
                                                     </form>
-                                                    ) : (
-                                                        <div className="container">
-                                                            <div className="row">
-                                                                <div className="col-1">
-                                                                    <input 
-                                                                        type="checkbox" 
-                                                                        checked={selectedIntentions.includes(intention._id)}
-                                                                        onChange={() => handleIntentionCheckboxChange(intention._id)}
-                                                                    />
-                                                                </div>
-                                                                <div className="col-9">
-                                                                    <p style={{ fontSize: '12px', textAlign: 'left', wordBreak: 'break-word' }}>
-                                                                        {intention.content}
-                                                                    </p>
-                                                                </div>
-                                                                <div className="col-1">
-                                                                    <span 
-                                                                        // className='btn btn-light btn-sm'
-                                                                        onClick={() => handleEditClick(intention._id, intention.content)}
-                                                                        style={{ fontSize: '9px'}}
-                                                                    >
-                                                                        <MdOutlineModeEdit />
-                                                                    </span>
-                                                                </div>
+                                                ) : (
+                                                    <div className="container">
+                                                        <div className="row">
+                                                            <div className="col-1">
+                                                                <input 
+                                                                    type="checkbox" 
+                                                                    checked={selectedIntentions.includes(intention._id)}
+                                                                    onChange={() => handleIntentionCheckboxChange(intention._id)}
+                                                                />
+                                                            </div>
+                                                            <div className="col-9">
+                                                                <p style={{ fontSize: '12px', textAlign: 'left', wordBreak: 'break-word' }}>
+                                                                    {intention.content}
+                                                                </p>
+                                                            </div>
+                                                            <div className="col-1">
+                                                                <span 
+                                                                    // className='btn btn-light btn-sm'
+                                                                    onClick={() => handleEditClick(intention._id, intention.content)}
+                                                                    style={{ fontSize: '9px'}}
+                                                                >
+                                                                    <MdOutlineModeEdit />
+                                                                </span>
                                                             </div>
                                                         </div>
-                                                    )
+                                                    </div>
+                                                )
                                             }
                                         </li>
                                     ))
@@ -172,7 +189,6 @@ const MassQuestions = ({
                     }
                 </div>
             </div>
-            
             {/* Form to Add New Intention */}
             <div className="row">
                 <div className="col-12">
@@ -203,7 +219,6 @@ const MassQuestions = ({
                     />
                 </div>
             </div>
-            
             <hr />
             <div className="row">
                 <div className="col-12">
@@ -226,6 +241,6 @@ const MassQuestions = ({
             </div>
         </div>
     )
-}
+};
 
 export default MassQuestions;

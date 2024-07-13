@@ -1,22 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import './styles.css'
+import './styles.css';
 
-const ReusableDatatable = ({ data, columns, pageSize, checkbox, onRowSelect, onDelete, refreshTrigger }) => {
+const ReusableDatatable = ({ data = [], columns, pageSize, checkbox, onRowSelect, onDelete, refreshTrigger }) => {
     const [currentPage, setCurrentPage] = useState(1);
     const [sortedData, setSortedData] = useState([]);
     const [selectedRows, setSelectedRows] = useState([]);
 
     const dateField = 'createdAt'; // Example field name
 
-    // Initially sort and set data
     useEffect(() => {
-        
         // Sort data by the date field in descending order (newest first)
         const sorted = [...data].sort((a, b) => {
             return new Date(b[dateField]) - new Date(a[dateField]);
         });
 
-        setSortedData(sorted); // Replace with actual sorting logic if needed
+        setSortedData(sorted);
         setSelectedRows([]);
     }, [data, refreshTrigger]);
 
@@ -39,27 +37,21 @@ const ReusableDatatable = ({ data, columns, pageSize, checkbox, onRowSelect, onD
             onDelete(selectedRows.map(row => row._id)); // Or the correct field for ID
         }
     };
-    
 
-    // Function to handle delete click
     const handleDeleteClick = () => {
         if(window.confirm('Are you sure you want to delete the selected rows?')) {
             onDelete(selectedRows);
         }
-    };    
+    };
 
-    // Calculate the number of total pages
     const totalPages = Math.ceil(data.length / pageSize);
 
-    // Handle the logic to change page
     const goToPage = (pageNumber) => {
         setCurrentPage(pageNumber);
     };
 
-    // Get current page data
     const currentPageData = sortedData.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
-    // Handle row selection
     const handleCheckboxChange = (row) => {
         if (selectedRows.includes(row)) {
             setSelectedRows(selectedRows.filter(selectedRow => selectedRow !== row));
@@ -68,7 +60,6 @@ const ReusableDatatable = ({ data, columns, pageSize, checkbox, onRowSelect, onD
         }
     };
 
-    // Call the onRowSelect callback function when selected rows change
     useEffect(() => {
         if (onRowSelect) {
             onRowSelect(selectedRows);
@@ -118,7 +109,6 @@ const ReusableDatatable = ({ data, columns, pageSize, checkbox, onRowSelect, onD
                 </tbody>
             </table>
 
-            {/* Pagination Controls */}
             <div className="datatable-pagination">
                 {Array.from({ length: totalPages }, (_, i) => i + 1).map(pageNumber => (
                     <button 
