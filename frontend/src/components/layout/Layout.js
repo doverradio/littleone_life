@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import NavbarMain from '../../NavbarMain';
 import Sidebar from '../sidebar/Sidebar';
 import Footer from '../../Footer';
@@ -8,7 +8,18 @@ import { Outlet, useLocation } from 'react-router-dom';
 
 const Layout = () => {
     const location = useLocation();
-    const isMobile = window.matchMedia("(max-width: 768px)").matches;
+    const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+    const handleResize = () => {
+        setIsMobile(window.innerWidth <= 768);
+    };
+
+    useEffect(() => {
+        window.addEventListener('resize', handleResize);
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
 
     const shouldShowFooter = !isMobile || (isMobile && location.pathname === '/user/settings');
 
@@ -16,12 +27,12 @@ const Layout = () => {
         <div className="layout-wrapper">
             <NavbarMain />
             <div className="layout-container">
-                <Sidebar />
+                {!isMobile && <Sidebar />} {/* Only show sidebar on desktop */}
                 <div className="layout-content">
                     <Outlet /> {/* This will render the nested routes */}
                 </div>
             </div>
-            <BottomBar />
+            {isMobile && <BottomBar />} {/* Only show bottom bar on mobile */}
             {shouldShowFooter && <Footer />}
         </div>
     );

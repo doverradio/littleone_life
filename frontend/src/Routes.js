@@ -20,6 +20,7 @@ import Works from './works/Works';
 import Prayers from './prayers/Prayers';
 import Social from './social/Social';
 import Layout from './components/layout/Layout';
+import TestDropdown from './components/profile/profileicon/TestDropdown';
 
 const RoutesComponent = () => {
     return (
@@ -33,6 +34,7 @@ const RoutesComponent = () => {
                     <Route path="/terms" element={<TermsOfService />} exact />
                     <Route path="/contact" element={<Contact />} exact />
                     <Route path="/privacy" element={<PrivacyPolicy />} exact />
+                    <Route path="/test-dropdown" element={<TestDropdown />} exact /> {/* Add this line for testing */}
 
                     {/* Routes with Layout */}
                     <Route element={<Layout />}>

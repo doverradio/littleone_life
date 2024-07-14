@@ -1,0 +1,45 @@
+.profile-icon {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.dropdown-toggle {
+    cursor: pointer;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 40px;
+    right: 0;
+    background-color: white;
+    border: 1px solid #ddd;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    width: 200px;
+    z-index: 1000;
+}
+
+.dropdown-header, .dropdown-item {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.dropdown-item:hover {
+    background-color: #f1f1f1;
+}
+
+.dropdown-divider {
+    height: 1px;
+    background-color: #ddd;
+    margin: 5px 0;
+}
+
+.dropdown-item {
+    display: flex;
+    align-items: center;
+}
+
+.dropdown-item svg {
+    margin-right: 8px;
+}
