@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { FaHome, FaPray, FaStore, FaUser, FaShoppingCart } from 'react-icons/fa'; // Importing icons
+import { FaHome, FaPray, FaStore, FaUserFriends, FaShoppingCart } from 'react-icons/fa'; // Importing icons
 
 const BottomBar = () => {
     return (
@@ -13,17 +13,17 @@ const BottomBar = () => {
                 <FaPray />
                 <span>Prayers</span>
             </NavLink>
-            <NavLink to="/shop" activeClassName="active">
-                <FaShoppingCart />
-                <span>Shop</span>
+            <NavLink to="/social" activeClassName="active">
+                <FaUserFriends />
+                <span>Social</span>
             </NavLink>
             <NavLink to="/works" activeClassName="active">
                 <FaStore />
                 <span>Works</span>
             </NavLink>
-            <NavLink to="/user/settings" activeClassName="active">
-                <FaUser />
-                <span>Settings</span>
+            <NavLink to="/shop" activeClassName="active">
+                <FaShoppingCart />
+                <span>Shop</span>
             </NavLink>
         </div>
     );

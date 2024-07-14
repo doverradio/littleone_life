@@ -13,16 +13,6 @@ const Sidebar = () => {
                         </NavLink>
                     </li>
                     <li>
-                        <NavLink to="/shop" activeClassName="active">
-                            <span>Shop</span>
-                        </NavLink>
-                    </li>
-                    <li>
-                        <NavLink to="/works" activeClassName="active">
-                            <span>Works</span>
-                        </NavLink>
-                    </li>
-                    <li>
                         <NavLink to="/prayers" activeClassName="active">
                             <span>Prayers</span>
                         </NavLink>
@@ -33,13 +23,13 @@ const Sidebar = () => {
                         </NavLink>
                     </li>
                     <li>
-                        <NavLink to="/user/settings" activeClassName="active">
-                            <span>Settings</span>
+                        <NavLink to="/works" activeClassName="active">
+                            <span>Works</span>
                         </NavLink>
                     </li>
                     <li>
-                        <NavLink to="/signout" activeClassName="active">
-                            <span>Sign Out</span>
+                        <NavLink to="/shop" activeClassName="active">
+                            <span>Shop</span>
                         </NavLink>
                     </li>
                 </ul>
