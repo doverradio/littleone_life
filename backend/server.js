@@ -18,6 +18,7 @@ const prayerRoutes = require('./routes/prayer');
 const rosaryRoutes = require('./routes/rosary');
 const userRoutes = require('./routes/user');
 const prayerSpaceRoutes = require('./routes/prayerSpaces'); // New prayer space routes
+const stripeRoutes = require('./routes/stripe'); // Stripe routes
 
 // app
 const app = express();
@@ -59,6 +60,7 @@ app.use('/api', prayerRoutes);
 app.use('/api', rosaryRoutes);
 app.use('/api', userRoutes);
 app.use('/api/prayerSpaces', prayerSpaceRoutes); // New prayer space routes
+app.use('/api/stripe', stripeRoutes); // Stripe routes
 
 io.on('connection', (socket) => {
     console.log('New client connected');

@@ -33,12 +33,11 @@ const userSchema = new mongoose.Schema({
     },
     hashed_password: {
         type: String,
-        // For Google sign-in, this field can be optional
     },
     googleId: {
         type: String,
         unique: true,
-        sparse: true // Allow null values but still ensure uniqueness
+        sparse: true
     },
     about: {
         type: String,
@@ -68,14 +67,21 @@ const userSchema = new mongoose.Schema({
     autoSendPrayerGroupRequest: {
         type: Boolean,
         default: false
+    },
+    isSeller: {
+        type: Boolean,
+        default: false
+    },
+    seller: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Seller',
+        default: null
     }
 }, { timestamps: true });
 
-// Encryption key and signature key
 var encKey = process.env.SOME_32BYTE_BASE64_STRING;
 var sigKey = process.env.SOME_64BYTE_BASE64_STRING;
 
-// Virtual field for password
 userSchema.virtual('password')
     .set(function(password) {
         this._password = password;
@@ -86,7 +92,6 @@ userSchema.virtual('password')
         return this._password;
     });
 
-// Methods
 userSchema.methods = {
     authenticate: function(plainText) {
         return this.encryptPassword(plainText) === this.hashed_password;
@@ -101,13 +106,11 @@ userSchema.methods = {
     }
 };
 
-// Field encryption
 userSchema.plugin(fieldEncryption, {
     fields: ['firstName', 'lastName', 'email', 'about', 'phone', 'prayerSettings'],
     secret: encKey,
     saltGenerator: function(secret) {
-        // Ensure the salt is a string of length 16
-        const salt = crypto.randomBytes(8).toString('hex'); // Generate a hex string of 16 characters (8 bytes)
+        const salt = crypto.randomBytes(8).toString('hex');
         return salt;
     }
 });
