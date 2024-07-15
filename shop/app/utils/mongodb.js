@@ -11,3 +11,4 @@ export async function connectToDatabase() {
   const db = client.db('shop');
   return { db, client };
 }
+ 
