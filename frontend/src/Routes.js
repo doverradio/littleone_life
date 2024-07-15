@@ -20,7 +20,7 @@ import Works from './works/Works';
 import Prayers from './prayers/Prayers';
 import Social from './social/Social';
 import Layout from './components/layout/Layout';
-import TestDropdown from './components/profile/profileicon/TestDropdown';
+import PrayerSpace from './components/prayerspace/PrayerSpace'; // Import PrayerSpace
 
 const RoutesComponent = () => {
     return (
@@ -34,7 +34,6 @@ const RoutesComponent = () => {
                     <Route path="/terms" element={<TermsOfService />} exact />
                     <Route path="/contact" element={<Contact />} exact />
                     <Route path="/privacy" element={<PrivacyPolicy />} exact />
-                    <Route path="/test-dropdown" element={<TestDropdown />} exact /> {/* Add this line for testing */}
 
                     {/* Routes with Layout */}
                     <Route element={<Layout />}>
@@ -45,6 +44,7 @@ const RoutesComponent = () => {
                         <Route path="/works" element={<PrivateRoute component={Works} />} exact />
                         <Route path="/prayers" element={<PrivateRoute component={Prayers} />} exact />
                         <Route path="/social" element={<PrivateRoute component={Social} />} exact />
+                        <Route path="/prayerspace/:id" element={<PrivateRoute component={PrayerSpace} />} exact /> {/* Add PrayerSpace route */}
                     </Route>
                 </Routes>
             </Router>

@@ -1,33 +1,25 @@
-// PrayerButton.js
-import React, { useState } from 'react';
-// import Modal from './Modal';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { createPrayerSpace } from '../../api/prayerSpaces';
 
 const PrayerButton = ({ prayerType }) => {
-    const [showModal, setShowModal] = useState(false);
+    const navigate = useNavigate();
 
-    const handleShow = () => setShowModal(true);
-    const handleClose = () => setShowModal(false);
-
-    const handleCreateRequest = () => {
-        // Logic to create prayer request
-        console.log(`Creating prayer request for ${prayerType}`);
-        handleClose();
+    const handleCreateRequest = async () => {
+        try {
+            const prayerSpace = await createPrayerSpace(`${prayerType} Prayer Space`);
+            const spaceId = prayerSpace._id;
+            console.log(`Created prayer space with ID: ${spaceId}`);
+            navigate(`/prayer-space/${spaceId}`);
+        } catch (error) {
+            console.error('Error creating prayer space:', error);
+        }
     };
 
     return (
-        <>
-            <button onClick={handleShow} className="btn btn-primary">
-                Start Instant Prayer Army
-            </button>
-
-            {/* <Modal show={showModal} handleClose={handleClose} title={`Create ${prayerType} Prayer Request`}>
-                <p>Configure your {prayerType} prayer request...</p>
-                <div className="modal-footer">
-                    <button onClick={handleClose} className="btn">Close</button>
-                    <button onClick={handleCreateRequest} className="btn btn-primary">Create Request</button>
-                </div>
-            </Modal> */}
-        </>
+        <button onClick={handleCreateRequest} className="btn btn-primary">
+            Start Instant Prayer Army
+        </button>
     );
 };
 

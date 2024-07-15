@@ -5,6 +5,8 @@ const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const fs = require('fs');
 const mongoose = require('mongoose');
+const http = require('http');
+const socketIo = require('socket.io');
 require('dotenv').config();
 
 const authRoutes = require("./routes/auth");
@@ -15,10 +17,13 @@ const massAttendanceRoutes = require('./routes/massAttendance');
 const prayerRoutes = require('./routes/prayer');
 const rosaryRoutes = require('./routes/rosary');
 const userRoutes = require('./routes/user');
+const prayerSpaceRoutes = require('./routes/prayerSpaces'); // New prayer space routes
 
 // app
 const app = express();
 app.set('trust proxy', true);
+const server = http.createServer(app);
+const io = socketIo(server);
 
 // db
 mongoose
@@ -45,16 +50,6 @@ app.use(cors({
   credentials: true
 }));
 
-// Custom request logger middleware for debugging
-// const requestLogger = (req, res, next) => {
-//     console.log(`Received ${req.method} request for ${req.originalUrl}`);
-//     console.log('Request Headers:', JSON.stringify(req.headers, null, 2));
-//     console.log('Request Body:', JSON.stringify(req.body, null, 2));
-//     next();
-// };
-
-// app.use(requestLogger);
-
 app.use('/api', authRoutes);
 app.use('/api', churchRoutes);
 app.use('/api', confessionRoutes);
@@ -63,8 +58,26 @@ app.use('/api', massAttendanceRoutes);
 app.use('/api', prayerRoutes);
 app.use('/api', rosaryRoutes);
 app.use('/api', userRoutes);
+app.use('/api/prayerSpaces', prayerSpaceRoutes); // New prayer space routes
+
+io.on('connection', (socket) => {
+    console.log('New client connected');
+
+    socket.on('joinSpace', (spaceId) => {
+        socket.join(spaceId);
+        console.log(`Client joined space: ${spaceId}`);
+    });
+
+    socket.on('message', (data) => {
+        io.in(data.spaceId).emit('message', data);
+    });
+
+    socket.on('disconnect', () => {
+        console.log('Client disconnected');
+    });
+});
 
 const PORT = process.env.PORT || 8000;
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Server is running at http://localhost:${PORT}`);
 });

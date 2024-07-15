@@ -1,7 +1,10 @@
+/* index.css */
+
 html {
   height: 100%;
   margin: 0;
 }
+
 /* src/index.css or src/styles.css (whichever file you're using for global styles) */
 body {
   font-family: 'Cormorant', serif;
@@ -11,20 +14,8 @@ body {
   font-family: 'Cormorant', serif;
 }
 
-
-/* body {
-  margin: 0;
-  height: 100%;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-} */
-
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
 #root {
@@ -33,58 +24,53 @@ code {
   min-height: 100vh;
 }
 
-/* Assuming MainPage or a similar component is the direct child of #root */
 MainPage {
   display: flex;
   flex-direction: column;
-  flex: 1; /* This ensures that MainPage takes up all the available space */
+  flex: 1;
 }
 
 .main-content, .main-page-content {
-  flex: 1; /* This will push the footer down */
+  flex: 1;
 }
 
-/* This class hides the element on larger screens */
-@media (min-width: 768px) { /* adjust 768px as needed for your breakpoint */
+@media (min-width: 768px) {
   .d-lg-none {
-      display: none !important;
+    display: none !important;
   }
 }
 
-/* This class hides the element on smaller screens */
 @media (max-width: 767px) {
   .d-sm-block {
-      display: none !important;
+    display: none !important;
   }
 }
 
 footer {
-  flex-shrink: 0;  /* Prevents the footer from shrinking */
+  flex-shrink: 0;
 }
+
 .main-content-container {
   margin: 40px auto;
   background-color: black;
   color: white;
 }
 
-/* This ensures that on screens larger than 768px (typical breakpoint for tablets and up), the width will be 1200px */
 @media (min-width: 768px) {
   .main-content-container {
-      width: 1200px;
+    width: 1200px;
   }
 }
 
-/* On screens smaller than 768px, the width will adjust to 100% minus some margin for breathing space */
 @media (max-width: 767px) {
   .main-content-container {
-      width: calc(100% - 20px);
-      padding: 0 10px;
+    width: calc(100% - 20px);
+    padding: 0 10px;
   }
 }
 
 .dashboard-link {
-  /* Adjust the margin-top to control the vertical position */
-  margin-top: 1px; /* Adjust the value as needed */
+  margin-top: 1px;
 }
 
 .logo-img {
@@ -96,19 +82,19 @@ footer {
 .navbar-nav {
   display: flex;
   align-items: center;
-  margin-left: 1rem; /* Adjust as needed */
+  margin-left: 1rem;
 }
 
 .navbar-icon {
-  margin-left: 1rem; /* Adjust as needed */
+  margin-left: 1rem;
 }
 
 @media (max-width: 768px) {
   .navbar-nav {
-      flex-direction: row; /* Ensure nav items are in a row */
+    flex-direction: row;
   }
 
   .navbar-icon, .btn-link {
-      margin-left: 0.5rem; /* Adjust as needed */
+    margin-left: 0.5rem;
   }
 }

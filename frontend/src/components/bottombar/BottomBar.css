@@ -1,0 +1,33 @@
+/* BottomBar.css */
+
+.bottom-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #f8f9fa; /* Adjust background color as needed */
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+    z-index: 1050;
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 0;
+    height: 60px; /* Set a fixed height for the BottomBar */
+}
+
+.bottom-bar a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: #000000; /* Change non-active link color to black */
+    font-size: 14px; /* Ensure the font size is appropriate */
+}
+
+.bottom-bar a.active {
+    color: #a72c28; /* Adjust active link color to a vibrant green */
+}
+
+.bottom-bar a span {
+    font-size: 12px;
+    margin-top: 4px;
+}

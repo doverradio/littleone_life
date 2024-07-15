@@ -1,6 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { FaHome, FaPray, FaStore, FaUserFriends, FaShoppingCart } from 'react-icons/fa'; // Importing icons
+import { FaHome, FaPray, FaStore, FaUserFriends, FaShoppingCart } from 'react-icons/fa';
+import './BottomBar.css'; // Importing the CSS file
 
 const BottomBar = () => {
     return (
