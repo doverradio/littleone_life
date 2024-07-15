@@ -1,6 +1,6 @@
 const { exec } = require('child_process');
 
-exec('yarn start', (error, stdout, stderr) => {
+exec('yarn start -p 3001', (error, stdout, stderr) => {
   if (error) {
     console.error(`Error: ${error.message}`);
     return;
