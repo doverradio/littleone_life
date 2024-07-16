@@ -1,15 +1,14 @@
+// start-next.js
 const { exec } = require('child_process');
 
-exec('yarn start -p 3001', (error, stdout, stderr) => {
-  if (error) {
-    console.error(`Error: ${error.message}`);
+// Change port to 3002
+const port = process.env.PORT || 3002;
+
+exec(`next start -p ${port}`, (err, stdout, stderr) => {
+  if (err) {
+    console.error(`Error starting Next.js server: ${err.message}`);
     return;
   }
-
-  if (stderr) {
-    console.error(`stderr: ${stderr}`);
-    return;
-  }
-
-  console.log(`stdout: ${stdout}`);
+  console.log(stdout);
+  console.error(stderr);
 });
