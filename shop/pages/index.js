@@ -15,7 +15,7 @@ const ShopPage = () => {
 
     return (
         <div>
-            <h1>Shop</h1>
+            <h1>Shop by Next.js</h1>
             {/* Your shop functionality */}
         </div>
     );
