@@ -1,0 +1,101 @@
+.signup-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    width: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    padding: 20px;
+    background-image: var(--background-image);
+    position: relative; /* Ensure the container is relative for child positioning */
+}
+
+.signup-form-wrapper {
+    background: rgba(0, 0, 0, 0.7); /* Semi-transparent black */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    width: 100%;
+}
+
+.signup-form-wrapper h2 {
+    color: #fff; /* Ensure the header text is white */
+}
+
+.signup-form-wrapper form {
+    display: flex;
+    flex-direction: column;
+}
+
+.signup-form-wrapper input[type="text"],
+.signup-form-wrapper input[type="email"],
+.signup-form-wrapper input[type="password"] {
+    margin-bottom: 15px;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
+}
+
+.signup-form-wrapper button {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background: #e74c3c;
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.signup-form-wrapper button:hover {
+    background: #c0392b;
+}
+
+.signup-form-wrapper p {
+    color: #fff;
+}
+
+.signup-form-wrapper a {
+    color: #e74c3c;
+    text-decoration: none;
+}
+
+.signup-form-wrapper a:hover {
+    text-decoration: underline;
+}
+
+.social-signup {
+    text-align: center;
+}
+
+.social-signup .social-icons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.social-signup .social-icons a {
+    color: #fff;
+    font-size: 24px;
+    transition: color 0.3s;
+}
+
+.social-signup .social-icons a:hover {
+    color: #e74c3c;
+}
+
+@media (max-width: 768px) {
+    .signup-container {
+        padding: 10px;
+    }
+
+    .signup-form-wrapper {
+        padding: 15px;
+    }
+}
