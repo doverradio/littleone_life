@@ -1,0 +1,46 @@
+/* Prayers.css */
+
+.prayers-container {
+    text-align: center;
+    padding: 20px;
+}
+
+.prayers-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.prayer-icons {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.prayer-icon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 10px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none; /* Ensure no text decoration */
+}
+
+.prayer-icon img {
+    width: 64px;
+    height: 64px;
+    margin-bottom: 10px;
+}
+
+.prayer-icon p {
+    margin: 0;
+    font-size: 14px;
+    color: black; /* Ensure text color is black */
+}
+
+/* Add this rule to remove any link styling */
+.prayer-icon a {
+    text-decoration: none;
+    color: inherit;
+}

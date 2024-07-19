@@ -1,6 +1,5 @@
 // frontend/src/Routes.js
 import React from 'react';
-import ReactDOM from 'react-dom/client'; // Add this import
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import MainPage from './MainPage';
 import SignIn from './signin/SignIn';
@@ -20,6 +19,14 @@ import Prayers from './prayers/Prayers';
 import Social from './social/Social';
 import Layout from './components/layout/Layout';
 import PrayerSpace from './components/prayerspace/PrayerSpace';
+import Rosary from './components/rosary/Rosary';
+import Mass from './components/mass/Mass';
+import Confession from './components/confession/Confession';
+import DivineMercy from './components/otherprayers/divinemercy/DivineMercy';
+import StMichaelPrayer from './components/otherprayers/stmichaelprayer/StMichaelPrayer';
+import StFrancisPrayer from './components/otherprayers/stfrancis/StFrancisPrayer';
+import StLeandroRuizPrayer from './components/otherprayers/stleandroruiz/StLeandroRuiz';
+import PrayerSettings from './components/otherprayers/PrayerSettings';
 
 const RoutesComponent = () => {
   return (
@@ -43,6 +50,16 @@ const RoutesComponent = () => {
           <Route path="/prayers" element={<PrivateRoute component={Prayers} />} exact />
           <Route path="/social" element={<PrivateRoute component={Social} />} exact />
           <Route path="/prayerspace/:id" element={<PrivateRoute component={PrayerSpace} />} exact />
+          
+          {/* Prayer Routes */}
+          <Route path="/prayers/rosary" element={<PrivateRoute component={Rosary} />} exact />
+          <Route path="/prayers/mass" element={<PrivateRoute component={Mass} />} exact />
+          <Route path="/prayers/confession" element={<PrivateRoute component={Confession} />} exact />
+          <Route path="/prayers/divinemercy" element={<PrivateRoute component={DivineMercy} />} exact />
+          <Route path="/prayers/stmichael" element={<PrivateRoute component={StMichaelPrayer} />} exact />
+          <Route path="/prayers/stfrancis" element={<PrivateRoute component={StFrancisPrayer} />} exact />
+          <Route path="/prayers/stleandroruiz" element={<PrivateRoute component={StLeandroRuizPrayer} />} exact />
+          <Route path="/prayers/settings" element={<PrivateRoute component={PrayerSettings} />} exact />
         </Route>
       </Routes>
     </Router>
@@ -50,15 +67,3 @@ const RoutesComponent = () => {
 };
 
 export default RoutesComponent;
-
-if (module.hot) {
-  module.hot.accept('./Routes', () => {
-    const NextRoutes = require('./Routes').default;
-    const root = ReactDOM.createRoot(document.getElementById('root'));
-    root.render(
-      <React.StrictMode>
-        <NextRoutes />
-      </React.StrictMode>
-    );
-  });
-}
