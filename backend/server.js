@@ -51,6 +51,7 @@ app.use(cors({
   credentials: true
 }));
 
+// Define routes
 app.use('/api', authRoutes);
 app.use('/api', churchRoutes);
 app.use('/api', confessionRoutes);
