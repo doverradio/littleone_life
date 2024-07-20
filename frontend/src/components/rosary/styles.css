@@ -1,21 +1,12 @@
 .fancy-font {
-    /* font-family: 'Georgia', serif; Replace 'Georgia' with your preferred web safe font */
-    /* font-family: 'Cormorant', serif; Replace 'Georgia' with your preferred web safe font */
     font-family: 'Cormorant', serif;
 }
+
 .header-font {
     font-family: 'Cormorant', serif;
 }
 
-.rosary-header {
-    max-height: 100px; 
-    overflow: hidden;
-}
 
-/* .rosary-content {
-    max-height: calc(96vh - 100px); 
-    overflow-y: auto;
-}  */
 
 .mystery-details-container {
     display: flex;
@@ -34,6 +25,13 @@
     }
 }
 
+.mystery-details li {
+    display: list-item;
+    list-style-position: inside;
+    margin-left: 0;
+    padding-left: 0;
+}
+
 .tab-navigation a {
     padding: 7px;
     margin-right: 3px;
@@ -49,30 +47,117 @@
 .highlighted {
     stroke: #fff; /* White stroke for highlighting */
     stroke-width: 2; /* Thicker stroke to make the slice stand out */
-  }
-  
-  .legend-container {
+}
+
+.legend-container {
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 10px;
-  }
-  
-  .legend-item {
+}
+
+.legend-item {
     display: flex;
     align-items: center;
     margin-bottom: 5px;
-  }
-  
-  .legend-item span:first-child {
-    margin-right: 10px;
-  }
+}
 
-  .pie-chart-container {
+.legend-item span:first-child {
+    margin-right: 10px;
+}
+
+.pie-chart-container {
     width: 100%;
     max-width: 360px; /* or your preferred max width */
     margin: auto;
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+/* New styles */
+.rosary-header {
+    max-height: 100px; 
+    overflow: hidden;
+    text-align: center; /* Center the header content */
+}
+
+.rosary-icon {
+    height: 55px;
+    width: 55px;
+    cursor: pointer;
+}
+
+.rosary-main {
+    text-align: center;
+}
+
+.rosary-nav {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.rosary-nav a {
+    padding: 7px;
+    margin-right: 3px;
+    text-decoration: none;
+    color: black;
+    font-size: 16px;
+}
+
+.rosary-nav a.active {
+    font-weight: bold;
+    color: blue;
+}
+
+.mysteries-row {
+    display: flex;
+    justify-content: center;
+    gap: 15px; /* Adjust gap between items */
+    margin-top: 2rem; /* Adjust margin as needed */
+}
+
+.mystery-item {
+    text-align: center;
+    cursor: pointer;
+}
+
+.mystery-image {
+    height: 50px;
+    width: 50px;
+    border-radius: 15%;
+}
+
+.mystery-details-section {
+    margin-top: 2rem; /* Adjust margin as needed */
+}
+
+.prayer-intentions-list {
+    list-style: none;
+    padding: 0;
+}
+
+.prayer-intention-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.submit-rosary-btn {
+    margin-top: 1rem; /* Adjust margin as needed */
+}
+
+.selected-mystery-icon {
+    width: 250px;
+    height: 250px;
+    display: block;
+    margin: 1rem auto; /* Center the image */
+}
+
+/* New styles */
+.centered-list {
+    list-style-position: inside;
+    padding: 0;
+    text-align: center; /* Center align text */
 }
