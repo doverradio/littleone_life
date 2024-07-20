@@ -17,6 +17,23 @@ export const updatePrayerSettings = async (userId, prayerSettings, token) => {
     }
 };
 
+// export const getPrayerSettings = async (userId, token) => {
+//     try {
+//         const response = await fetch(`${API}/user/prayer-settings`, {
+//             method: 'POST',
+//             headers: {
+//                 'Content-Type': 'application/json',
+//                 'Authorization': `Bearer ${token}`
+//             },
+//             body: JSON.stringify({ userId })
+//         });
+//         return await response.json();
+//     } catch (error) {
+//         console.error('Error fetching prayer settings:', error);
+//         throw error;
+//     }
+// };
+
 export const getPrayerSettings = async (userId, token) => {
     try {
         const response = await fetch(`${API}/user/prayer-settings`, {
@@ -27,12 +44,18 @@ export const getPrayerSettings = async (userId, token) => {
             },
             body: JSON.stringify({ userId })
         });
-        return await response.json();
+        const data = await response.json();
+
+        // Log the response data
+        console.log("Response Data from getPrayerSettings:", data);
+
+        return data;
     } catch (error) {
         console.error('Error fetching prayer settings:', error);
         throw error;
     }
 };
+
 
 export const getUserSettings = async (token, _id) => {
     try {

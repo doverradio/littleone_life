@@ -25,22 +25,22 @@ const Layout = () => {
   const shouldShowFooter = !isMobile || (isMobile && location.pathname === '/user/settings');
 
   return (
-    <div className="layout-wrapper" style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
-      <div style={{ position: 'fixed', top: 0, width: '100%', zIndex: 1100 }}>
+    <div className="layout-wrapper">
+      <div className="navbar-fixed">
         <NavbarMain />
       </div>
-      <div className="layout-container" style={{ display: 'flex', flex: 1, marginTop: '60px' }}>
+      <div className="layout-container">
         {!isMobile && (
-          <div style={{ width: '250px', position: 'fixed', top: '60px', bottom: 0 }}>
+          <div className="sidebar-fixed">
             <Sidebar />
           </div>
         )}
-        <div className="layout-content" style={{ flex: 1, paddingLeft: !isMobile ? '250px' : '0', paddingTop: '20px' }}>
+        <div className="layout-content">
           <Outlet /> {/* This will render the nested routes */}
         </div>
       </div>
       {isMobile && (
-        <div style={{ position: 'fixed', bottom: 0, width: '100%', zIndex: 1100 }}>
+        <div className="bottombar-fixed">
           <BottomBar />
         </div>
       )}

@@ -7,8 +7,8 @@ import SignUp from './signup/Signup';
 import TermsOfService from './TermsOfService';
 import Contact from './Contact';
 import PrivacyPolicy from './PrivacyPolicy';
-import PrivateRoute from './auth/PrivateRoute';
-import AdminRoute from './auth/AdminRoute';
+import PrivateRoute from './auth/PrivateRoute'; // Ensure this is correctly imported
+import AdminRoute from './auth/AdminRoute'; // Ensure this is correctly imported
 import UserDashboard from './user/dashboard/UserDashboard';
 import AdminDashboard from './admin/AdminDashboard';
 import Settings from './components/settings/Settings';
@@ -26,7 +26,7 @@ import DivineMercy from './components/otherprayers/divinemercy/DivineMercy';
 import StMichaelPrayer from './components/otherprayers/stmichaelprayer/StMichaelPrayer';
 import StFrancisPrayer from './components/otherprayers/stfrancis/StFrancisPrayer';
 import StLeandroRuizPrayer from './components/otherprayers/stleandroruiz/StLeandroRuiz';
-import PrayerSettings from './components/otherprayers/PrayerSettings';
+import PrayerSettingsPage from './components/otherprayers/PrayerSettingsPage';
 
 const RoutesComponent = () => {
   return (
@@ -50,7 +50,7 @@ const RoutesComponent = () => {
           <Route path="/prayers" element={<PrivateRoute component={Prayers} />} exact />
           <Route path="/social" element={<PrivateRoute component={Social} />} exact />
           <Route path="/prayerspace/:id" element={<PrivateRoute component={PrayerSpace} />} exact />
-          
+
           {/* Prayer Routes */}
           <Route path="/prayers/rosary" element={<PrivateRoute component={Rosary} />} exact />
           <Route path="/prayers/mass" element={<PrivateRoute component={Mass} />} exact />
@@ -59,7 +59,7 @@ const RoutesComponent = () => {
           <Route path="/prayers/stmichael" element={<PrivateRoute component={StMichaelPrayer} />} exact />
           <Route path="/prayers/stfrancis" element={<PrivateRoute component={StFrancisPrayer} />} exact />
           <Route path="/prayers/stleandroruiz" element={<PrivateRoute component={StLeandroRuizPrayer} />} exact />
-          <Route path="/prayers/settings" element={<PrivateRoute component={PrayerSettings} />} exact />
+          <Route path="/prayers/settings" element={<PrivateRoute component={PrayerSettingsPage} />} exact />
         </Route>
       </Routes>
     </Router>
