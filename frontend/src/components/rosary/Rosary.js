@@ -77,7 +77,7 @@ const Rosary = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [refreshTrigger, setRefreshTrigger] = useState(0);
-    const [showVirtualRosary, setShowVirtualRosary] = useState(false);
+    const [showVirtualRosary, setShowVirtualRosary] = useState(false); // Ensure this state is defined
 
     const {
         user: { _id },
@@ -115,8 +115,13 @@ const Rosary = () => {
                 {activeTab === 'Questions' && (
                     <div className="questions-tab">
                         <h2 className="text-center">{selectedMystery}</h2>
-                        <Mysteries handleMysteryClick={handleMysteryClick} />
-                        <MysteryDetails selectedMysteryDetails={selectedMysteryDetails} selectedMysteryIcon={selectedMysteryIcon} />
+                        <Mysteries 
+                            handleMysteryClick={(mysteryName) => handleMysteryClick(mysteryName, mysteriesDetails, setSelectedMystery, setSelectedMysteryDetails, setSelectedMysteryIcon, mysteries, setShowVirtualRosary)} 
+                        />
+                        <MysteryDetails 
+                            selectedMysteryDetails={selectedMysteryDetails} 
+                            selectedMysteryIcon={selectedMysteryIcon} 
+                        />
                         <PrayerIntentions 
                             prayerIntentions={prayerIntentions}
                             selectedIntentions={selectedIntentions}

@@ -1,7 +1,8 @@
-// src/utils/rosaryUtils.js
 import { deleteRosaries, getUserRosaries, createRosary } from '../../../api/rosary';
-import { createIntention, updateIntention } from '../../../api/intentions';
+import { createIntention, deleteIntention, updateIntention } from '../../../api/intentions';
 import { fetchIntentions } from './fetchFunctions';
+const API = process.env.REACT_APP_API || 'https://www.littleone.life/api'; // Your backend API URL
+
 export const increaseFontSize = (currentSize, MAX_FONT_SIZE) => {
     return Math.min(currentSize + 1, MAX_FONT_SIZE);
 };
@@ -9,7 +10,6 @@ export const increaseFontSize = (currentSize, MAX_FONT_SIZE) => {
 export const decreaseFontSize = (currentSize, MIN_FONT_SIZE) => {
     return Math.max(currentSize - 1, MIN_FONT_SIZE);
 };
-
 
 export const handleDelete = async (selectedIds, token, userId, currentPage, rosariesPerPage, setRosaries, setTotalRosaries, setRefreshTrigger, setError) => {
     if (window.confirm('Are you sure you want to delete the selected rosaries?')) {
@@ -53,8 +53,15 @@ export const handleIntentionCheckboxChange = (intentionId, setSelectedIntentions
     });
 };
 
-export const handleDeleteIntention = async (intentionId, token, fetchIntentions) => {
-    // Implement delete intention logic
+export const handleDeleteIntention = async (intentionId, token, fetchIntentions, userId) => {
+    if (window.confirm('Are you sure you want to delete this intention?')) {
+        try {
+            await deleteIntention(intentionId, token);
+            await fetchIntentions(userId, token);
+        } catch (error) {
+            console.error('Error deleting intention:', error);
+        }
+    }
 };
 
 export const handlePrayRosary = async (userId, selectedMystery, selectedIntentions, token, toggleModal, setSelectedIntentions, setSelectedMystery, setIsSubmitting, setCount) => {
@@ -96,24 +103,55 @@ export const handleNewIntentionSubmit = async (e, newIntention, userId, token, s
     }
 };
 
-export const handleMysteryClick = (mysteryName, mysteriesDetails, setSelectedMystery, setSelectedMysteryDetails, setSelectedMysteryIcon, mysteries, toggleVirtualRosary) => {
+export const handleMysteryClick = (mysteryName, mysteriesDetails, setSelectedMystery, setSelectedMysteryDetails, setSelectedMysteryIcon, mysteries, setShowVirtualRosary) => {
     setSelectedMystery(mysteryName);
     setSelectedMysteryDetails(mysteriesDetails[mysteryName]);
     const selectedMystery = mysteries.find(mystery => mystery.name === mysteryName);
     setSelectedMysteryIcon(selectedMystery ? selectedMystery.image : null);
-    toggleVirtualRosary();
+    setShowVirtualRosary(prev => !prev); // Ensure this is a function
 };
+
+
 
 export const handleEditClick = (intentionId, content, setEditingIntentionId, setEditContent) => {
     setEditingIntentionId(intentionId);
     setEditContent(content);
 };
 
-export const handleUpdateIntention = async (e, editingIntentionId, editContent, token, fetchIntentions, setEditingIntentionId) => {
+export const handleSaveClick = async (intentionId, content, token, fetchIntentions, userId, setEditingIntentionId, setEditContent, setPrayerIntentions) => {
+    try {
+        const response = await fetch(`${API}/intention/update`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ _id: intentionId, content })
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to update intention');
+        }
+
+        const data = await response.json();
+        await fetchIntentions(userId, token, setPrayerIntentions);
+        setEditingIntentionId(null);
+        setEditContent('');
+    } catch (error) {
+        console.error('Error updating intention:', error);
+    }
+};
+
+export const handleCancelClick = (setEditingIntentionId, setEditContent) => {
+    setEditingIntentionId(null);
+    setEditContent('');
+};
+
+export const handleUpdateIntention = async (e, editingIntentionId, editContent, token, fetchIntentions, userId, setEditingIntentionId) => {
     e.preventDefault();
     try {
         await updateIntention(editingIntentionId, { content: editContent }, token);
-        fetchIntentions();
+        await fetchIntentions(userId, token);
         setEditingIntentionId(null);
     } catch (error) {
         console.error('Error updating intention:', error);

@@ -29,7 +29,8 @@ exports.createIntention = async (req, res) => {
 exports.getAllIntentions = async (req, res) => {
     try {
         const { userId, type } = req.body;
-        // console.log("Received userId:", userId);
+        // log("Received userId:", userId);
+        // log("Received type:", type);
 
         // Validate userId
         if (!mongoose.isValidObjectId(userId)) {
@@ -37,7 +38,7 @@ exports.getAllIntentions = async (req, res) => {
         }
 
         const intentions = await Intention.find({ user: userId, type });
-        // console.log("Intentions:", intentions);
+        // log("Fetched Intentions:", intentions);
 
         res.json(intentions);
     } catch (error) {
@@ -63,16 +64,28 @@ exports.getIntentionById = async (req, res) => {
 // Update an intention
 exports.updateIntention = async (req, res) => {
     try {
-        const { _id } = req.body;
-        const intention = await Intention.findByIdAndUpdate(_id, req.body, { new: true });
+        const { _id, content } = req.body;
+
+        // Ensure _id and content are provided
+        if (!_id || !content) {
+            return res.status(400).json({ error: 'Missing required fields (_id, content)' });
+        }
+
+        const intention = await Intention.findById(_id);
         if (!intention) {
             return res.status(404).json({ error: 'Intention not found' });
         }
+
+        intention.content = content;
+        await intention.save();
+
         res.json(intention);
     } catch (error) {
+        console.error('Error updating intention:', error);
         res.status(400).json({ error: error.message });
     }
 };
+
 
 // Delete an intention
 exports.deleteIntention = async (req, res) => {

@@ -1,5 +1,3 @@
-// Sidebar.js
-
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import './Sidebar.css';
@@ -17,21 +15,6 @@ const Sidebar = () => {
                     <li>
                         <NavLink to="/prayers" activeClassName="active">
                             <span>Prayers</span>
-                        </NavLink>
-                    </li>
-                    <li>
-                        <NavLink to="/social" activeClassName="active">
-                            <span>Social</span>
-                        </NavLink>
-                    </li>
-                    <li>
-                        <NavLink to="/works" activeClassName="active">
-                            <span>Works</span>
-                        </NavLink>
-                    </li>
-                    <li>
-                        <NavLink to="/shop" activeClassName="active">
-                            <span>Shop</span>
                         </NavLink>
                     </li>
                 </ul>

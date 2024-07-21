@@ -133,6 +133,11 @@
     margin-top: 2rem; /* Adjust margin as needed */
 }
 
+.prayer-intentions-container {
+    max-width: 40vw;
+    margin: 0 auto;
+}
+
 .prayer-intentions-list {
     list-style: none;
     padding: 0;
@@ -141,7 +146,21 @@
 .prayer-intention-item {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
+}
+
+.prayer-intention-item p {
+    margin: 0;
+    flex-grow: 1;
+    text-align: left;
+}
+
+.prayer-intention-item input {
+    margin-right: 10px;
+}
+
+.prayer-intention-item .ml-2 {
+    margin-left: 10px;
 }
 
 .submit-rosary-btn {
