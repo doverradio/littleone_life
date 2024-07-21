@@ -1,0 +1,12 @@
+.mysteries-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    list-style-type: none;
+    padding: 0;
+}
+
+.mystery-item {
+    text-align: center;
+    margin: 5px 0;
+}

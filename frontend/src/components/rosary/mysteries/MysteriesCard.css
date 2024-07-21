@@ -1,0 +1,25 @@
+/* Add this to your styles.css or the relevant CSS file */
+.mystery-details-card {
+    display: flex;
+    justify-content: center;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 600px; /* Adjust this value if needed */
+}
+
+.mystery-details-content {
+    text-align: left;
+}
+
+.mysteries-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.mystery-item {
+    margin: 5px 0;
+}

@@ -75,6 +75,7 @@ export const updateIntention = async (intentionId, intentionData, token) => {
 // Function to delete an intention
 export const deleteIntention = async (intentionId, token) => {
     try {
+        console.log('Token:', token); // Log the token to debug
         const response = await fetch(`${API}/intention/delete`, {
             method: 'DELETE',
             headers: {
@@ -83,9 +84,13 @@ export const deleteIntention = async (intentionId, token) => {
             },
             body: JSON.stringify({ _id: intentionId })
         });
+        if (!response.ok) {
+            throw new Error('Failed to delete intention');
+        }
         return await response.json();
     } catch (error) {
         console.error('Error in deleteIntention:', error);
         throw error;
     }
 };
+

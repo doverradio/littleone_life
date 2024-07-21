@@ -89,6 +89,7 @@ exports.updateIntention = async (req, res) => {
 
 // Delete an intention
 exports.deleteIntention = async (req, res) => {
+    console.log('Token:', req.headers.authorization); // Log the token to debug
     try {
         const { _id } = req.body;
         const intention = await Intention.findByIdAndDelete(_id);

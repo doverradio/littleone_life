@@ -134,20 +134,26 @@
 }
 
 .prayer-intentions-container {
-    max-width: 40vw;
-    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%; /* Ensure the container takes full width */
 }
 
 .prayer-intentions-list {
-    list-style: none;
-    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center align items */
+    width: 100%; /* Ensure the list takes full width */
 }
 
 .prayer-intention-item {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center; /* Center align items within each list item */
+    width: 100%; /* Ensure each list item takes full width */
 }
+
 
 .prayer-intention-item p {
     margin: 0;
@@ -179,4 +185,38 @@
     list-style-position: inside;
     padding: 0;
     text-align: center; /* Center align text */
+}
+
+.card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    background-color: #fff;
+}
+
+.mx-auto {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+.my-4 {
+    margin-top: 16px;
+    margin-bottom: 16px;
+}
+
+/* Add media query for mobile view */
+@media (max-width: 768px) {
+    .prayer-intentions-container {
+        max-width: 90vw;
+        padding: 10px;
+    }
+}
+.p-4 {
+    padding: 1.5rem;
+}
+
+.text-left {
+    text-align: left;
 }

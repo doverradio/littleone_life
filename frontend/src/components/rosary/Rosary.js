@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { isAuthenticated } from '../../api/auth';
-import rosaryIcon from './rosary_icon.png'; // Adjust the path to where your icon is stored
+import rosaryIcon from './rosary_icon.png';
 import './styles.css';
 import { useModal } from '../../context/ModalContext';
 import Mysteries, { mysteries } from './mysteries/Mysteries';
 import mysteriesDetails from './mysteries/mysteriesDetails';
 import MysteryDetails from './mysteries/MysteryDetails';
 import PrayerIntentions from './intentions/PrayerIntentions';
-import PrayerIntentionsForm from './PrayerIntentionsForm';  // Import the new form
+import PrayerIntentionsForm from './PrayerIntentionsForm';
 import {
     increaseFontSize,
     decreaseFontSize,
@@ -35,7 +35,7 @@ import RosaryHeader from './RosaryHeader';
 const Rosary = () => {
     const { toggleModal } = useModal();
     const [count, setCount] = useState(0);
-    const [selectedMystery, setSelectedMystery] = useState('Luminous');
+    const [selectedMystery, setSelectedMystery] = useState('');
     const [prayerIntentions, setPrayerIntentions] = useState([]);
     const [selectedIntentions, setSelectedIntentions] = useState([]);
     const [isAddingIntention, setIsAddingIntention] = useState(false);
@@ -77,7 +77,7 @@ const Rosary = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [refreshTrigger, setRefreshTrigger] = useState(0);
-    const [showVirtualRosary, setShowVirtualRosary] = useState(false); // Ensure this state is defined
+    const [showVirtualRosary, setShowVirtualRosary] = useState(false);
 
     const {
         user: { _id },
@@ -115,13 +115,10 @@ const Rosary = () => {
                 {activeTab === 'Questions' && (
                     <div className="questions-tab">
                         <h2 className="text-center">{selectedMystery}</h2>
-                        <Mysteries 
-                            handleMysteryClick={(mysteryName) => handleMysteryClick(mysteryName, mysteriesDetails, setSelectedMystery, setSelectedMysteryDetails, setSelectedMysteryIcon, mysteries, setShowVirtualRosary)} 
-                        />
-                        <MysteryDetails 
-                            selectedMysteryDetails={selectedMysteryDetails} 
-                            selectedMysteryIcon={selectedMysteryIcon} 
-                        />
+                        <Mysteries handleMysteryClick={(name) => handleMysteryClick(name, mysteriesDetails, setSelectedMystery, setSelectedMysteryDetails, setSelectedMysteryIcon, mysteries, setShowVirtualRosary)} />
+                        {selectedMystery && (
+                            <MysteryDetails selectedMysteryDetails={selectedMysteryDetails} />
+                        )}
                         <PrayerIntentions 
                             prayerIntentions={prayerIntentions}
                             selectedIntentions={selectedIntentions}
@@ -131,7 +128,7 @@ const Rosary = () => {
                             handleDeleteIntention={handleDeleteIntention}
                             editingIntentionId={editingIntentionId}
                             editContent={editContent}
-                            setEditContent={setEditContent} // Pass setEditContent
+                            setEditContent={setEditContent} 
                             isAddingIntention={isAddingIntention}
                             addPrayerIntention={handleAddIntentionClick}
                             handleNewIntentionSubmit={(e) => handleNewIntentionSubmit(e, newIntention, userId, token, setPrayerIntentions, setNewIntention, setIsAddingIntention)}
@@ -139,8 +136,9 @@ const Rosary = () => {
                             setNewIntention={setNewIntention}
                             isSubmitting={isSubmitting}
                             handlePrayRosary={handlePrayRosary}
-                            setEditingIntentionId={setEditingIntentionId} // Pass setEditingIntentionId
-                            setSelectedIntentions={setSelectedIntentions} // Pass setSelectedIntentions
+                            setEditingIntentionId={setEditingIntentionId} 
+                            setSelectedIntentions={setSelectedIntentions} 
+                            setPrayerIntentions={setPrayerIntentions} // Make sure this prop is passed
                         />
                         {isAddingIntention && (
                             <PrayerIntentionsForm
@@ -148,21 +146,19 @@ const Rosary = () => {
                                 newIntention={newIntention}
                                 handleNewIntentionSubmit={(e) => handleNewIntentionSubmit(e, newIntention, userId, token, setPrayerIntentions, setNewIntention, setIsAddingIntention)}
                                 setNewIntention={setNewIntention}
-                                handleCloseForm={handleCloseForm} // Pass the handleCloseForm function
+                                handleCloseForm={handleCloseForm} 
                             />
                         )}
-                        {!isAddingIntention && (
-                            <div className="row mt-3">
-                                <div className="col-12 text-center">
-                                    <button 
-                                        className="btn btn-outline-secondary btn-sm" 
-                                        onClick={handleAddIntentionClick}
-                                    >
-                                        Add intention
-                                    </button>
-                                </div>
+                        <div className="row mt-3">
+                            <div className="col-12 text-center">
+                                <button 
+                                    className="btn btn-outline-secondary btn-sm" 
+                                    onClick={handleAddIntentionClick}
+                                >
+                                    Add intention
+                                </button>
                             </div>
-                        )}
+                        </div>
                         <div className="row mt-5">
                             <div className="col-12 text-center">
                                 <button 

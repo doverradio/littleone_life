@@ -1,14 +1,16 @@
 import React from 'react';
+import './MysteriesCard.css'; // Import the new CSS file
 
-const MysteryDetails = ({ selectedMysteryDetails, selectedMysteryIcon }) => {
+const MysteryDetails = ({ selectedMysteryDetails }) => {
     return (
-        <div className="mystery-details-section">
-            <ol className="mystery-details centered-list">
+        <div className="mystery-details-card">
+            <ul className="mysteries-list">
                 {selectedMysteryDetails.map((detail, index) => (
-                    <li key={index}>{detail}</li>
+                    <li key={index} className="mystery-item">
+                        {index + 1}. {detail}
+                    </li>
                 ))}
-            </ol>
-            {selectedMysteryIcon && <img src={selectedMysteryIcon} alt="Selected Mystery" className="selected-mystery-icon" />}
+            </ul>
         </div>
     );
 };

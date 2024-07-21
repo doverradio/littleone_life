@@ -1,5 +1,6 @@
 import { deleteRosaries, getUserRosaries, createRosary } from '../../../api/rosary';
 import { createIntention, deleteIntention, updateIntention } from '../../../api/intentions';
+import { deleteIntention as deleteIntentionAPI } from '../../../api/intentions';
 import { fetchIntentions } from './fetchFunctions';
 const API = process.env.REACT_APP_API || 'https://www.littleone.life/api'; // Your backend API URL
 
@@ -53,11 +54,11 @@ export const handleIntentionCheckboxChange = (intentionId, setSelectedIntentions
     });
 };
 
-export const handleDeleteIntention = async (intentionId, token, fetchIntentions, userId) => {
+export const handleDeleteIntention = async (intentionId, token, fetchIntentions, userId, setPrayerIntentions) => {
     if (window.confirm('Are you sure you want to delete this intention?')) {
         try {
-            await deleteIntention(intentionId, token);
-            await fetchIntentions(userId, token);
+            await deleteIntentionAPI(intentionId, token);
+            await fetchIntentions(userId, token, setPrayerIntentions);
         } catch (error) {
             console.error('Error deleting intention:', error);
         }
