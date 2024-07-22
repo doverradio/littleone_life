@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { isAuthenticated } from "../../api/auth";
 import { useUser } from '../../context/UserContext';
-
-import "./UserDashboard.css"; // Ensure you have this CSS file
+import { Link } from 'react-router-dom';
+import "./UserDashboard.css";
 import { getUserPrayerStats } from "../../api/user";
 
 const UserDashboard = () => {
-    const { user } = useUser(); // Access user from UserContext
+    const { user } = useUser();
     const {
         user: { firstName, _id: userId },
         token
@@ -45,7 +45,11 @@ const UserDashboard = () => {
                     </div>
                     <div className="user-stats">
                         <h3>User Stats</h3>
-                        <p>Rosaries: {userStats.rosaries}</p>
+                        <p>
+                            <Link to="/prayers/rosary" style={{ textDecoration: 'none', color: 'inherit' }}>
+                                Rosaries: {userStats.rosaries}
+                            </Link>
+                        </p>
                         <p>Masses: {userStats.masses}</p>
                         <p>Confessions: {userStats.confessions}</p>
                         <p>Divine Mercy Chaplets: {userStats.divineMercies}</p>

@@ -17,13 +17,11 @@ import {
     toggleVirtualRosary,
     handleIntentionCheckboxChange,
     handleDeleteIntention,
-    handlePrayRosary, // Import handlePrayRosary
+    handlePrayRosary,
     addPrayerIntention,
     handleNewIntentionSubmit,
     handleMysteryClick,
     handleEditClick,
-    handleSaveClick,
-    handleCancelClick,
     handleUpdateIntention,
     handleRowSelect,
     formatDataForTable
@@ -47,7 +45,7 @@ const Rosary = () => {
     const [selectedMysteryDetails, setSelectedMysteryDetails] = useState([]);
     const [selectedMysteryIcon, setSelectedMysteryIcon] = useState(null);
     const [activeTab, setActiveTab] = useState('Questions');
-    const [isSubmitting, setIsSubmitting] = useState(false); // Ensure this is defined
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const [isEmailEnabled, setIsEmailEnabled] = useState(false);
     const DEFAULT_FONT_SIZE = 11;
     const MAX_FONT_SIZE = 33;
@@ -106,10 +104,6 @@ const Rosary = () => {
         setIsAddingIntention(true);
     };
 
-    const handlePrayRosaryWrapper = () => {
-        handlePrayRosary(userId, selectedMystery, selectedIntentions, token, toggleModal, setSelectedIntentions, setSelectedMystery, setIsSubmitting, setCount);
-    };
-
     return (
         <div className="rosary-component container">
             <RosaryHeader
@@ -120,22 +114,21 @@ const Rosary = () => {
             <main className="rosary-main">
                 {activeTab === 'Questions' && (
                     <div className="questions-tab">
-                        <h2 className="text-center">{selectedMystery}</h2>
                         <Mysteries handleMysteryClick={(name) => handleMysteryClick(name, mysteriesDetails, setSelectedMystery, setSelectedMysteryDetails, setSelectedMysteryIcon, mysteries, setShowVirtualRosary)} />
                         {selectedMystery && (
-                            <MysteryDetails selectedMysteryDetails={selectedMysteryDetails} />
+                            <div>
+                                <h2 className="text-center">{selectedMystery}</h2>
+                                <MysteryDetails selectedMystery={selectedMystery} selectedMysteryDetails={selectedMysteryDetails} />
+                            </div>
                         )}
-                        
                         <div className="prayer-intentions-container">
                             <div className="card mx-auto my-4">
                                 <PrayerIntentions 
                                     prayerIntentions={prayerIntentions}
                                     selectedIntentions={selectedIntentions}
                                     handleIntentionCheckboxChange={handleIntentionCheckboxChange}
-                                    handleEditClick={(id, content) => handleEditClick(id, content, setEditingIntentionId, setEditContent)} // Ensure correct prop passing
-                                    handleSaveClick={(id, content) => handleSaveClick(id, content, token, fetchIntentions, userId, setPrayerIntentions, setEditingIntentionId, setEditContent)} // Pass it here
-                                    handleCancelClick={() => handleCancelClick(setEditingIntentionId, setEditContent)} // Pass it here
-                                    handleDeleteIntention={(id) => handleDeleteIntention(id, token, fetchIntentions, userId, setPrayerIntentions)} // Pass it here
+                                    handleEditClick={handleEditClick}
+                                    handleDeleteIntention={handleDeleteIntention}
                                     editingIntentionId={editingIntentionId}
                                     editContent={editContent}
                                     setEditContent={setEditContent}
@@ -152,26 +145,30 @@ const Rosary = () => {
                                         handleCloseForm={handleCloseForm} 
                                     />
                                 )}
+                                {!isAddingIntention && (
+                                    <div className="row mt-3">
+                                        <div className="col-12 text-center">
+                                            <button 
+                                                className="btn btn-outline-secondary btn-sm" 
+                                                onClick={handleAddIntentionClick}
+                                            >
+                                                Add intention
+                                            </button>
+                                        </div>
+                                    </div>
+                                )}
                             </div>
                         </div>
-    
-                        <div className="row mt-3">
-                            <div className="col-12 text-center">
-                                <button 
-                                    className="btn btn-outline-secondary btn-sm" 
-                                    onClick={handleAddIntentionClick}
-                                >
-                                    Add intention
-                                </button>
-                            </div>
-                        </div>
+
                         <div className="row mt-5">
                             <div className="col-12 text-center">
                                 <button 
-                                    onClick={handlePrayRosaryWrapper} 
+                                    onClick={handlePrayRosary} 
                                     className="btn btn-primary"
                                 >
-                                    {isSubmitting ? 'Submitting...' : 'Submit Rosary'}
+                                    {
+                                        isSubmitting ? 'Submitting...' : 'Submit Rosary'
+                                    }
                                 </button>
                             </div>
                         </div>

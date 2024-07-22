@@ -98,8 +98,8 @@ const ProfileIcon = ({ handleSignout, userStats }) => {
             </div>
           </div>
           <div style={{ height: '1px', backgroundColor: '#ddd', margin: '5px 0' }}></div>
-          <Link to="/user/settings" style={{ padding: '10px', display: 'flex', alignItems: 'center' }}>
-            <FaCog size={16} /> Settings
+          <Link to="/user/settings" style={{ padding: '10px', display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
+            <FaCog size={16} /> &nbsp;&nbsp;Settings
           </Link>
           <div style={{ padding: '10px', color: '#c0392b', cursor: 'pointer' }} onClick={handleSignout}>
             Sign Out

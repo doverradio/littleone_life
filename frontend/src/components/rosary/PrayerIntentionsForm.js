@@ -21,15 +21,13 @@ const PrayerIntentionsForm = ({
                     type="text"
                     value={newIntention}
                     onChange={handleContentChange}
-                    maxLength={100} // Ensure the maxlength attribute is set
+                    maxLength={100}
                     className="form-control"
                 />
-                <small className={charCount >= 90 ? 'warning' : ''}>
-                    {100 - charCount} characters remaining
-                </small>
+                <small>{100 - charCount} characters remaining</small>
             </div>
-            <button type="submit" className="btn btn-primary">Add</button>
-            <button type="button" className="btn btn-secondary" onClick={handleCloseForm}>Close</button>
+            <button type="submit" className="btn btn-primary m-1">Add</button>
+            <button type="button" className="btn btn-secondary m-1" onClick={handleCloseForm}>Close</button>
         </form>
     );
 };
