@@ -120,6 +120,7 @@ export const handleEditClick = (id, content, setEditingIntentionId, setEditConte
     setEditContent(content);
 };
 
+
 export const handleSaveClick = async (id, updatedContent, token, fetchIntentions, userId, setPrayerIntentions, setEditingIntentionId, setEditContent) => {
     if (updatedContent.length > 100) {
         alert('Prayer intention cannot exceed 100 characters');

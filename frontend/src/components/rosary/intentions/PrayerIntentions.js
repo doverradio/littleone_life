@@ -1,7 +1,5 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { MdOutlineModeEdit, MdDelete, MdSave, MdCancel } from "react-icons/md";
-import { isAuthenticated } from '../../../api/auth';
-import { fetchIntentions } from '../utils/fetchFunctions';
 
 const PrayerIntentions = ({
     prayerIntentions,
@@ -17,20 +15,6 @@ const PrayerIntentions = ({
     setEditingIntentionId,
     setSelectedIntentions
 }) => {
-    const {
-        user: { _id },
-        token
-    } = isAuthenticated();
-
-    const userId = _id;
-
-    const [charCount, setCharCount] = useState(editContent.length);
-
-    const handleContentChange = (e) => {
-        setEditContent(e.target.value);
-        setCharCount(e.target.value.length);
-    };
-
     return (
         <div className="prayer-intentions-container">
             <h2>Prayer Intentions</h2>
@@ -45,30 +29,24 @@ const PrayerIntentions = ({
                                 className="mr-2"
                             />
                             {editingIntentionId === intention._id ? (
-                                <div className="flex-grow-1">
-                                    <input
-                                        type="text"
-                                        value={editContent}
-                                        onChange={handleContentChange}
-                                        maxLength={100} // Ensure the maxlength attribute is set
-                                        className="form-control"
-                                    />
-                                    <small className={charCount >= 90 ? 'warning' : ''}>
-                                        {100 - charCount} characters remaining
-                                    </small>
-                                </div>
+                                <input
+                                    type="text"
+                                    value={editContent}
+                                    onChange={(e) => setEditContent(e.target.value)}
+                                    className="form-control"
+                                />
                             ) : (
                                 <p className="m-0 flex-grow-1">{intention.content}</p>
                             )}
                             {editingIntentionId === intention._id ? (
                                 <>
-                                    <MdSave onClick={() => handleSaveClick(intention._id, editContent)} className="ml-2 icon" />
-                                    <MdCancel onClick={handleCancelClick} className="ml-2 icon" />
+                                    <MdSave onClick={() => handleSaveClick(intention._id, editContent)} className="ml-2" />
+                                    <MdCancel onClick={handleCancelClick} className="ml-2" />
                                 </>
                             ) : (
                                 <>
-                                    <MdOutlineModeEdit onClick={() => handleEditClick(intention._id, intention.content)} className="ml-2 icon" />
-                                    <MdDelete onClick={() => handleDeleteIntention(intention._id)} className="ml-2 icon" />
+                                    <MdOutlineModeEdit onClick={() => handleEditClick(intention._id, intention.content, setEditingIntentionId, setEditContent)} className="ml-2" />
+                                    <MdDelete onClick={() => handleDeleteIntention(intention._id)} className="ml-2" />
                                 </>
                             )}
                         </li>
