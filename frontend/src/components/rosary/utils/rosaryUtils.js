@@ -71,20 +71,22 @@ export const handlePrayRosary = async (userId, selectedMystery, selectedIntentio
         userId,
         mystery: selectedMystery,
         intentions: selectedIntentions,
+        recording: "" // Assuming recording is part of the payload, else remove this
     };
 
     try {
-        await createRosary(rosaryData.userId, rosaryData.mystery, rosaryData.intentions, rosaryData.recording, token);
+        await createRosary(rosaryData.userId, rosaryData.mystery, rosaryData.intentions, token);
         setSelectedIntentions([]);
         setSelectedMystery('Luminous');
         toggleModal('rosary');
     } catch (error) {
         console.error('Error creating rosary:', error);
+    } finally {
+        setIsSubmitting(false);
+        setCount(prevCount => prevCount + 1);
     }
-
-    setIsSubmitting(false);
-    setCount(prevCount => prevCount + 1);
 };
+
 
 export const addPrayerIntention = (setIsAddingIntention) => {
     setIsAddingIntention(true);
@@ -113,8 +115,6 @@ export const handleMysteryClick = (mysteryName, mysteriesDetails, setSelectedMys
     setShowVirtualRosary(prev => !prev); // Ensure this is a function
 };
 
-
-
 export const handleEditClick = (id, content, setEditingIntentionId, setEditContent) => {
     setEditingIntentionId(id);
     setEditContent(content);
@@ -140,7 +140,6 @@ export const handleCancelClick = (setEditingIntentionId, setEditContent) => {
     setEditContent('');
 };
 
-
 export const handleUpdateIntention = async (id, updatedContent, token, fetchIntentions, userId, setPrayerIntentions, setEditingIntentionId, setEditContent) => {
     try {
         await updateIntention(id, { content: updatedContent }, token);
@@ -151,7 +150,6 @@ export const handleUpdateIntention = async (id, updatedContent, token, fetchInte
         console.error("Error updating intention: ", error);
     }
 };
-
 
 export const handleRowSelect = (selectedRows) => {
     // Implement what should happen when rows are selected

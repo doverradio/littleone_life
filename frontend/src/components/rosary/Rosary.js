@@ -17,7 +17,7 @@ import {
     toggleVirtualRosary,
     handleIntentionCheckboxChange,
     handleDeleteIntention,
-    handlePrayRosary,
+    handlePrayRosary, // Import handlePrayRosary
     addPrayerIntention,
     handleNewIntentionSubmit,
     handleMysteryClick,
@@ -47,7 +47,7 @@ const Rosary = () => {
     const [selectedMysteryDetails, setSelectedMysteryDetails] = useState([]);
     const [selectedMysteryIcon, setSelectedMysteryIcon] = useState(null);
     const [activeTab, setActiveTab] = useState('Questions');
-    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false); // Ensure this is defined
     const [isEmailEnabled, setIsEmailEnabled] = useState(false);
     const DEFAULT_FONT_SIZE = 11;
     const MAX_FONT_SIZE = 33;
@@ -106,6 +106,10 @@ const Rosary = () => {
         setIsAddingIntention(true);
     };
 
+    const handlePrayRosaryWrapper = () => {
+        handlePrayRosary(userId, selectedMystery, selectedIntentions, token, toggleModal, setSelectedIntentions, setSelectedMystery, setIsSubmitting, setCount);
+    };
+
     return (
         <div className="rosary-component container">
             <RosaryHeader
@@ -150,7 +154,7 @@ const Rosary = () => {
                                 )}
                             </div>
                         </div>
-
+    
                         <div className="row mt-3">
                             <div className="col-12 text-center">
                                 <button 
@@ -164,12 +168,10 @@ const Rosary = () => {
                         <div className="row mt-5">
                             <div className="col-12 text-center">
                                 <button 
-                                    onClick={handlePrayRosary} 
+                                    onClick={handlePrayRosaryWrapper} 
                                     className="btn btn-primary"
                                 >
-                                    {
-                                        isSubmitting ? 'Submitting...' : 'Submit Rosary'
-                                    }
+                                    {isSubmitting ? 'Submitting...' : 'Submit Rosary'}
                                 </button>
                             </div>
                         </div>

@@ -1,16 +1,21 @@
 const API = process.env.REACT_APP_API ? process.env.REACT_APP_API : 'https://www.littleone.life/api';
 
 // Function to create a new Rosary
-export const createRosary = async (userId, mystery, intentions, recording, token) => {
+export const createRosary = async (userId, mystery, intentions, token) => {
   try {
     const response = await fetch(`${API}/rosary/create`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
+        'Authorization': `Bearer ${token}` // Ensure token is correctly passed
       },
-      body: JSON.stringify({ userId, mystery, intentions, recording })
+      body: JSON.stringify({ userId, mystery, intentions })
     });
+
+    if (!response.ok) {
+      throw new Error('Failed to create rosary');
+    }
+
     return await response.json();
   } catch (error) {
     console.error('Error in createRosary:', error);
@@ -179,4 +184,22 @@ export const deleteRosaries = async (rosaryIds, token) => {
       console.error('Error deleting rosaries:', error);
       throw error;
   }
+};
+
+export const submitRosary = async (userId, token, intentions) => {
+  const response = await fetch(`${API}/rosary/submit`, {
+      method: 'POST',
+      headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify({ userId, intentions })
+  });
+
+  if (!response.ok) {
+      throw new Error('Failed to submit rosary');
+  }
+
+  return await response.json();
 };
