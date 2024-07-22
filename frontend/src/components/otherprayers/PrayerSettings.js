@@ -6,8 +6,6 @@ const PrayerSettings = ({ availablePrayers, onVisibilityChange }) => {
         onVisibilityChange(prayerId, isChecked);
     };
 
-    console.log("Available Prayers in PrayerSettings:", availablePrayers);
-
     return (
         <div className="prayer-settings">
             <h2>Prayer Settings</h2>

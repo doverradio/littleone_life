@@ -78,9 +78,9 @@ const PrayerSettingsPage = () => {
     //     fetchPrayerSettings();
     // }, []);
 
-    useEffect(() => {
-        console.log("Updated Available Prayers in useEffect:", availablePrayers);
-    }, [availablePrayers]);
+    // useEffect(() => {
+    //     console.log("Updated Available Prayers in useEffect:", availablePrayers);
+    // }, [availablePrayers]);
 
     const persistPrayerSettings = async (updatedPrayers) => {
         if (!userId) {
@@ -103,8 +103,6 @@ const PrayerSettingsPage = () => {
             return updatedPrayers;
         });
     };
-
-    console.log("Available Prayers in PrayerSettingsPage:", availablePrayers);
 
     return (
         <div className="prayer-settings-page">
