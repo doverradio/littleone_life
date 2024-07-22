@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { updatePrayerSettings, getPrayerSettings, getUserSettings, updateUserSettings } = require('../controllers/user'); // Adjust the path according to your project structure
+const { updatePrayerSettings, getPrayerSettings, getUserSettings, updateUserSettings, getUserPrayerStats } = require('../controllers/user'); // Adjust the path according to your project structure
 const { requireSignin, authMiddleware, adminMiddleware, isAuth, isAdmin } = require('../controllers/auth');
 
 // Update prayer settings
@@ -12,6 +12,9 @@ router.put('/user/settings',
     updateUserSettings
 
 );
+
+// Dashboard User Stats
+router.get('/user/stats/:userId', requireSignin, authMiddleware, isAuth, getUserPrayerStats);
 
 
 module.exports = router;

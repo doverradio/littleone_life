@@ -96,17 +96,22 @@ export const updateUserSettings = async (token, settings) => {
 // New API call to get user prayer stats
 export const getUserPrayerStats = async (userId, token) => {
     try {
-        const response = await fetch(`${API}/prayer/user-stats`, {
-            method: 'POST',
+        const response = await fetch(`${API}/user/stats/${userId}`, {
+            method: 'GET',
             headers: {
+                Accept: 'application/json',
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify({ userId })
+                Authorization: `Bearer ${token}`
+            }
         });
+
+        if (!response.ok) {
+            throw new Error('Failed to fetch user stats');
+        }
+
         return await response.json();
     } catch (error) {
-        console.error('Error fetching user prayer stats:', error);
+        console.error('Error fetching user stats:', error);
         throw error;
     }
 };
