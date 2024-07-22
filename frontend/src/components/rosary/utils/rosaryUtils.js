@@ -1,6 +1,5 @@
 import { deleteRosaries, getUserRosaries, createRosary } from '../../../api/rosary';
 import { createIntention, deleteIntention, updateIntention } from '../../../api/intentions';
-import { deleteIntention as deleteIntentionAPI } from '../../../api/intentions';
 import { fetchIntentions } from './fetchFunctions';
 const API = process.env.REACT_APP_API || 'https://www.littleone.life/api'; // Your backend API URL
 
@@ -54,11 +53,11 @@ export const handleIntentionCheckboxChange = (intentionId, setSelectedIntentions
     });
 };
 
-export const handleDeleteIntention = async (intentionId, token, fetchIntentions, userId, setPrayerIntentions) => {
+export const handleDeleteIntention = async (id, token, fetchIntentions, userId, setPrayerIntentions) => {
     if (window.confirm('Are you sure you want to delete this intention?')) {
         try {
-            await deleteIntentionAPI(intentionId, token);
-            await fetchIntentions(userId, token, setPrayerIntentions);
+            await deleteIntention(id, token);
+            fetchIntentions(userId, token, setPrayerIntentions);
         } catch (error) {
             console.error('Error deleting intention:', error);
         }
@@ -87,18 +86,24 @@ export const handlePrayRosary = async (userId, selectedMystery, selectedIntentio
     }
 };
 
-
-export const addPrayerIntention = (setIsAddingIntention) => {
-    setIsAddingIntention(true);
+export const addPrayerIntention = async (intention, userId, token, setPrayerIntentions, setNewIntention, setIsAddingIntention) => {
+    try {
+        await createIntention(intention, userId, token);
+        await fetchIntentions(userId, token, setPrayerIntentions);
+        setNewIntention('');
+        setIsAddingIntention(false);
+    } catch (error) {
+        console.error('Error adding prayer intention:', error);
+    }
 };
 
-export const handleNewIntentionSubmit = (e, newIntention, userId, token, setPrayerIntentions, setNewIntention, setIsAddingIntention) => {
+export const handleNewIntentionSubmit = (e, newIntention, userId, token, setPrayerIntentions, setNewIntention, setIsAddingIntention, type) => {
     e.preventDefault();
     if (newIntention.length > 100) {
         alert('Prayer intention cannot exceed 100 characters');
         return;
     }
-    addPrayerIntention({ content: newIntention }, userId, token)
+    createIntention({ content: newIntention, type }, userId, token)
         .then(() => {
             fetchIntentions(userId, token, setPrayerIntentions);
             setNewIntention('');
@@ -106,6 +111,7 @@ export const handleNewIntentionSubmit = (e, newIntention, userId, token, setPray
         })
         .catch(err => console.error(err));
 };
+
 
 export const handleMysteryClick = (mysteryName, mysteriesDetails, setSelectedMystery, setSelectedMysteryDetails, setSelectedMysteryIcon, mysteries, setShowVirtualRosary) => {
     setSelectedMystery(mysteryName);
@@ -120,7 +126,6 @@ export const handleEditClick = (id, content, setEditingIntentionId, setEditConte
     setEditContent(content);
 };
 
-
 export const handleSaveClick = async (id, updatedContent, token, fetchIntentions, userId, setPrayerIntentions, setEditingIntentionId, setEditContent) => {
     if (updatedContent.length > 100) {
         alert('Prayer intention cannot exceed 100 characters');
@@ -132,7 +137,7 @@ export const handleSaveClick = async (id, updatedContent, token, fetchIntentions
         setEditingIntentionId(null);
         setEditContent('');
     } catch (error) {
-        console.error("Error updating intention: ", error);
+        console.error("Error updating intention:", error);
     }
 };
 

@@ -1,7 +1,7 @@
 const API = process.env.REACT_APP_API ? process.env.REACT_APP_API : 'https://www.littleone.life/api';
 
 // Function to create a new intention
-export const createIntention = async (intention, token) => {
+export const createIntention = async (intention, userId, token) => {
     try {
         const response = await fetch(`${API}/intention`, {
             method: 'POST',
@@ -9,14 +9,20 @@ export const createIntention = async (intention, token) => {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             },
-            body: JSON.stringify(intention),
+            body: JSON.stringify({ ...intention, user: userId })
         });
-        return await response.json();
+        if (!response.ok) {
+            throw new Error('Failed to create intention');
+        }
+        const data = await response.json();
+        console.log('createIntention response:', data); // Log the response
+        return data;
     } catch (error) {
         console.error('Error in createIntention:', error);
         throw error;
     }
 };
+
 
 // Function to get all intentions for a user
 export const getAllIntentions = async (userId, type, token) => {
@@ -55,7 +61,7 @@ export const getIntentionById = async (intentionId, token) => {
 };
 
 // Function to update an intention
-export const updateIntention = async (intentionId, intentionData, token) => {
+export const updateIntention = async (id, intention, token) => {
     try {
         const response = await fetch(`${API}/intention/update`, {
             method: 'PUT',
@@ -63,7 +69,7 @@ export const updateIntention = async (intentionId, intentionData, token) => {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             },
-            body: JSON.stringify({_id: intentionId, ...intentionData}),
+            body: JSON.stringify({ _id: id, ...intention })
         });
         return await response.json();
     } catch (error) {
@@ -73,16 +79,15 @@ export const updateIntention = async (intentionId, intentionData, token) => {
 };
 
 // Function to delete an intention
-export const deleteIntention = async (intentionId, token) => {
+export const deleteIntention = async (id, token) => {
     try {
-        // console.log('Token:', token); // Log the token to debug
         const response = await fetch(`${API}/intention/delete`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             },
-            body: JSON.stringify({ _id: intentionId })
+            body: JSON.stringify({ _id: id })
         });
         if (!response.ok) {
             throw new Error('Failed to delete intention');

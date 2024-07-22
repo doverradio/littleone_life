@@ -24,7 +24,9 @@ import {
     handleEditClick,
     handleUpdateIntention,
     handleRowSelect,
-    formatDataForTable
+    formatDataForTable,
+    handleSaveClick,
+    handleCancelClick
 } from './utils/rosaryUtils';
 import { fetchRosaries, fetchMysteryCounts, fetchIntentions, fetchRosaryCount } from './utils/fetchFunctions';
 import RosaryPrayerText from './RosaryPrayerText';
@@ -94,7 +96,7 @@ const Rosary = () => {
         if (activeTab === 'Responses') {
             fetchMysteryCounts(userId, token, setChartData);
         }
-    }, [userId, token, activeTab, currentPage]);
+    }, [userId, token, activeTab, currentPage, refreshTrigger]);
 
     const handleCloseForm = () => {
         setIsAddingIntention(false);
@@ -116,10 +118,7 @@ const Rosary = () => {
                     <div className="questions-tab">
                         <Mysteries handleMysteryClick={(name) => handleMysteryClick(name, mysteriesDetails, setSelectedMystery, setSelectedMysteryDetails, setSelectedMysteryIcon, mysteries, setShowVirtualRosary)} />
                         {selectedMystery && (
-                            <div>
-                                <h2 className="text-center">{selectedMystery}</h2>
-                                <MysteryDetails selectedMystery={selectedMystery} selectedMysteryDetails={selectedMysteryDetails} />
-                            </div>
+                            <MysteryDetails selectedMysteryDetails={selectedMysteryDetails} />
                         )}
                         <div className="prayer-intentions-container">
                             <div className="card mx-auto my-4">
@@ -128,38 +127,38 @@ const Rosary = () => {
                                     selectedIntentions={selectedIntentions}
                                     handleIntentionCheckboxChange={handleIntentionCheckboxChange}
                                     handleEditClick={handleEditClick}
-                                    handleDeleteIntention={handleDeleteIntention}
+                                    handleSaveClick={(id, updatedContent) => handleSaveClick(id, updatedContent, token, fetchIntentions, userId, setPrayerIntentions, setEditingIntentionId, setEditContent)}
+                                    handleCancelClick={() => handleCancelClick(setEditingIntentionId, setEditContent)}
+                                    handleDeleteIntention={(id) => handleDeleteIntention(id, token, fetchIntentions, userId, setPrayerIntentions)}
                                     editingIntentionId={editingIntentionId}
                                     editContent={editContent}
                                     setEditContent={setEditContent}
-                                    setEditingIntentionId={setEditingIntentionId} 
-                                    setSelectedIntentions={setSelectedIntentions} 
-                                    setPrayerIntentions={setPrayerIntentions}
+                                    setEditingIntentionId={setEditingIntentionId}
+                                    setSelectedIntentions={setSelectedIntentions}
                                 />
                                 {isAddingIntention && (
                                     <PrayerIntentionsForm
                                         isAddingIntention={isAddingIntention}
                                         newIntention={newIntention}
-                                        handleNewIntentionSubmit={(e) => handleNewIntentionSubmit(e, newIntention, userId, token, setPrayerIntentions, setNewIntention, setIsAddingIntention)}
+                                        handleNewIntentionSubmit={(e) => handleNewIntentionSubmit(e, newIntention, userId, token, setPrayerIntentions, setNewIntention, setIsAddingIntention, 'Rosary')}
                                         setNewIntention={setNewIntention}
-                                        handleCloseForm={handleCloseForm} 
+                                        handleCloseForm={handleCloseForm}
                                     />
                                 )}
-                                {!isAddingIntention && (
-                                    <div className="row mt-3">
-                                        <div className="col-12 text-center">
-                                            <button 
-                                                className="btn btn-outline-secondary btn-sm" 
-                                                onClick={handleAddIntentionClick}
-                                            >
-                                                Add intention
-                                            </button>
-                                        </div>
-                                    </div>
-                                )}
                             </div>
+                            {!isAddingIntention && (
+                                <div className="row mt-3">
+                                    <div className="col-12 text-center">
+                                        <button 
+                                            className="btn btn-outline-secondary btn-sm" 
+                                            onClick={handleAddIntentionClick}
+                                        >
+                                            Add intention
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
                         </div>
-
                         <div className="row mt-5">
                             <div className="col-12 text-center">
                                 <button 

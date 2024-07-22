@@ -23,6 +23,7 @@ const PrayerIntentionsForm = ({
                     onChange={handleContentChange}
                     maxLength={100}
                     className="form-control"
+                    placeholder="Enter your prayer intention here"
                 />
                 <small>{100 - charCount} characters remaining</small>
             </div>

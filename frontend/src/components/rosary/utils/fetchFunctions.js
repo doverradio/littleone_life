@@ -35,6 +35,7 @@ export const fetchIntentions = async (userId, token, setPrayerIntentions) => {
     try {
         const response = await getAllIntentions(userId, "Rosary", token);
         if (response) {
+            // console.log('fetchIntentions response:', response); // Log the response
             setPrayerIntentions(response);
         } else {
             setPrayerIntentions([]);
