@@ -86,6 +86,7 @@ export const handlePrayRosary = async (userId, selectedMystery, selectedIntentio
     }
 };
 
+
 export const addPrayerIntention = async (intention, userId, token, setPrayerIntentions, setNewIntention, setIsAddingIntention) => {
     try {
         await createIntention(intention, userId, token);

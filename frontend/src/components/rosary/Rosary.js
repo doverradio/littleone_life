@@ -106,6 +106,10 @@ const Rosary = () => {
         setIsAddingIntention(true);
     };
 
+    const handlePrayRosaryWrapper = () => {
+        handlePrayRosary(userId, selectedMystery, selectedIntentions, token, toggleModal, setSelectedIntentions, setSelectedMystery, setIsSubmitting, setCount);
+    };
+
     return (
         <div className="rosary-component container">
             <RosaryHeader
@@ -162,7 +166,7 @@ const Rosary = () => {
                         <div className="row mt-5">
                             <div className="col-12 text-center">
                                 <button 
-                                    onClick={handlePrayRosary} 
+                                    onClick={handlePrayRosaryWrapper} 
                                     className="btn btn-primary"
                                 >
                                     {
