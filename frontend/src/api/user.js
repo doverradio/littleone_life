@@ -47,7 +47,7 @@ export const getPrayerSettings = async (userId, token) => {
         const data = await response.json();
 
         // Log the response data
-        console.log("Response Data from getPrayerSettings:", data);
+        // console.log("Response Data from getPrayerSettings:", data);
 
         return data;
     } catch (error) {
