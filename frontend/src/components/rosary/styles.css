@@ -6,8 +6,6 @@
     font-family: 'Cormorant', serif;
 }
 
-
-
 .mystery-details-container {
     display: flex;
     justify-content: center; /* Center the container */
@@ -140,26 +138,55 @@
     width: 100%; /* Ensure the container takes full width */
 }
 
-.prayer-intentions-list {
-    display: flex;
-    flex-direction: column;
-    align-items: center; /* Center align items */
-    width: 100%; /* Ensure the list takes full width */
+/* For desktop view */
+@media (min-width: 769px) {
+    .prayer-intentions-list {
+        max-width: 600px; /* Adjust to your preferred max width */
+        width: 100%;
+        padding: 10px;
+        margin: auto; /* Center the list on the page */
+    }
+}
+
+/* For mobile view */
+@media (max-width: 768px) {
+    .prayer-intentions-list {
+        max-width: 90vw;
+        padding: 10px;
+        margin: auto; /* Center the list on the page */
+    }
+}
+
+
+.prayer-intention-item .icon {
+    font-size: 18px; /* Adjust the size as needed */
+    cursor: pointer;
 }
 
 .prayer-intention-item {
     display: flex;
     align-items: center;
-    justify-content: center; /* Center align items within each list item */
-    width: 100%; /* Ensure each list item takes full width */
+    justify-content: space-between;
+    width: 100%;
 }
-
 
 .prayer-intention-item p {
     margin: 0;
     flex-grow: 1;
     text-align: left;
+    word-break: break-word; /* Ensure long words break to the next line */
 }
+
+.form-group small {
+    display: block;
+    margin-top: 0.5rem;
+    color: #000; /* Default color */
+}
+
+.form-group small.warning {
+    color: red; /* Warning color */
+}
+
 
 .prayer-intention-item input {
     margin-right: 10px;
@@ -170,21 +197,20 @@
 }
 
 .submit-rosary-btn {
-    margin-top: 1rem; /* Adjust margin as needed */
+    margin-top: 1rem;
 }
 
 .selected-mystery-icon {
     width: 250px;
     height: 250px;
     display: block;
-    margin: 1rem auto; /* Center the image */
+    margin: 1rem auto;
 }
 
-/* New styles */
 .centered-list {
     list-style-position: inside;
     padding: 0;
-    text-align: center; /* Center align text */
+    text-align: center;
 }
 
 .card {
@@ -193,6 +219,8 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding: 20px;
     background-color: #fff;
+    width: 100%; /* Ensure full width */
+    max-width: 800px; /* Set a new maximum width */
 }
 
 .mx-auto {
@@ -200,19 +228,11 @@
     margin-right: auto;
 }
 
-
 .my-4 {
     margin-top: 16px;
     margin-bottom: 16px;
 }
 
-/* Add media query for mobile view */
-@media (max-width: 768px) {
-    .prayer-intentions-container {
-        max-width: 90vw;
-        padding: 10px;
-    }
-}
 .p-4 {
     padding: 1.5rem;
 }

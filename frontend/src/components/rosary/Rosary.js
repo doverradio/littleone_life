@@ -22,6 +22,8 @@ import {
     handleNewIntentionSubmit,
     handleMysteryClick,
     handleEditClick,
+    handleSaveClick,
+    handleCancelClick,
     handleUpdateIntention,
     handleRowSelect,
     formatDataForTable
@@ -119,36 +121,36 @@ const Rosary = () => {
                         {selectedMystery && (
                             <MysteryDetails selectedMysteryDetails={selectedMysteryDetails} />
                         )}
-                        <PrayerIntentions 
-                            prayerIntentions={prayerIntentions}
-                            selectedIntentions={selectedIntentions}
-                            handleIntentionCheckboxChange={handleIntentionCheckboxChange}
-                            handleEditClick={handleEditClick}
-                            handleUpdateIntention={handleUpdateIntention}
-                            handleDeleteIntention={handleDeleteIntention}
-                            editingIntentionId={editingIntentionId}
-                            editContent={editContent}
-                            setEditContent={setEditContent} 
-                            isAddingIntention={isAddingIntention}
-                            addPrayerIntention={handleAddIntentionClick}
-                            handleNewIntentionSubmit={(e) => handleNewIntentionSubmit(e, newIntention, userId, token, setPrayerIntentions, setNewIntention, setIsAddingIntention)}
-                            newIntention={newIntention}
-                            setNewIntention={setNewIntention}
-                            isSubmitting={isSubmitting}
-                            handlePrayRosary={handlePrayRosary}
-                            setEditingIntentionId={setEditingIntentionId} 
-                            setSelectedIntentions={setSelectedIntentions} 
-                            setPrayerIntentions={setPrayerIntentions} // Make sure this prop is passed
-                        />
-                        {isAddingIntention && (
-                            <PrayerIntentionsForm
-                                isAddingIntention={isAddingIntention}
-                                newIntention={newIntention}
-                                handleNewIntentionSubmit={(e) => handleNewIntentionSubmit(e, newIntention, userId, token, setPrayerIntentions, setNewIntention, setIsAddingIntention)}
-                                setNewIntention={setNewIntention}
-                                handleCloseForm={handleCloseForm} 
-                            />
-                        )}
+                        
+                        <div className="prayer-intentions-container">
+                            <div className="card mx-auto my-4">
+                                <PrayerIntentions 
+                                    prayerIntentions={prayerIntentions}
+                                    selectedIntentions={selectedIntentions}
+                                    handleIntentionCheckboxChange={handleIntentionCheckboxChange}
+                                    handleEditClick={(id, content) => handleEditClick(id, content, setEditingIntentionId, setEditContent)} // Ensure correct prop passing
+                                    handleSaveClick={(id, content) => handleSaveClick(id, content, token, fetchIntentions, userId, setPrayerIntentions, setEditingIntentionId, setEditContent)} // Pass it here
+                                    handleCancelClick={() => handleCancelClick(setEditingIntentionId, setEditContent)} // Pass it here
+                                    handleDeleteIntention={(id) => handleDeleteIntention(id, token, fetchIntentions, userId, setPrayerIntentions)} // Pass it here
+                                    editingIntentionId={editingIntentionId}
+                                    editContent={editContent}
+                                    setEditContent={setEditContent}
+                                    setEditingIntentionId={setEditingIntentionId} 
+                                    setSelectedIntentions={setSelectedIntentions} 
+                                    setPrayerIntentions={setPrayerIntentions}
+                                />
+                                {isAddingIntention && (
+                                    <PrayerIntentionsForm
+                                        isAddingIntention={isAddingIntention}
+                                        newIntention={newIntention}
+                                        handleNewIntentionSubmit={(e) => handleNewIntentionSubmit(e, newIntention, userId, token, setPrayerIntentions, setNewIntention, setIsAddingIntention)}
+                                        setNewIntention={setNewIntention}
+                                        handleCloseForm={handleCloseForm} 
+                                    />
+                                )}
+                            </div>
+                        </div>
+
                         <div className="row mt-3">
                             <div className="col-12 text-center">
                                 <button 

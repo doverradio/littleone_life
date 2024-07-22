@@ -90,18 +90,19 @@ export const addPrayerIntention = (setIsAddingIntention) => {
     setIsAddingIntention(true);
 };
 
-export const handleNewIntentionSubmit = async (e, newIntention, userId, token, setPrayerIntentions, setNewIntention, setIsAddingIntention) => {
+export const handleNewIntentionSubmit = (e, newIntention, userId, token, setPrayerIntentions, setNewIntention, setIsAddingIntention) => {
     e.preventDefault();
-    if (!newIntention.trim()) return;
-
-    try {
-        await createIntention({ user: userId, content: newIntention, type: 'Rosary' }, token);
-        await fetchIntentions(userId, token, setPrayerIntentions);
-        setNewIntention('');
-        setIsAddingIntention(false);
-    } catch (error) {
-        console.error('Error adding new intention:', error);
+    if (newIntention.length > 100) {
+        alert('Prayer intention cannot exceed 100 characters');
+        return;
     }
+    addPrayerIntention({ content: newIntention }, userId, token)
+        .then(() => {
+            fetchIntentions(userId, token, setPrayerIntentions);
+            setNewIntention('');
+            setIsAddingIntention(false);
+        })
+        .catch(err => console.error(err));
 };
 
 export const handleMysteryClick = (mysteryName, mysteriesDetails, setSelectedMystery, setSelectedMysteryDetails, setSelectedMysteryIcon, mysteries, setShowVirtualRosary) => {
@@ -114,32 +115,23 @@ export const handleMysteryClick = (mysteryName, mysteriesDetails, setSelectedMys
 
 
 
-export const handleEditClick = (intentionId, content, setEditingIntentionId, setEditContent) => {
-    setEditingIntentionId(intentionId);
+export const handleEditClick = (id, content, setEditingIntentionId, setEditContent) => {
+    setEditingIntentionId(id);
     setEditContent(content);
 };
 
-export const handleSaveClick = async (intentionId, content, token, fetchIntentions, userId, setEditingIntentionId, setEditContent, setPrayerIntentions) => {
+export const handleSaveClick = async (id, updatedContent, token, fetchIntentions, userId, setPrayerIntentions, setEditingIntentionId, setEditContent) => {
+    if (updatedContent.length > 100) {
+        alert('Prayer intention cannot exceed 100 characters');
+        return;
+    }
     try {
-        const response = await fetch(`${API}/intention/update`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify({ _id: intentionId, content })
-        });
-
-        if (!response.ok) {
-            throw new Error('Failed to update intention');
-        }
-
-        const data = await response.json();
-        await fetchIntentions(userId, token, setPrayerIntentions);
+        await updateIntention(id, { content: updatedContent }, token);
+        fetchIntentions(userId, token, setPrayerIntentions);
         setEditingIntentionId(null);
         setEditContent('');
     } catch (error) {
-        console.error('Error updating intention:', error);
+        console.error("Error updating intention: ", error);
     }
 };
 
@@ -148,16 +140,18 @@ export const handleCancelClick = (setEditingIntentionId, setEditContent) => {
     setEditContent('');
 };
 
-export const handleUpdateIntention = async (e, editingIntentionId, editContent, token, fetchIntentions, userId, setEditingIntentionId) => {
-    e.preventDefault();
+
+export const handleUpdateIntention = async (id, updatedContent, token, fetchIntentions, userId, setPrayerIntentions, setEditingIntentionId, setEditContent) => {
     try {
-        await updateIntention(editingIntentionId, { content: editContent }, token);
-        await fetchIntentions(userId, token);
+        await updateIntention(id, { content: updatedContent }, token);
+        fetchIntentions(userId, token, setPrayerIntentions);
         setEditingIntentionId(null);
+        setEditContent('');
     } catch (error) {
-        console.error('Error updating intention:', error);
+        console.error("Error updating intention: ", error);
     }
 };
+
 
 export const handleRowSelect = (selectedRows) => {
     // Implement what should happen when rows are selected

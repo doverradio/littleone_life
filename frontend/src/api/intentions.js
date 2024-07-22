@@ -75,7 +75,7 @@ export const updateIntention = async (intentionId, intentionData, token) => {
 // Function to delete an intention
 export const deleteIntention = async (intentionId, token) => {
     try {
-        console.log('Token:', token); // Log the token to debug
+        // console.log('Token:', token); // Log the token to debug
         const response = await fetch(`${API}/intention/delete`, {
             method: 'DELETE',
             headers: {
