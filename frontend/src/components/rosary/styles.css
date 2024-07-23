@@ -92,21 +92,32 @@
 
 .rosary-nav {
     display: flex;
-    justify-content: center;
-    margin-top: 20px;
+    justify-content: space-between;
+    margin: 0 20px;
+}
+.rosary-nav a {
+    color: darkgrey; /* Set the color for inactive tabs */
+    text-decoration: none;
+    padding: 10px 15px;
+    display: flex;
+    justify-content: space-between;
+    transition: color 0.3s ease;
+    margin: 0 20px;
 }
 
 .rosary-nav a {
-    padding: 7px;
-    margin-right: 3px;
-    text-decoration: none;
-    color: black;
-    font-size: 16px;
+    padding: 10px;
+    flex-grow: 1;
+    text-align: center;
 }
 
 .rosary-nav a.active {
+    color: black; /* Set the color for the active tab */
     font-weight: bold;
-    color: blue;
+}
+
+.rosary-nav a:hover {
+    color: black; /* Optional: Set the color for hover state */
 }
 
 .mysteries-row {

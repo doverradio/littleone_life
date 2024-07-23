@@ -38,3 +38,20 @@
     display: flex;
     justify-content: center;
 }
+
+.first-row {
+    outline: 2px solid black;
+}
+
+.datatable-filter-btn button {
+    color: lightgrey; /* Set the default color for the button */
+    background-color: transparent; /* Ensure the background is transparent */
+    border: none; /* Remove border */
+    cursor: pointer; /* Change cursor to pointer */
+    font-size: 1.5rem; /* Adjust the size as needed */
+    transition: color 0.3s ease; /* Add transition for smooth color change */
+}
+
+.datatable-filter-btn button:hover {
+    color: darkgrey; /* Set the color on hover */
+}

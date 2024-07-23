@@ -1,50 +1,52 @@
 import React, { useState, useEffect } from 'react';
+import DataTableHeader from './components/DataTableHeader';
+import DataTableBody from './components/DataTableBody';
+import DataTablePagination from './components/DataTablePagination';
+import DataTableFilters from './components/DataTableFilters';
+import { sortData } from '../sorting';
+import { filterData } from '../filterData';
 import './styles.css';
 
 const ReusableDatatable = ({ data = [], columns, pageSize, checkbox, onRowSelect, onDelete, refreshTrigger }) => {
     const [currentPage, setCurrentPage] = useState(1);
     const [sortedData, setSortedData] = useState([]);
     const [selectedRows, setSelectedRows] = useState([]);
+    const [sortConfig, setSortConfig] = useState({ key: 'createdAt', direction: 'desc' });
+    const [filterOpen, setFilterOpen] = useState(false);
+    const [startDate, setStartDate] = useState(null);
+    const [endDate, setEndDate] = useState(null);
+    const [selectedMystery, setSelectedMystery] = useState('');
 
-    const dateField = 'createdAt'; // Example field name
+    const dateField = 'createdAt';
 
     useEffect(() => {
-        // Sort data by the date field in descending order (newest first)
-        const sorted = [...data].sort((a, b) => {
-            return new Date(b[dateField]) - new Date(a[dateField]);
-        });
-
+        let filteredData = filterData(data, startDate, endDate, selectedMystery, dateField);
+        const sorted = sortData(filteredData, sortConfig.key, sortConfig.direction);
         setSortedData(sorted);
         setSelectedRows([]);
-    }, [data, refreshTrigger]);
+    }, [data, refreshTrigger, sortConfig, startDate, endDate, selectedMystery]);
 
-    const formatDate = (dateString) => {
-        const date = new Date(dateString);
-        let hours = date.getHours();
-        const minutes = date.getMinutes();
-        const ampm = hours >= 12 ? 'PM' : 'AM';
-        hours = hours % 12;
-        hours = hours ? hours : 12; // the hour '0' should be '12'
-        const strHours = hours < 10 ? '0' + hours : hours;
-        const strMinutes = minutes < 10 ? '0' + minutes : minutes;
-    
-        const formattedDate = `${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}-${date.getFullYear()} ${strHours}:${strMinutes} ${ampm}`;
-        return formattedDate;
+    const handleSort = (key) => {
+        let direction = 'asc';
+        if (sortConfig.key === key && sortConfig.direction === 'asc') {
+            direction = 'desc';
+        }
+        setSortConfig({ key, direction });
     };
 
     const handleDeleteAction = () => {
         if (selectedRows.length > 0) {
-            onDelete(selectedRows.map(row => row._id)); // Or the correct field for ID
+            onDelete(selectedRows.map(row => row._id));
         }
     };
 
     const handleDeleteClick = () => {
-        if(window.confirm('Are you sure you want to delete the selected rows?')) {
+        if (window.confirm('Are you sure you want to delete the selected rows?')) {
             onDelete(selectedRows);
         }
     };
 
-    const totalPages = Math.ceil(data.length / pageSize);
+    const totalPages = Math.ceil(sortedData.length / pageSize);
 
     const goToPage = (pageNumber) => {
         setCurrentPage(pageNumber);
@@ -57,6 +59,14 @@ const ReusableDatatable = ({ data = [], columns, pageSize, checkbox, onRowSelect
             setSelectedRows(selectedRows.filter(selectedRow => selectedRow !== row));
         } else {
             setSelectedRows([...selectedRows, row]);
+        }
+    };
+
+    const handleSelectAllChange = () => {
+        if (selectedRows.length === currentPageData.length) {
+            setSelectedRows([]);
+        } else {
+            setSelectedRows(currentPageData);
         }
     };
 
@@ -78,48 +88,40 @@ const ReusableDatatable = ({ data = [], columns, pageSize, checkbox, onRowSelect
                     </button>
                 </div>
             )}
+
+            <DataTableFilters 
+                filterOpen={filterOpen}
+                setFilterOpen={setFilterOpen}
+                startDate={startDate}
+                setStartDate={setStartDate}
+                endDate={endDate}
+                setEndDate={setEndDate}
+                selectedMystery={selectedMystery}
+                setSelectedMystery={setSelectedMystery}
+            />
+
             <table className='datatable'>
-                <thead>
-                    <tr>
-                        {checkbox && <th>Select</th>}
-                        {columns.map(column => (
-                            <th key={column.accessor}>{column.header}</th>
-                        ))}
-                    </tr>
-                </thead>
-                <tbody>
-                    {currentPageData.map((row, rowIndex) => (
-                        <tr key={rowIndex}>
-                            {checkbox && (
-                                <td>
-                                    <input 
-                                        type="checkbox" 
-                                        checked={selectedRows.includes(row)}
-                                        onChange={() => handleCheckboxChange(row)} 
-                                    />
-                                </td>
-                            )}
-                            {columns.map(column => (
-                                <td key={column.accessor}>
-                                    {column.isDate ? formatDate(row[column.accessor]) : row[column.accessor]}
-                                </td>
-                            ))}
-                        </tr>
-                    ))}
-                </tbody>
+                <DataTableHeader 
+                    columns={columns}
+                    sortConfig={sortConfig}
+                    handleSort={handleSort}
+                    checkbox={checkbox}
+                    handleSelectAllChange={handleSelectAllChange}
+                    allRowsSelected={selectedRows.length === currentPageData.length}
+                />
+                <DataTableBody 
+                    currentPageData={currentPageData}
+                    columns={columns}
+                    checkbox={checkbox}
+                    handleCheckboxChange={handleCheckboxChange}
+                    selectedRows={selectedRows}
+                />
             </table>
 
-            <div className="datatable-pagination">
-                {Array.from({ length: totalPages }, (_, i) => i + 1).map(pageNumber => (
-                    <button 
-                        key={pageNumber} 
-                        onClick={() => goToPage(pageNumber)}
-                        className='btn btn-outline-primary btn-sm m-1'
-                    >
-                        {pageNumber}
-                    </button>
-                ))}
-            </div>
+            <DataTablePagination 
+                totalPages={totalPages}
+                goToPage={goToPage}
+            />
         </div>
     );
 };

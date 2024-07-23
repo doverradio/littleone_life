@@ -16,18 +16,25 @@ const RosaryResponses = ({ rosaries, chartData, columns, handleRowSelect, handle
                     </div>
                 </div>
             </div>
-            
-            <PieChartMysteries data={chartData} />
-
-            <ReusableDatatable
-                data={formatDataForTable(formattedRosaries)} 
-                columns={columns} 
-                pageSize={30} 
-                checkbox={true}
-                onRowSelect={handleRowSelect} 
-                onDelete={handleDelete}
-                refreshTrigger={refreshTrigger}
-            />
+            <div className="row mb-5">
+                <div className="col-12">
+                    <p><sup>The most recent rosary prayed is outlined in the table below:</sup></p>
+                    <ReusableDatatable
+                        data={formatDataForTable(formattedRosaries)} 
+                        columns={columns} 
+                        pageSize={30} 
+                        checkbox={true}
+                        onRowSelect={handleRowSelect} 
+                        onDelete={handleDelete}
+                        refreshTrigger={refreshTrigger}
+                    />
+                </div>
+            </div>
+            <div className="row mt-5">
+                <div className="col-12">
+                    <PieChartMysteries data={chartData} />
+                </div>
+            </div>
         </div>
     );
 };

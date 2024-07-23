@@ -60,9 +60,6 @@ const SignUp = () => {
                         googleToken={googleToken} 
                         informParent={informParent} // Pass informParent as a prop
                     />
-                    <p className="mt-3 text-center">
-                        Are you a member? <a href="/signin">Login</a>
-                    </p>
                     <div className="social-signup mt-4">
                         <p className="text-center">Register With Social Media</p>
                         <div className="social-icons">
