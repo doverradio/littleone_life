@@ -4,7 +4,7 @@ import { isAuthenticated } from '../../../api/auth';
 import { Link } from 'react-router-dom';
 import { formatNumber } from '../../utils/numberFormatter';
 
-const ProfileIcon = ({ handleSignout, userStats }) => {
+const ProfileIcon = ({ handleSignout, userStats = {} }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const { user } = isAuthenticated();
   const dropdownRef = useRef(null);
@@ -59,7 +59,7 @@ const ProfileIcon = ({ handleSignout, userStats }) => {
                   fontSize: '14px',
                   fontWeight: 'bold',
                   border: '1px solid black'
-                }}>{formatNumber(userStats.rosaries)}</span>
+                }}>{formatNumber(userStats.rosaries || 0)}</span>
               </div>
             </div>
             <div style={{ position: 'relative', textAlign: 'center' }}>
@@ -76,7 +76,7 @@ const ProfileIcon = ({ handleSignout, userStats }) => {
                   fontSize: '14px',
                   fontWeight: 'bold',
                   border: '1px solid black'
-                }}>{formatNumber(userStats.masses)}</span>
+                }}>{formatNumber(userStats.masses || 0)}</span>
               </div>
             </div>
             <div style={{ position: 'relative', textAlign: 'center' }}>
@@ -93,7 +93,7 @@ const ProfileIcon = ({ handleSignout, userStats }) => {
                   fontSize: '14px',
                   fontWeight: 'bold',
                   border: '1px solid black'
-                }}>{formatNumber(userStats.confessions)}</span>
+                }}>{formatNumber(userStats.confessions || 0)}</span>
               </div>
             </div>
           </div>
