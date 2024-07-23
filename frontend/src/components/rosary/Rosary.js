@@ -46,7 +46,7 @@ const Rosary = () => {
     const [editContent, setEditContent] = useState('');
     const [selectedMysteryDetails, setSelectedMysteryDetails] = useState([]);
     const [selectedMysteryIcon, setSelectedMysteryIcon] = useState(null);
-    const [activeTab, setActiveTab] = useState('Questions');
+    const [activeTab, setActiveTab] = useState('Form');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isEmailEnabled, setIsEmailEnabled] = useState(false);
     const DEFAULT_FONT_SIZE = 11;
@@ -118,7 +118,7 @@ const Rosary = () => {
                 rosaryIcon={rosaryIcon}
             />
             <main className="rosary-main">
-                {activeTab === 'Questions' && (
+                {activeTab === 'Form' && (
                     <div className="questions-tab">
                         <Mysteries handleMysteryClick={(name) => handleMysteryClick(name, mysteriesDetails, setSelectedMystery, setSelectedMysteryDetails, setSelectedMysteryIcon, mysteries, setShowVirtualRosary)} />
                         {selectedMystery && (

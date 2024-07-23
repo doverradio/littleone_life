@@ -38,7 +38,7 @@ exports.getAllIntentions = async (req, res) => {
         }
 
         const intentions = await Intention.find({ user: userId, type });
-        log("Fetched Intentions:", intentions);
+        // log("Fetched Intentions:", intentions);
 
         res.json(intentions);
     } catch (error) {
