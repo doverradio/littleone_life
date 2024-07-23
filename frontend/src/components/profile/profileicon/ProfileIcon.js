@@ -45,57 +45,63 @@ const ProfileIcon = ({ handleSignout, userStats = {} }) => {
         }}>
           <div style={{ padding: '10px', fontWeight: 'bold' }}>{user ? user.username : 'User Name'}</div>
           <div style={{ padding: '10px', display: 'flex', justifyContent: 'space-around' }}>
-            <div style={{ position: 'relative', textAlign: 'center' }}>
-              <FaCross size={20} title="Rosaries" />
-              <div>
-                <sup>Rosaries</sup>
-                <span style={{
-                  display: 'inline-block',
-                  marginTop: '5px',
-                  backgroundColor: 'white',
-                  borderRadius: '12px',
-                  padding: '2px 8px',
-                  color: 'black',
-                  fontSize: '14px',
-                  fontWeight: 'bold',
-                  border: '1px solid black'
-                }}>{formatNumber(userStats.rosaries || 0)}</span>
+            <Link to="/prayers/rosary" style={{ textAlign: 'center', textDecoration: 'none', color: 'black' }}>
+              <div style={{ position: 'relative', textAlign: 'center' }}>
+                <FaCross size={20} title="Rosaries" />
+                <div>
+                  <sup>Rosaries</sup>
+                  <span style={{
+                    display: 'inline-block',
+                    marginTop: '5px',
+                    backgroundColor: 'white',
+                    borderRadius: '12px',
+                    padding: '2px 8px',
+                    color: 'black',
+                    fontSize: '14px',
+                    fontWeight: 'bold',
+                    border: '1px solid black'
+                  }}>{formatNumber(userStats.rosaries || 0)}</span>
+                </div>
               </div>
-            </div>
-            <div style={{ position: 'relative', textAlign: 'center' }}>
-              <FaChurch size={20} title="Masses" />
-              <div>
-                <sup>Masses</sup>
-                <span style={{
-                  display: 'inline-block',
-                  marginTop: '5px',
-                  backgroundColor: 'white',
-                  borderRadius: '12px',
-                  padding: '2px 8px',
-                  color: 'black',
-                  fontSize: '14px',
-                  fontWeight: 'bold',
-                  border: '1px solid black'
-                }}>{formatNumber(userStats.masses || 0)}</span>
+            </Link>
+            <Link to="/prayers/mass" style={{ textAlign: 'center', textDecoration: 'none', color: 'black' }}>
+              <div style={{ position: 'relative', textAlign: 'center' }}>
+                <FaChurch size={20} title="Masses" />
+                <div>
+                  <sup>Masses</sup>
+                  <span style={{
+                    display: 'inline-block',
+                    marginTop: '5px',
+                    backgroundColor: 'white',
+                    borderRadius: '12px',
+                    padding: '2px 8px',
+                    color: 'black',
+                    fontSize: '14px',
+                    fontWeight: 'bold',
+                    border: '1px solid black'
+                  }}>{formatNumber(userStats.masses || 0)}</span>
+                </div>
               </div>
-            </div>
-            <div style={{ position: 'relative', textAlign: 'center' }}>
-              <FaPray size={20} title="Confessions" />
-              <div>
-                <sup>Confessions</sup>
-                <span style={{
-                  display: 'inline-block',
-                  marginTop: '5px',
-                  backgroundColor: 'white',
-                  borderRadius: '12px',
-                  padding: '2px 8px',
-                  color: 'black',
-                  fontSize: '14px',
-                  fontWeight: 'bold',
-                  border: '1px solid black'
-                }}>{formatNumber(userStats.confessions || 0)}</span>
+            </Link>
+            <Link to="/prayers/confession" style={{ textAlign: 'center', textDecoration: 'none', color: 'black' }}>
+              <div style={{ position: 'relative', textAlign: 'center' }}>
+                <FaPray size={20} title="Confessions" />
+                <div>
+                  <sup>Confessions</sup>
+                  <span style={{
+                    display: 'inline-block',
+                    marginTop: '5px',
+                    backgroundColor: 'white',
+                    borderRadius: '12px',
+                    padding: '2px 8px',
+                    color: 'black',
+                    fontSize: '14px',
+                    fontWeight: 'bold',
+                    border: '1px solid black'
+                  }}>{formatNumber(userStats.confessions || 0)}</span>
+                </div>
               </div>
-            </div>
+            </Link>
           </div>
           <div style={{ height: '1px', backgroundColor: '#ddd', margin: '5px 0' }}></div>
           <Link to="/user/settings" style={{ padding: '10px', display: 'flex', alignItems: 'center', textDecoration: 'none' }}>

@@ -1,63 +1,59 @@
-import React, { useEffect, useState } from "react";
-import { isAuthenticated } from "../../api/auth";
-import { useUser } from '../../context/UserContext';
+import React, { useState, useEffect } from 'react';
+import { isAuthenticated } from '../../api/auth';
+import { getUserPrayerStats } from '../../api/user';
 import { Link } from 'react-router-dom';
-import "./UserDashboard.css";
-import { getUserPrayerStats } from "../../api/user";
 
 const UserDashboard = () => {
-    const { user } = useUser();
-    const {
-        user: { firstName, _id: userId },
-        token
-    } = isAuthenticated();
-    
-    const [userStats, setUserStats] = useState({
-        rosaries: 0,
-        masses: 0,
-        confessions: 0,
-        divineMercies: 0
-    });
+  const [userStats, setUserStats] = useState({});
+  const { user, token } = isAuthenticated();
 
-    useEffect(() => {
-        const fetchUserStats = async () => {
-            try {
-                const stats = await getUserPrayerStats(userId, token);
-                setUserStats(stats);
-            } catch (error) {
-                console.error("Error fetching user stats:", error);
-            }
-        };
+  useEffect(() => {
+    const fetchUserStats = async () => {
+      try {
+        const stats = await getUserPrayerStats(user._id, token);
+        setUserStats(stats);
+      } catch (error) {
+        console.error('Error fetching user stats:', error);
+      }
+    };
 
-        fetchUserStats();
-    }, [userId, token]);
+    fetchUserStats();
+  }, [user._id, token]);
 
-    return (
-        <>
-            <div className="dashboard-container">
-                <div className="dashboard-content">
-                    <div className="row justify-content-center align-items-center">
-                        {
-                            firstName ?
-                            <><h2 className="header-font mt-2">{firstName}'s Faith Journey</h2></>
-                            : <><h2 className="header-font mt-2">My Faith Journey</h2></>
-                        }
-                    </div>
-                    <div className="user-stats">
-                        <h3>User Stats</h3>
-                        <p>
-                            <Link to="/prayers/rosary" style={{ textDecoration: 'none', color: 'inherit' }}>
-                                Rosaries: {userStats.rosaries}
-                            </Link>
-                        </p>
-                        <p>Masses: {userStats.masses}</p>
-                        <p>Confessions: {userStats.confessions}</p>
-                        <p>Divine Mercy Chaplets: {userStats.divineMercies}</p>
-                    </div>
-                </div>
-            </div>
-        </>
-    );
-}
+  return (
+    <div className="container">
+      <h1 className="my-4">User Dashboard</h1>
+      <div className="card mb-4">
+        <div className="card-header">
+          <h4>User Stats</h4>
+        </div>
+        <div className="card-body">
+          <ul className="list-group">
+            <li className="list-group-item">
+              <Link to="/prayers/rosary" style={{ textDecoration: 'none', color: 'inherit' }}>
+                Rosaries: {userStats.rosaries || 0}
+              </Link>
+            </li>
+            <li className="list-group-item">
+              <Link to="/prayers/mass" style={{ textDecoration: 'none', color: 'inherit' }}>
+                Masses: {userStats.masses || 0}
+              </Link>
+            </li>
+            <li className="list-group-item">
+              <Link to="/prayers/confession" style={{ textDecoration: 'none', color: 'inherit' }}>
+                Confessions: {userStats.confessions || 0}
+              </Link>
+            </li>
+            <li className="list-group-item">
+              <Link to="/prayers/divinemercy" style={{ textDecoration: 'none', color: 'inherit' }}>
+                Divine Mercy Chaplets: {userStats.divineMercies || 0}
+              </Link>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 export default UserDashboard;
