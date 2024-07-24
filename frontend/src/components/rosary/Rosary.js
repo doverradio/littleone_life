@@ -33,6 +33,7 @@ import RosaryPrayerText from './RosaryPrayerText';
 import RosaryResponses from './RosaryResponses';
 import ToggleSlider from '../utils/ToggleSlider';
 import RosaryHeader from './RosaryHeader';
+import BackIcon from '../utils/BackIcon'; // Import the BackIcon component
 
 const Rosary = () => {
     const { toggleModal } = useModal();
@@ -49,7 +50,7 @@ const Rosary = () => {
     const [activeTab, setActiveTab] = useState('Form');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isEmailEnabled, setIsEmailEnabled] = useState(false);
-    const DEFAULT_FONT_SIZE = 11;
+    const DEFAULT_FONT_SIZE = 18;
     const MAX_FONT_SIZE = 33;
     const MIN_FONT_SIZE = 11;
     const [fontSize, setFontSize] = useState(DEFAULT_FONT_SIZE);
@@ -112,6 +113,7 @@ const Rosary = () => {
 
     return (
         <div className="rosary-component container">
+            <BackIcon /> {/* Add the BackIcon component */}
             <RosaryHeader
                 activeTab={activeTab}
                 setActiveTab={setActiveTab}

@@ -1,14 +1,15 @@
+/* Existing styles */
 .fancy-font {
-    /* font-family: 'Georgia', serif; Replace 'Georgia' with your preferred web safe font */
-    font-family: 'Cormorant', serif; /* Replace 'Georgia' with your preferred web safe font */
+    font-family: 'Cormorant', serif;
 }
+
 .header-font {
-    font-family: 'Georgia', serif; 
+    font-family: 'Cormorant', serif;
 }
 
 .form-container {
     width: 80%;
-    margin: 0 auto; /* Centers the form */
+    margin: 0 auto;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -16,12 +17,225 @@
 
 @media (max-width: 768px) {
     .form-container {
-        width: 90%; /* Wider on smaller screens */
+        width: 90%;
     }
 }
 
 .radio-button-container {
     display: flex;
-    align-items: center; /* This will vertically align the radio button with the label */
-    margin-bottom: 10px; /* Optional: adds some space between each radio button */
+    align-items: center;
+    margin-bottom: 10px;
 }
+
+.mass-header {
+    max-height: 100px;
+    overflow: hidden;
+    text-align: center;
+}
+
+.mass-icon {
+    height: 55px;
+    width: 55px;
+    cursor: pointer;
+}
+
+.mass-main {
+    text-align: center;
+}
+
+.mass-nav {
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 0;
+    border-bottom: 1px solid #ccc;
+    overflow-x: auto;
+}
+
+.mass-nav a {
+    color: darkgrey;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 5px 10px;
+    border-radius: 4px;
+    transition: color 0.3s;
+    flex: 1;
+    text-align: center;
+}
+
+.mass-nav a:hover,
+.mass-nav a.active {
+    color: black;
+}
+
+/* Media query for mobile view */
+@media (max-width: 768px) {
+    .mass-nav {
+        padding: 5px 0;
+    }
+
+    .mass-nav a {
+        padding: 5px 5px;
+        font-size: 0.9rem;
+    }
+}
+
+.prayer-intentions-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+@media (min-width: 769px) {
+    .prayer-intentions-list {
+        max-width: 600px;
+        width: 100%;
+        padding: 10px;
+        margin: auto;
+    }
+}
+
+@media (max-width: 768px) {
+    .prayer-intentions-list {
+        max-width: 90vw;
+        padding: 10px;
+        margin: auto;
+    }
+}
+
+.prayer-intention-item .icon {
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.prayer-intention-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.prayer-intention-item p {
+    margin: 0;
+    flex-grow: 1;
+    text-align: left;
+    word-break: break-word;
+}
+
+.form-group small {
+    display: block;
+    margin-top: 0.5rem;
+    color: #000;
+}
+
+.form-group small.warning {
+    color: red;
+}
+
+.prayer-intention-item input {
+    margin-right: 10px;
+}
+
+.prayer-intention-item .ml-2 {
+    margin-left: 10px;
+}
+
+.submit-mass-btn {
+    margin-top: 1rem;
+}
+
+.centered-list {
+    list-style-position: inside;
+    padding: 0;
+    text-align: center;
+}
+
+.card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    background-color: #fff;
+    width: 100%;
+    max-width: 800px;
+}
+
+.mx-auto {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.my-4 {
+    margin-top: 16px;
+    margin-bottom: 16px;
+}
+
+.p-4 {
+    padding: 1.5rem;
+}
+
+.text-left {
+    text-align: left;
+}
+
+.mass-image {
+    width: 110px;
+    height: auto;
+    margin-top: 20px;
+}
+
+/* New styles */
+.mass-questions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.d-flex {
+    display: flex;
+}
+
+.flex-column {
+    flex-direction: column;
+}
+
+.align-items-center {
+    align-items: center;
+}
+
+.justify-content-center {
+    justify-content: center;
+}
+
+.w-100 {
+    width: 100%;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.img-fluid {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Additional styles for centering */
+.mass-component {
+    display: flex;
+    flex-direction: column;
+    /* align-items: center;
+    justify-content: center; */
+    min-height: 100vh;
+    padding: 20px;
+}
+
+/* 
+.mass-container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+} */

@@ -59,3 +59,26 @@
     border-radius: 50%;
   }
   
+  .back-icon {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    margin-bottom: 20px; /* Add some space below the icon */
+}
+
+.back-icon svg {
+    margin-right: 8px;
+}
+
+/* Media query for smaller screens */
+@media (max-width: 768px) {
+    .back-icon {
+        justify-content: center;
+        font-size: 16px;
+    }
+
+    .back-icon svg {
+        width: 20px;
+        height: 20px;
+    }
+}
