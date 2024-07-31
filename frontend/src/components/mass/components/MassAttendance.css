@@ -1,0 +1,36 @@
+.scrollable-container {
+    max-height: 200px; /* Adjust this height to fit up to 5 churches */
+    overflow-y: auto;
+    border: 1px solid #ccc; /* Optional: to visually separate the scrollable area */
+    padding: 10px; /* Optional: for some padding inside the scrollable area */
+}
+
+.church-item-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.church-item-label {
+    flex-grow: 1;
+    margin-left: 10px;
+    margin-right: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.add-church-button {
+    background-color: #007bff;
+    border: none;
+    color: white;
+    font-size: 18px;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.add-church-button:hover {
+    background-color: #0056b3;
+}

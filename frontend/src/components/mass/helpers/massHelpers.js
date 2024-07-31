@@ -1,6 +1,7 @@
 import { countMassesByUser, getAllMassAttendances, createMassAttendance } from '../../../api/massAttendance';
 import { getAllIntentions } from '../../../api/intentions';
-import { createChurch, getAllChurches } from '../../../api/church';
+import { getAllChurches } from '../../../api/church';
+const API = process.env.REACT_APP_API ? process.env.REACT_APP_API : 'https://www.littleone.life/api';
 
 export const fetchMassData = async (userId, token, setCount, setMassAttendances, setPieChartData, setUserChurches, setPrayerIntentions, setError) => {
     await fetchMassCount(userId, token, setCount);
@@ -53,16 +54,27 @@ const processMassAttendanceDataForPieChart = (massAttendances) => {
 
 const fetchUserChurches = async (userId, token, setUserChurches) => {
     try {
-        const response = await getAllChurches(userId, token);
-        if (response) {
-            setUserChurches(response);
+        const response = await fetch(`${API}/churches`, {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify({ userId })
+        });
+
+        const data = await response.json();
+        if (data.error) {
+            console.error(data.error);
         } else {
-            console.error("No churches found");
+            setUserChurches(data);
         }
     } catch (error) {
-        console.error("Error fetching churches:", error);
+        console.error('Error fetching user churches:', error);
     }
 };
+
 
 const fetchIntentions = async (userId, token, setPrayerIntentions, setError) => {
     try {
@@ -99,3 +111,28 @@ export const handleMassData = async (userId, selectedChurch, selectedMassTime, s
 
     setCount(prevCount => prevCount + 1);
 };
+
+export const addChurchToUser = async (userId, church, token) => {
+    try {
+        const response = await fetch(`${API}/churches/addToUser`, {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({ userId, churches: [church] }),
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || 'Failed to add church to user');
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error('Error adding church to user:', error);
+        throw error;
+    }
+};
+

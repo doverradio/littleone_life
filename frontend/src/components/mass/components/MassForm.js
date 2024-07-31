@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
-import massImage from '../mass_image.png'; // Ensure the path is correct
 import MassAttendance from './MassAttendance';
 import ManualEntryForm from './ManualEntryForm';
 import PrayerIntentions from './PrayerIntentions';
-import Map from '../../map/Map'; // Corrected import path
-import { handleManualChurchChange, handleManualChurchSubmit, handleZipCodeSearch, addChurchToMassOptions as addChurchToMassOptionsHelper, savePendingChurches } from '../helpers/massFormHelpers';
+import Map from '../../map/Map';
+import { handleManualChurchChange, handleManualChurchSubmit, handleZipCodeSearch, savePendingChurches } from '../helpers/massFormHelpers';
+import { addChurchToUser } from '../helpers/massHelpers';
+import { isAuthenticated } from '../../../api/auth';
 
 const MassForm = ({
     userChurches,
     setUserChurches,
-    nearbyChurches, // Add this prop
+    nearbyChurches,
     showChurchForm,
     setShowChurchForm,
     submitNewChurch,
@@ -40,7 +41,6 @@ const MassForm = ({
     editContent,
     selectedChurch,
     specialIntentions,
-    token,
     setNearbyChurches
 }) => {
     const [distance, setDistance] = useState(8046.72); // default 5 miles in meters
@@ -59,6 +59,9 @@ const MassForm = ({
         website: '',
         additionalInfo: '',
     });
+    
+    const { user: { _id }, token } = isAuthenticated();
+    const userId = _id;
 
     const [isChurchFormVisible, setIsChurchFormVisible] = useState(false);
 
@@ -66,9 +69,14 @@ const MassForm = ({
         setIsChurchFormVisible(!isChurchFormVisible);
     };
 
-    const addChurchToMassOptions = (church) => {
-        setUserChurches([...userChurches, church]);
-        addChurchToMassOptionsHelper(church);
+    const addChurchToMassOptions = async (church) => {
+        try {
+            const updatedChurch = await addChurchToUser(userId, church, token);
+            setUserChurches(prevUserChurches => [...prevUserChurches, updatedChurch]);
+            setNearbyChurches(prevNearbyChurches => prevNearbyChurches.filter(nearby => nearby.name !== church.name || nearby.address !== church.address));
+        } catch (error) {
+            console.error('Error adding church to user:', error);
+        }
     };
 
     return (
@@ -77,13 +85,13 @@ const MassForm = ({
                 <div className="col-md-12 text-center">
                     <MassAttendance 
                         userChurches={userChurches}
-                        nearbyChurches={nearbyChurches} // Pass nearbyChurches
+                        nearbyChurches={nearbyChurches}
                         handleChurchSelection={handleChurchSelection}
                         selectedMassTime={selectedMassTime}
                         handleMassTimeChange={handleMassTimeChange}
                         massTimesOptions={massTimesOptions}
                         selectedChurch={selectedChurch}
-                        addChurchToMassOptions={addChurchToMassOptions} // Pass down this function
+                        addChurchToMassOptions={addChurchToMassOptions}
                     />
                     <button className="btn btn-outline-secondary mt-3" onClick={toggleChurchForm}>
                         {isChurchFormVisible ? 'Hide Church Form' : 'Add New Church'}
@@ -128,7 +136,7 @@ const MassForm = ({
                             distance={distance}
                             setDistance={setDistance}
                             nearbyChurches={nearbyChurches}
-                            setNearbyChurches={setNearbyChurches} // Ensure this is defined
+                            setNearbyChurches={setNearbyChurches}
                         />
                     )}
                     {pendingChurches.length > 0 && (

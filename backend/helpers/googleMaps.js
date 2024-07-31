@@ -6,11 +6,11 @@ const fetchNearbyChurches = async (latitude, longitude, radius) => {
 
     try {
         const fetch = (await import('node-fetch')).default;
-        console.log('Fetching nearby churches with URL:', url);
+        // console.log('Fetching nearby churches with URL:', url);
         const response = await fetch(url);
         const data = await response.json();
 
-        console.log('Google Maps API response:', JSON.stringify(data, null, 2));
+        // console.log('Google Maps API response:', JSON.stringify(data, null, 2));
 
         if (data.results) {
             return data.results.map(place => ({
@@ -108,7 +108,7 @@ const preprocessGoogleData = (rawGoogleData) => {
 };
 
 const mapGoogleDataToDesiredStructure = (nearbyChurches) => {
-    console.log(`Begin mapGoogleDataToDesiredStructure! nearbyChurches: `, JSON.stringify(nearbyChurches, null, 2));
+    // console.log(`Begin mapGoogleDataToDesiredStructure! nearbyChurches: `, JSON.stringify(nearbyChurches, null, 2));
     try {
         return nearbyChurches
             .map(church => {

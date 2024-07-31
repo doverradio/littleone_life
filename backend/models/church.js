@@ -43,12 +43,7 @@ const churchSchema = new mongoose.Schema(
         additionalInfo: {
             type: String,
             trim: true
-        },
-        users: [{
-            type: ObjectId,
-            ref: 'User',
-            required: true
-          }],
+        }
     },
     { timestamps: true }
 );

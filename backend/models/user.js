@@ -76,7 +76,11 @@ const userSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Seller',
         default: null
-    }
+    },
+    churches: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Church'
+    }]
 }, { timestamps: true });
 
 var encKey = process.env.SOME_32BYTE_BASE64_STRING;

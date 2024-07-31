@@ -14,18 +14,18 @@ exports.createChurch = async (req, res) => {
     }
 };
 
-
 exports.getAllChurches = async (req, res) => {
     const { userId, latitude, longitude, radius } = req.body;
     try {
-        const userChurches = await Church.find({ users: userId });
+        // Fetch user churches
+        const user = await User.findById(userId).populate('churches');
+        const userChurches = user ? user.churches : [];
 
+        // Fetch nearby churches
         const nearbyChurches = await fetchNearbyChurches(latitude, longitude, radius);
 
-        // Preprocess the Google data
+        // Preprocess and map Google data
         const preprocessedNearbyChurches = preprocessGoogleData(nearbyChurches);
-
-        // Map preprocessed data to desired structure
         const mappedNearbyChurches = mapGoogleDataToDesiredStructure(preprocessedNearbyChurches);
 
         // Filter out nearby churches that already exist in user churches
@@ -34,7 +34,7 @@ exports.getAllChurches = async (req, res) => {
         });
 
         const combinedChurches = [...userChurches, ...filteredNearbyChurches];
-        console.log("Combined Churches:", combinedChurches);
+        // console.log("Combined Churches:", combinedChurches);
 
         res.json(combinedChurches);
     } catch (error) {
@@ -43,31 +43,35 @@ exports.getAllChurches = async (req, res) => {
     }
 };
 
+
+
 // exports.getAllChurches = async (req, res) => {
 //     const { userId, latitude, longitude, radius } = req.body;
 //     try {
 //         const userChurches = await Church.find({ users: userId });
-//         console.log("User Churches:", userChurches);
 
 //         const nearbyChurches = await fetchNearbyChurches(latitude, longitude, radius);
-//         console.log("Nearby Churches:", nearbyChurches);
+
+//         // Preprocess the Google data
+//         const preprocessedNearbyChurches = preprocessGoogleData(nearbyChurches);
+
+//         // Map preprocessed data to desired structure
+//         const mappedNearbyChurches = mapGoogleDataToDesiredStructure(preprocessedNearbyChurches);
 
 //         // Filter out nearby churches that already exist in user churches
-//         const filteredNearbyChurches = nearbyChurches.filter(nearbyChurch => {
+//         const filteredNearbyChurches = mappedNearbyChurches.filter(nearbyChurch => {
 //             return !userChurches.some(userChurch => userChurch.name === nearbyChurch.name);
 //         });
-//         console.log("Filtered Nearby Churches:", filteredNearbyChurches);
 
 //         const combinedChurches = [...userChurches, ...filteredNearbyChurches];
-//         console.log("Combined Churches:", combinedChurches);
+//         // console.log("Combined Churches:", combinedChurches);
 
 //         res.json(combinedChurches);
 //     } catch (error) {
+//         console.error('Error retrieving churches:', error);
 //         res.status(400).json({ error: 'Unable to retrieve churches' });
 //     }
 // };
-
-
 
 exports.getChurchById = async (req, res) => {
     const { _id } = req.body;
@@ -114,6 +118,9 @@ exports.getChurchesByZipCode = async (req, res) => {
 
 exports.addChurchesToUser = async (req, res) => {
     const { userId, churches } = req.body;
+
+    console.log("Request received:", { userId, churches });
+
     try {
         const user = await User.findById(userId);
         if (!user) {
@@ -122,24 +129,79 @@ exports.addChurchesToUser = async (req, res) => {
 
         const savedChurches = [];
         for (const churchData of churches) {
+            console.log("Processing church:", churchData);
             let church = await Church.findOne({ name: churchData.name, address: churchData.address });
             if (!church) {
-                church = new Church({ ...churchData, users: [userId] });
+                church = new Church(churchData);
                 await church.save();
-            } else {
-                if (!church.users.includes(userId)) {
-                    church.users.push(userId);
-                    await church.save();
-                }
+            }
+            // Ensure the church is added to the user's churches array
+            if (!user.churches.includes(church._id)) {
+                user.churches.push(church._id);
             }
             savedChurches.push(church);
         }
 
-        user.churches.push(...savedChurches.map(ch => ch._id));
         await user.save();
 
-        res.json({ churches: savedChurches });
+        res.json(savedChurches[0]); // Return the first added church as the response
     } catch (error) {
+        console.error("Error adding churches to user:", error);
         res.status(400).json({ error: "Unable to add churches to user" });
+    }
+};
+
+
+
+// exports.addChurchesToUser = async (req, res) => {
+//     const { userId, churches } = req.body;
+//     try {
+//         const user = await User.findById(userId);
+//         if (!user) {
+//             return res.status(404).json({ error: "User not found" });
+//         }
+
+//         const savedChurches = [];
+//         for (const churchData of churches) {
+//             let church = await Church.findOne({ name: churchData.name, address: churchData.address });
+//             if (!church) {
+//                 church = new Church({ ...churchData, users: [userId] });
+//                 await church.save();
+//             } else {
+//                 if (!church.users.includes(userId)) {
+//                     church.users.push(userId);
+//                     await church.save();
+//                 }
+//             }
+//             savedChurches.push(church);
+//         }
+
+//         user.churches.push(...savedChurches.map(ch => ch._id));
+//         await user.save();
+
+//         res.json({ churches: savedChurches });
+//     } catch (error) {
+//         res.status(400).json({ error: "Unable to add churches to user" });
+//     }
+// };
+
+exports.addUserToChurch = async (req, res) => {
+    const { userId, churchId } = req.body;
+
+    try {
+        const church = await Church.findById(churchId);
+        if (!church) {
+            return res.status(404).json({ error: 'Church not found' });
+        }
+
+        if (!church.users.includes(userId)) {
+            church.users.push(userId);
+            await church.save();
+        }
+
+        return res.json(church);
+    } catch (error) {
+        console.error('Error adding user to church:', error);
+        res.status(400).json({ error: 'Unable to add user to church' });
     }
 };

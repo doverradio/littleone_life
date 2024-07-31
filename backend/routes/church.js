@@ -8,7 +8,8 @@ const {
     updateChurch,
     deleteChurch,
     addChurchesToUser,
-    getChurchesByZipCode
+    getChurchesByZipCode,
+    addUserToChurch
 } = require('../controllers/church');
 
 router.post('/church/create', requireSignin, authMiddleware, isAuth, createChurch);
@@ -19,6 +20,7 @@ router.delete('/church/delete', requireSignin, authMiddleware, isAuth, deleteChu
 router.post('/churches/addToUser', requireSignin, authMiddleware, isAuth, addChurchesToUser); // New route
 router.post('/churches/by-zip', requireSignin, authMiddleware, isAuth, getChurchesByZipCode);
 router.post('/church/zipcode', getChurchesByZipCode);
+router.post('/church/add-user', requireSignin, authMiddleware, isAuth, addUserToChurch)
 
 
 module.exports = router;

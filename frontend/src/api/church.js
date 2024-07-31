@@ -84,3 +84,21 @@ export const getChurchesByZipCode = async (zipCode, token) => {
     });
     return response.json();
 };
+
+export const addUserToChurch = async (userId, churchId, token) => {
+    try {
+        const response = await fetch(`${API}/church/add-user`, {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify({ userId, churchId })
+        });
+        return await response.json();
+    } catch (error) {
+        console.error('Error adding user to church:', error);
+        return { error: 'Unable to add user to church' };
+    }
+};

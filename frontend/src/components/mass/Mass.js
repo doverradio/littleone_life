@@ -8,8 +8,8 @@ import MassForm from './components/MassForm';
 import MassPrayers from './MassPrayers';
 import MassResponses from './MassResponses';
 import MassSettings from './MassSettings';
-import { fetchMassData, handleMassData } from './helpers/massHelpers';
-import { fetchNearbyChurches } from '../../api/googleMaps'; // Correct import
+import { fetchMassData, handleMassData, addChurchToUser } from './helpers/massHelpers';
+import { fetchNearbyChurches } from '../../api/googleMaps';
 import { DEFAULT_FONT_SIZE, MAX_FONT_SIZE, MIN_FONT_SIZE, initialChurchState, MASS_TIMES_OPTIONS } from './constants';
 import BackIcon from '../utils/BackIcon';
 import novusOrdoImage from './novus_ordo.jpg';
@@ -78,24 +78,33 @@ const Mass = () => {
         }
     }, [token, userId]);
 
-    // useEffect(() => {
-    //     const combineChurches = () => {
-    //         // Combine user churches and nearby churches, avoiding duplicates
-    //         const allChurches = [...userChurches, ...nearbyChurches.filter(nearby => !userChurches.some(user => user.name === nearby.name))];
-    //         setUserChurches(allChurches);
-    //     };
-    //     combineChurches();
-    // }, [userChurches, nearbyChurches]);
+    const handleChurchSelection = (church) => {
+        setSelectedChurch(church);
+    };
+
+    const addChurchToMassOptions = async (church, token) => {
+        try {
+            const result = await addChurchToUser(userId, church, token);
+            if (result.churches && result.churches.length > 0) {
+                setUserChurches(prev => [...prev, ...result.churches]);
+                setNearbyChurches(prev => prev.filter(c => c.placeId !== church.placeId));
+            }
+        } catch (error) {
+            console.error('Error adding church to user:', error);
+        }
+    };
 
     return (
         <div className="mass-component container">
-            <BackIcon /> {/* Add the BackIcon component */}
+            <BackIcon />
             <MassHeader activeTab={activeTab} setActiveTab={setActiveTab} />
             <div className='p-1'>
                 {activeTab === 'Form' && (
                     <MassForm
                         userChurches={userChurches}
+                        setUserChurches={setUserChurches}
                         nearbyChurches={nearbyChurches}
+                        setNearbyChurches={setNearbyChurches}
                         showChurchForm={showChurchForm}
                         setShowChurchForm={setShowChurchForm}
                         submitNewChurch={handleSubmitMass}
@@ -128,7 +137,6 @@ const Mass = () => {
                         setShowMap={setShowMap}
                         selectedChurch={selectedChurch}
                         specialIntentions={specialIntentions}
-                        setNearbyChurches={setNearbyChurches}
                     />
                 )}
                 {activeTab === 'Prayers' && (
