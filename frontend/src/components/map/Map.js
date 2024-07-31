@@ -6,7 +6,7 @@ const Map = ({ setNearbyChurches, distance }) => {
 
     useEffect(() => {
         const googleMapsScript = document.createElement('script');
-        googleMapsScript.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyAHbrprZ2-514b9KtV5ixaoBaQLgYq_oM0&libraries=places,geometry`;
+        googleMapsScript.src = `https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places,geometry`;
         window.document.body.appendChild(googleMapsScript);
 
         googleMapsScript.addEventListener('load', () => {

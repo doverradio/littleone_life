@@ -1,7 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
-import { isAuthenticated } from "../api/auth";
-import { getPrayerSettings } from "../api/user";
 import { useUser } from '../context/UserContext';
 import prayerSettingsIcon from '../components/otherprayers/prayersettings_icon.png';
 import stLeandroRuizIcon from '../components/otherprayers/stleandroruiz/stleandroruiz_icon.png';
@@ -14,14 +12,8 @@ import rosaryIcon from '../components/rosary/rosary_icon.png';
 import "./Prayers.css"; // Ensure you have this CSS file
 
 const Prayers = () => {
-    const { user } = useUser(); // Access user from UserContext
-    const {
-        user: { firstName, _id: userId },
-        token
-    } = isAuthenticated();
-    
-    const [availablePrayers, setAvailablePrayers] = useState([]);
-    
+    const { user, prayerSettings, loading } = useUser();
+
     const icons = [
         { id: 'rosary', name: 'Rosary', icon: rosaryIcon, route: '/prayers/rosary' },
         { id: 'mass', name: 'Mass', icon: massIcon, route: '/prayers/mass' },
@@ -33,21 +25,12 @@ const Prayers = () => {
         { id: 'prayerSettings', name: 'Prayer Settings', icon: prayerSettingsIcon, route: '/prayers/settings' },
     ];
 
-    const fetchPrayerSettings = async () => {
-        try {
-            const settings = await getPrayerSettings(userId, token);
-            setAvailablePrayers(settings);
-        } catch (error) {
-            console.error("Error fetching prayer settings:", error);
-        }
-    };
-
-    useEffect(() => {
-        fetchPrayerSettings();
-    }, [userId]);
+    if (loading) {
+        return <div>Loading...</div>; // Add a loading state
+    }
 
     const visiblePrayers = icons.filter(icon => {
-        const prayerSetting = availablePrayers.find(prayer => prayer.id === icon.id);
+        const prayerSetting = prayerSettings.find(prayer => prayer.id === icon.id);
         return prayerSetting ? prayerSetting.isVisible : true;
     });
 
@@ -55,11 +38,11 @@ const Prayers = () => {
         <div className="prayers-container">
             <div className="prayers-content">
                 <div className="row justify-content-center align-items-center">
-                    {
-                        firstName ?
-                        <><h2 className="header-font mt-2">{firstName}'s Prayers</h2></>
-                        : <><h2 className="header-font mt-2">My Prayers</h2></>
-                    }
+                    {user && user.firstName ? (
+                        <h2 className="header-font mt-2">{user.firstName}'s Prayers</h2>
+                    ) : (
+                        <h2 className="header-font mt-2">My Prayers</h2>
+                    )}
                 </div>
                 <div className="prayer-icons">
                     {visiblePrayers.map(icon => (

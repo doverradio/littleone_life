@@ -4,11 +4,12 @@ import MassAttendance from './MassAttendance';
 import ManualEntryForm from './ManualEntryForm';
 import PrayerIntentions from './PrayerIntentions';
 import Map from '../../map/Map'; // Corrected import path
-import { handleManualChurchChange, handleManualChurchSubmit, handleZipCodeSearch, addChurchToMassOptions, savePendingChurches } from '../helpers/massFormHelpers';
+import { handleManualChurchChange, handleManualChurchSubmit, handleZipCodeSearch, addChurchToMassOptions as addChurchToMassOptionsHelper, savePendingChurches } from '../helpers/massFormHelpers';
 
 const MassForm = ({
     userChurches,
     setUserChurches,
+    nearbyChurches, // Add this prop
     showChurchForm,
     setShowChurchForm,
     submitNewChurch,
@@ -39,10 +40,10 @@ const MassForm = ({
     editContent,
     selectedChurch,
     specialIntentions,
-    token
+    token,
+    setNearbyChurches
 }) => {
     const [distance, setDistance] = useState(8046.72); // default 5 miles in meters
-    const [nearbyChurches, setNearbyChurches] = useState([]);
     const [pendingChurches, setPendingChurches] = useState([]);
     const [manualMode, setManualMode] = useState(true);
     const [zipCode, setZipCode] = useState('');
@@ -65,17 +66,24 @@ const MassForm = ({
         setIsChurchFormVisible(!isChurchFormVisible);
     };
 
+    const addChurchToMassOptions = (church) => {
+        setUserChurches([...userChurches, church]);
+        addChurchToMassOptionsHelper(church);
+    };
+
     return (
         <div className="mass-questions d-flex flex-column align-items-center">
             <div className="row w-100 justify-content-center mb-3">
                 <div className="col-md-12 text-center">
                     <MassAttendance 
                         userChurches={userChurches}
+                        nearbyChurches={nearbyChurches} // Pass nearbyChurches
                         handleChurchSelection={handleChurchSelection}
                         selectedMassTime={selectedMassTime}
                         handleMassTimeChange={handleMassTimeChange}
                         massTimesOptions={massTimesOptions}
                         selectedChurch={selectedChurch}
+                        addChurchToMassOptions={addChurchToMassOptions} // Pass down this function
                     />
                     <button className="btn btn-outline-secondary mt-3" onClick={toggleChurchForm}>
                         {isChurchFormVisible ? 'Hide Church Form' : 'Add New Church'}
@@ -120,7 +128,7 @@ const MassForm = ({
                             distance={distance}
                             setDistance={setDistance}
                             nearbyChurches={nearbyChurches}
-                            setNearbyChurches={setNearbyChurches}
+                            setNearbyChurches={setNearbyChurches} // Ensure this is defined
                         />
                     )}
                     {pendingChurches.length > 0 && (

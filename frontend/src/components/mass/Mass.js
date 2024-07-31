@@ -9,10 +9,11 @@ import MassPrayers from './MassPrayers';
 import MassResponses from './MassResponses';
 import MassSettings from './MassSettings';
 import { fetchMassData, handleMassData } from './helpers/massHelpers';
+import { fetchNearbyChurches } from '../../api/googleMaps'; // Correct import
 import { DEFAULT_FONT_SIZE, MAX_FONT_SIZE, MIN_FONT_SIZE, initialChurchState, MASS_TIMES_OPTIONS } from './constants';
-import BackIcon from '../utils/BackIcon'; // Import the BackIcon component
-import novusOrdoImage from './novus_ordo.jpg'
-import latinMassImage from './latin_mass.jpg'
+import BackIcon from '../utils/BackIcon';
+import novusOrdoImage from './novus_ordo.jpg';
+import latinMassImage from './latin_mass.jpg';
 
 const Mass = () => {
     const { toggleModal } = useModal();
@@ -40,6 +41,7 @@ const Mass = () => {
     const [prayerIntentions, setPrayerIntentions] = useState([]);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [fontSize, setFontSize] = useState(DEFAULT_FONT_SIZE);
+    const [nearbyChurches, setNearbyChurches] = useState([]);
 
     useEffect(() => {
         fetchMassData(userId, token, setCount, setMassAttendances, setPieChartData, setUserChurches, setPrayerIntentions, setError);
@@ -51,6 +53,40 @@ const Mass = () => {
         setIsSubmitting(false);
     };
 
+    useEffect(() => {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                async (position) => {
+                    const { latitude, longitude } = position.coords;
+                    try {
+                        const nearbyChurchesData = await fetchNearbyChurches(latitude, longitude, 5, token);
+                        if (Array.isArray(nearbyChurchesData)) {
+                            setNearbyChurches(nearbyChurchesData);
+                        } else {
+                            setNearbyChurches([]); // In case of error, set to an empty array
+                            console.error('Error fetching nearby churches:', nearbyChurchesData);
+                        }
+                    } catch (error) {
+                        console.error('Error fetching nearby churches:', error);
+                        setNearbyChurches([]); // In case of error, set to an empty array
+                    }
+                },
+                (error) => {
+                    console.error('Error fetching location:', error);
+                }
+            );
+        }
+    }, [token, userId]);
+
+    // useEffect(() => {
+    //     const combineChurches = () => {
+    //         // Combine user churches and nearby churches, avoiding duplicates
+    //         const allChurches = [...userChurches, ...nearbyChurches.filter(nearby => !userChurches.some(user => user.name === nearby.name))];
+    //         setUserChurches(allChurches);
+    //     };
+    //     combineChurches();
+    // }, [userChurches, nearbyChurches]);
+
     return (
         <div className="mass-component container">
             <BackIcon /> {/* Add the BackIcon component */}
@@ -59,6 +95,7 @@ const Mass = () => {
                 {activeTab === 'Form' && (
                     <MassForm
                         userChurches={userChurches}
+                        nearbyChurches={nearbyChurches}
                         showChurchForm={showChurchForm}
                         setShowChurchForm={setShowChurchForm}
                         submitNewChurch={handleSubmitMass}
@@ -91,6 +128,7 @@ const Mass = () => {
                         setShowMap={setShowMap}
                         selectedChurch={selectedChurch}
                         specialIntentions={specialIntentions}
+                        setNearbyChurches={setNearbyChurches}
                     />
                 )}
                 {activeTab === 'Prayers' && (

@@ -1,5 +1,8 @@
 const Church = require('../models/church');
 const User = require('../models/user'); // Assuming you have a User model
+const { fetchNearbyChurches, mapGoogleDataToDesiredStructure, preprocessGoogleData } = require('../helpers/googleMaps')
+const log = console.log;
+
 
 exports.createChurch = async (req, res) => {
     try {
@@ -11,15 +14,60 @@ exports.createChurch = async (req, res) => {
     }
 };
 
+
 exports.getAllChurches = async (req, res) => {
-    const { userId } = req.body;
+    const { userId, latitude, longitude, radius } = req.body;
     try {
-        const churches = await Church.find({ users: userId });
-        res.json(churches);
+        const userChurches = await Church.find({ users: userId });
+
+        const nearbyChurches = await fetchNearbyChurches(latitude, longitude, radius);
+
+        // Preprocess the Google data
+        const preprocessedNearbyChurches = preprocessGoogleData(nearbyChurches);
+
+        // Map preprocessed data to desired structure
+        const mappedNearbyChurches = mapGoogleDataToDesiredStructure(preprocessedNearbyChurches);
+
+        // Filter out nearby churches that already exist in user churches
+        const filteredNearbyChurches = mappedNearbyChurches.filter(nearbyChurch => {
+            return !userChurches.some(userChurch => userChurch.name === nearbyChurch.name);
+        });
+
+        const combinedChurches = [...userChurches, ...filteredNearbyChurches];
+        console.log("Combined Churches:", combinedChurches);
+
+        res.json(combinedChurches);
     } catch (error) {
-        res.status(400).json({ error: "Unable to retrieve churches" });
+        console.error('Error retrieving churches:', error);
+        res.status(400).json({ error: 'Unable to retrieve churches' });
     }
 };
+
+// exports.getAllChurches = async (req, res) => {
+//     const { userId, latitude, longitude, radius } = req.body;
+//     try {
+//         const userChurches = await Church.find({ users: userId });
+//         console.log("User Churches:", userChurches);
+
+//         const nearbyChurches = await fetchNearbyChurches(latitude, longitude, radius);
+//         console.log("Nearby Churches:", nearbyChurches);
+
+//         // Filter out nearby churches that already exist in user churches
+//         const filteredNearbyChurches = nearbyChurches.filter(nearbyChurch => {
+//             return !userChurches.some(userChurch => userChurch.name === nearbyChurch.name);
+//         });
+//         console.log("Filtered Nearby Churches:", filteredNearbyChurches);
+
+//         const combinedChurches = [...userChurches, ...filteredNearbyChurches];
+//         console.log("Combined Churches:", combinedChurches);
+
+//         res.json(combinedChurches);
+//     } catch (error) {
+//         res.status(400).json({ error: 'Unable to retrieve churches' });
+//     }
+// };
+
+
 
 exports.getChurchById = async (req, res) => {
     const { _id } = req.body;
