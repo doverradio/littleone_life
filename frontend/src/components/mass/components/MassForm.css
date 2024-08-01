@@ -1,0 +1,76 @@
+/* MassForm.css */
+
+.search-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto 15px;
+}
+
+.search-container .filter-input-container {
+    flex-grow: 1;
+    position: relative; /* Ensure the clear icon is positioned relative to this container */
+}
+
+.search-container input {
+    width: 100%;
+    padding-right: 30px;
+}
+
+.clear-icon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: red;
+}
+
+.search-icon-container {
+    margin-left: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.search-icon {
+    cursor: pointer;
+    color: #000; /* Ensure the color is set */
+}
+
+.search-icon.red {
+    color: red;
+}
+
+.add-icon {
+    margin-left: 10px;
+    color: blue; /* Ensure the color is set to blue */
+    cursor: pointer;
+}
+
+.remove-icon {
+    margin-left: 10px;
+    color: red; /* Set the color to red for the minus sign */
+    cursor: pointer;
+}
+
+.radio-button-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px; /* Add some spacing between items */
+}
+
+.radio-button-container label {
+    flex: 1; /* Ensure the label takes up available space */
+}
+
+.radio-button-container .add-icon,
+.radio-button-container .remove-icon {
+    margin-left: auto; /* Ensure the icon is aligned to the right */
+}
+
+.church-list {
+    max-height: 200px; /* Adjust this height to ensure 5 items are visible */
+    overflow-y: auto;
+}

@@ -1,6 +1,6 @@
 import { countMassesByUser, getAllMassAttendances, createMassAttendance } from '../../../api/massAttendance';
 import { getAllIntentions } from '../../../api/intentions';
-import { getAllChurches } from '../../../api/church';
+import { createChurch, getAllChurches } from '../../../api/church';
 const API = process.env.REACT_APP_API ? process.env.REACT_APP_API : 'https://www.littleone.life/api';
 
 export const fetchMassData = async (userId, token, setCount, setMassAttendances, setPieChartData, setUserChurches, setPrayerIntentions, setError) => {
@@ -54,27 +54,16 @@ const processMassAttendanceDataForPieChart = (massAttendances) => {
 
 const fetchUserChurches = async (userId, token, setUserChurches) => {
     try {
-        const response = await fetch(`${API}/churches`, {
-            method: 'POST',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`
-            },
-            body: JSON.stringify({ userId })
-        });
-
-        const data = await response.json();
-        if (data.error) {
-            console.error(data.error);
+        const response = await getAllChurches(userId, token);
+        if (response) {
+            setUserChurches(response);
         } else {
-            setUserChurches(data);
+            console.error("No churches found");
         }
     } catch (error) {
-        console.error('Error fetching user churches:', error);
+        console.error("Error fetching churches:", error);
     }
 };
-
 
 const fetchIntentions = async (userId, token, setPrayerIntentions, setError) => {
     try {
@@ -123,12 +112,6 @@ export const addChurchToUser = async (userId, church, token) => {
             },
             body: JSON.stringify({ userId, churches: [church] }),
         });
-
-        if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.error || 'Failed to add church to user');
-        }
-
         return await response.json();
     } catch (error) {
         console.error('Error adding church to user:', error);
@@ -136,3 +119,40 @@ export const addChurchToUser = async (userId, church, token) => {
     }
 };
 
+export const removeChurchFromUser = async (userId, church, token) => {
+    try {
+        const response = await fetch(`${API}/churches/removeFromUser`, {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({ userId, churchId: church._id }),
+        });
+        return await response.json();
+    } catch (error) {
+        console.error('Error removing church from user:', error);
+        throw error;
+    }
+};
+
+export const addChurchToMassOptions = async (userId, church, token, setUserChurches, setNearbyChurches) => {
+    try {
+        const updatedChurch = await addChurchToUser(userId, church, token);
+        setUserChurches(prevUserChurches => [...prevUserChurches, updatedChurch]);
+        setNearbyChurches(prevNearbyChurches => prevNearbyChurches.filter(nearby => nearby.name !== church.name || nearby.address !== church.address));
+    } catch (error) {
+        console.error('Error adding church to user:', error);
+    }
+};
+
+export const removeChurchFromUserOptions = async (userId, church, token, setUserChurches, setNearbyChurches) => {
+    try {
+        await removeChurchFromUser(userId, church, token);
+        setUserChurches(prevUserChurches => prevUserChurches.filter(userChurch => userChurch._id !== church._id));
+        setNearbyChurches(prevNearbyChurches => [...prevNearbyChurches, church]);
+    } catch (error) {
+        console.error('Error removing church from user:', error);
+    }
+};

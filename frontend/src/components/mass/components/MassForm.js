@@ -1,16 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import './MassForm.css';
 import MassAttendance from './MassAttendance';
 import ManualEntryForm from './ManualEntryForm';
 import PrayerIntentions from './PrayerIntentions';
 import Map from '../../map/Map';
 import { handleManualChurchChange, handleManualChurchSubmit, handleZipCodeSearch, savePendingChurches } from '../helpers/massFormHelpers';
-import { addChurchToUser } from '../helpers/massHelpers';
+import { addChurchToMassOptions, removeChurchFromUserOptions } from '../helpers/massHelpers';
 import { isAuthenticated } from '../../../api/auth';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimes, faSearch, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 
 const MassForm = ({
     userChurches,
     setUserChurches,
     nearbyChurches,
+    setNearbyChurches,
     showChurchForm,
     setShowChurchForm,
     submitNewChurch,
@@ -40,8 +46,7 @@ const MassForm = ({
     handleChurchSelection,
     editContent,
     selectedChurch,
-    specialIntentions,
-    setNearbyChurches
+    specialIntentions
 }) => {
     const [distance, setDistance] = useState(8046.72); // default 5 miles in meters
     const [pendingChurches, setPendingChurches] = useState([]);
@@ -59,39 +64,90 @@ const MassForm = ({
         website: '',
         additionalInfo: '',
     });
-    
+
     const { user: { _id }, token } = isAuthenticated();
     const userId = _id;
 
     const [isChurchFormVisible, setIsChurchFormVisible] = useState(false);
+    const [filterQuery, setFilterQuery] = useState('');
+    const [isFilterVisible, setIsFilterVisible] = useState(false);
 
     const toggleChurchForm = () => {
         setIsChurchFormVisible(!isChurchFormVisible);
     };
 
-    const addChurchToMassOptions = async (church) => {
-        try {
-            const updatedChurch = await addChurchToUser(userId, church, token);
-            setUserChurches(prevUserChurches => [...prevUserChurches, updatedChurch]);
-            setNearbyChurches(prevNearbyChurches => prevNearbyChurches.filter(nearby => nearby.name !== church.name || nearby.address !== church.address));
-        } catch (error) {
-            console.error('Error adding church to user:', error);
-        }
+    const toggleFilterVisibility = () => {
+        setIsFilterVisible(!isFilterVisible);
+        setFilterQuery('');
     };
+
+    const notify = (message, type) => {
+        toast[type](message);
+    };
+
+    const filterChurches = (churches, query) => {
+        if (!query) return churches;
+        return churches.filter(church => 
+            church.name.toLowerCase().includes(query.toLowerCase()) ||
+            church.address.toLowerCase().includes(query.toLowerCase()) ||
+            church.city.toLowerCase().includes(query.toLowerCase())
+        );
+    };
+
+    const filteredUserChurches = filterChurches(userChurches, filterQuery);
+    const filteredNearbyChurches = filterChurches(nearbyChurches.filter(nearby => !userChurches.some(user => user.name === nearby.name)), filterQuery);
+    const filteredChurches = [...filteredUserChurches, ...filteredNearbyChurches];
 
     return (
         <div className="mass-questions d-flex flex-column align-items-center">
+            <ToastContainer />
             <div className="row w-100 justify-content-center mb-3">
                 <div className="col-md-12 text-center">
+                    <div className="search-container">
+                        {isFilterVisible && (
+                            <div className="filter-input-container">
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    placeholder="Filter churches by name, address, or city"
+                                    value={filterQuery}
+                                    onChange={(e) => setFilterQuery(e.target.value)}
+                                />
+                                {filterQuery && (
+                                    <FontAwesomeIcon
+                                        icon={faTimes}
+                                        className="clear-icon"
+                                        onClick={() => setFilterQuery('')}
+                                    />
+                                )}
+                            </div>
+                        )}
+                        <div className="search-icon-container">
+                            <FontAwesomeIcon
+                                icon={isFilterVisible ? faTimesCircle : faSearch}
+                                className={`search-icon ${isFilterVisible ? 'red' : ''}`}
+                                onClick={toggleFilterVisibility}
+                                title={isFilterVisible ? "Close search" : "Search by church name"}
+                            />
+                        </div>
+                    </div>
                     <MassAttendance 
-                        userChurches={userChurches}
-                        nearbyChurches={nearbyChurches}
+                        userChurches={filteredUserChurches}
+                        nearbyChurches={filteredNearbyChurches}
                         handleChurchSelection={handleChurchSelection}
                         selectedMassTime={selectedMassTime}
                         handleMassTimeChange={handleMassTimeChange}
                         massTimesOptions={massTimesOptions}
                         selectedChurch={selectedChurch}
-                        addChurchToMassOptions={addChurchToMassOptions}
+                        addChurchToMassOptions={(church) => {
+                            addChurchToMassOptions(userId, church, token, setUserChurches, setNearbyChurches);
+                            notify('Church added to your list', 'success');
+                        }}
+                        removeChurchFromUserOptions={(church) => {
+                            removeChurchFromUserOptions(userId, church, token, setUserChurches, setNearbyChurches);
+                            notify('Church removed from your list', 'info');
+                        }}
+                        token={token}
                     />
                     <button className="btn btn-outline-secondary mt-3" onClick={toggleChurchForm}>
                         {isChurchFormVisible ? 'Hide Church Form' : 'Add New Church'}
@@ -123,16 +179,16 @@ const MassForm = ({
                             newChurch={newChurch}
                             manualChurchData={manualChurchData}
                             handleManualChurchChange={(e) => handleManualChurchChange(e, setManualChurchData, manualChurchData)}
-                            handleManualChurchSubmit={(e) => handleManualChurchSubmit(e, addChurchToMassOptions, manualChurchData, setManualChurchData)}
+                            handleManualChurchSubmit={(e) => handleManualChurchSubmit(e, (church) => addChurchToMassOptions(userId, church, token, setUserChurches, setNearbyChurches), manualChurchData, setManualChurchData)}
                             zipCode={zipCode}
                             setZipCode={setZipCode}
                             handleZipCodeSearch={() => handleZipCodeSearch(zipCode, token, setZipCodeChurches)}
                             zipCodeChurches={zipCodeChurches}
-                            addChurchToMassOptions={addChurchToMassOptions}
+                            addChurchToMassOptions={(church) => addChurchToMassOptions(userId, church, token, setUserChurches, setNearbyChurches)}
                         />
                     ) : (
                         <Map
-                            addChurchToMassOptions={addChurchToMassOptions}
+                            addChurchToMassOptions={(church) => addChurchToMassOptions(userId, church, token, setUserChurches, setNearbyChurches)}
                             distance={distance}
                             setDistance={setDistance}
                             nearbyChurches={nearbyChurches}

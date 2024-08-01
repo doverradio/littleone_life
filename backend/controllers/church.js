@@ -205,3 +205,44 @@ exports.addUserToChurch = async (req, res) => {
         res.status(400).json({ error: 'Unable to add user to church' });
     }
 };
+
+exports.removeChurchFromUser = async (req, res) => {
+    const { userId, churchId } = req.body;
+
+    try {
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ error: "User not found" });
+        }
+
+        const church = await Church.findById(churchId);
+        if (!church) {
+            return res.status(404).json({ error: "Church not found" });
+        }
+
+        // Log the current state of user.churches and church.users
+        console.log('User churches before removal:', user.churches);
+        console.log('Church users before removal:', church.users);
+
+        // Check if user.churches and church.users are defined and are arrays
+        if (!Array.isArray(user.churches)) {
+            user.churches = [];
+        }
+        if (!Array.isArray(church.users)) {
+            church.users = [];
+        }
+
+        // Remove church from user's churches array
+        user.churches = user.churches.filter(id => id.toString() !== churchId);
+        await user.save();
+
+        // Remove user from church's users array
+        church.users = church.users.filter(id => id.toString() !== userId);
+        await church.save();
+
+        res.json({ message: "Church removed from user successfully" });
+    } catch (error) {
+        console.error("Error removing church from user:", error);
+        res.status(400).json({ error: "Unable to remove church from user" });
+    }
+};
