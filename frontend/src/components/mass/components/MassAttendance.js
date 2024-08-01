@@ -1,9 +1,8 @@
-// src/components/mass/components/MassAttendance.js
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart as solidHeart } from '@fortawesome/free-solid-svg-icons';
 import { faHeart as regularHeart } from '@fortawesome/free-regular-svg-icons';
-
+import './MassAttendance.css';
 
 const MassAttendance = ({
     userChurches,
@@ -31,11 +30,14 @@ const MassAttendance = ({
                                 onChange={() => handleChurchSelection(church)} 
                             />
                             <label htmlFor={church._id || index} title={`${church.name}, ${church.address}, ${church.city}, ${church.state}`}>
-                                &nbsp;&nbsp;{church.name}, {church.address}, {church.city}, {church.state}
+                                <div>
+                                    <span className="church-name">{church.name}</span> 
+                                    {church.address}, {church.city}, {church.state}
+                                </div>
                             </label>
                             <FontAwesomeIcon 
                                 icon={solidHeart} 
-                                className="remove-icon" 
+                                className="add-icon m-1" 
                                 title="Remove church from user churches"
                                 onClick={() => removeChurchFromUserOptions(church)}
                             />
@@ -51,11 +53,14 @@ const MassAttendance = ({
                                 onChange={() => handleChurchSelection(church)} 
                             />
                             <label htmlFor={church._id || `nearby-${index}`} title={`${church.name}, ${church.address}, ${church.city}, ${church.state}`}>
-                                &nbsp;&nbsp;{church.name}, {church.address}, {church.city}, {church.state}
+                                <div className="church-item-label">
+                                    <span className="church-name">{church.name}</span> 
+                                    {church.address}, {church.city}, {church.state}
+                                </div>
                             </label>
                             <FontAwesomeIcon 
                                 icon={regularHeart}
-                                className="add-icon" 
+                                className="remove-icon m-1" 
                                 title="Add church to user churches"
                                 onClick={() => addChurchToMassOptions(church)}
                             />

@@ -10,21 +10,33 @@
     align-items: center;
     justify-content: space-between;
     margin-bottom: 10px;
+    text-align: left; /* Ensure text is left-aligned */
 }
 
 .church-item-label {
     flex-grow: 1;
     margin-left: 10px;
     margin-right: 10px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
 }
 
-.add-church-button {
-    background-color: #007bff;
+.church-name {
+    font-weight: bold;
+    font-size: 1rem; /* Slightly larger font for the church name */
+    display: block; /* Ensure each part is on a new line */
+}
+
+.church-details {
+    font-style: italic;
+    font-size: 0.8rem; /* Smaller font for address, city, state */
+    color: #555;
+    display: block; /* Ensure each part is on a new line */
+}
+
+.add-church-button,
+.remove-church-button {
+    background-color: transparent;
     border: none;
-    color: white;
+    color: #007bff;
     font-size: 18px;
     padding: 5px 10px;
     cursor: pointer;
@@ -32,5 +44,46 @@
 }
 
 .add-church-button:hover {
-    background-color: #0056b3;
+    color: #0056b3;
+}
+
+.remove-church-button {
+    color: #dc3545; /* Red color for remove icon */
+}
+
+.remove-church-button:hover {
+    color: #c82333;
+}
+
+.icon-container {
+    display: flex;
+    align-items: center;
+}
+
+.fa-heart {
+    margin-left: 5px;
+    color: red;
+    cursor: pointer;
+}
+
+.fa-heart:hover {
+    color: darkred;
+}
+
+.add-icon {
+    color: red;
+    cursor: pointer;
+}
+
+.add-icon:hover {
+    color: darkred;
+}
+
+.remove-icon {
+    color: black; /* Set the color to black for the outline */
+    cursor: pointer;
+}
+
+.remove-icon:hover {
+    color: gray;
 }
