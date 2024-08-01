@@ -1,0 +1,23 @@
+/* src/components/mass/components/SuccessMessage.css */
+
+.success-message {
+    text-align: center;
+    margin: 20px 0;
+    padding: 20px;
+    background-color: #dff9fb; /* Light blue background */
+    border-radius: 8px;
+    border: 1px solid #c1e4e9; /* Light border */
+}
+
+.success-message h3 {
+    margin-bottom: 10px;
+}
+
+.success-message .btn-link {
+    color: #007bff;
+    text-decoration: underline;
+}
+
+.success-message .btn-link:hover {
+    color: #0056b3;
+}

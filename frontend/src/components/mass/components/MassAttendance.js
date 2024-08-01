@@ -1,3 +1,4 @@
+// src/components/mass/components/MassAttendance.js
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart as solidHeart } from '@fortawesome/free-solid-svg-icons';
@@ -21,7 +22,10 @@ const MassAttendance = ({
             <form>
                 <div className="church-list">
                     {userChurches.map((church, index) => (
-                        <div key={index} className="radio-button-container">
+                        <div 
+                            key={index} 
+                            className={`radio-button-container ${selectedChurch && selectedChurch._id === church._id ? 'selected-row' : ''}`}
+                        >
                             <input 
                                 type="radio" 
                                 id={church._id || index} 
@@ -44,15 +48,18 @@ const MassAttendance = ({
                         </div>
                     ))}
                     {nearbyChurches.map((church, index) => (
-                        <div key={index} className="radio-button-container">
+                        <div 
+                            key={`nearby-${index}`} 
+                            className={`radio-button-container ${selectedChurch && selectedChurch.placeId === church.placeId ? 'selected-row' : ''}`}
+                        >
                             <input 
                                 type="radio" 
-                                id={church._id || `nearby-${index}`} 
+                                id={church.placeId || `nearby-${index}`} 
                                 name="churchSelection" 
-                                value={church._id || `nearby-${index}`} 
+                                value={church.placeId || `nearby-${index}`} 
                                 onChange={() => handleChurchSelection(church)} 
                             />
-                            <label htmlFor={church._id || `nearby-${index}`} title={`${church.name}, ${church.address}, ${church.city}, ${church.state}`}>
+                            <label htmlFor={church.placeId || `nearby-${index}`} title={`${church.name}, ${church.address}, ${church.city}, ${church.state}`}>
                                 <div className="church-item-label">
                                     <span className="church-name">{church.name}</span> 
                                     {church.address}, {church.city}, {church.state}

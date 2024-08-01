@@ -4,6 +4,8 @@ const log = console.log;
 exports.createMassAttendance = async (req, res) => {
     const { user, church, massTime, i, specialIntentions } = req.body;
 
+    console.log('Received mass attendance data:', { user, church, massTime, i, specialIntentions }); // Log data
+
     const newMassAttendance = new MassAttendance({
         user,
         church,
@@ -20,6 +22,7 @@ exports.createMassAttendance = async (req, res) => {
         res.status(400).json({ error: 'Unable to create mass attendance' });
     }
 };
+
 
 exports.countMassesByUser = async (req, res) => {
     const { userId } = req.body; // Assuming the user ID is passed as a URL parameter

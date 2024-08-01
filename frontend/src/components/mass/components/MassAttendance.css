@@ -87,3 +87,9 @@
 .remove-icon:hover {
     color: gray;
 }
+
+.selected-row {
+    background-color: #dff9fb; /* Change background color for selected row */
+    border: 0.1px solid black; /* Add a light gray border */
+    border-radius: 4px; /* Optional: add border radius for rounded corners */
+}

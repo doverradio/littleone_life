@@ -1,5 +1,8 @@
+// src/components/mass/Mass.js
+
 import React, { useState, useEffect } from 'react';
 import { isAuthenticated } from '../../api/auth';
+import { fetchIntentions } from './utils/fetchFunctions';
 import { useModal } from '../../context/ModalContext';
 import massIcon from './mass_icon.png';
 import './styles.css';
@@ -36,7 +39,7 @@ const Mass = () => {
     const [newChurch, setNewChurch] = useState(initialChurchState);
     const [selectedMassTime, setSelectedMassTime] = useState('');
     const [specialIntentions, setSpecialIntentions] = useState('');
-    const [selectedIntentions, setSelectedIntentions] = useState([]);
+    const [selectedIntentions, setSelectedIntentions] = useState([]); // Ensure this is defined
     const [userChurches, setUserChurches] = useState([]);
     const [prayerIntentions, setPrayerIntentions] = useState([]);
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -45,12 +48,17 @@ const Mass = () => {
 
     useEffect(() => {
         fetchMassData(userId, token, setCount, setMassAttendances, setPieChartData, setUserChurches, setPrayerIntentions, setError);
+        fetchIntentions(userId, token, setPrayerIntentions);
     }, [userId, token]);
 
     const handleSubmitMass = async () => {
         setIsSubmitting(true);
         await handleMassData(userId, selectedChurch, selectedMassTime, selectedIntentions, specialIntentions, token, toggleModal, setCount, setSelectedIntentions, setSelectedChurch, setSelectedMassTime);
         setIsSubmitting(false);
+    };
+
+    const handleChurchChange = (church) => {
+        // Logic to handle church change
     };
 
     useEffect(() => {
@@ -94,6 +102,15 @@ const Mass = () => {
         }
     };
 
+    const handleEditClick = (id, content) => {
+        setEditingIntentionId(id);
+        setEditContent(content);
+    };
+
+    const handleUpdateIntention = () => {
+        // Logic for updating an intention
+    };
+
     return (
         <div className="mass-component container">
             <BackIcon />
@@ -107,23 +124,18 @@ const Mass = () => {
                         setNearbyChurches={setNearbyChurches}
                         showChurchForm={showChurchForm}
                         setShowChurchForm={setShowChurchForm}
-                        submitNewChurch={handleSubmitMass}
-                        handleChurchChange={handleSubmitMass}
                         newChurch={newChurch}
                         selectedMassTime={selectedMassTime}
-                        handleMassTimeChange={handleSubmitMass}
                         massTimesOptions={MASS_TIMES_OPTIONS}
                         prayerIntentions={prayerIntentions}
                         editingIntentionId={editingIntentionId}
-                        handleUpdateIntention={handleSubmitMass}
+                        handleUpdateIntention={handleUpdateIntention}
                         setEditContent={setEditContent}
                         setEditingIntentionId={setEditingIntentionId}
-                        handleDeleteIntention={handleSubmitMass}
                         selectedIntentions={selectedIntentions}
-                        handleIntentionCheckboxChange={handleSubmitMass}
-                        handleEditClick={handleSubmitMass}
+                        setSelectedIntentions={setSelectedIntentions} // Pass this prop
+                        handleEditClick={handleEditClick}
                         isAddingIntention={isAddingIntention}
-                        handleNewIntentionSubmit={handleSubmitMass}
                         newIntention={newIntention}
                         setNewIntention={setNewIntention}
                         setIsAddingIntention={setIsAddingIntention}
@@ -131,12 +143,14 @@ const Mass = () => {
                         handleSubmitMass={handleSubmitMass}
                         isSubmitting={isSubmitting}
                         count={massAttendances.length}
-                        handleChurchSelection={handleSubmitMass}
+                        handleChurchSelection={handleChurchSelection}
                         editContent={editContent}
                         showMap={showMap}
                         setShowMap={setShowMap}
                         selectedChurch={selectedChurch}
                         specialIntentions={specialIntentions}
+                        fetchIntentions={fetchIntentions}
+                        setPrayerIntentions={setPrayerIntentions}
                     />
                 )}
                 {activeTab === 'Prayers' && (
