@@ -1,6 +1,9 @@
+// src/components/mass/components/MassAttendance.js
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faMinus } from '@fortawesome/free-solid-svg-icons';
+import { faHeart as solidHeart } from '@fortawesome/free-solid-svg-icons';
+import { faHeart as regularHeart } from '@fortawesome/free-regular-svg-icons';
+
 
 const MassAttendance = ({
     userChurches,
@@ -31,7 +34,7 @@ const MassAttendance = ({
                                 &nbsp;&nbsp;{church.name}, {church.address}, {church.city}, {church.state}
                             </label>
                             <FontAwesomeIcon 
-                                icon={faMinus} 
+                                icon={solidHeart} 
                                 className="remove-icon" 
                                 title="Remove church from user churches"
                                 onClick={() => removeChurchFromUserOptions(church)}
@@ -51,7 +54,7 @@ const MassAttendance = ({
                                 &nbsp;&nbsp;{church.name}, {church.address}, {church.city}, {church.state}
                             </label>
                             <FontAwesomeIcon 
-                                icon={faPlus} 
+                                icon={regularHeart}
                                 className="add-icon" 
                                 title="Add church to user churches"
                                 onClick={() => addChurchToMassOptions(church)}
