@@ -186,36 +186,31 @@ const MassForm = ({
                             />
                         </div>
                     </div>
-                    <button 
-                        className="btn btn-primary mt-3 submit-mass-btn" 
-                        onClick={handleSubmit} 
-                        disabled={isSubmitting}
-                    >
-                        {isSubmitting ? 'Submitting...' : 'Submit Mass Attendance'}
-                    </button>
                 </div>
             </div>
             <hr className="w-100"/>
             <div className="prayer-intentions w-100">
-                <PrayerIntentions
-                    prayerIntentions={prayerIntentions}
-                    editingIntentionId={editingIntentionId}
-                    handleUpdateIntention={handleUpdateIntention}
-                    setEditContent={setEditContent}
-                    setEditingIntentionId={setEditingIntentionId}
-                    handleDeleteIntention={handleDeleteIntention}
-                    selectedIntentions={selectedIntentions}
-                    handleIntentionCheckboxChange={handleIntentionCheckboxChange}
-                    handleEditClick={handleEditClick}
-                    isAddingIntention={isAddingIntention}
-                    handleNewIntentionSubmit={handleNewIntentionSubmit}
-                    newIntention={newIntention}
-                    setNewIntention={setNewIntention}
-                    setIsAddingIntention={setIsAddingIntention}
-                    editContent={editContent}
-                />
+                <div className="col-md-12 text-center">
+                    <PrayerIntentions
+                        prayerIntentions={prayerIntentions}
+                        editingIntentionId={editingIntentionId}
+                        handleUpdateIntention={handleUpdateIntention}
+                        setEditContent={setEditContent}
+                        setEditingIntentionId={setEditingIntentionId}
+                        handleDeleteIntention={handleDeleteIntention}
+                        selectedIntentions={selectedIntentions}
+                        handleIntentionCheckboxChange={handleIntentionCheckboxChange}
+                        handleEditClick={handleEditClick}
+                        isAddingIntention={isAddingIntention}
+                        handleNewIntentionSubmit={handleNewIntentionSubmit}
+                        newIntention={newIntention}
+                        setNewIntention={setNewIntention}
+                        setIsAddingIntention={setIsAddingIntention}
+                        editContent={editContent}
+                    />
+                </div>
             </div>
-            <div className="form-group w-100 mt-3">
+            <div className="form-group w-100 mt-3 text-center">
                 <label htmlFor="specialIntentions">Special Intentions</label>
                 <textarea
                     id="specialIntentions"
@@ -224,6 +219,18 @@ const MassForm = ({
                     value={specialIntentions}
                     onChange={(e) => setSpecialIntentions(e.target.value)}
                 ></textarea>
+            </div>
+            
+            <div className="row w-100 justify-content-center my-3">
+                <div className="col-md-12 text-center">
+                    <button 
+                        className="btn btn-primary mt-3 submit-mass-btn" 
+                        onClick={handleSubmit} 
+                        disabled={isSubmitting}
+                    >
+                        {isSubmitting ? 'Submitting...' : 'Submit Mass'}
+                    </button>
+                </div>
             </div>
         </div>
     );
