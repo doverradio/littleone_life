@@ -15,7 +15,6 @@ const MassAttendance = ({
     token
 }) => (
     <div className='mt-3'>
-        <h3>Mass Attendance</h3>
         <div className="form-group">
             <form>
                 <div className="church-list">
@@ -61,20 +60,6 @@ const MassAttendance = ({
                     ))}
                 </div>
             </form>
-        </div>
-        <div className="form-group">
-            <label htmlFor="massTime">Select Mass Time</label>
-            <select 
-                id="massTime" 
-                className="form-control" 
-                value={selectedMassTime || ''} 
-                onChange={handleMassTimeChange}
-            >
-                <option value="" disabled>Select a mass time</option>
-                {massTimesOptions.map((time, index) => (
-                    <option key={index} value={time}>{time}</option>
-                ))}
-            </select>
         </div>
     </div>
 );

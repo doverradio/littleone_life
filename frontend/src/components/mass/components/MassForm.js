@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import './MassForm.css';
 import MassAttendance from './MassAttendance';
-import ManualEntryForm from './ManualEntryForm';
 import PrayerIntentions from './PrayerIntentions';
-import Map from '../../map/Map';
-import { handleManualChurchChange, handleManualChurchSubmit, handleZipCodeSearch, savePendingChurches } from '../helpers/massFormHelpers';
+import { handleManualChurchChange, handleManualChurchSubmit, handleZipCodeSearch } from '../helpers/massFormHelpers';
 import { addChurchToMassOptions, removeChurchFromUserOptions } from '../helpers/massHelpers';
 import { isAuthenticated } from '../../../api/auth';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes, faSearch, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
+import ChurchSearch from './ChurchSearch';
+import MassTimeSelector from './MassTimeSelector';
+import ChurchFormToggle from './ChurchFormToggle';
+import { createMassAttendance } from '../../../api/massAttendance';
 
 const MassForm = ({
     userChurches,
@@ -23,7 +23,6 @@ const MassForm = ({
     handleChurchChange,
     newChurch,
     selectedMassTime,
-    handleMassTimeChange,
     massTimesOptions,
     prayerIntentions,
     editingIntentionId,
@@ -40,17 +39,15 @@ const MassForm = ({
     setNewIntention,
     setIsAddingIntention,
     setSpecialIntentions,
-    handleSubmitMass,
     isSubmitting,
     count,
-    handleChurchSelection,
     editContent,
-    selectedChurch,
     specialIntentions
 }) => {
+    const { user: { _id }, token } = isAuthenticated();
+    const userId = _id;
+
     const [distance, setDistance] = useState(8046.72); // default 5 miles in meters
-    const [pendingChurches, setPendingChurches] = useState([]);
-    const [manualMode, setManualMode] = useState(true);
     const [zipCode, setZipCode] = useState('');
     const [zipCodeChurches, setZipCodeChurches] = useState([]);
     const [manualChurchData, setManualChurchData] = useState({
@@ -65,12 +62,11 @@ const MassForm = ({
         additionalInfo: '',
     });
 
-    const { user: { _id }, token } = isAuthenticated();
-    const userId = _id;
-
     const [isChurchFormVisible, setIsChurchFormVisible] = useState(false);
     const [filterQuery, setFilterQuery] = useState('');
     const [isFilterVisible, setIsFilterVisible] = useState(false);
+    const [massTime, setMassTime] = useState(selectedMassTime || '');
+    const [selectedChurch, setSelectedChurch] = useState(null);
 
     const toggleChurchForm = () => {
         setIsChurchFormVisible(!isChurchFormVisible);
@@ -98,44 +94,49 @@ const MassForm = ({
     const filteredNearbyChurches = filterChurches(nearbyChurches.filter(nearby => !userChurches.some(user => user.name === nearby.name)), filterQuery);
     const filteredChurches = [...filteredUserChurches, ...filteredNearbyChurches];
 
+    const handleMassTimeChange = (event) => {
+        setMassTime(event.target.value);
+    };
+
+    const handleChurchSelection = (church) => {
+        setSelectedChurch(church);
+    };
+
+    const handleSubmit = async () => {
+        const massAttendanceData = {
+            user: userId,
+            church: selectedChurch._id,
+            massTime: massTime,
+            i: selectedIntentions,
+            specialIntentions: specialIntentions,
+        };
+
+        try {
+            await createMassAttendance(massAttendanceData, token);
+            notify('Mass attendance recorded successfully!', 'success');
+        } catch (error) {
+            console.error('Error recording mass attendance:', error);
+            notify('Error recording mass attendance.', 'error');
+        }
+    };
+
     return (
         <div className="mass-questions d-flex flex-column align-items-center">
             <ToastContainer />
             <div className="row w-100 justify-content-center mb-3">
                 <div className="col-md-12 text-center">
-                    <div className="search-container">
-                        {isFilterVisible && (
-                            <div className="filter-input-container">
-                                <input
-                                    type="text"
-                                    className="form-control"
-                                    placeholder="Filter churches by name, address, or city"
-                                    value={filterQuery}
-                                    onChange={(e) => setFilterQuery(e.target.value)}
-                                />
-                                {filterQuery && (
-                                    <FontAwesomeIcon
-                                        icon={faTimes}
-                                        className="clear-icon"
-                                        onClick={() => setFilterQuery('')}
-                                    />
-                                )}
-                            </div>
-                        )}
-                        <div className="search-icon-container">
-                            <FontAwesomeIcon
-                                icon={isFilterVisible ? faTimesCircle : faSearch}
-                                className={`search-icon ${isFilterVisible ? 'red' : ''}`}
-                                onClick={toggleFilterVisibility}
-                                title={isFilterVisible ? "Close search" : "Search by church name"}
-                            />
-                        </div>
-                    </div>
+                    <h3>Mass Attendance</h3>
+                    <ChurchSearch
+                        filterQuery={filterQuery}
+                        setFilterQuery={setFilterQuery}
+                        isFilterVisible={isFilterVisible}
+                        toggleFilterVisibility={toggleFilterVisibility}
+                    />
                     <MassAttendance 
                         userChurches={filteredUserChurches}
                         nearbyChurches={filteredNearbyChurches}
                         handleChurchSelection={handleChurchSelection}
-                        selectedMassTime={selectedMassTime}
+                        selectedMassTime={massTime}
                         handleMassTimeChange={handleMassTimeChange}
                         massTimesOptions={massTimesOptions}
                         selectedChurch={selectedChurch}
@@ -149,70 +150,51 @@ const MassForm = ({
                         }}
                         token={token}
                     />
-                    <button className="btn btn-outline-secondary mt-3" onClick={toggleChurchForm}>
-                        {isChurchFormVisible ? 'Hide Church Form' : 'Add New Church'}
+                    <div className="row w-100 justify-content-center my-3">
+                        <div className="col-md-12 text-center">
+                            <ChurchFormToggle
+                                isChurchFormVisible={isChurchFormVisible}
+                                toggleChurchForm={toggleChurchForm}
+                                showChurchForm={showChurchForm}
+                                setShowChurchForm={setShowChurchForm}
+                                submitNewChurch={submitNewChurch}
+                                handleChurchChange={handleChurchChange}
+                                newChurch={newChurch}
+                                manualChurchData={manualChurchData}
+                                setManualChurchData={setManualChurchData}
+                                handleManualChurchSubmit={handleManualChurchSubmit}
+                                zipCode={zipCode}
+                                setZipCode={setZipCode}
+                                handleZipCodeSearch={handleZipCodeSearch}
+                                zipCodeChurches={zipCodeChurches}
+                                addChurchToMassOptions={addChurchToMassOptions}
+                                userId={userId}
+                                token={token}
+                                setUserChurches={setUserChurches}
+                                setNearbyChurches={setNearbyChurches}
+                                handleManualChurchChange={handleManualChurchChange}
+                                setZipCodeChurches={setZipCodeChurches}
+                            />
+                        </div>
+                    </div>
+                    <div className="row w-100 justify-content-center my-3">
+                        <div className="col-md-12 text-center">
+                            <MassTimeSelector
+                                selectedMassTime={massTime}
+                                handleMassTimeChange={handleMassTimeChange}
+                                massTimesOptions={massTimesOptions}
+                            />
+                        </div>
+                    </div>
+                    <button 
+                        className="btn btn-primary mt-3 submit-mass-btn" 
+                        onClick={handleSubmit} 
+                        disabled={isSubmitting}
+                    >
+                        {isSubmitting ? 'Submitting...' : 'Submit Mass Attendance'}
                     </button>
                 </div>
             </div>
-            {isChurchFormVisible && (
-                <div className="w-100">
-                    <div className="d-flex justify-content-center mt-3">
-                        <button 
-                            className={`btn ${manualMode ? 'btn-primary' : 'btn-secondary'} mr-2`}
-                            onClick={() => setManualMode(true)}
-                        >
-                            Manual Entry
-                        </button>
-                        <button 
-                            className={`btn ${!manualMode ? 'btn-primary' : 'btn-secondary'}`}
-                            onClick={() => setManualMode(false)}
-                        >
-                            Use Map
-                        </button>
-                    </div>
-                    {manualMode ? (
-                        <ManualEntryForm
-                            showChurchForm={showChurchForm}
-                            setShowChurchForm={setShowChurchForm}
-                            submitNewChurch={submitNewChurch}
-                            handleChurchChange={handleChurchChange}
-                            newChurch={newChurch}
-                            manualChurchData={manualChurchData}
-                            handleManualChurchChange={(e) => handleManualChurchChange(e, setManualChurchData, manualChurchData)}
-                            handleManualChurchSubmit={(e) => handleManualChurchSubmit(e, (church) => addChurchToMassOptions(userId, church, token, setUserChurches, setNearbyChurches), manualChurchData, setManualChurchData)}
-                            zipCode={zipCode}
-                            setZipCode={setZipCode}
-                            handleZipCodeSearch={() => handleZipCodeSearch(zipCode, token, setZipCodeChurches)}
-                            zipCodeChurches={zipCodeChurches}
-                            addChurchToMassOptions={(church) => addChurchToMassOptions(userId, church, token, setUserChurches, setNearbyChurches)}
-                        />
-                    ) : (
-                        <Map
-                            addChurchToMassOptions={(church) => addChurchToMassOptions(userId, church, token, setUserChurches, setNearbyChurches)}
-                            distance={distance}
-                            setDistance={setDistance}
-                            nearbyChurches={nearbyChurches}
-                            setNearbyChurches={setNearbyChurches}
-                        />
-                    )}
-                    {pendingChurches.length > 0 && (
-                        <div className="mt-3">
-                            <h5>Pending Churches</h5>
-                            <ul className="list-group">
-                                {pendingChurches.map((church, index) => (
-                                    <li key={index} className="list-group-item">{church.name}</li>
-                                ))}
-                            </ul>
-                            <button 
-                                className="btn btn-success mt-2"
-                                onClick={savePendingChurches}
-                            >
-                                Save Pending Churches
-                            </button>
-                        </div>
-                    )}
-                </div>
-            )}
             <hr className="w-100"/>
             <div className="prayer-intentions w-100">
                 <PrayerIntentions
@@ -243,13 +225,6 @@ const MassForm = ({
                     onChange={(e) => setSpecialIntentions(e.target.value)}
                 ></textarea>
             </div>
-            <button 
-                className="btn btn-primary mt-3 submit-mass-btn" 
-                onClick={handleSubmitMass} 
-                disabled={isSubmitting}
-            >
-                {isSubmitting ? 'Submitting...' : 'Submit Mass Attendance'}
-            </button>
         </div>
     );
 };

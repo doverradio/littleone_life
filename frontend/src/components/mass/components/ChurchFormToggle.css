@@ -1,0 +1,40 @@
+/* src/components/mass/components/ChurchFormToggle.css */
+
+.church-form-toggle {
+    width: 100%;
+    text-align: center;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+.church-form-toggle .btn {
+    margin-top: 1rem;
+}
+
+.church-form-toggle .w-100 {
+    margin-top: 1rem;
+}
+
+.church-form-toggle .d-flex {
+    justify-content: center;
+}
+
+.church-form-toggle .mt-3 {
+    margin-top: 1rem;
+}
+
+.church-form-toggle .list-group-item {
+    text-align: left;
+}
+
+.church-form-toggle .form-group {
+    margin-top: 1rem;
+}
+
+.church-form-toggle .btn-primary, .church-form-toggle .btn-secondary {
+    margin-right: 0.5rem;
+}
+
+.church-form-toggle .btn-success {
+    margin-top: 1rem;
+}

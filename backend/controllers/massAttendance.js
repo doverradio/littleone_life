@@ -2,12 +2,22 @@ const MassAttendance = require('../models/massAttendance'); // Adjust the path a
 const log = console.log;
 
 exports.createMassAttendance = async (req, res) => {
+    const { user, church, massTime, i, specialIntentions } = req.body;
+
+    const newMassAttendance = new MassAttendance({
+        user,
+        church,
+        massTime,
+        i,
+        specialIntentions
+    });
+
     try {
-        const massAttendance = new MassAttendance(req.body);
-        await massAttendance.save();
-        res.status(201).json({result: `success!`});
+        const savedMassAttendance = await newMassAttendance.save();
+        res.status(201).json(savedMassAttendance);
     } catch (error) {
-        res.status(400).json({ error: "Unable to record mass attendance" });
+        console.error('Error creating mass attendance:', error);
+        res.status(400).json({ error: 'Unable to create mass attendance' });
     }
 };
 

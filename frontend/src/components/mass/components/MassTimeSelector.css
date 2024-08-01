@@ -1,0 +1,18 @@
+/* src/components/mass/components/MassTimeSelector.css */
+
+.clock-display {
+    font-family: 'Digital-7', sans-serif;
+    font-size: 2em;
+    color: #ff0000;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.select-container {
+    text-align: center;
+}
+
+.select-increased-width {
+    width: 65%; /* Increased width by 30% from half */
+    margin: 0 auto;
+}

@@ -1,0 +1,44 @@
+/* ChurchSearch.css */
+
+.search-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto 15px;
+}
+
+.search-container .filter-input-container {
+    flex-grow: 1;
+    position: relative; /* Ensure the clear icon is positioned relative to this container */
+}
+
+.search-container input {
+    width: 100%;
+    padding-right: 30px;
+}
+
+.clear-icon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: red;
+}
+
+.search-icon-container {
+    margin-left: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.search-icon {
+    cursor: pointer;
+    color: #000; /* Ensure the color is set */
+}
+
+.search-icon.red {
+    color: red;
+}
