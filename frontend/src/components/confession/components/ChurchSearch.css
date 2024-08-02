@@ -1,0 +1,46 @@
+/* ChurchSearch.css */
+
+.search-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+  
+  .filter-input-container {
+    position: relative;
+    margin-right: 10px;
+  }
+  
+  .filter-input-container input {
+    width: 200px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .clear-icon {
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #888;
+  }
+  
+  .clear-icon:hover {
+    color: #555;
+  }
+  
+  .search-icon-container {
+    cursor: pointer;
+  }
+  
+  .search-icon {
+    font-size: 20px;
+  }
+  
+  .search-icon.red {
+    color: red;
+  }
+  

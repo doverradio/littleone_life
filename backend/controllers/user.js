@@ -1,3 +1,4 @@
+const MassAttendance = require("../models/massAttendance");
 const Rosary = require("../models/rosary"); 
 const User = require('../models/user'); // Adjust the path according to your project structure
 const log = console.log
@@ -102,20 +103,21 @@ exports.updateUserSettings = async (req, res) => {
 
 exports.getUserPrayerStats = async (req, res) => {
     const userId = req.params.userId;
-
+  
     try {
-        const rosaryCount = await Rosary.countDocuments({ user: userId });
-        // Add similar queries for masses, confessions, and divineMercies if you have those models.
-
-        const stats = {
-            rosaries: rosaryCount,
-            masses: 0, // Replace with actual count
-            confessions: 0, // Replace with actual count
-            divineMercies: 0 // Replace with actual count
-        };
-
-        res.json(stats);
+      const rosaryCount = await Rosary.countDocuments({ user: userId });
+      const massCount = await MassAttendance.countDocuments({ user: userId });
+      // Add similar queries for confessions and divineMercies if you have those models.
+  
+      const stats = {
+        rosaries: rosaryCount,
+        masses: massCount,
+        confessions: 0, // Replace with actual count
+        divineMercies: 0 // Replace with actual count
+      };
+  
+      res.json(stats);
     } catch (error) {
-        res.status(400).json({ error: error.message });
+      res.status(400).json({ error: error.message });
     }
-};
+  };

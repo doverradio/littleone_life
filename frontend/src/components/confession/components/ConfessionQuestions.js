@@ -1,6 +1,6 @@
 import React from "react";
 import { MdOutlineModeEdit } from "react-icons/md";
-import ButtonLoader from "../../loaders/ButtonLoader";
+import ButtonLoader from "../../../loaders/ButtonLoader";
 
 const ConfessionQuestions = ({ 
     userChurches, 
