@@ -55,3 +55,9 @@
 .datatable-filter-btn button:hover {
     color: darkgrey; /* Set the color on hover */
 }
+
+.subrow-content {
+    background-color: #f9f9f9;
+    padding: 10px;
+  }
+  

@@ -22,16 +22,15 @@ const NavbarMain = ({ userStats, backgroundColor }) => {
         </NavLink>
         <div className="d-flex align-items-center">
           {isAuthenticated() && isAuthenticated().user.role === 1 && (
-            <ul className="navbar-nav">
-              <li className="nav-item">
-                <NavLink to="/admin/dashboard" className="nav-link dashboard-link" style={{ color: 'black', display: 'flex', flexDirection: 'column', alignItems: 'center', textDecoration: 'none' }}>
-                  <MdOutlineDashboard size={24} />
-                  <sup style={{ color: 'black', fontSize: '12px', marginTop: '4px', marginLeft: '4px' }}>Dashboard</sup>
-                </NavLink>
-              </li>
-            </ul>
+            <>
+              <NavLink to="/admin/dashboard" className="nav-link dashboard-link" style={{ color: 'black', display: 'flex', flexDirection: 'column', alignItems: 'center', textDecoration: 'none' }}>
+                <MdOutlineDashboard size={24} />
+                <sup style={{ color: 'black', fontSize: '12px', marginTop: '14px', marginLeft: '4px' }}>Admin Dashboard</sup>
+              </NavLink>
+              <ProfileIcon handleSignout={handleSignout} userStats={userStats} />
+            </>
           )}
-          {isAuthenticated() && (
+          {isAuthenticated() && isAuthenticated().user.role === 0 &&  (
             <>
               <NavLink to="/user/dashboard" className="dashboard-link" style={{ color: 'black', marginRight: '10px', display: 'flex', flexDirection: 'column', alignItems: 'center', textDecoration: 'none' }}>
                 <MdOutlineDashboard size={24} />

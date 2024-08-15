@@ -1,3 +1,5 @@
+// src/components/utils/datatable/ReusableDatatable.js
+
 import React, { useState, useEffect } from 'react';
 import DataTableHeader from './components/DataTableHeader';
 import DataTableBody from './components/DataTableBody';
@@ -5,6 +7,16 @@ import DataTablePagination from './components/DataTablePagination';
 import DataTableFilters from './components/DataTableFilters';
 import { sortData } from '../sorting';
 import { filterData } from '../filterData';
+import {
+    handleDeleteAction,
+    handleDeleteClick,
+    calculateTotalPages,
+    goToPage,
+    getCurrentPageData,
+    handleCheckboxChange,
+    handleSelectAllChange,
+    toggleRowExpansion
+} from './datatableHelpers';
 import './styles.css';
 
 const ReusableDatatable = ({ data = [], columns, pageSize, checkbox, onRowSelect, onDelete, refreshTrigger }) => {
@@ -16,6 +28,7 @@ const ReusableDatatable = ({ data = [], columns, pageSize, checkbox, onRowSelect
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
     const [selectedMystery, setSelectedMystery] = useState('');
+    const [expandedRows, setExpandedRows] = useState([]); // State for tracking expanded rows
 
     const dateField = 'createdAt';
 
@@ -34,41 +47,9 @@ const ReusableDatatable = ({ data = [], columns, pageSize, checkbox, onRowSelect
         setSortConfig({ key, direction });
     };
 
-    const handleDeleteAction = () => {
-        if (selectedRows.length > 0) {
-            onDelete(selectedRows.map(row => row._id));
-        }
-    };
+    const totalPages = calculateTotalPages(sortedData, pageSize);
 
-    const handleDeleteClick = () => {
-        if (window.confirm('Are you sure you want to delete the selected rows?')) {
-            onDelete(selectedRows);
-        }
-    };
-
-    const totalPages = Math.ceil(sortedData.length / pageSize);
-
-    const goToPage = (pageNumber) => {
-        setCurrentPage(pageNumber);
-    };
-
-    const currentPageData = sortedData.slice((currentPage - 1) * pageSize, currentPage * pageSize);
-
-    const handleCheckboxChange = (row) => {
-        if (selectedRows.includes(row)) {
-            setSelectedRows(selectedRows.filter(selectedRow => selectedRow !== row));
-        } else {
-            setSelectedRows([...selectedRows, row]);
-        }
-    };
-
-    const handleSelectAllChange = () => {
-        if (selectedRows.length === currentPageData.length) {
-            setSelectedRows([]);
-        } else {
-            setSelectedRows(currentPageData);
-        }
-    };
+    const currentPageData = getCurrentPageData(sortedData, currentPage, pageSize);
 
     useEffect(() => {
         if (onRowSelect) {
@@ -81,7 +62,7 @@ const ReusableDatatable = ({ data = [], columns, pageSize, checkbox, onRowSelect
             {selectedRows.length > 0 && (
                 <div className="datatable-delete-btn">
                     <button 
-                        onClick={handleDeleteAction}
+                        onClick={() => handleDeleteAction(selectedRows, onDelete)}
                         className='btn btn-danger btn-sm m-1'
                     >
                         Delete Selected
@@ -106,21 +87,23 @@ const ReusableDatatable = ({ data = [], columns, pageSize, checkbox, onRowSelect
                     sortConfig={sortConfig}
                     handleSort={handleSort}
                     checkbox={checkbox}
-                    handleSelectAllChange={handleSelectAllChange}
+                    handleSelectAllChange={() => handleSelectAllChange(selectedRows, setSelectedRows, currentPageData)}
                     allRowsSelected={selectedRows.length === currentPageData.length}
                 />
                 <DataTableBody 
                     currentPageData={currentPageData}
                     columns={columns}
                     checkbox={checkbox}
-                    handleCheckboxChange={handleCheckboxChange}
+                    handleCheckboxChange={(row) => handleCheckboxChange(selectedRows, setSelectedRows, row)}
                     selectedRows={selectedRows}
+                    expandedRows={expandedRows}
+                    toggleRowExpansion={(rowId) => toggleRowExpansion(expandedRows, setExpandedRows, rowId)} // Pass toggle function
                 />
             </table>
 
             <DataTablePagination 
                 totalPages={totalPages}
-                goToPage={goToPage}
+                goToPage={(pageNumber) => goToPage(setCurrentPage, pageNumber)}
             />
         </div>
     );

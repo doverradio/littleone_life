@@ -11,7 +11,8 @@ const {
     resetPassword,
     checkUsernameAvailability,
     googleSignin,
-    googleSignup
+    googleSignup,
+    refreshToken 
 } = require("../controllers/auth");
 const { 
     forgotPasswordValidator,
@@ -56,5 +57,8 @@ router.get('/callback', async (req, res) => {
         res.status(500).send('Authentication failed');
     }
 });
+
+// Refresh Token Route
+router.post('/refresh-token', refreshToken);
 
 module.exports = router;

@@ -10,6 +10,7 @@ const socketIo = require('socket.io');
 require('dotenv').config();
 
 const authRoutes = require("./routes/auth");
+const adminRoutes = require('./routes/admin'); // Add this line
 const churchRoutes = require('./routes/church');
 const confessionRoutes = require('./routes/confession');
 const intentionRoutes = require('./routes/intentions');
@@ -19,6 +20,7 @@ const rosaryRoutes = require('./routes/rosary');
 const userRoutes = require('./routes/user');
 const prayerSpaceRoutes = require('./routes/prayerSpaces'); // New prayer space routes
 const stripeRoutes = require('./routes/stripe'); // Stripe routes
+const emailRoutes = require('./routes/email'); // Email routes
 
 // app
 const app = express();
@@ -53,6 +55,7 @@ app.use(cors({
 
 // Define routes
 app.use('/api', authRoutes);
+app.use('/api', adminRoutes); // Add this line
 app.use('/api', churchRoutes);
 app.use('/api', confessionRoutes);
 app.use('/api', intentionRoutes);
@@ -62,6 +65,7 @@ app.use('/api', rosaryRoutes);
 app.use('/api', userRoutes);
 app.use('/api/prayerSpaces', prayerSpaceRoutes); // New prayer space routes
 app.use('/api/stripe', stripeRoutes); // Stripe routes
+app.use('/api', emailRoutes); // Email routes
 
 io.on('connection', (socket) => {
     console.log('New client connected');

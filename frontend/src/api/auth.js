@@ -1,6 +1,39 @@
 // src/api/auth.js
 
 const API = process.env.REACT_APP_API || 'https://www.littleone.life/api'; // Your backend API URL
+const log = console.log;
+
+export const refreshToken = async () => {
+  try {
+      const jwt_token = JSON.parse(localStorage.getItem("jwt"));
+      if (!jwt_token || !jwt_token.token) {
+        throw new Error('No token found');
+      }
+      let { token } = jwt_token;
+      console.log('Token being sent:', token); // Debugging line
+
+      const response = await fetch(`${API}/refresh-token`, {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`,
+          },
+      });
+
+      if (response.ok) {
+          const { token: newToken } = await response.json();
+          localStorage.setItem('jwt', JSON.stringify({ token: newToken })); // Update the token in localStorage
+          return newToken;
+      } else {
+          throw new Error('Failed to refresh token');
+      }
+  } catch (error) {
+      console.error('Error refreshing token:', error);
+      return null;
+  }
+};
+
+
 
 export const signup = async (user) => {
   try {
@@ -18,21 +51,6 @@ export const signup = async (user) => {
   }
 };
 
-// export const checkUsernameAvailability = async (username) => {
-//   try {
-//     const response = await fetch(`${API}/check-username`, {
-//       method: 'POST',
-//       headers: {
-//         'Content-Type': 'application/json',
-//       },
-//       body: JSON.stringify({ username }),
-//     });
-//     return await response.json();
-//   } catch (error) {
-//     console.error('Error in checking username availability:', error);
-//     throw error;
-//   }
-// };
 
 export const checkUsernameAvailability = async (username, userId) => {
   try {

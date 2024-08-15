@@ -1,0 +1,673 @@
+[
+    {
+        "prayerSettings": [
+            {
+                "id": "rosary",
+                "name": "Rosary",
+                "isVisible": true
+            },
+            {
+                "id": "mass",
+                "name": "Mass",
+                "isVisible": true
+            },
+            {
+                "id": "confession",
+                "name": "Confession",
+                "isVisible": true
+            },
+            {
+                "id": "divineMercy",
+                "name": "Divine Mercy",
+                "isVisible": true
+            },
+            {
+                "id": "stMichaelPrayer",
+                "name": "St. Michael Prayer",
+                "isVisible": true
+            },
+            {
+                "id": "stfrancis",
+                "name": "St. Francis Prayer",
+                "isVisible": true
+            },
+            {
+                "id": "stleandroruiz",
+                "name": "St. Leandro Ruiz Prayer",
+                "isVisible": true
+            }
+        ],
+        "preferredLoginType": "username-password",
+        "allowInstantPrayerArmy": false,
+        "allowNotifications": false,
+        "autoSendPrayerGroupRequest": false,
+        "isSeller": false,
+        "seller": null,
+        "churches": [],
+        "_id": "65c7cbc8663077ff9db4ba9e",
+        "username": "ericvalencia",
+        "firstName": "Eric",
+        "lastName": "Valencia",
+        "email": "ericlvalencia@gmail.com",
+        "phone": "(310) 383-8914",
+        "hashed_password": "c81756186bb9b7c59476adf9076b9f6078226a44",
+        "salt": "08151030-c849-11ee-bfd8-bf08c92b7270",
+        "role": 0,
+        "createdAt": "2024-02-10T19:17:28.884Z",
+        "updatedAt": "2024-05-30T22:15:21.696Z",
+        "__enc_firstName": false,
+        "__enc_lastName": false,
+        "__enc_email": false,
+        "__enc_phone": false,
+        "__v": 0,
+        "__enc_prayerSettings": false,
+        "__enc_prayerSettings_d": ""
+    },
+    {
+        "prayerSettings": [],
+        "preferredLoginType": "username-password",
+        "allowInstantPrayerArmy": false,
+        "allowNotifications": false,
+        "autoSendPrayerGroupRequest": false,
+        "isSeller": false,
+        "seller": null,
+        "churches": [],
+        "_id": "65c7d0108e7210acee1f1325",
+        "username": "test",
+        "firstName": "Test",
+        "lastName": "User",
+        "email": "test@gmail.com",
+        "phone": "(310) 555-5555",
+        "hashed_password": "3831eb6d136b5dc22fb317d15f2bb610c94131ec",
+        "salt": "951d6ca0-c84b-11ee-a8c1-2d809b7fb41b",
+        "role": 0,
+        "createdAt": "2024-02-10T19:35:44.569Z",
+        "updatedAt": "2024-02-10T19:35:44.569Z",
+        "__enc_firstName": false,
+        "__enc_lastName": false,
+        "__enc_email": false,
+        "__enc_phone": false,
+        "__v": 0
+    },
+    {
+        "prayerSettings": [],
+        "preferredLoginType": "username-password",
+        "allowInstantPrayerArmy": false,
+        "allowNotifications": false,
+        "autoSendPrayerGroupRequest": false,
+        "isSeller": false,
+        "seller": null,
+        "churches": [],
+        "_id": "65c7d15f8e7210acee1f132d",
+        "username": "tester",
+        "firstName": "Test",
+        "lastName": "User",
+        "email": "test@gmail.com",
+        "phone": "(310) 555-5555",
+        "hashed_password": "16c27b3e85b661c7c3a0f2e62e8e1bab07c7b143",
+        "salt": "5d1597f0-c84c-11ee-a8c1-2d809b7fb41b",
+        "role": 0,
+        "createdAt": "2024-02-10T19:41:19.988Z",
+        "updatedAt": "2024-02-10T19:41:19.988Z",
+        "__enc_firstName": false,
+        "__enc_lastName": false,
+        "__enc_email": false,
+        "__enc_phone": false,
+        "__v": 0
+    },
+    {
+        "prayerSettings": [
+            {
+                "id": "rosary",
+                "name": "Rosary",
+                "isVisible": true
+            },
+            {
+                "id": "mass",
+                "name": "Mass",
+                "isVisible": true
+            },
+            {
+                "id": "confession",
+                "name": "Confession",
+                "isVisible": true
+            },
+            {
+                "id": "divineMercy",
+                "name": "Divine Mercy",
+                "isVisible": false
+            },
+            {
+                "id": "stMichaelPrayer",
+                "name": "St. Michael Prayer",
+                "isVisible": false
+            },
+            {
+                "id": "stfrancis",
+                "name": "St. Francis Prayer",
+                "isVisible": false
+            },
+            {
+                "id": "stleandroruiz",
+                "name": "St. Leandro Ruiz Prayer",
+                "isVisible": false
+            }
+        ],
+        "preferredLoginType": "username-password",
+        "allowInstantPrayerArmy": false,
+        "allowNotifications": false,
+        "autoSendPrayerGroupRequest": false,
+        "isSeller": false,
+        "seller": null,
+        "churches": [],
+        "_id": "66503c57fa6436f2fcf99f65",
+        "username": "testingwaters",
+        "firstName": "First",
+        "lastName": "Tester",
+        "email": "daveh95580@qiradio.com",
+        "phone": "",
+        "hashed_password": "f6d6e4a7c21472cbb2601968c496b54ca8a083c2",
+        "salt": "12bb44b0-199c-11ef-8fa0-91b41f141525",
+        "role": 0,
+        "createdAt": "2024-05-24T07:05:59.167Z",
+        "updatedAt": "2024-05-24T07:06:41.438Z",
+        "__enc_firstName": false,
+        "__enc_lastName": false,
+        "__enc_email": false,
+        "__enc_phone": false,
+        "__enc_prayerSettings_d": "",
+        "__enc_prayerSettings": false,
+        "__v": 0
+    },
+    {
+        "prayerSettings": [],
+        "preferredLoginType": "username-password",
+        "allowInstantPrayerArmy": false,
+        "allowNotifications": false,
+        "autoSendPrayerGroupRequest": false,
+        "isSeller": false,
+        "seller": null,
+        "churches": [],
+        "_id": "6675f30757846e284309be12",
+        "username": "testuser",
+        "firstName": "Test",
+        "lastName": "User",
+        "email": "testuser@example.com",
+        "hashed_password": "a84bba0ef2cf7f8ab0058618e4788995c3199271",
+        "salt": "b7672a20-3016-11ef-94e8-6faa6506febb",
+        "role": 0,
+        "createdAt": "2024-06-21T21:39:19.624Z",
+        "updatedAt": "2024-06-21T21:39:19.624Z",
+        "__enc_firstName": false,
+        "__enc_lastName": false,
+        "__enc_email": false,
+        "__enc_prayerSettings_d": "",
+        "__enc_prayerSettings": false,
+        "__v": 0
+    },
+    {
+        "prayerSettings": [
+            {
+                "id": "rosary",
+                "name": "Rosary",
+                "isVisible": true
+            },
+            {
+                "id": "mass",
+                "name": "Mass",
+                "isVisible": true
+            },
+            {
+                "id": "confession",
+                "name": "Confession",
+                "isVisible": true
+            },
+            {
+                "id": "divineMercy",
+                "name": "Divine Mercy",
+                "isVisible": false
+            },
+            {
+                "id": "stMichaelPrayer",
+                "name": "St. Michael Prayer",
+                "isVisible": false
+            },
+            {
+                "id": "stfrancis",
+                "name": "St. Francis Prayer",
+                "isVisible": false
+            },
+            {
+                "id": "stleandroruiz",
+                "name": "St. Leandro Ruiz Prayer",
+                "isVisible": false
+            }
+        ],
+        "preferredLoginType": "username-password",
+        "allowInstantPrayerArmy": false,
+        "allowNotifications": false,
+        "autoSendPrayerGroupRequest": false,
+        "isSeller": false,
+        "seller": null,
+        "churches": [],
+        "_id": "66843c5697c3a824af3afff1",
+        "username": "crrazyyellow",
+        "email": "true",
+        "role": 0,
+        "createdAt": "2024-07-02T17:43:50.579Z",
+        "updatedAt": "2024-07-02T17:43:50.934Z",
+        "__enc_email": false,
+        "__enc_prayerSettings_d": "",
+        "__enc_prayerSettings": false,
+        "__v": 0
+    },
+    {
+        "prayerSettings": [
+            {
+                "id": "rosary",
+                "name": "Rosary",
+                "isVisible": true
+            },
+            {
+                "id": "mass",
+                "name": "Mass",
+                "isVisible": true
+            },
+            {
+                "id": "confession",
+                "name": "Confession",
+                "isVisible": true
+            },
+            {
+                "id": "divineMercy",
+                "name": "Divine Mercy",
+                "isVisible": true
+            },
+            {
+                "id": "stMichaelPrayer",
+                "name": "St. Michael Prayer",
+                "isVisible": false
+            },
+            {
+                "id": "stfrancis",
+                "name": "St. Francis Prayer",
+                "isVisible": false
+            },
+            {
+                "id": "stleandroruiz",
+                "name": "St. Leandro Ruiz Prayer",
+                "isVisible": false
+            }
+        ],
+        "seller": null,
+        "_id": "66849c4e417335040674f1c7",
+        "username": "Bill Videos",
+        "email": "true",
+        "role": 0,
+        "createdAt": "2024-07-03T00:33:18.922Z",
+        "updatedAt": "2024-08-01T02:01:25.810Z",
+        "__enc_email": false,
+        "__enc_prayerSettings_d": "",
+        "__enc_prayerSettings": false,
+        "__v": 1,
+        "__enc_firstName": false,
+        "__enc_lastName": false,
+        "firstName": "Bill",
+        "lastName": "Arnold",
+        "__enc_phone": false,
+        "allowInstantPrayerArmy": false,
+        "allowNotifications": false,
+        "autoSendPrayerGroupRequest": false,
+        "phone": "",
+        "preferredLoginType": "google",
+        "churches": [
+            "65c9f25555f8b90ae0947c63"
+        ],
+        "isSeller": false
+    },
+    {
+        "prayerSettings": [
+            {
+                "id": "rosary",
+                "name": "Rosary",
+                "isVisible": true
+            },
+            {
+                "id": "mass",
+                "name": "Mass",
+                "isVisible": true
+            },
+            {
+                "id": "confession",
+                "name": "Confession",
+                "isVisible": true
+            },
+            {
+                "id": "divineMercy",
+                "name": "Divine Mercy",
+                "isVisible": false
+            },
+            {
+                "id": "stMichaelPrayer",
+                "name": "St. Michael Prayer",
+                "isVisible": false
+            },
+            {
+                "id": "stfrancis",
+                "name": "St. Francis Prayer",
+                "isVisible": false
+            },
+            {
+                "id": "stleandroruiz",
+                "name": "St. Leandro Ruiz Prayer",
+                "isVisible": false
+            }
+        ],
+        "preferredLoginType": "username-password",
+        "allowInstantPrayerArmy": false,
+        "allowNotifications": false,
+        "autoSendPrayerGroupRequest": false,
+        "isSeller": false,
+        "seller": null,
+        "churches": [],
+        "_id": "6684a8b72d80e75bf74cd00d",
+        "username": "SSG Info",
+        "email": "true",
+        "role": 0,
+        "createdAt": "2024-07-03T01:26:15.616Z",
+        "updatedAt": "2024-07-03T01:26:16.049Z",
+        "__enc_email": false,
+        "__enc_prayerSettings_d": "",
+        "__enc_prayerSettings": false,
+        "__v": 0
+    },
+    {
+        "prayerSettings": [
+            {
+                "id": "rosary",
+                "name": "Rosary",
+                "isVisible": true
+            },
+            {
+                "id": "mass",
+                "name": "Mass",
+                "isVisible": true
+            },
+            {
+                "id": "confession",
+                "name": "Confession",
+                "isVisible": true
+            },
+            {
+                "id": "divineMercy",
+                "name": "Divine Mercy",
+                "isVisible": true
+            },
+            {
+                "id": "stMichaelPrayer",
+                "name": "St. Michael Prayer",
+                "isVisible": true
+            },
+            {
+                "id": "stfrancis",
+                "name": "St. Francis Prayer",
+                "isVisible": true
+            },
+            {
+                "id": "stleandroruiz",
+                "name": "St. Leandro Ruiz Prayer",
+                "isVisible": true
+            }
+        ],
+        "preferredLoginType": "username-password",
+        "allowInstantPrayerArmy": false,
+        "allowNotifications": false,
+        "autoSendPrayerGroupRequest": false,
+        "isSeller": false,
+        "seller": null,
+        "churches": [],
+        "_id": "66870b758932fdc013820121",
+        "username": "eric",
+        "firstName": "Eric",
+        "lastName": "Valencia",
+        "email": "ericlvalencia@gmail.com",
+        "phone": "3103838914",
+        "hashed_password": "760829fc398f578b6e927060f6baec6915fc2957",
+        "salt": "45c40ce0-3a47-11ef-ac32-e779e0daf9f3",
+        "role": 0,
+        "createdAt": "2024-07-04T20:52:05.940Z",
+        "updatedAt": "2024-07-04T20:52:28.107Z",
+        "__enc_firstName": false,
+        "__enc_lastName": false,
+        "__enc_email": false,
+        "__enc_phone": false,
+        "__enc_prayerSettings_d": "",
+        "__enc_prayerSettings": false,
+        "__v": 0
+    },
+    {
+        "prayerSettings": [
+            {
+                "id": "rosary",
+                "name": "Rosary",
+                "isVisible": true
+            },
+            {
+                "id": "mass",
+                "name": "Mass",
+                "isVisible": true
+            },
+            {
+                "id": "confession",
+                "name": "Confession",
+                "isVisible": true
+            },
+            {
+                "id": "divineMercy",
+                "name": "Divine Mercy",
+                "isVisible": false
+            },
+            {
+                "id": "stMichaelPrayer",
+                "name": "St. Michael Prayer",
+                "isVisible": false
+            },
+            {
+                "id": "stfrancis",
+                "name": "St. Francis Prayer",
+                "isVisible": false
+            },
+            {
+                "id": "stleandroruiz",
+                "name": "St. Leandro Ruiz Prayer",
+                "isVisible": false
+            }
+        ],
+        "preferredLoginType": "username-password",
+        "allowInstantPrayerArmy": false,
+        "allowNotifications": false,
+        "autoSendPrayerGroupRequest": false,
+        "isSeller": false,
+        "seller": null,
+        "churches": [],
+        "_id": "668758eb8932fdc01382015f",
+        "username": "rcom",
+        "firstName": "Eric",
+        "lastName": "Valencia",
+        "email": "rcomadmin@gmail.com",
+        "phone": "3103838914",
+        "hashed_password": "5fffb99ce5499afa87dce134fd3e6907fea595e8",
+        "salt": "715fe7b0-3a75-11ef-ac32-e779e0daf9f3",
+        "role": 0,
+        "createdAt": "2024-07-05T02:22:35.948Z",
+        "updatedAt": "2024-07-05T02:23:04.215Z",
+        "__enc_firstName": false,
+        "__enc_lastName": false,
+        "__enc_email": false,
+        "__enc_phone": false,
+        "__enc_prayerSettings_d": "",
+        "__enc_prayerSettings": false,
+        "__v": 0
+    },
+    {
+        "prayerSettings": [],
+        "preferredLoginType": "username-password",
+        "allowInstantPrayerArmy": false,
+        "allowNotifications": false,
+        "autoSendPrayerGroupRequest": false,
+        "isSeller": false,
+        "seller": null,
+        "churches": [],
+        "_id": "66894dd08932fdc0138201a0",
+        "username": "Lonestarnate",
+        "firstName": "Nate",
+        "lastName": "Pinto",
+        "email": "nathanlpinto@gmail.com",
+        "phone": "",
+        "hashed_password": "e844ab60877b267e13fd9e707ae30afdc20a0d62",
+        "salt": "ff4eae01-3b9f-11ef-ac32-e779e0daf9f3",
+        "role": 0,
+        "createdAt": "2024-07-06T13:59:44.099Z",
+        "updatedAt": "2024-07-06T13:59:44.099Z",
+        "__enc_firstName": false,
+        "__enc_lastName": false,
+        "__enc_email": false,
+        "__enc_phone": false,
+        "__enc_prayerSettings_d": "",
+        "__enc_prayerSettings": false,
+        "__v": 0
+    },
+    {
+        "prayerSettings": [
+            {
+                "id": "rosary",
+                "name": "Rosary",
+                "isVisible": true
+            },
+            {
+                "id": "mass",
+                "name": "Mass",
+                "isVisible": true
+            },
+            {
+                "id": "confession",
+                "name": "Confession",
+                "isVisible": true
+            },
+            {
+                "id": "divineMercy",
+                "name": "Divine Mercy",
+                "isVisible": false
+            },
+            {
+                "id": "stMichaelPrayer",
+                "name": "St. Michael Prayer",
+                "isVisible": false
+            },
+            {
+                "id": "stfrancis",
+                "name": "St. Francis Prayer",
+                "isVisible": false
+            },
+            {
+                "id": "stleandroruiz",
+                "name": "St. Leandro Ruiz Prayer",
+                "isVisible": false
+            }
+        ],
+        "isSeller": false,
+        "seller": null,
+        "churches": [],
+        "_id": "6689bd11bb537cef9240658e",
+        "username": "boomer",
+        "firstName": "Eric",
+        "lastName": "Valencia",
+        "email": "ericlvalencia@gmail.com",
+        "googleId": "eyJhbGciOiJSUzI1NiIsImtpZCI6Ijg3YmJlMDgxNWIwNjRlNmQ0NDljYWM5OTlmMGU1MGU3MmEzZTQzNzQiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJhenAiOiIxNDU0NzIyNDY1NjYtbTVhYjlsa2gwY20ybTI2OGRubmZnaTZtbHBta2toYWIuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiIxNDU0NzIyNDY1NjYtbTVhYjlsa2gwY20ybTI2OGRubmZnaTZtbHBta2toYWIuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMDU0MzIyOTk2ODI0MzgzMjU5NTkiLCJlbWFpbCI6ImVyaWNsdmFsZW5jaWFAZ21haWwuY29tIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsIm5iZiI6MTcyMDMwMjU2NSwibmFtZSI6IkVyaWMgVmFsZW5jaWEiLCJwaWN0dXJlIjoiaHR0cHM6Ly9saDMuZ29vZ2xldXNlcmNvbnRlbnQuY29tL2EvQUNnOG9jSjhOSUkyUWdwaWM2LUFhR3pwTDFCTnJJekRYMHlNNkEzQjlEX1MxdTRZV25VNlBHOFQ0QT1zOTYtYyIsImdpdmVuX25hbWUiOiJFcmljIiwiZmFtaWx5X25hbWUiOiJWYWxlbmNpYSIsImlhdCI6MTcyMDMwMjg2NSwiZXhwIjoxNzIwMzA2NDY1LCJqdGkiOiJlNmRlOWNhMjU4MjE3MGUxNjFmZDIwZmFjYzUwMjNjZDMxMWZkNDZkIn0.gkZB9b1cWVEIr0A7ZUYwBgCzfeO8ImfDc5eom0zAfRXe3ILDHlk9DqjmMln1RS02fZigOVGIBTK_tbkMqmKZ20IpqdurO4Oqn2LcFUq1DCatvFUL-Pf8Ddw3TluwSBHuWBO3mElopToFBRm2GX3H_Jjm17g60IZTLweFeFGSX5UZ3MnUiK5VrIWNcp69AWV4RoPcHAdCyGZ22OCshUGBuT5bra-Ju-9rt3EVaBYPhJNOfIPzScyzZPjW-Z8cetuM3Hjgqq68RbNk7SJAm68QQ-LkTsydc44J7UbCJrQTGLvdSQ53O2CisQd0Gnzy2oz-oxVhZ0IxMbIeuNWUK00Row",
+        "role": 0,
+        "preferredLoginType": "google",
+        "allowInstantPrayerArmy": false,
+        "allowNotifications": false,
+        "autoSendPrayerGroupRequest": false,
+        "createdAt": "2024-07-06T21:54:25.522Z",
+        "updatedAt": "2024-07-09T01:09:32.518Z",
+        "__enc_firstName": false,
+        "__enc_lastName": false,
+        "__enc_email": false,
+        "__enc_prayerSettings_d": "",
+        "__enc_prayerSettings": false,
+        "__v": 0,
+        "__enc_phone": false,
+        "phone": "3103838914"
+    },
+    {
+        "prayerSettings": [
+            {
+                "id": "rosary",
+                "name": "Rosary",
+                "isVisible": true
+            },
+            {
+                "id": "mass",
+                "name": "Mass",
+                "isVisible": true
+            },
+            {
+                "id": "confession",
+                "name": "Confession",
+                "isVisible": true
+            },
+            {
+                "id": "divineMercy",
+                "name": "Divine Mercy",
+                "isVisible": true
+            },
+            {
+                "id": "stMichaelPrayer",
+                "name": "St. Michael Prayer",
+                "isVisible": false
+            },
+            {
+                "id": "stfrancis",
+                "name": "St. Francis Prayer",
+                "isVisible": false
+            },
+            {
+                "id": "stleandroruiz",
+                "name": "St. Leandro Ruiz Prayer",
+                "isVisible": false
+            }
+        ],
+        "seller": null,
+        "_id": "",
+        "username": "Eric Valencia",
+        "email": "",
+        "role": 1,
+        "preferredLoginType": "google",
+        "allowInstantPrayerArmy": true,
+        "allowNotifications": true,
+        "autoSendPrayerGroupRequest": true,
+        "createdAt": "2024-07-09T01:10:04.066Z",
+        "updatedAt": "2024-08-01T09:36:29.126Z",
+        "__enc_email": false,
+        "__enc_prayerSettings_d": "",
+        "__enc_prayerSettings": false,
+        "__v": 15,
+        "__enc_firstName": false,
+        "__enc_lastName": false,
+        "__enc_phone": false,
+        "firstName": "Eric",
+        "lastName": "Valencia",
+        "phone": "",
+        "churches": [
+            "65c9f38155f8b90ae0947c77",
+            "669402393020f602bdb58b1c",
+            "66aac6ceaf245100bf30308f",
+            "66aac6ddaf245100bf303095",
+            "66aad9fa20ed7e880bf30f1b",
+            "66ab174304d6e875a9288f90",
+            "66ab571d2d78f9b3100af0a5"
+        ],
+        "isSeller": false
+    }
+]
