@@ -3,7 +3,7 @@
 import { isAuthenticated } from '../api/auth';
 
 // Base URL for API requests
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000/api';
+const API_BASE_URL = process.env.REACT_APP_API || 'http://localhost:8000/api';
 
 // Function to get the stored token
 const getToken = () => {
