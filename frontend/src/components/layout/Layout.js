@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import NavbarMain from '../../NavbarMain';
 import Sidebar from '../sidebar/Sidebar';
 import Footer from '../../Footer';
@@ -6,6 +6,7 @@ import BottomBar from '../bottombar/BottomBar';
 import { Outlet, useLocation } from 'react-router-dom';
 import { isAuthenticated } from '../../api/auth';
 import { getUserPrayerStats } from '../../api/user';
+import ChatIcon from '../ai/ChatIcon'; // Import the ChatIcon component
 import './Layout.css';
 
 const Layout = () => {
@@ -40,6 +41,9 @@ const Layout = () => {
 
   const shouldShowFooter = !isMobile || (isMobile && location.pathname === '/user/settings');
 
+  // Ensure the user is authenticated
+  const { user: { _id: userId }, token } = isAuthenticated();
+
   return (
     <div className="layout-wrapper">
       <div className="navbar-fixed">
@@ -61,6 +65,7 @@ const Layout = () => {
         </div>
       )}
       {shouldShowFooter && <Footer />}
+      {userId && token && <ChatIcon userId={userId} token={token} />} {/* Add ChatIcon here */}
     </div>
   );
 };

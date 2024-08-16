@@ -45,7 +45,15 @@ const userSchema = new mongoose.Schema({
     },
     prayerSettings: {
         type: Array,
-        default: []
+        default: [
+            { id: 'rosary', isVisible: true },
+            { id: 'mass', isVisible: true },
+            { id: 'confession', isVisible: true },
+            { id: 'divineMercy', isVisible: true },
+            { id: 'stMichaelPrayer', isVisible: false },
+            { id: 'stfrancis', isVisible: false },
+            { id: 'stleandroruiz', isVisible: false }
+        ]
     },
     salt: String,
     role: {
@@ -80,7 +88,11 @@ const userSchema = new mongoose.Schema({
     churches: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Church'
-    }]
+    }],
+    aiModel: {
+        type: String,
+        default: 'gpt-3.5-turbo',  // Default model
+    },
 }, { timestamps: true });
 
 var encKey = process.env.SOME_32BYTE_BASE64_STRING;

@@ -1,5 +1,8 @@
+  // /controllers/user.js
+
 const MassAttendance = require("../models/massAttendance");
 const Rosary = require("../models/rosary"); 
+const AiInteraction = require('../models/ai'); // Adjust the path if necessary
 const User = require('../models/user'); // Adjust the path according to your project structure
 const log = console.log
 
@@ -30,19 +33,37 @@ exports.updatePrayerSettings = async (req, res) => {
 exports.getPrayerSettings = async (req, res) => {
     try {
         const { userId } = req.body;
-        const user = await User.findById(userId) // .select('prayerSettings');
+        console.log('Fetching prayer settings for user:', userId);
+
+        const user = await User.findById(userId).select('prayerSettings');
         if (!user) {
             return res.status(404).json({ error: 'User not found' });
         }
-        // Optionally, you can send back only relevant information to the client
-        const updatedPrayerSettings = user.prayerSettings;
 
-        res.json(updatedPrayerSettings);
+        let prayerSettings = user.prayerSettings;
+        console.log('Fetched prayer settings:', prayerSettings);
+
+        // If prayerSettings is empty or undefined, fall back to default settings
+        if (!prayerSettings || prayerSettings.length === 0) {
+            prayerSettings = [
+                { id: 'rosary', isVisible: true },
+                { id: 'mass', isVisible: true },
+                { id: 'confession', isVisible: true },
+                { id: 'divineMercy', isVisible: true },
+                { id: 'stMichaelPrayer', isVisible: false },
+                { id: 'stfrancis', isVisible: false },
+                { id: 'stleandroruiz', isVisible: false }
+            ];
+        }
+
+        res.json(prayerSettings);
     } catch (error) {
         console.error('Error fetching prayer settings:', error);
         res.status(500).json({ error: 'Internal server error' });
     }
 };
+
+
 
 exports.getUserSettings = async (req, res) => {
     // log(`Begin getUserSettings! req.body: `, req.body)
@@ -121,3 +142,38 @@ exports.getUserPrayerStats = async (req, res) => {
       res.status(400).json({ error: error.message });
     }
   };
+
+
+exports.updateAiModel = async (req, res) => {
+    const { userId, aiModel } = req.body;
+
+    try {
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        user.aiModel = aiModel;
+        await user.save();
+
+        res.status(200).json({ message: 'AI model updated successfully' });
+    } catch (error) {
+        console.error('Error updating AI model:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+};
+
+exports.getUserTokenUsage = async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const interactions = await AiInteraction.find({ userId });
+
+        const totalTokens = interactions.reduce((acc, interaction) => acc + interaction.tokensUsed, 0);
+        const totalCost = interactions.reduce((acc, interaction) => acc + interaction.cost, 0);
+
+        res.status(200).json({ totalTokens, totalCost });
+    } catch (error) {
+        console.error('Error fetching token usage:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+};

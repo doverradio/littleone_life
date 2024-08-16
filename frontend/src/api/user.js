@@ -98,3 +98,23 @@ export const getUserPrayerStats = async (userId, token) => {
         throw error;
     }
 };
+
+export const getTokenUsage = async (userId, token) => {
+    try {
+        const response = await fetch(`${API}/user/token-usage/${userId}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to fetch token usage');
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error('Error fetching token usage:', error);
+        throw error;
+    }
+};

@@ -9,6 +9,8 @@ const http = require('http');
 const socketIo = require('socket.io');
 require('dotenv').config();
 
+
+const aiRoutes = require('./routes/ai');
 const authRoutes = require("./routes/auth");
 const adminRoutes = require('./routes/admin'); // Add this line
 const churchRoutes = require('./routes/church');
@@ -54,6 +56,7 @@ app.use(cors({
 }));
 
 // Define routes
+app.use('/api', aiRoutes);
 app.use('/api', authRoutes);
 app.use('/api', adminRoutes); // Add this line
 app.use('/api', churchRoutes);

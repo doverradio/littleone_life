@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { getUserSettings, updateUserSettings } from '../../api/user';
-import { isAuthenticated, checkUsernameAvailability } from '../../api/auth';
+import { getUserSettings, updateUserSettings, getTokenUsage } from '../../api/user'; // Import getTokenUsage
+import { isAuthenticated } from '../../api/auth';
 import { toast } from 'react-toastify';
+
+import PersonalInfoForm from './PersonalInfoForm';
+import LoginSettingsForm from './LoginSettingsForm';
+import NotificationSettingsForm from './NotificationSettingsForm';
+import PrayerSettingsForm from './PrayerSettingsForm';
+import AiModelSettingsForm from './AiModelSettingsForm';
 
 const Settings = () => {
     const [settings, setSettings] = useState({
@@ -13,76 +19,61 @@ const Settings = () => {
         allowInstantPrayerArmy: false,
         allowNotifications: false,
         autoSendPrayerGroupRequest: false,
+        aiModel: 'gpt-3.5-turbo',
         username: '',
         password: '',
         _id: '',
         prayerSettings: []
     });
 
-    const [usernameAvailable, setUsernameAvailable] = useState(true);
-    const [originalUsername, setOriginalUsername] = useState('');
-    const [checkUsername, setCheckUsername] = useState(false);
+    const [tokenUsage, setTokenUsage] = useState({ totalTokens: 0, totalCost: 0 }); // New state for token usage
 
     useEffect(() => {
-        const fetchSettings = async () => {
+        const fetchSettingsAndUsage = async () => {
             const { token, user } = isAuthenticated();
             const result = await getUserSettings(token, user._id);
+            const usage = await getTokenUsage(user._id, token); // Fetch token usage and cost
+
             if (result.error) {
                 toast.error(result.error);
             } else {
                 setSettings({
                     ...settings,
-                    firstName: result.firstName || '',
-                    lastName: result.lastName || '',
-                    phoneNumber: result.phone || '',
-                    preferredLoginType: result.preferredLoginType || 'username-password',
-                    allowInstantPrayerArmy: result.allowInstantPrayerArmy || false,
-                    allowNotifications: result.allowNotifications || false,
-                    autoSendPrayerGroupRequest: result.autoSendPrayerGroupRequest || false,
-                    username: result.username || '',
+                    ...result,
                     _id: user._id || '',
-                    role: result.role || 0,
-                    prayerSettings: result.prayerSettings || [],
                 });
-                setOriginalUsername(result.username || '');
+                setTokenUsage(usage); // Set the token usage and cost
             }
         };
 
-        fetchSettings();
+        fetchSettingsAndUsage();
     }, []);
 
     const handleChange = (e) => {
-        const { name, value, type, checked } = e.target;
-        setSettings(prevSettings => ({
-            ...prevSettings,
-            [name]: type === 'checkbox' ? checked : value
-        }));
-    };
-
-    const handleUsernameChange = async (e) => {
-        const value = e.target.value;
-        setSettings(prevSettings => ({
-            ...prevSettings,
-            username: value
-        }));
-
-        if (value !== originalUsername && checkUsername) {
-            const result = await checkUsernameAvailability(value, settings._id);
-            setUsernameAvailable(result.isAvailable);
+        const { name, value } = e.target;
+        const [fieldName, index, subField] = name.split('.');
+    
+        if (fieldName === 'prayerSettings') {
+            const newSettings = [...settings.prayerSettings];
+            newSettings[index] = { ...newSettings[index], [subField]: value };
+    
+            setSettings(prevSettings => ({
+                ...prevSettings,
+                prayerSettings: newSettings,
+            }));
         } else {
-            setUsernameAvailable(true); // It's their original username or not checking yet, so it's valid
+            setSettings(prevSettings => ({
+                ...prevSettings,
+                [name]: value
+            }));
         }
     };
-
+    
     const handleSubmit = async (e) => {
         e.preventDefault();
-
-        if (settings.preferredLoginType === 'username-password' && !settings.password) {
-            return toast.error('You must set a password when using username-password as your login type.');
-        }
-
+    
         const { token } = isAuthenticated();
-        const result = await updateUserSettings(token, settings);
+        const result = await updateUserSettings(token, settings); // Ensure `settings` includes the updated `prayerSettings`
         if (result.error) {
             toast.error(result.error);
         } else {
@@ -91,150 +82,40 @@ const Settings = () => {
         }
     };
 
-    const handlePreferredLoginTypeChange = (e) => {
-        const value = e.target.value;
-        if (value === 'username-password' && settings.preferredLoginType === 'google') {
-            const confirmChange = window.confirm('Changing login type to username-password requires you to set a password. Do you want to proceed?');
-            if (!confirmChange) {
-                return;
-            }
-            setCheckUsername(true); // Allow username check after confirmation
-        }
-        setSettings(prevSettings => ({
-            ...prevSettings,
-            preferredLoginType: value
-        }));
-    };
-
     return (
-        <>
-            <div className="container" style={{ minHeight: '80vh' }}>
-                <h2>Settings</h2>
-                <form onSubmit={handleSubmit}>
-                    <div className="form-group">
-                        <label>First Name:</label>
-                        <input 
-                            type="text" 
-                            name="firstName" 
-                            value={settings.firstName} 
-                            onChange={handleChange}
-                            className="form-control"
-                        />
-                    </div>
-                    <div className="form-group">
-                        <label>Last Name:</label>
-                        <input 
-                            type="text" 
-                            name="lastName" 
-                            value={settings.lastName} 
-                            onChange={handleChange}
-                            className="form-control"
-                        />
-                    </div>
-                    <div className="form-group">
-                        <label>Phone Number:</label>
-                        <input 
-                            type="text" 
-                            name="phoneNumber" 
-                            value={settings.phoneNumber} 
-                            onChange={handleChange}
-                            className="form-control"
-                        />
-                    </div>
-                    <div className="form-group">
-                        <label>Preferred Login Type:</label>
-                        <div>
-                            <label>
-                                <input 
-                                    type="radio" 
-                                    name="preferredLoginType" 
-                                    value="username-password" 
-                                    checked={settings.preferredLoginType === 'username-password'} 
-                                    onChange={handlePreferredLoginTypeChange}
-                                /> Username/Password
-                            </label>
-                            <label className="ml-3">
-                                <input 
-                                    type="radio" 
-                                    name="preferredLoginType" 
-                                    value="google" 
-                                    checked={settings.preferredLoginType === 'google'} 
-                                    onChange={handlePreferredLoginTypeChange}
-                                /> Google Account
-                            </label>
-                        </div>
-                    </div>
-                    <div className="form-group">
-                        <label>Receive Notifications:</label>
-                        <div>
-                            <label>
-                                <input 
-                                    type="checkbox" 
-                                    name="allowInstantPrayerArmy" 
-                                    checked={settings.allowInstantPrayerArmy} 
-                                    onChange={handleChange}
-                                /> Allow instant prayer army
-                            </label>
-                            <label className="ml-3">
-                                <input 
-                                    type="checkbox" 
-                                    name="allowNotifications" 
-                                    checked={settings.allowNotifications} 
-                                    onChange={handleChange}
-                                /> Allow notifications
-                            </label>
-                        </div>
-                    </div>
-                    <div className="form-group">
-                        <label>Send Notifications:</label>
-                        <div>
-                            <label>
-                                <input 
-                                    type="checkbox" 
-                                    name="autoSendPrayerGroupRequest" 
-                                    checked={settings.autoSendPrayerGroupRequest} 
-                                    onChange={handleChange}
-                                /> Automatically send prayer group request upon clicking button
-                            </label>
-                        </div>
-                    </div>
-                    <div className="form-group">
-                        <label>Change Username:</label>
-                        <input 
-                            type="text" 
-                            name="username" 
-                            value={settings.username} 
-                            onChange={handleUsernameChange}
-                            className="form-control"
-                            disabled={settings.preferredLoginType === 'google'}
-                            style={{ backgroundColor: settings.preferredLoginType === 'google' ? '#e9ecef' : 'white' }}
-                        />
-                        {settings.preferredLoginType === 'username-password' && (
-                            <>
-                                {usernameAvailable ? (
-                                    <p style={{ color: 'green' }}>Current username</p>
-                                ) : (
-                                    <p style={{ color: 'red' }}>Username is not available</p>
-                                )}
-                            </>
-                        )}
-                    </div>
-                    {settings.preferredLoginType === 'username-password' && (
-                        <div className="form-group">
-                            <label>Change Password:</label>
-                            <input 
-                                type="password" 
-                                name="password" 
-                                value={settings.password} 
-                                onChange={handleChange}
-                                className="form-control"
-                            />
-                        </div>
-                    )}
-                    <button type="submit" className="btn btn-primary">Save Settings</button>
-                </form>
-            </div>
-        </>
+        <div className="container" style={{ minHeight: '80vh' }}>
+            <h2>Settings</h2>
+            <form onSubmit={handleSubmit}>
+                <PersonalInfoForm settings={settings} handleChange={handleChange} />
+                <LoginSettingsForm settings={settings} handleChange={handleChange} />
+                <NotificationSettingsForm settings={settings} handleChange={handleChange} />
+                <PrayerSettingsForm settings={settings} handleChange={handleChange} />
+                <AiModelSettingsForm settings={settings} handleChange={handleChange} />
+                
+                {/* Display the token usage and cost */}
+                <div className="form-group">
+                    <label>Total Token Usage:</label>
+                    <input
+                        type="text"
+                        value={tokenUsage.totalTokens}
+                        readOnly
+                        className="form-control"
+                    />
+                </div>
+                <div className="form-group">
+                    <label>Total Cost:</label>
+                    <input
+                        type="text"
+                        value={`$${((tokenUsage.totalCost * 2) / 100).toFixed(2)}`} // assuming cost is stored in cents and doubling the cost
+                        readOnly
+                        className="form-control"
+                    />
+                </div>
+
+
+                <button type="submit" className="btn btn-primary">Save Settings</button>
+            </form>
+        </div>
     );
 };
 
