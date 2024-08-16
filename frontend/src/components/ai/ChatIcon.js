@@ -51,7 +51,7 @@ const ChatIcon = ({ userId, token }) => {
                         flexDirection: 'column',
                     }}
                 >
-                    <AiInteraction userId={userId} token={token} />
+                    <AiInteraction userId={userId} token={token} onClose={toggleChat} />
                 </div>
             )}
         </div>

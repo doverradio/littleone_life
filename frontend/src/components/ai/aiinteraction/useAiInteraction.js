@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { interactWithAI, getChatHistory } from '../../api/ai';
-import AiInteractionLayout from './aiinteraction/AiInteractionLayout';
+// src/components/ai/aiinteraction/useAiInteraction.js
 
-const AiInteraction = ({ userId, token, onClose }) => {
+import { useState, useEffect, useRef } from 'react';
+import { interactWithAI, getChatHistory } from '../../../api/ai';
+
+const useAiInteraction = (userId, token) => {
     const [inputText, setInputText] = useState('');
     const [chatHistory, setChatHistory] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -13,6 +14,8 @@ const AiInteraction = ({ userId, token, onClose }) => {
     const endOfMessagesRef = useRef(null);
 
     const characterLimit = 1000; // Set a reasonable character limit
+    const minChatHeight = 300; // Minimum height of the chat area
+    const maxChatHeight = 500; // Maximum height of the chat area
 
     useEffect(() => {
         fetchChatHistory(page);
@@ -47,7 +50,7 @@ const AiInteraction = ({ userId, token, onClose }) => {
             setChatHistory(prevHistory => [...prevHistory, { content: inputText, response }]);
             setInputText(''); // Clear the textarea after submission
         } catch (err) {
-            setError('Failed to interact with AI');
+            setError('Failed to interact with Bill');
         } finally {
             setLoading(false);
             if (endOfMessagesRef.current) {
@@ -79,22 +82,25 @@ const AiInteraction = ({ userId, token, onClose }) => {
         }
     };
 
-    return (
-        <AiInteractionLayout
-            chatHistory={chatHistory}
-            chatContainerRef={chatContainerRef}
-            endOfMessagesRef={endOfMessagesRef}
-            handleScroll={handleScroll}
-            inputText={inputText}
-            setInputText={setInputText}
-            handleSubmit={handleSubmit}
-            characterLimit={characterLimit}
-            loading={loading}
-            handleExport={handleExport}
-            error={error}
-            onClose={onClose} // Pass the close handler
-        />
-    );
+    const calculateChatHeight = () => {
+        const baseHeight = minChatHeight + (chatHistory.length * 20); // Adjust the multiplier as needed
+        return Math.min(maxChatHeight, baseHeight);
+    };
+
+    return {
+        inputText,
+        setInputText,
+        chatHistory,
+        loading,
+        error,
+        chatContainerRef,
+        endOfMessagesRef,
+        characterLimit,
+        handleScroll,
+        handleSubmit,
+        handleExport,
+        calculateChatHeight,
+    };
 };
 
-export default AiInteraction;
+export default useAiInteraction;

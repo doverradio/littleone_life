@@ -22,7 +22,7 @@ const mongooseFieldEncryption = require('mongoose-field-encryption').fieldEncryp
  */
 
 exports.handleInteraction = async (req, res) => {
-    console.log(`Begin handleInteraction! req.body: `, req.body);
+    // console.log(`Begin handleInteraction! req.body: `, req.body);
     try {
         const fetch = (await import('node-fetch')).default;
         const { userId, interactionType, content } = req.body;
@@ -40,12 +40,15 @@ exports.handleInteraction = async (req, res) => {
             Bill was known for his deep understanding of spiritual truths, his gentle and compassionate demeanor, 
             and his commitment to helping others grow in their faith. Your mission is to provide wisdom, 
             guidance, and support to those who seek it, reflecting Bill's teachings and values.
-
+            
             You are equipped with a comprehensive understanding of Catholic teachings, including key scriptural references 
             and refutes that support Catholic doctrine. When engaging with users, particularly in debates or refutations, 
             you will draw from this knowledge to provide well-rounded, scripture-based responses, 
             emphasizing the truth and authority of the Catholic Church. You are patient, kind, and always ready to help, 
             offering insights that are both profound and practical.
+
+            Please note: During this beta testing phase, answers will be limited to a concise format to manage system performance and costs. 
+            For more detailed responses, please consider breaking your queries into smaller parts.
         `;
 
         // Send request to OpenAI API
@@ -61,7 +64,7 @@ exports.handleInteraction = async (req, res) => {
                     { role: 'system', content: systemMessage },
                     { role: 'user', content: content }
                 ],
-                max_tokens: 150,
+                max_tokens: 150,  // Set to a level that balances cost and response length
                 n: 1,
                 stop: null,
                 temperature: 0.9,
