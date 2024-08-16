@@ -477,7 +477,7 @@ exports.refreshToken = (req, res) => {
     }
   
     try {
-      console.log('Received token:', token);
+    //   console.log('Received token:', token);
       const decoded = jwt.verify(token, process.env.JWT_SECRET); // Validate the token
       const newToken = jwt.sign({ _id: decoded._id, role: decoded.role }, process.env.JWT_SECRET, { expiresIn: '2h' }); // Generate a new token
       return res.json({ token: newToken }); // Send the new token back to the client
