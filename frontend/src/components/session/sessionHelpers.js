@@ -23,12 +23,12 @@ export const scheduleTimers = (warningTimeoutRef, logoutTimeoutRef, showLogoutWa
 
     try {
         /** TESTING */
-        warningTimeoutRef.current = setTimeout(showLogoutWarning, 10 * 1000); // 10 seconds for warning
-        logoutTimeoutRef.current = setTimeout(logoutUser, 20 * 1000); // 20 seconds for logout
+        // warningTimeoutRef.current = setTimeout(showLogoutWarning, 10 * 1000); // 10 seconds for warning
+        // logoutTimeoutRef.current = setTimeout(logoutUser, 20 * 1000); // 20 seconds for logout
 
         /** PRODUCTION */
-        // warningTimeoutRef.current = setTimeout(showLogoutWarning, 1.95 * 60 * 60 * 1000); // 1.95 hours
-        // logoutTimeoutRef.current = setTimeout(logoutUser, 2 * 60 * 60 * 1000); // 2 hours
+        warningTimeoutRef.current = setTimeout(showLogoutWarning, 1.95 * 60 * 60 * 1000); // 1.95 hours
+        logoutTimeoutRef.current = setTimeout(logoutUser, 2 * 60 * 60 * 1000); // 2 hours
     } catch (error) {
         console.error('Error scheduling timers:', error);
         throw error;

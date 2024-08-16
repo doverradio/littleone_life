@@ -8,6 +8,10 @@ import {
   updateActivity,
 } from './sessionHelpers';
 import SessionExpiryModal from './SessionExpiryModal';
+import Modal from 'react-modal';
+
+// Set the app element for accessibility
+Modal.setAppElement('#root');
 
 const SessionManager = ({ children }) => {
   const [lastActivityTime, setLastActivityTime] = useState(Date.now());
