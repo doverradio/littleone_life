@@ -1,7 +1,7 @@
 // src/components/confession/Confession.js
 
 import React, { useState, useEffect } from 'react';
-import { isAuthenticated } from '../../api/auth';
+import { useAuth } from '../../api/authHook';
 import { fetchNearbyChurches } from '../../api/googleMaps';
 import ConfessionHeader from './components/ConfessionHeader';
 import ConfessionForm from './components/ConfessionForm';
@@ -12,7 +12,8 @@ import './styles.css';
 import BackIcon from '../utils/BackIcon';
 
 const Confession = () => {
-    const { user: { _id }, token } = isAuthenticated();
+    const { user, token } = useAuth();
+    const { _id } = user || {};
     const userId = _id;
 
     const [confessions, setConfessions] = useState([]);

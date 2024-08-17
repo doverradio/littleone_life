@@ -10,9 +10,11 @@ import Step3Names from './wizard/Step3Names';
 import { checkUsernameAvailability, signup, googleSignup, authenticate } from '../api/auth';
 import ProgressBar from './wizard/ProgressBar';
 import GoogleSignupButton from './GoogleSignupButton';
+import { useToken } from '../context/TokenContext';  // Import the custom hook
 
 const SignUpWizard = ({ googleProfile, googleToken, informParent }) => {
     const navigate = useNavigate();
+    const { setToken } = useToken();  // Get the setToken function from context
     const [step, setStep] = useState(1);
     const [signUpMethod, setSignUpMethod] = useState(null);
     const [userData, setUserData] = useState({
@@ -121,7 +123,7 @@ const SignUpWizard = ({ googleProfile, googleToken, informParent }) => {
         if (result.error) {
             toast.error(result.error);
         } else {
-            authenticate(result, () => {
+            authenticate(result, setToken, () => {  // Pass setToken to authenticate
                 setUserData({
                     ...userData,
                     username: result.user.username,

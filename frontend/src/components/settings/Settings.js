@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { getUserSettings, updateUserSettings, getTokenUsage } from '../../api/user'; // Import getTokenUsage
-import { isAuthenticated } from '../../api/auth';
+import { getUserSettings, updateUserSettings, getTokenUsage } from '../../api/user';
+import { useAuth } from '../../api/authHook';
 import { toast } from 'react-toastify';
 
 import PersonalInfoForm from './PersonalInfoForm';
@@ -10,6 +10,9 @@ import PrayerSettingsForm from './PrayerSettingsForm';
 import AiModelSettingsForm from './AiModelSettingsForm';
 
 const Settings = () => {
+    
+    const { user, token } = useAuth();
+
     const [settings, setSettings] = useState({
         firstName: '',
         lastName: '',
@@ -26,13 +29,12 @@ const Settings = () => {
         prayerSettings: []
     });
 
-    const [tokenUsage, setTokenUsage] = useState({ totalTokens: 0, totalCost: 0 }); // New state for token usage
+    const [tokenUsage, setTokenUsage] = useState({ totalTokens: 0, totalCost: 0 });
 
     useEffect(() => {
         const fetchSettingsAndUsage = async () => {
-            const { token, user } = isAuthenticated();
             const result = await getUserSettings(token, user._id);
-            const usage = await getTokenUsage(user._id, token); // Fetch token usage and cost
+            const usage = await getTokenUsage(user._id, token);
 
             if (result.error) {
                 toast.error(result.error);
@@ -42,45 +44,60 @@ const Settings = () => {
                     ...result,
                     _id: user._id || '',
                 });
-                setTokenUsage(usage); // Set the token usage and cost
+                setTokenUsage(usage);
             }
         };
 
         fetchSettingsAndUsage();
     }, []);
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        const [fieldName, index, subField] = name.split('.');
-    
-        if (fieldName === 'prayerSettings') {
-            const newSettings = [...settings.prayerSettings];
-            newSettings[index] = { ...newSettings[index], [subField]: value };
-    
-            setSettings(prevSettings => ({
-                ...prevSettings,
-                prayerSettings: newSettings,
-            }));
-        } else {
-            setSettings(prevSettings => ({
-                ...prevSettings,
-                [name]: value
-            }));
+    const handlePrayerSettingsChange = async (index, isVisible) => {
+        const updatedPrayerSettings = [...settings.prayerSettings];
+        updatedPrayerSettings[index].isVisible = isVisible;
+
+        setSettings(prevSettings => ({
+            ...prevSettings,
+            prayerSettings: updatedPrayerSettings,
+        }));
+
+        // Send update to the backend
+        try {
+            const result = await updateUserSettings(token, { ...settings, prayerSettings: updatedPrayerSettings });
+            if (result.error) {
+                toast.error(result.error);
+            } else {
+                toast.success('Prayer settings updated successfully');
+            }
+        } catch (error) {
+            toast.error('Failed to update settings');
+            console.error(error);
         }
     };
-    
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setSettings(prevSettings => ({
+            ...prevSettings,
+            [name]: value
+        }));
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
-    
-        const { token } = isAuthenticated();
+        
+        console.log('Submitting settings:', settings); // Log the settings being submitted
+        
         const result = await updateUserSettings(token, settings); // Ensure `settings` includes the updated `prayerSettings`
+        
         if (result.error) {
             toast.error(result.error);
         } else {
             toast.success('Settings updated successfully');
+            console.log('Updated settings saved:', result); // Log the result from the backend
             setSettings(result);
         }
     };
+    
 
     return (
         <div className="container" style={{ minHeight: '80vh' }}>
@@ -89,10 +106,9 @@ const Settings = () => {
                 <PersonalInfoForm settings={settings} handleChange={handleChange} />
                 <LoginSettingsForm settings={settings} handleChange={handleChange} />
                 <NotificationSettingsForm settings={settings} handleChange={handleChange} />
-                <PrayerSettingsForm settings={settings} handleChange={handleChange} />
+                <PrayerSettingsForm settings={settings} handlePrayerSettingsChange={handlePrayerSettingsChange} />
                 <AiModelSettingsForm settings={settings} handleChange={handleChange} />
                 
-                {/* Display the token usage and cost */}
                 <div className="form-group">
                     <label>Total Token Usage:</label>
                     <input
@@ -106,12 +122,11 @@ const Settings = () => {
                     <label>Total Cost:</label>
                     <input
                         type="text"
-                        value={`$${((tokenUsage.totalCost * 2) / 100).toFixed(2)}`} // assuming cost is stored in cents and doubling the cost
+                        value={`$${((tokenUsage.totalCost * 2) / 100).toFixed(2)}`}
                         readOnly
                         className="form-control"
                     />
                 </div>
-
 
                 <button type="submit" className="btn btn-primary">Save Settings</button>
             </form>

@@ -1,7 +1,7 @@
 // src/components/mass/Mass.js
 
 import React, { useState, useEffect } from 'react';
-import { isAuthenticated } from '../../api/auth';
+import { useAuth } from '../../api/authHook';
 import { fetchIntentions } from './utils/fetchFunctions';
 import { useModal } from '../../context/ModalContext';
 import massIcon from './mass_icon.png';
@@ -20,7 +20,8 @@ import latinMassImage from './latin_mass.jpg';
 
 const Mass = () => {
     const { toggleModal } = useModal();
-    const { user: { _id }, token } = isAuthenticated();
+    const { user, token } = useAuth();
+    const { _id } = user || {};
     const userId = _id;
 
     const [count, setCount] = useState(0);

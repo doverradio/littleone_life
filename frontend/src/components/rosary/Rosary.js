@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { isAuthenticated } from '../../api/auth';
+import { useAuth } from '../../api/authHook';
 import rosaryIcon from './rosary_icon.png';
 import './styles.css';
 import { useModal } from '../../context/ModalContext';
@@ -82,11 +82,8 @@ const Rosary = () => {
     const [refreshTrigger, setRefreshTrigger] = useState(0);
     const [showVirtualRosary, setShowVirtualRosary] = useState(false);
 
-    const {
-        user: { _id },
-        token
-    } = isAuthenticated();
-
+    const { user, token } = useAuth();
+    const { _id } = user || {};
     const userId = _id;
 
     useEffect(() => {

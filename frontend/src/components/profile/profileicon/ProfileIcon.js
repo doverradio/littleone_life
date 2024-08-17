@@ -1,12 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { FaUserCircle, FaCog, FaCross, FaPray, FaChurch } from 'react-icons/fa';
-import { isAuthenticated } from '../../../api/auth';
+import { useAuth } from '../../../api/authHook';
 import { Link } from 'react-router-dom';
 import { formatNumber } from '../../utils/numberFormatter';
 
 const ProfileIcon = ({ handleSignout, userStats = {} }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const { user } = isAuthenticated();
+  const { user } = useAuth();
   const dropdownRef = useRef(null);
 
   const toggleDropdown = () => {

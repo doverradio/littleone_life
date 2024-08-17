@@ -4,12 +4,18 @@ import Sidebar from '../sidebar/Sidebar';
 import Footer from '../../Footer';
 import BottomBar from '../bottombar/BottomBar';
 import { Outlet, useLocation } from 'react-router-dom';
-import { isAuthenticated } from '../../api/auth';
+import { useAuth } from '../../api/authHook';
 import { getUserPrayerStats } from '../../api/user';
 import ChatIcon from '../ai/ChatIcon'; // Import the ChatIcon component
 import './Layout.css';
 
 const Layout = () => {
+  
+  // Ensure the user is authenticated
+  const { user, token } = useAuth();
+  const { _id } = user || {};
+  const userId = _id;
+
   const location = useLocation();
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const [userStats, setUserStats] = useState({ rosaries: 0, masses: 0, confessions: 0, divineMercies: 0 });
@@ -28,7 +34,6 @@ const Layout = () => {
   useEffect(() => {
     const fetchUserStats = async () => {
       try {
-        const { user: { _id: userId }, token } = isAuthenticated();
         const stats = await getUserPrayerStats(userId, token);
         setUserStats(stats);
       } catch (error) {
@@ -40,10 +45,7 @@ const Layout = () => {
   }, []);
 
   const shouldShowFooter = !isMobile || (isMobile && location.pathname === '/user/settings');
-
-  // Ensure the user is authenticated
-  const { user: { _id: userId }, token } = isAuthenticated();
-
+  
   return (
     <div className="layout-wrapper">
       <div className="navbar-fixed">

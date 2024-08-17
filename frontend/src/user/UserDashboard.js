@@ -13,7 +13,7 @@ import divineMercyIcon from '../components/otherprayers/divinemercy/divinemercy_
 import prayerSettingsIcon from '../components/otherprayers/prayersettings_icon.png';
 import './styles.css';
 import { useModal } from "../context/ModalContext";
-import { isAuthenticated } from "../api/auth";
+import { useAuth } from '../api/authHook';
 import { getPrayerSettings, updatePrayerSettings } from "../api/user";
 import PrayerSettings from "../components/otherprayers/PrayerSettings";
 import StMichaelPrayer from "../components/otherprayers/stmichaelprayer/StMichaelPrayer";
@@ -22,15 +22,12 @@ import StFrancisPrayer from "../components/otherprayers/stfrancis/StFrancisPraye
 import stFrancisIcon from "../components/otherprayers/stfrancis/stfrancis_icon.png";
 import StLeandroRuizPrayer from "../components/otherprayers/stleandroruiz/StLeandroRuiz";
 import stLeandroRuizIcon from "../components/otherprayers/stleandroruiz/stleandroruiz_icon.png";
-import { useUser } from '../context/UserContext';
 
 const UserDashboard = () => {
     const { modalState, toggleModal } = useModal(); // Import from context
-    const { user } = useUser(); // Access user from UserContext
-    const {
-        user: { firstName, _id: userId },
-        token
-    } = isAuthenticated();
+    const { user, token } = useAuth();
+    const { _id } = user || {};
+    const userId = _id;
     
     // Define available prayers with visibility control
     const [availablePrayers, setAvailablePrayers] = useState([]);

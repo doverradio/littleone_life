@@ -1,7 +1,7 @@
 // src/components/confession/components/ConfessionForm.js
 import React, { useState } from 'react';
 import './ConfessionForm.css';
-import { isAuthenticated } from '../../../api/auth';
+import { useAuth } from '../../../api/authHook';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ChurchSearch from './ChurchSearch';
@@ -25,7 +25,8 @@ const ConfessionForm = ({
     handleSubmitConfession,
     isSubmitting
 }) => {
-    const { user: { _id }, token } = isAuthenticated();
+    const { user, token } = useAuth();
+    const { _id } = user || {};
     const userId = _id;
 
     const handleChurchSelection = (church) => {

@@ -1,6 +1,6 @@
 import React from 'react';
 
-const PrayerSettingsForm = ({ settings, handleChange }) => {
+const PrayerSettingsForm = ({ settings, handlePrayerSettingsChange }) => {
     const defaultPrayers = [
         { id: 'rosary', name: 'Rosary' },
         { id: 'mass', name: 'Mass' },
@@ -21,14 +21,8 @@ const PrayerSettingsForm = ({ settings, handleChange }) => {
                         <input
                             type="checkbox"
                             className="form-check-input"
-                            name={`prayerSettings[${index}].isVisible`}
                             checked={isChecked}
-                            onChange={(e) => handleChange({
-                                target: {
-                                    name: `prayerSettings[${index}].isVisible`,
-                                    value: e.target.checked
-                                }
-                            })}
+                            onChange={(e) => handlePrayerSettingsChange(index, e.target.checked)}
                         />
                         <label className="form-check-label">
                             {prayer.name}

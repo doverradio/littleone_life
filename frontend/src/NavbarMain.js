@@ -1,15 +1,20 @@
 import React from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { isAuthenticated, signout } from './api/auth';
+import { signout } from './api/auth';
+import { useAuth } from './api/authHook';
+import { useToken } from './context/TokenContext'; // Import useToken
 import ProfileIcon from './components/profile/profileicon/ProfileIcon';
 import { MdOutlineDashboard } from "react-icons/md";
 import './index.css';
 
 const NavbarMain = ({ userStats, backgroundColor }) => {
+  
+  const { user, isAuthenticated } = useAuth();
+  const { setToken } = useToken(); // Destructure setToken from useToken
   const navigate = useNavigate();
 
   const handleSignout = () => {
-    signout(() => {
+    signout(setToken, () => {
       navigate('/');
     });
   };
@@ -21,7 +26,7 @@ const NavbarMain = ({ userStats, backgroundColor }) => {
           <img src="/logo.png" alt="logo" className="logo-img" style={{ height: '40px', width: 'auto' }} />
         </NavLink>
         <div className="d-flex align-items-center">
-          {isAuthenticated() && isAuthenticated().user.role === 1 && (
+          {isAuthenticated && user.role === 1 && (
             <>
               <NavLink to="/admin/dashboard" className="nav-link dashboard-link" style={{ color: 'black', display: 'flex', flexDirection: 'column', alignItems: 'center', textDecoration: 'none' }}>
                 <MdOutlineDashboard size={24} />
@@ -30,7 +35,7 @@ const NavbarMain = ({ userStats, backgroundColor }) => {
               <ProfileIcon handleSignout={handleSignout} userStats={userStats} />
             </>
           )}
-          {isAuthenticated() && isAuthenticated().user.role === 0 &&  (
+          {isAuthenticated && user.role === 0 &&  (
             <>
               <NavLink to="/user/dashboard" className="dashboard-link" style={{ color: 'black', marginRight: '10px', display: 'flex', flexDirection: 'column', alignItems: 'center', textDecoration: 'none' }}>
                 <MdOutlineDashboard size={24} />
@@ -39,7 +44,7 @@ const NavbarMain = ({ userStats, backgroundColor }) => {
               <ProfileIcon handleSignout={handleSignout} userStats={userStats} />
             </>
           )}
-          {!isAuthenticated() && (
+          {!isAuthenticated && (
             <>
               <NavLink to="/signup" className="nav-link" style={{ color: 'black' }}>Sign Up</NavLink>
               <NavLink to="/signin" className="nav-link" style={{ color: 'black' }}>Sign In</NavLink>

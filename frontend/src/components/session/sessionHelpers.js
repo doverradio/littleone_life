@@ -61,9 +61,9 @@ export const refreshTokenHandler = async (logoutUser, clearTimers, scheduleTimer
     }
 };
 
-export const logoutUser = (navigate, clearTimers, warningTimeoutRef, logoutTimeoutRef) => {
+export const logoutUser = (navigate, clearTimers, warningTimeoutRef, logoutTimeoutRef, setToken) => {
     clearTimers(warningTimeoutRef, logoutTimeoutRef);
-    signout(() => {
+    signout(setToken, () => {
         navigate('/signin');
     });
 };

@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { isAuthenticated } from '../../api/auth';
+import { useAuth } from '../../api/authHook';
 import { getUserPrayerStats } from '../../api/user';
 import { Link } from 'react-router-dom';
 
 const UserDashboard = () => {
   const [userStats, setUserStats] = useState({});
-  const { user, token } = isAuthenticated();
+  const { user, token } = useAuth();
 
   useEffect(() => {
     const fetchUserStats = async () => {

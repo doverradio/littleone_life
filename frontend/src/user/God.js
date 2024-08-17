@@ -1,6 +1,6 @@
 // God.js
 import React, { useState, useEffect } from 'react';
-import { isAuthenticated } from "../api/auth";
+import { useAuth } from '../api/authHook';
 import { getPrayerSettings, updatePrayerSettings } from "../api/user";
 import { useModal } from "../context/ModalContext";
 import { 
@@ -61,7 +61,9 @@ const God = ({setBackgroundColor}) => {
         });
 
 
-    const { user: { firstName, _id: userId }, token } = isAuthenticated();
+        const { user, token } = useAuth();
+        const { _id } = user || {};
+        const userId = _id;
 
     useEffect(() => {
         const defaultIconId = localStorage.getItem('defaultIcon');

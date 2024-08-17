@@ -5,7 +5,7 @@ import PrayerIntentions from './PrayerIntentions';
 import SuccessMessage from './SuccessMessage'; // Import the new SuccessMessage component
 import { handleManualChurchChange, handleManualChurchSubmit, handleZipCodeSearch } from '../helpers/massFormHelpers';
 import { addChurchToMassOptions, removeChurchFromUserOptions } from '../helpers/massHelpers';
-import { isAuthenticated } from '../../../api/auth';
+import { useAuth } from '../../../api/authHook';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ChurchSearch from './ChurchSearch';
@@ -41,7 +41,8 @@ const MassForm = ({
     handleEditClick,
     fetchIntentions
 }) => {
-    const { user: { _id }, token } = isAuthenticated();
+    const { user, token } = useAuth();
+    const { _id } = user || {};
     const userId = _id;
 
     const [isChurchFormVisible, setIsChurchFormVisible] = useState(false);

@@ -3,18 +3,18 @@ import { GoogleLogin } from '@react-oauth/google';
 import { toast } from 'react-toastify';
 import { useNavigate } from "react-router-dom";
 import { googleSignIn, authenticate } from '../api/auth';
+import { useToken } from '../context/TokenContext';
 
 export const GoogleSignInButton = ({ responseGoogleSuccess, responseGoogleFailure }) => {
     const [isRequestPending, setIsRequestPending] = useState(false);
     const navigate = useNavigate();
     const isMountedRef = useRef(true);
+    const { setToken } = useToken();  // Get setToken from the context
 
     useEffect(() => {
-        // console.log('GoogleSignInButton component mounted');
         isMountedRef.current = true;
 
         return () => {
-            // console.log('GoogleSignInButton component unmounted');
             isMountedRef.current = false;
         };
     }, []);
@@ -22,12 +22,11 @@ export const GoogleSignInButton = ({ responseGoogleSuccess, responseGoogleFailur
     const handleSuccess = async (response) => {
         if (isRequestPending) {
             console.log('Request already pending, skipping this call');
-            return; // Prevent multiple requests
+            return;
         }
 
         setIsRequestPending(true);
 
-        // console.log('Google credential (GoogleSignInButton):', response.credential);
         try {
             const result = await googleSignIn(response.credential);
             if (result.error) {
@@ -35,8 +34,7 @@ export const GoogleSignInButton = ({ responseGoogleSuccess, responseGoogleFailur
                 toast.error('Google sign-in failed. Please try again.');
                 responseGoogleFailure(result.error);
             } else {
-                // console.log('GOOGLE SIGNIN SUCCESS', result);
-                authenticate(result, () => {
+                authenticate(result, setToken, () => {
                     if (isMountedRef.current) {
                         responseGoogleSuccess(result);
                         const { user } = result;

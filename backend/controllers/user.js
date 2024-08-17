@@ -9,7 +9,10 @@ const log = console.log
 exports.updatePrayerSettings = async (req, res) => {
     try {
         const { userId, prayerSettings } = req.body;
-
+        
+        console.log('Updating prayer settings for user:', userId); // Log the user ID
+        console.log('New prayer settings:', prayerSettings); // Log the new prayer settings being received
+        
         // Find the user and update the prayerSettings field
         const updatedUser = await User.findByIdAndUpdate(
             userId,
@@ -21,41 +24,49 @@ exports.updatePrayerSettings = async (req, res) => {
             return res.status(404).json({ error: 'User not found' });
         }
 
-
+        console.log('Updated prayer settings saved:', updatedUser.prayerSettings); // Log the updated prayer settings
+        
         // Optionally, you can send back only relevant information to the client
         const { username, firstName, lastName, email, role, prayerSettings: updatedPrayerSettings } = updatedUser;
         res.json({ user: { username, firstName, lastName, email, role, prayerSettings: updatedPrayerSettings } });
     } catch (err) {
+        console.error('Error updating prayer settings:', err); // Log any errors
         res.status(500).json({ error: 'Internal server error' });
     }
 };
 
+
 exports.getPrayerSettings = async (req, res) => {
     try {
         const { userId } = req.body;
-        console.log('Fetching prayer settings for user:', userId);
+        // console.log('Fetching prayer settings for user:', userId);
 
-        const user = await User.findById(userId).select('prayerSettings');
+        const user = await User.findById(userId, '-hashed_password -salt');
+        // console.log('Fetched user:', user);
+        let { prayerSettings } = user;
+        // const user = await User.findById(userId).select('prayerSettings');
         if (!user) {
             return res.status(404).json({ error: 'User not found' });
         }
 
-        let prayerSettings = user.prayerSettings;
-        console.log('Fetched prayer settings:', prayerSettings);
+        // let prayerSettings = user.prayerSettings;
+        // console.log('Fetched prayer settings:', prayerSettings);
 
         // If prayerSettings is empty or undefined, fall back to default settings
         if (!prayerSettings || prayerSettings.length === 0) {
+            console.log(`prayerSettings was empty, proceeding to create objects...`)
             prayerSettings = [
                 { id: 'rosary', isVisible: true },
                 { id: 'mass', isVisible: true },
                 { id: 'confession', isVisible: true },
                 { id: 'divineMercy', isVisible: true },
-                { id: 'stMichaelPrayer', isVisible: false },
-                { id: 'stfrancis', isVisible: false },
-                { id: 'stleandroruiz', isVisible: false }
+                { id: 'stMichaelPrayer', isVisible: true },
+                { id: 'stfrancis', isVisible: true },
+                { id: 'stleandroruiz', isVisible: true }
             ];
         }
 
+        // console.log(`prayerSettings (final- getPrayerSettings): `, prayerSettings)
         res.json(prayerSettings);
     } catch (error) {
         console.error('Error fetching prayer settings:', error);
@@ -89,10 +100,13 @@ exports.updateUserSettings = async (req, res) => {
     try {
         const { _id, firstName, lastName, phoneNumber, username, email, prayerSettings, role, preferredLoginType, allowInstantPrayerArmy, allowNotifications, autoSendPrayerGroupRequest } = req.body;
 
+        // console.log('updateUserSettings - Received data:', req.body); // Log the incoming data
+
         // Find the user by ID
         let user = await User.findById(_id);
         
         if (!user) {
+            console.log('updateUserSettings - User not found with ID:', _id);
             return res.status(404).json({ error: 'User not found' });
         }
 
@@ -102,7 +116,10 @@ exports.updateUserSettings = async (req, res) => {
         if (phoneNumber !== undefined) user.phone = phoneNumber;
         if (username !== undefined) user.username = username;
         if (email !== undefined) user.email = email;
-        if (prayerSettings !== undefined) user.prayerSettings = prayerSettings;
+        if (prayerSettings !== undefined) {
+            // console.log('updateUserSettings - Updating prayerSettings:', prayerSettings); // Log prayer settings update
+            user.prayerSettings = prayerSettings;
+        }
         if (role !== undefined) user.role = role;
         if (preferredLoginType !== undefined) user.preferredLoginType = preferredLoginType;
         if (allowInstantPrayerArmy !== undefined) user.allowInstantPrayerArmy = allowInstantPrayerArmy;
@@ -112,15 +129,18 @@ exports.updateUserSettings = async (req, res) => {
         // Save the updated user to trigger encryption
         user = await user.save();
 
+        // console.log('updateUserSettings - Saved user:', user); // Log the saved user data
+
         // Select the fields to return
         user = await User.findById(_id).select('-hashed_password -salt');
 
         res.json(user);
     } catch (error) {
-        console.error('updateUserSettings - error: ', error);
+        console.error('updateUserSettings - error:', error);
         res.status(500).json({ error: 'Error updating user settings' });
     }
 };
+
 
 exports.getUserPrayerStats = async (req, res) => {
     const userId = req.params.userId;

@@ -1,16 +1,17 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import NavbarMain from "../NavbarMain";
 import Footer from "../Footer";
-import { isAuthenticated, googleSignIn, authenticate } from '../api/auth';
+import { googleSignIn, authenticate } from '../api/auth';
 import { toast, ToastContainer } from 'react-toastify';
 import SignInOptions from './SignInOptions';
 import 'react-toastify/dist/ReactToastify.css';
+import { useToken } from '../context/TokenContext';  // Import the custom hook
 
 const SignIn = () => {
     const [signInMethod, setSignInMethod] = useState(null);
     const navigate = useNavigate();
-    const { user } = isAuthenticated();
+    const { setToken } = useToken();  // Get the setToken function from context
 
     const handleGoogleSignin = async (response) => {
         const googleToken = response.credential;
@@ -18,7 +19,7 @@ const SignIn = () => {
         if (result.error) {
             toast.error(result.error);
         } else {
-            authenticate(result, () => {
+            authenticate(result, setToken, () => {  // Pass setToken to authenticate
                 navigate(result.user.role === 1 ? '/admin/dashboard' : '/user/dashboard');
             });
         }
@@ -48,7 +49,7 @@ const SignIn = () => {
                     setSignInMethod={setSignInMethod}
                     responseGoogleSuccess={responseGoogleSuccess}
                     responseGoogleFailure={responseGoogleFailure}
-                    navigate={navigate} // Pass navigate function as prop
+                    navigate={navigate}
                 />
             </div>
             <Footer />

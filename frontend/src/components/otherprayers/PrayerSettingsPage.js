@@ -1,19 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { isAuthenticated } from "../../api/auth";
+import { useAuth } from '../../api/authHook';
 import { getPrayerSettings, updatePrayerSettings } from "../../api/user";
-import { useUser } from '../../context/UserContext';
 import PrayerSettings from '../../components/otherprayers/PrayerSettings';
 
 const PrayerSettingsPage = () => {
-    const { user } = useUser();
-    // const { token } = isAuthenticated();
     const [availablePrayers, setAvailablePrayers] = useState([]);
 
-    // const userId = user ? user._id : null;
-    const {
-        user: { firstName, _id: userId },
-        token
-    } = isAuthenticated();
+    const { user, token } = useAuth();
+    const { _id } = user || {};
+    const userId = _id;
 
     const fetchPrayerSettings = async () => {
         if (!userId) {

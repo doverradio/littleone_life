@@ -1,5 +1,5 @@
 // src/api/auth.js
-
+import { useToken } from '../context/TokenContext';
 const API = process.env.REACT_APP_API || 'https://www.littleone.life/api'; // Your backend API URL
 const log = console.log;
 
@@ -87,16 +87,18 @@ export const signin = async (user) => {
   }
 };
 
-export const authenticate = (data, next) => {
+export const authenticate = (data, setToken, next) => {
   if (typeof window !== "undefined") {
-    localStorage.setItem("jwt", JSON.stringify(data));
+    setToken(data.token);  // Store the token in the context
     next();
   }
 };
 
-export const signout = next => {
+
+export const signout = (setToken, next) => {
   if (typeof window !== "undefined") {
     localStorage.removeItem("jwt");
+    setToken(null);  // Clear the token from context
     next();
     return fetch(`${API}/signout`, {
       method: "POST"
@@ -105,17 +107,6 @@ export const signout = next => {
         // console.log("signout", response);
       })
       .catch(err => console.log(err));
-  }
-};
-
-export const isAuthenticated = () => {
-  if (typeof window === "undefined") {
-    return false;
-  }
-  if (localStorage.getItem("jwt")) {
-    return JSON.parse(localStorage.getItem("jwt"));
-  } else {
-    return false;
   }
 };
 
@@ -188,4 +179,14 @@ export const googleSignup = async (token) => {
   } else {
     return { error: 'Google sign-up failed. Please try again.' };
   }
+};
+
+export const isTokenExpired = (token) => {
+  if (!token) return true;
+
+  const payload = JSON.parse(atob(token.split('.')[1]));
+  const expiration = payload.exp * 1000;
+  const currentTime = Date.now();
+
+  return expiration < currentTime;
 };

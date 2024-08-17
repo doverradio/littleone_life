@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { MdOutlineModeEdit } from 'react-icons/md';
-import { isAuthenticated } from '../../api/auth';
+import { useAuth } from '../../api/authHook';
 import { createIntention, getAllIntentions, updateIntention } from '../../api/intentions';
 import ToggleSlider from '../utils/ToggleSlider';
 import { createPrayer, deletePrayers, getUserPrayers } from '../../api/prayer';
@@ -37,11 +37,8 @@ const GenericPrayer = ({ prayerTitle, prayerText, iconSrc, onIntentionChange, pr
     
     const { toggleModal } = useModal();
 
-    const {
-        user: { _id },
-        token
-    } = isAuthenticated();
-
+    const { user, token } = useAuth();
+    const { _id } = user || {};
     const userId = _id;
 
     const increaseFontSize = () => {

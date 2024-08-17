@@ -3,13 +3,12 @@
 import { useState, useEffect } from 'react';
 import { getAllConfessions, getUserConfessions } from '../../api/confession';
 import { getAllChurches } from '../../api/church';
-import { isAuthenticated } from '../../api/auth';
+import { useAuth } from '../../api/authHook';
 
 export const useConfessionData = () => {
-  const {
-    user: { _id },
-    token
-  } = isAuthenticated();
+  
+  const { user, token } = useAuth();
+  const { _id } = user || {};
 
   const [confessions, setConfessions] = useState([]);
   const [userChurches, setUserChurches] = useState([]);

@@ -1,15 +1,10 @@
 // src/api/email.js
 
-import { isAuthenticated } from '../api/auth';
-
 // Base URL for API requests
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000/api';
 
-// Get the authentication token from the `isAuthenticated` function
-const { token } = isAuthenticated();
-
 // Function to send email notifications
-export const sendNotificationEmail = async (emailData) => {
+export const sendNotificationEmail = async (emailData, token) => {
   try {
     const response = await fetch(`${API_BASE_URL}/send-email`, {
       method: 'POST',

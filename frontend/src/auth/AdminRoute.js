@@ -1,12 +1,12 @@
 import React from "react";
 import { useLocation, Navigate } from "react-router-dom";
-import { isAuthenticated } from "../api/auth"; 
+import { useAuth } from '../api/authHook';
 
 const AdminRoute = ({ component: Component }) => {
     const location = useLocation();
-    const { user } = isAuthenticated();
+    const { user } = useAuth();
     
-    return isAuthenticated() && user.role === 1 ? (
+    return user && user.role === 1 ? (
         <Component />
     ) : (
         <Navigate to="/signin" state={{ from: location }} replace />

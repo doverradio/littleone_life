@@ -1,3 +1,5 @@
+// src/components/session/SessionManager.js
+
 import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -7,6 +9,9 @@ import {
   scheduleTimers,
   updateActivity,
 } from './sessionHelpers';
+import { isTokenExpired, signout } from '../../api/auth'; // Import the signout function
+import { useAuth } from '../../api/authHook';
+import { useToken } from '../../context/TokenContext';
 import SessionExpiryModal from './SessionExpiryModal';
 import Modal from 'react-modal';
 
@@ -14,6 +19,10 @@ import Modal from 'react-modal';
 Modal.setAppElement('#root');
 
 const SessionManager = ({ children }) => {
+  
+  const { token } = useAuth();
+  const { setToken } = useToken(); // Get setToken here
+
   const [lastActivityTime, setLastActivityTime] = useState(Date.now());
   const [warningShown, setWarningShown] = useState(false);
   const navigate = useNavigate();
@@ -21,7 +30,11 @@ const SessionManager = ({ children }) => {
   const warningTimeoutRef = useRef(null);
   const logoutTimeoutRef = useRef(null);
 
-  const handleLogoutUser = useCallback(() => logoutUser(navigate, clearTimers, warningTimeoutRef, logoutTimeoutRef, setWarningShown), [navigate]);
+  const handleLogoutUser = useCallback(() => {
+    // Signout the user and navigate to /signin
+    logoutUser(navigate, clearTimers, warningTimeoutRef, logoutTimeoutRef, setToken);
+  }, [navigate, setToken]);
+
   const handleRefreshToken = useCallback(() => refreshTokenHandler(handleLogoutUser, clearTimers, () => handleScheduleTimers(), setWarningShown), [handleLogoutUser]);
 
   const handleShowLogoutWarning = useCallback(() => {
@@ -36,6 +49,13 @@ const SessionManager = ({ children }) => {
   const handleUpdateActivity = useCallback(() => updateActivity(setLastActivityTime, handleScheduleTimers, warningShown), [handleScheduleTimers, warningShown]);
 
   useEffect(() => {
+    
+
+    if (isTokenExpired(token)) {
+      handleLogoutUser();  // Sign out the user if token is expired
+      return; // Exit early since we don't want to schedule timers or set up activity tracking
+    }
+
     if (window.location.pathname !== '/signin') {
       handleScheduleTimers(); // Schedule the initial timers
 
@@ -53,7 +73,7 @@ const SessionManager = ({ children }) => {
       clearTimers(warningTimeoutRef, logoutTimeoutRef); // Ensure timers are cleared on the signin page
       setWarningShown(false);  // Ensure the modal is hidden
     }
-  }, [handleUpdateActivity, handleScheduleTimers]);
+  }, [handleUpdateActivity, handleScheduleTimers, handleLogoutUser]);
 
   return (
     <>

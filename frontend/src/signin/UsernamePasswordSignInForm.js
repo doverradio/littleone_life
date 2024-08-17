@@ -1,7 +1,9 @@
 import React, { useState } from "react";
-import { signin, authenticate, isAuthenticated } from '../api/auth';
+import { signin, authenticate } from '../api/auth';
+import { useAuth } from '../api/authHook';
 import { useNavigate } from "react-router-dom";
 import { toast } from 'react-toastify';
+import { useToken } from '../context/TokenContext';  // Import useToken
 
 const UsernamePasswordSignInForm = () => {
     const [values, setValues] = useState({
@@ -12,7 +14,8 @@ const UsernamePasswordSignInForm = () => {
         redirectToReferrer: false,
     });
     const { username, password, loading, error, redirectToReferrer } = values;
-    const { user } = isAuthenticated();
+    const { user } = useAuth();
+    const { setToken } = useToken();  // Get the setToken function from context
     const navigate = useNavigate();
 
     const handleChange = name => event => {
@@ -29,7 +32,7 @@ const UsernamePasswordSignInForm = () => {
             if (response.error) {
                 setValues({ ...values, error: response.error, loading: false });
             } else {
-                authenticate(response, () => {
+                authenticate(response, setToken, () => {  // Pass setToken to authenticate
                     setValues({ ...values, redirectToReferrer: true });
                 });
             }
@@ -49,7 +52,7 @@ const UsernamePasswordSignInForm = () => {
                 navigate('/user/dashboard');
             }
         }
-        if (isAuthenticated()) {
+        if (user) {
             if (user && user.role === 1) {
                 navigate('/admin/dashboard');
             } else if (user && user.role === 0) {

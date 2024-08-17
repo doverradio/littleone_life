@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
-import { useUser } from '../context/UserContext';
-import { getPrayerSettings } from '../api/user';
+import { useAuth } from '../api/authHook';
 import prayerSettingsIcon from '../components/otherprayers/prayersettings_icon.png';
 import stLeandroRuizIcon from '../components/otherprayers/stleandroruiz/stleandroruiz_icon.png';
 import stFrancisIcon from '../components/otherprayers/stfrancis/stfrancis_icon.png';
@@ -10,31 +9,12 @@ import divineMercyIcon from '../components/otherprayers/divinemercy/divinemercy_
 import confessionIcon from '../components/confession/confession_icon.png';
 import massIcon from '../components/mass/mass_icon.png';
 import rosaryIcon from '../components/rosary/rosary_icon.png';
+import { usePrayerSettings } from '../context/PrayerSettingsContext';
 import "./Prayers.css";
 
 const Prayers = () => {
-    const { user, loading } = useUser();
-    const [prayerSettings, setPrayerSettings] = useState([]);
-
-    useEffect(() => {
-        console.log('useEffect for fetching prayer settings triggered');
-    
-        const fetchSettings = async () => {
-            if (user) {
-                try {
-                    const settings = await getPrayerSettings(user._id); // Fetch prayer settings
-                    console.log('Fetched prayerSettings:', settings); // Log the fetched settings
-                    setPrayerSettings(settings);
-                } catch (error) {
-                    console.error('Error fetching prayer settings:', error);
-                }
-            }
-        };
-    
-        fetchSettings();
-    }, [user]);
-    
-    
+    const { user, token } = useAuth();
+    const { prayerSettings, loading } = usePrayerSettings();
 
     const icons = [
         { id: 'rosary', name: 'Rosary', icon: rosaryIcon, route: '/prayers/rosary' },
@@ -47,22 +27,20 @@ const Prayers = () => {
         { id: 'prayerSettings', name: 'Prayer Settings', icon: prayerSettingsIcon, route: '/prayers/settings' },
     ];
 
-    if (loading) {
-        return <div>Loading...</div>; // Add a loading state
-    }
-
-    console.log('prayerSettings in Prayers.js:', prayerSettings);
-
     const visiblePrayers = icons.filter(icon => {
         const prayerSetting = prayerSettings.find(prayer => prayer.id === icon.id);
         return prayerSetting ? prayerSetting.isVisible : false;
     });
 
+    if (loading) {
+        return <div>Loading...</div>;
+    }
+
     return (
         <div className="prayers-container">
             <div className="prayers-content">
                 <div className="row justify-content-center align-items-center">
-                    {user && user.firstName ? (
+                    {user?.firstName ? (
                         <h2 className="header-font mt-2">{user.firstName}'s Prayers</h2>
                     ) : (
                         <h2 className="header-font mt-2">My Prayers</h2>

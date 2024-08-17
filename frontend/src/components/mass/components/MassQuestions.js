@@ -4,7 +4,7 @@ import MapSection from './form/MapSection';
 import { MdOutlineModeEdit } from 'react-icons/md';
 import ButtonLoader from '../../loaders/ButtonLoader';
 import { addChurchesToUser, getChurchesByZipCode, createChurch } from '../../api/church';
-import { isAuthenticated } from '../../api/auth';
+import { useAuth } from '../../api/authHook';
 import massImage from '../mass_image.png'; // Ensure the path is correct
 
 const MassQuestions = ({
@@ -61,7 +61,7 @@ const MassQuestions = ({
         additionalInfo: '',
     });
 
-    const { user, token } = isAuthenticated();
+    const { user, token } = useAuth();
 
     const addChurchToMassOptions = (church) => {
         setPendingChurches([...pendingChurches, church]);

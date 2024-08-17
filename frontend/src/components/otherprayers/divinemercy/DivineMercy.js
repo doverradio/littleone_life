@@ -2,17 +2,14 @@ import React, { useState, useEffect } from 'react';
 import divineMercyIcon from './divinemercy_icon.png'; // Adjust the path to your icon
 import GenericPrayer from '../GenericPrayer';
 import chapletBeads from './chapletbeads.jpg'
-import { isAuthenticated } from '../../../api/auth';
+import { useAuth } from '../../../api/authHook';
 
 const DivineMercy = () => {
     const [intentions, setIntentions] = useState([]);
     const [newIntention, setNewIntention] = useState('');
 
-    const {
-        user: { _id },
-        token
-    } = isAuthenticated();
-
+    const { user, token } = useAuth();
+    const { _id } = user || {};
     const userId = _id;
 
 

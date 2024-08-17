@@ -4,7 +4,7 @@ import MapSection from './form/MapSection';
 import { MdOutlineModeEdit } from 'react-icons/md';
 import ButtonLoader from '../../loaders/ButtonLoader';
 import { addChurchesToUser, getChurchesByZipCode, createChurch } from '../../api/church';
-import { isAuthenticated } from '../../api/auth';
+import { useAuth } from '../../api/authHook';
 
 const MassQuestions = ({
     userChurches,
@@ -56,7 +56,7 @@ const MassQuestions = ({
     });
     const [editContent, setEditContent] = useState(''); // Ensure editContent is defined
 
-    const { user, token } = isAuthenticated();
+    const { user, token } = useAuth();
 
     const addChurchToMassOptions = (church) => {
         setPendingChurches([...pendingChurches, church]);

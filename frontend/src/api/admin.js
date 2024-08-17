@@ -1,23 +1,8 @@
-// src/api/admin.js
-
-import { isAuthenticated } from '../api/auth';
-
 // Base URL for API requests
 const API_BASE_URL = process.env.REACT_APP_API || 'http://localhost:8000/api';
 
-// Function to get the stored token
-const getToken = () => {
-  const jwt = localStorage.getItem('jwt');
-  if (jwt) {
-    return JSON.parse(jwt).token;
-  }
-  return null;
-};
-
 // Function to get all users
-export const getUsers = async () => {
-  const token = getToken(); // Get the token before making the request
-
+export const getUsers = async (token) => {
   if (!token) {
     throw new Error('No token found');
   }
@@ -43,11 +28,13 @@ export const getUsers = async () => {
   }
 };
 
-
 // Function to update a user's role
-export const updateUserRole = async (userId, role) => {
+export const updateUserRole = async (token, userId, role) => {
+  if (!token) {
+    throw new Error('No token found');
+  }
+
   try {
-    const token = getToken(); // Get the token before making the request
     const response = await fetch(`${API_BASE_URL}/users/${userId}/role`, {
       method: 'PUT',
       headers: {
