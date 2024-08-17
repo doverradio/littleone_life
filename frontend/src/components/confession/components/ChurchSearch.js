@@ -1,6 +1,6 @@
 // src/components/confession/components/ChurchSearch.js
 
-import React, { useState } from 'react';
+import React from 'react';
 import './ChurchSearch.css';
 
 const ChurchSearch = ({ filterQuery, setFilterQuery, isFilterVisible, toggleFilterVisibility }) => {

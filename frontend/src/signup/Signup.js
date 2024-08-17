@@ -6,7 +6,6 @@ import { GoogleOAuthProvider } from '@react-oauth/google';
 import { toast, ToastContainer } from 'react-toastify';
 import { useUser } from "../context/UserContext";
 import 'react-toastify/dist/ReactToastify.css';
-import { googleSignup } from '../api/auth';
 import background from '../assets/background.jpg'; // Import the background image
 import './Signup.css'; // Ensure this path is correct
 

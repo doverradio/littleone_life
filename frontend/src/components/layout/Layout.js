@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState } from 'react';
 import NavbarMain from '../../NavbarMain';
 import Sidebar from '../sidebar/Sidebar';
 import Footer from '../../Footer';
@@ -33,16 +33,18 @@ const Layout = () => {
 
   useEffect(() => {
     const fetchUserStats = async () => {
-      try {
-        const stats = await getUserPrayerStats(userId, token);
-        setUserStats(stats);
-      } catch (error) {
-        console.error('Error fetching user stats:', error);
+      if (userId && token) {  // Ensure userId and token are available before making the request
+        try {
+          const stats = await getUserPrayerStats(userId, token);
+          setUserStats(stats);
+        } catch (error) {
+          console.error('Error fetching user stats:', error);
+        }
       }
     };
 
     fetchUserStats();
-  }, []);
+  }, [userId, token]);  // Add userId and token as dependencies
 
   const shouldShowFooter = !isMobile || (isMobile && location.pathname === '/user/settings');
   

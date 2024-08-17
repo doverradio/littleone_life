@@ -1,7 +1,5 @@
 // src/api/auth.js
-import { useToken } from '../context/TokenContext';
 const API = process.env.REACT_APP_API || 'https://www.littleone.life/api'; // Your backend API URL
-const log = console.log;
 
 export const refreshToken = async () => {
   try {

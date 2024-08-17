@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import GoogleSignupButton from './GoogleSignupButton';
 import './styles.css';
 
 const SignUpOptions = ({ setSignUpMethod, informParent, setStep, step }) => {

@@ -64,13 +64,13 @@ const SignUpWizard = ({ googleProfile, googleToken, informParent }) => {
         }
     };
 
-    const handleChange = (input) => (e) => {
-        let value = e.target.value;
-        if (input === 'username' && usernameEmpty) {
-            setUsernameEmpty(false);
-        }
-        setUserData({ ...userData, [input]: value });
-    };
+    // const handleChange = (input) => (e) => {
+    //     let value = e.target.value;
+    //     if (input === 'username' && usernameEmpty) {
+    //         setUsernameEmpty(false);
+    //     }
+    //     setUserData({ ...userData, [input]: value });
+    // };
 
     const handleSubmit = async () => {
         try {

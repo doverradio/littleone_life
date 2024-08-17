@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../api/authHook';
-import { fetchNearbyChurches } from '../../api/googleMaps';
 import ConfessionHeader from './components/ConfessionHeader';
 import ConfessionForm from './components/ConfessionForm';
 import ConfessionPrayers from './components/ConfessionPrayers';
