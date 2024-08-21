@@ -9,7 +9,7 @@ const RosaryHeader = ({ activeTab, setActiveTab }) => {
                 <h1>Rosary</h1>
             </header>
             <nav className="rosary-nav">
-                <a href="#questions" className={activeTab === 'Questions' ? 'active' : ''} onClick={() => setActiveTab('Questions')}>Form</a>
+                <a href="#form" className={activeTab === 'Form' ? 'active' : ''} onClick={() => setActiveTab('Form')}>Form</a>
                 <a href="#prayers" className={activeTab === 'Prayers' ? 'active' : ''} onClick={() => setActiveTab('Prayers')}>Prayers</a>
                 <a href="#responses" className={activeTab === 'Responses' ? 'active' : ''} onClick={() => setActiveTab('Responses')}>Responses</a>
                 <a href="#settings" className={activeTab === 'Settings' ? 'active' : ''} onClick={() => setActiveTab('Settings')}>Settings</a>

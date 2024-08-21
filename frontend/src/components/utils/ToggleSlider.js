@@ -1,31 +1,42 @@
-// ToggleSlider.js
-import React from 'react';
-import './styles.css'
+import React, { useEffect, useState } from 'react';
+import './styles.css';
+import { toggleNotification } from '../../api/notification';
 
-const ToggleSlider = ({ isEnabled, toggleFunction, componentName, isDisabled }) => {
+const ToggleSlider = ({ 
+  initialIsEnabled,  // Received initial state from parent
+  componentName, 
+  userId, 
+  token 
+}) => {
+    const [isEnabled, setIsEnabled] = useState(initialIsEnabled);
+
+    useEffect(() => {
+        setIsEnabled(initialIsEnabled);
+    }, [initialIsEnabled]);
+
+    const handleToggle = async () => {
+        try {
+            const updatedStatus = await toggleNotification(userId, componentName, token);
+            setIsEnabled(prevState => !prevState);  // Flip the state locally
+        } catch (error) {
+            console.error('Failed to toggle notification:', error);
+        }
+    };
+
     return (
         <div className="toggle-slider-container">
-          <label className="switch">
-            <input 
-              type="checkbox" 
-              checked={isEnabled} 
-              onChange={toggleFunction} 
-              disabled={isDisabled} // Disable the input based on the prop
-            />
-            <span className="slider round"></span>
-          </label>&nbsp;&nbsp;&nbsp;&nbsp;
-          <span className="toggle-label">Email Notification Per Submitted {componentName}</span>
+            <label className="switch">
+                <input 
+                    type="checkbox" 
+                    checked={isEnabled} 
+                    onChange={handleToggle} 
+                />
+                <span className="slider round"></span>
+            </label>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <span className="toggle-label">Email Notification Per Submitted {componentName}</span>
         </div>
-      );
-    // return (
-    //   <div className="toggle-slider-container">
-    //     <label className="switch">
-    //       <input type="checkbox" checked={isEnabled} onChange={toggleFunction} />
-    //       <span className="slider round"></span>
-    //     </label>&nbsp;&nbsp;&nbsp;&nbsp;
-    //     <span className="toggle-label">Email Notification Per Submitted {componentName}</span>
-    //   </div>
-    // );
-  };
-  
-  export default ToggleSlider;
+    );
+};
+
+export default ToggleSlider;

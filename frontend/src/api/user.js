@@ -118,3 +118,25 @@ export const getTokenUsage = async (userId, token) => {
         throw error;
     }
 };
+
+export const getUser = async (userId, token) => {
+    try {
+        const response = await fetch(`${API}/user/${userId}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        
+        if (!response.ok) {
+            throw new Error(`Error fetching user data: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Error fetching user data:', error);
+        throw error;
+    }
+};

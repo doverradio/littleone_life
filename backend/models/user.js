@@ -93,6 +93,10 @@ const userSchema = new mongoose.Schema({
         type: String,
         default: 'gpt-3.5-turbo',  // Default model
     },
+    notificationPreferences: {
+        type: Object, // Change from Map to Object
+        default: {}
+    },
 }, { timestamps: true });
 
 var encKey = process.env.SOME_32BYTE_BASE64_STRING;

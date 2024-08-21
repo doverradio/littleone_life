@@ -3,17 +3,18 @@ import { useAuth } from '../../api/authHook';
 import rosaryIcon from './rosary_icon.png';
 import './styles.css';
 import { useModal } from '../../context/ModalContext';
+import { getUserNotificationPreferences } from '../../api/notification'; // Add this import
 import Mysteries, { mysteries } from './mysteries/Mysteries';
 import mysteriesDetails from './mysteries/mysteriesDetails';
 import MysteryDetails from './mysteries/MysteryDetails';
 import PrayerIntentions from './intentions/PrayerIntentions';
+import { sendNotificationEmail } from '../../api/email';
 import PrayerIntentionsForm from './PrayerIntentionsForm';
 import {
     increaseFontSize,
     decreaseFontSize,
     handleDelete,
     columns,
-    handleEmailToggle,
     toggleVirtualRosary,
     handleIntentionCheckboxChange,
     handleDeleteIntention,
@@ -33,7 +34,10 @@ import RosaryPrayerText from './RosaryPrayerText';
 import RosaryResponses from './RosaryResponses';
 import ToggleSlider from '../utils/ToggleSlider';
 import RosaryHeader from './RosaryHeader';
-import BackIcon from '../utils/BackIcon'; // Import the BackIcon component
+import BackIcon from '../utils/BackIcon';
+import { getUser } from '../../api/user';
+import { ToastContainer, toast } from 'react-toastify'; // Import ToastContainer and toast
+import 'react-toastify/dist/ReactToastify.css'; // Import Toast styles
 
 const Rosary = () => {
     const { toggleModal } = useModal();
@@ -94,6 +98,34 @@ const Rosary = () => {
         if (activeTab === 'Responses') {
             fetchMysteryCounts(userId, token, setChartData);
         }
+
+        // Fetch the user data to get the notification preferences
+        const fetchUser = async () => {
+            try {
+                const userData = await getUser(userId, token);
+                setIsEmailEnabled(userData.notificationPreferences?.Rosary || false);
+            } catch (err) {
+                console.error('Failed to fetch user data:', err);
+            }
+        };
+
+        fetchUser();
+
+        // Fetch the notification preferences when the component loads
+        const fetchNotificationPreferences = async () => {
+            try {
+                const preferences = await getUserNotificationPreferences(userId, token);
+                const rosaryNotificationEnabled = preferences?.Rosary || false;
+                setIsEmailEnabled(rosaryNotificationEnabled); // Set initial state
+            } catch (error) {
+                console.error('Failed to fetch notification preferences:', error);
+            }
+        };
+
+        if (userId && token) {
+            fetchNotificationPreferences();
+        }
+
     }, [userId, token, activeTab, currentPage, refreshTrigger]);
 
     const handleCloseForm = () => {
@@ -104,8 +136,59 @@ const Rosary = () => {
         setIsAddingIntention(true);
     };
 
-    const handlePrayRosaryWrapper = () => {
-        handlePrayRosary(userId, selectedMystery, selectedIntentions, token, toggleModal, setSelectedIntentions, setSelectedMystery, setIsSubmitting, setCount);
+    const handlePrayRosaryWrapper = async () => {
+        if (!selectedMystery) {
+            toast.error('Please select a Rosary mystery before submitting.');
+            return;
+        }
+
+        try {
+            await handlePrayRosary(
+                userId,
+                selectedMystery,
+                selectedIntentions,
+                token,
+                toggleModal,
+                setSelectedIntentions,
+                setSelectedMystery,
+                setIsSubmitting,
+                setCount
+            );
+
+            if (isEmailEnabled) {
+                const DOMAIN = process.env.REACT_APP_API.includes('localhost') 
+                    ? process.env.REACT_APP_API
+                    : 'https://www.littleone.life';
+
+                const emailData = {
+                    to: user.email,
+                    subject: 'Rosary Prayer Submitted',
+                    message: `Dear ${user.username || 'User'},
+
+You have successfully submitted a Rosary prayer. If you wish to turn off these notifications, please click the link below:
+
+${DOMAIN}/disable-notifications?userId=${user._id}&component=Rosary
+
+Blessings,
+Your Prayer Team`,
+                };
+
+                await sendNotificationEmail(emailData, token);
+                console.log('Notification email sent successfully.');
+            }
+        } catch (error) {
+            console.error('Failed to submit Rosary or send notification email:', error);
+        }
+    };
+
+    const handleEmailToggle = async () => {
+        setIsEmailEnabled(!isEmailEnabled);
+    
+        if (!isEmailEnabled) {
+            console.log('Email notifications enabled.');
+        } else {
+            console.log('Email notifications disabled.');
+        }
     };
 
     return (
@@ -167,6 +250,7 @@ const Rosary = () => {
                                 <button 
                                     onClick={handlePrayRosaryWrapper} 
                                     className="btn btn-primary"
+                                    disabled={!selectedMystery} // Disable button if no mystery is selected
                                 >
                                     {
                                         isSubmitting ? 'Submitting...' : 'Submit Rosary'
@@ -205,12 +289,14 @@ const Rosary = () => {
                                 isEnabled={isEmailEnabled} 
                                 toggleFunction={handleEmailToggle} 
                                 componentName="Rosary"
-                                isDisabled={true} // Disable the toggle
+                                token={token}
+                                userId={userId}
                             />
                         </div>
                     </div>
                 )}
             </main>
+            <ToastContainer /> {/* Add ToastContainer for the toast notifications */}
         </div>
     );
 };
