@@ -172,7 +172,7 @@ exports.signin = async (req, res) => {
 
 // GOOGLE SIGN IN
 exports.googleSignin = async (req, res) => {
-    // log(`Begin googleSignin! req.body: `, JSON.stringify(req.body, null, 2));
+    // log(Begin googleSignin! req.body: , JSON.stringify(req.body, null, 2));
     const { idToken } = req.body;
 
     try {
@@ -182,21 +182,21 @@ exports.googleSignin = async (req, res) => {
         });
 
         const payload = ticket.getPayload();
-        // log(`payload: `, payload);
+        // log(payload: , payload);
 
         const username = payload.name; // Use 'name' as the username
         const email_verified = payload.email_verified;
 
-        // log(`username: `, username);
-        // log(`email_verified: `, email_verified);
+        // log(username: , username);
+        // log(email_verified: , email_verified);
 
         if (email_verified && username) {
-            // log(`email_verified: `, email_verified);
+            // log(email_verified: , email_verified);
             let user = await User.findOne({ username });
-            // log(`user: `, user);
+            // log(user: , user);
 
             if (user) {
-                // log(`user found!`);
+                // log(user found!);
                 const token = jwt.sign({ _id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '2h' });
                 res.cookie('token', token, {
                     httpOnly: true,
@@ -255,7 +255,7 @@ exports.authMiddleware = async (req, res, next) => {
     }
 
     const authUserId = req.auth._id;
-    console.log(`Authenticated user ID: ${authUserId}`);
+    // console.log(Authenticated user ID: ${authUserId});
 
     try {
         const user = await User.findById(authUserId);
@@ -264,7 +264,7 @@ exports.authMiddleware = async (req, res, next) => {
             return res.status(400).json({ error: 'User not found' });
         }
         req.profile = user; // Attach the user object to req.profile
-        // console.log(`User profile set in request: ${user}`);
+        // console.log(User profile set in request: ${user});
         next();
     } catch (err) {
         console.error("Error in authMiddleware:", err);
@@ -306,6 +306,7 @@ exports.isAuth = (req, res, next) => {
 
 
 exports.isAdmin = async (req, res, next) => {
+    // log(Begin isAdmin!  req.body: , req.body )
     let a = {};
     try {
         if (!req.profile || req.profile.role === undefined) {
@@ -348,12 +349,12 @@ exports.forgotPassword = async ( req, res ) =>  // a
             ${ process.env.CLIENT_URL }/auth/password/reset/${ a.token }
             
             This email may contain sensitive information.
-            https://superstoreglobal.com
-        `
+            https://superstoreglobal.com`
+        
         }
         a.updatedUserDoc =  await a.userDoc.updateOne( { resetPasswordLink: a.token } ).catch(  error_userDoc_updateOne => { a.errors.error_userDoc_updateOne = error_userDoc_updateOne; console.log( `error_userDoc_updateOne: `, error_userDoc_updateOne ) } ) // populating the db > user > resetPasswordLink
         a.endpoint = `${ process.env.API_URL }/api/email/sendemail`
-        a.method = `POST`
+        a.method = POST
         a.headers = { Accept: "application/json", "Content-Type": "application/json" }
         a.body = JSON.stringify( a.emailData )
         a.message = { message: `Email has been sent to ${ a.email }. Follow the instructions to reset your password. Link expires in 10min.` }
@@ -361,7 +362,7 @@ exports.forgotPassword = async ( req, res ) =>  // a
         a.response = await a.response.json()
         
         // try {
-        //     await fetch( `${process.env.API_URL}/email/sendemail`, {
+        //     await fetch( ${process.env.API_URL}/email/sendemail, {
         //         method: "POST",
         //         headers: {
         //             Accept: "application/json",
@@ -369,7 +370,7 @@ exports.forgotPassword = async ( req, res ) =>  // a
         //         },
         //         body: JSON.stringify({ subject, text })
         //     })
-        // } catch (e) { console.log(`Unable to send email due to this error...`, e);  }
+        // } catch (e) { console.log(Unable to send email due to this error..., e);  }
         res.json( a.message )
     } catch ( e ) { 
         console.log( `Got an error in forgotPassword... e`, e )
@@ -468,7 +469,7 @@ exports.resetPassword = (req, res) => {
 
 // Added 8/15/2024 - to keep the logged in user logged in as long as they remain active on the site for the last 2 hours.
 exports.refreshToken = (req, res) => {
-    // log(`Begin refreshToken! req.headers: `, req.headers);
+    // log(Begin refreshToken! req.headers: , req.headers);
     const authHeader = req.headers.authorization;
     const token = authHeader && authHeader.split(' ')[1];
   
