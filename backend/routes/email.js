@@ -1,9 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const emailController = require('../controllers/email');
-const { requireSignin, authMiddleware, adminMiddleware, isAuth, isAdmin } = require('../controllers/auth');
+const { sendEmail } = require('../controllers/email');
 
 // POST endpoint to send email
-router.post('/send-email', requireSignin, authMiddleware, adminMiddleware, isAuth, emailController.sendEmail);
+router.post('/email/send-email', sendEmail);
 
 module.exports = router;

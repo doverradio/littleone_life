@@ -1,3 +1,5 @@
+// backend/controllers/auth.js
+
 const User = require("../models/user");
 const jwt = require("jsonwebtoken"); // to generate signed token
 const { v1: uuidv1 } = require('uuid');
@@ -20,7 +22,6 @@ const generateUniqueUsername = async (username) => {
     return uniqueUsername;
 };
 
-
 exports.checkUsernameAvailability = async (req, res) => {
     const { username, userId } = req.body;
 
@@ -36,8 +37,6 @@ exports.checkUsernameAvailability = async (req, res) => {
         return res.status(500).json({ error: 'Server error while checking username' });
     }
 };
-
-
 
 // USERNAME / PASSWORD SIGN UP
 exports.signup = async (req, res) => {
@@ -124,13 +123,12 @@ exports.googleSignup = async (req, res) => {
     }
 };
 
-
 // USERNAME / PASSWORD SIGN IN
 exports.signin = async (req, res) => {
     try {
-        const { username, password } = req.body; // Destructuring username and password from request body
+        const { username, password } = req.body;
 
-        const userDoc = await User.findOne({ username }); // Finding the user with the provided username
+        const userDoc = await User.findOne({ username });
 
         if (!userDoc) {
             return res.status(400).json({ error: "User with that username does not exist. Please sign up" });
@@ -140,16 +138,15 @@ exports.signin = async (req, res) => {
             return res.status(401).json({ error: "Username and password don't match" });
         }
 
-        // Destructuring user properties to send in response
-        const { _id, role, firstName, lastName } = userDoc;
+        const { _id, role, firstName, lastName, email } = userDoc;
 
         // Set the token expiration to 2 hours
-        const token = jwt.sign({ _id, role }, process.env.JWT_SECRET, { expiresIn: '2h' });
+        const token = jwt.sign({ _id, role, email }, process.env.JWT_SECRET, { expiresIn: '2h' });
 
-        // Set the cookie with the token, expire set to 2 hours
+        // Set the cookie with the token
         res.cookie("t", token, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === 'production', // Ensure the cookie is secure in production
+            secure: process.env.NODE_ENV === 'production', 
             maxAge: 2 * 60 * 60 * 1000 // 2 hours in milliseconds
         });
 
@@ -157,10 +154,11 @@ exports.signin = async (req, res) => {
             token,
             user: {
                 _id,
-                username, // Use the username from the request body
+                username,
                 firstName,
                 lastName,
-                role
+                role,
+                email // Include the email in the user object
             }
         });
     } catch (error) {
@@ -169,10 +167,8 @@ exports.signin = async (req, res) => {
     }
 };
 
-
 // GOOGLE SIGN IN
 exports.googleSignin = async (req, res) => {
-    // log(Begin googleSignin! req.body: , JSON.stringify(req.body, null, 2));
     const { idToken } = req.body;
 
     try {
@@ -182,34 +178,25 @@ exports.googleSignin = async (req, res) => {
         });
 
         const payload = ticket.getPayload();
-        // log(payload: , payload);
+        const { name: username, email_verified, email } = payload;
 
-        const username = payload.name; // Use 'name' as the username
-        const email_verified = payload.email_verified;
-
-        // log(username: , username);
-        // log(email_verified: , email_verified);
-
-        if (email_verified && username) {
-            // log(email_verified: , email_verified);
+        if (email_verified) {
             let user = await User.findOne({ username });
-            // log(user: , user);
 
             if (user) {
-                // log(user found!);
-                const token = jwt.sign({ _id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '2h' });
+                const token = jwt.sign({ _id: user._id, role: user.role, email: user.email }, process.env.JWT_SECRET, { expiresIn: '2h' });
+                console.log(`token (googleSignin): `, token)
                 res.cookie('token', token, {
                     httpOnly: true,
                     secure: process.env.NODE_ENV === 'production',
                     maxAge: 7 * 24 * 60 * 60 * 1000, // 1 week
                 });
-                const { _id, username, role } = user;
+                const { _id, role } = user;
                 return res.json({
                     token,
-                    user: { _id, username, role }
+                    user: { _id, username, role, email: user.email }
                 });
             } else {
-                // // Return error if user not found
                 return res.status(400).json({
                     error: 'Google login failed. Try again'
                 });
@@ -220,9 +207,9 @@ exports.googleSignin = async (req, res) => {
             });
         }
     } catch (error) {
-        log('GOOGLE SIGNIN ERROR', error);
+        console.error('GOOGLE SIGNIN ERROR', error);
         return res.status(400).json({
-            error: 'Google login failed. Try again'
+            error: 'Google login failed. Try again.'
         });
     }
 };
@@ -249,31 +236,28 @@ exports.requireSignin = expressJwt( {
 } );
 
 exports.authMiddleware = async (req, res, next) => {
-    if (!req.auth || !req.auth._id) {
-        console.error("No auth data found in request");
-        return res.status(400).json({ error: "No auth data found" });
-    }
-
-    const authUserId = req.auth._id;
-    // console.log(Authenticated user ID: ${authUserId});
-
+    console.log('Begin authMiddleware!');
+    // console.log('authMiddleware: req.auth:', req.auth);
     try {
-        const user = await User.findById(authUserId);
+        const userId = req.auth && req.auth._id;
+        if (!userId) {
+            console.log("No user ID found in request");
+            return res.status(400).json({ error: "No user ID found in request" });
+        }
+
+        const user = await User.findById(userId);
         if (!user) {
-            console.error("User not found in database");
+            console.log("User not found");
             return res.status(400).json({ error: 'User not found' });
         }
-        req.profile = user; // Attach the user object to req.profile
-        // console.log(User profile set in request: ${user});
+        req.profile = user; // Ensure this is set
+        // console.log('authMiddleware: req.profile:', req.profile);
         next();
     } catch (err) {
         console.error("Error in authMiddleware:", err);
-        res.status(500).json({ error: 'Internal server error' });
+        return res.status(500).json({ error: 'Server error' });
     }
 };
-
-
-
 
 exports.adminMiddleware = (req, res, next) => {
     const adminUserId = req.user._id;
@@ -295,8 +279,9 @@ exports.adminMiddleware = (req, res, next) => {
     });
 };
 
-
 exports.isAuth = (req, res, next) => {
+    log(`Begin isAuth!`)
+    // log(`Begin isAuth! req.body: `, req.body)
     const userIsAuthenticated = req.profile && req.auth && req.profile._id.toString() === req.auth._id;
     if (!userIsAuthenticated) {
         return res.status(403).json({ error: "Access denied" });
@@ -304,9 +289,9 @@ exports.isAuth = (req, res, next) => {
     next();
 };
 
-
 exports.isAdmin = async (req, res, next) => {
-    // log(Begin isAdmin!  req.body: , req.body )
+    log(`Begin isAdmin!` )
+    // log(`Begin isAdmin!  req.body: `, req.body )
     let a = {};
     try {
         if (!req.profile || req.profile.role === undefined) {
@@ -465,7 +450,6 @@ exports.resetPassword = (req, res) => {
         });
     }
 };
-
 
 // Added 8/15/2024 - to keep the logged in user logged in as long as they remain active on the site for the last 2 hours.
 exports.refreshToken = (req, res) => {

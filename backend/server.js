@@ -10,20 +10,20 @@ const socketIo = require('socket.io');
 require('dotenv').config();
 
 
+const adminRoutes = require('./routes/admin'); // Add this line
 const aiRoutes = require('./routes/ai');
 const authRoutes = require("./routes/auth");
-const adminRoutes = require('./routes/admin'); // Add this line
 const churchRoutes = require('./routes/church');
 const confessionRoutes = require('./routes/confession');
+const emailRoutes = require('./routes/email'); // Email routes
 const intentionRoutes = require('./routes/intentions');
 const massAttendanceRoutes = require('./routes/massAttendance');
 const notificationRoutes = require('./routes/notification');
 const prayerRoutes = require('./routes/prayer');
-const rosaryRoutes = require('./routes/rosary');
-const userRoutes = require('./routes/user');
 const prayerSpaceRoutes = require('./routes/prayerSpaces'); // New prayer space routes
+const rosaryRoutes = require('./routes/rosary');
 const stripeRoutes = require('./routes/stripe'); // Stripe routes
-const emailRoutes = require('./routes/email'); // Email routes
+const userRoutes = require('./routes/user');
 
 // app
 const app = express();
@@ -57,20 +57,20 @@ app.use(cors({
 }));
 
 // Define routes
+app.use('/api', adminRoutes); // Add this line
 app.use('/api', aiRoutes);
 app.use('/api', authRoutes);
-app.use('/api', adminRoutes); // Add this line
 app.use('/api', churchRoutes);
 app.use('/api', confessionRoutes);
+app.use('/api', emailRoutes); // Email routes
 app.use('/api', intentionRoutes);
 app.use('/api', massAttendanceRoutes);
 app.use('/api', notificationRoutes);
 app.use('/api', prayerRoutes);
-app.use('/api', rosaryRoutes);
-app.use('/api', userRoutes);
 app.use('/api/prayerSpaces', prayerSpaceRoutes); // New prayer space routes
+app.use('/api', rosaryRoutes);
 app.use('/api/stripe', stripeRoutes); // Stripe routes
-app.use('/api', emailRoutes); // Email routes
+app.use('/api', userRoutes);
 
 io.on('connection', (socket) => {
     console.log('New client connected');

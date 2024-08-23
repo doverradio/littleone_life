@@ -174,7 +174,7 @@ Your Prayer Team`,
                 };
 
                 await sendNotificationEmail(emailData, token);
-                console.log('Notification email sent successfully.');
+                // console.log('Notification email sent successfully.');
             }
         } catch (error) {
             console.error('Failed to submit Rosary or send notification email:', error);
@@ -286,7 +286,7 @@ Your Prayer Team`,
                     <div>
                         <div className="email-toggle">
                             <ToggleSlider 
-                                isEnabled={isEmailEnabled} 
+                                initialIsEnabled={isEmailEnabled} 
                                 toggleFunction={handleEmailToggle} 
                                 componentName="Rosary"
                                 token={token}
