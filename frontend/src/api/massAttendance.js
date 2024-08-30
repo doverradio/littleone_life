@@ -16,10 +16,10 @@ export const countMassesByUser = async (userId, token) => {
     const response = await fetch(`${API}/mass-attendance/count`, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
+            'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ userId })
+        body: JSON.stringify({ userId }),
+            credentials: 'include'
     });
     return response.json();
 };
@@ -28,10 +28,10 @@ export const getMassAttendanceByUser = async (userId, massId, token) => {
     const response = await fetch(`${API}/mass-attendance`, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
+            'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ userId, massId })
+        body: JSON.stringify({ userId, massId }),
+        credentials: 'include'
     });
     return response.json();
 };
@@ -40,10 +40,10 @@ export const getAllMassAttendances = async (userId, token) => {
     const response = await fetch(`${API}/mass-attendances`, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
+            'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ userId })
+        body: JSON.stringify({ userId }),
+        credentials: 'include'
     });
     return response.json();
 };

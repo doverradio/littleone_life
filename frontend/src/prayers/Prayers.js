@@ -17,7 +17,7 @@ const Prayers = () => {
     const { prayerSettings, loading } = usePrayerSettings();
 
     // Log for debugging
-    console.log('Prayer Settings:', prayerSettings);
+    // console.log('Prayer Settings:', prayerSettings);
 
     const icons = [
         { id: 'rosary', name: 'Rosary', icon: rosaryIcon, route: '/prayers/rosary' },

@@ -286,6 +286,16 @@ exports.requireSignin = (req, res, next) => {
     }
 };
 
+exports.isAuth = (req, res, next) => {
+    const userId = req.params.userId || req.body.userId; // Check both params and body
+
+    if (req.session.userId && req.session.userId === userId) {
+        next();
+    } else {
+        return res.status(403).json({ error: 'Access denied' });
+    }
+};
+
 exports.authMiddleware = async (req, res, next) => {
     if (req.session.userId) {
         try {
@@ -312,15 +322,6 @@ exports.adminMiddleware = async (req, res, next) => {
     }
 };
 
-exports.isAuth = (req, res, next) => {
-    const userId = req.params.userId || req.body.userId; // Check both params and body
-
-    if (req.session.userId && req.session.userId === userId) {
-        next();
-    } else {
-        return res.status(403).json({ error: 'Access denied' });
-    }
-};
 
 
 exports.isAdmin = async (req, res, next) => {

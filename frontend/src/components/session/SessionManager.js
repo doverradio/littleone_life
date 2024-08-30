@@ -31,7 +31,7 @@ const SessionManager = ({ children }) => {
   }, []); // Ensure this function is defined
 
   const handleLogoutUser = useCallback(() => {
-    console.log("Logging out user and clearing session...");
+    // console.log("Logging out user and clearing session...");
     logoutUser(navigate, clearTimers, warningTimeoutRef, logoutTimeoutRef);
     setUser(null); 
     setIsAuthenticated(false);
@@ -43,7 +43,7 @@ const SessionManager = ({ children }) => {
 
   const handleRefreshSession = useCallback(() => {
     checkSession().then(response => {
-      log(`checkSession response: `, response)
+      // log(`checkSession response: `, response)
       if (response.isAuthenticated) {
         setIsAuthenticated(true);
         setUser(response.user); 
@@ -57,14 +57,14 @@ const SessionManager = ({ children }) => {
   }, [handleLogoutUser, handleScheduleTimers, setUser]);
 
   useEffect(() => {
-    log(`SessionManager useEffect`)
+    // log(`SessionManager useEffect`)
     if (user) { 
-      log(`SessionManager useEffect - got user: `, user)
+      // log(`SessionManager useEffect - got user: `, user)
       setIsAuthenticated(true);
       handleScheduleTimers();
     } else {
       checkSession().then(response => {
-        log(`checkSession response (in SessionManager useEffect): `, response)
+        // log(`checkSession response (in SessionManager useEffect): `, response)
 
         if (response.isAuthenticated) {
           setUser(response.user); 

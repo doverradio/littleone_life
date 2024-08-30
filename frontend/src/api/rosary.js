@@ -24,15 +24,15 @@ export const createRosary = async (userId, mystery, intentions, token) => {
 };
 
 
-export const getRosaryCountByUser = async (userId, token) => {
+export const getRosaryCountByUser = async (userId) => {
   try {
     const response = await fetch(`${API}/rosary/count`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
+        'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ userId })
+      body: JSON.stringify({ userId }),
+      credentials: 'include'
     });
     return await response.json();
   } catch (error) {
@@ -156,10 +156,10 @@ export const getUserRosaries = async (userId, token, page = 1, limit = 30) => {
       const response = await fetch(`${API}/rosary/user-rosaries`, {
           method: 'POST',
           headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${token}`
+              'Content-Type': 'application/json'
           },
-          body: JSON.stringify({ userId, page, limit })
+          body: JSON.stringify({ userId, page, limit }),
+          credentials: 'include'
       });
       return await response.json();
   } catch (error) {

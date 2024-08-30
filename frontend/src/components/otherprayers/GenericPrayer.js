@@ -61,7 +61,7 @@ const GenericPrayer = ({ prayerTitle, prayerText, iconSrc, onIntentionChange, pr
     // Intentions functions
     const fetchIntentions = async () => {
         try {
-            const response = await getAllIntentions(userId, prayerType, token); // Adjust parameters as needed
+            const response = await getAllIntentions(userId, prayerType); // Adjust parameters as needed
             setIntentions(response);
         } catch (error) {
             console.error("Error fetching intentions:", error);

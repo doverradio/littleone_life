@@ -15,6 +15,7 @@ exports.createChurch = async (req, res) => {
 };
 
 exports.getAllChurches = async (req, res) => {
+    log(`Begin getAllChurches!  req.body: `, req.body)
     const { userId, latitude, longitude, radius } = req.body;
     try {
         // Fetch user churches

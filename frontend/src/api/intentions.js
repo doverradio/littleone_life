@@ -1,21 +1,21 @@
 const API = process.env.REACT_APP_API ? process.env.REACT_APP_API : 'https://www.littleone.life/api';
 
 // Function to create a new intention
-export const createIntention = async (intention, userId, token) => {
+export const createIntention = async (intention, userId) => {
     try {
         const response = await fetch(`${API}/intention`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
             },
-            body: JSON.stringify({ ...intention, user: userId })
+            body: JSON.stringify({ ...intention, user: userId }),
+            credentials: 'include'  // Include credentials for session-based auth
         });
         if (!response.ok) {
             throw new Error('Failed to create intention');
         }
         const data = await response.json();
-        console.log('createIntention response:', data); // Log the response
+        console.log('createIntention response:', data);
         return data;
     } catch (error) {
         console.error('Error in createIntention:', error);
@@ -23,17 +23,16 @@ export const createIntention = async (intention, userId, token) => {
     }
 };
 
-
 // Function to get all intentions for a user
-export const getAllIntentions = async (userId, type, token) => {
+export const getAllIntentions = async (userId, type) => {
     try {
         const response = await fetch(`${API}/intentions`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify({ userId, type }),
+            credentials: 'include'  // Include credentials for session-based auth
         });
         return await response.json();
     } catch (error) {
@@ -43,15 +42,15 @@ export const getAllIntentions = async (userId, type, token) => {
 };
 
 // Function to get a single intention by ID
-export const getIntentionById = async (intentionId, token) => {
+export const getIntentionById = async (intentionId) => {
     try {
         const response = await fetch(`${API}/intention/getintention`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
             },
-            body: JSON.stringify({ _id: intentionId })
+            body: JSON.stringify({ _id: intentionId }),
+            credentials: 'include'  // Include credentials for session-based auth
         });
         return await response.json();
     } catch (error) {
@@ -61,15 +60,15 @@ export const getIntentionById = async (intentionId, token) => {
 };
 
 // Function to update an intention
-export const updateIntention = async (id, intention, token) => {
+export const updateIntention = async (id, intention) => {
     try {
         const response = await fetch(`${API}/intention/update`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
             },
-            body: JSON.stringify({ _id: id, ...intention })
+            body: JSON.stringify({ _id: id, ...intention }),
+            credentials: 'include'  // Include credentials for session-based auth
         });
         return await response.json();
     } catch (error) {
@@ -79,15 +78,15 @@ export const updateIntention = async (id, intention, token) => {
 };
 
 // Function to delete an intention
-export const deleteIntention = async (id, token) => {
+export const deleteIntention = async (id) => {
     try {
         const response = await fetch(`${API}/intention/delete`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
             },
-            body: JSON.stringify({ _id: id })
+            body: JSON.stringify({ _id: id }),
+            credentials: 'include'  // Include credentials for session-based auth
         });
         if (!response.ok) {
             throw new Error('Failed to delete intention');
@@ -98,4 +97,3 @@ export const deleteIntention = async (id, token) => {
         throw error;
     }
 };
-

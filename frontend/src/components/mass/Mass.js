@@ -1,8 +1,5 @@
-// src/components/mass/Mass.js
-
 import React, { useState, useEffect } from 'react';
-import { useAuth } from '../../api/authHook';
-import { fetchIntentions } from './utils/fetchFunctions';
+import { useUser } from '../../context/UserContext'; // Import the useUser hook
 import { useModal } from '../../context/ModalContext';
 import massIcon from './mass_icon.png';
 import './styles.css';
@@ -11,7 +8,7 @@ import MassForm from './components/MassForm';
 import MassPrayers from './MassPrayers';
 import MassResponses from './MassResponses';
 import MassSettings from './MassSettings';
-import { fetchMassData, handleMassData, addChurchToUser } from './helpers/massHelpers';
+import { fetchMassData, handleMassData, addChurchToUser, fetchIntentions } from './helpers/massHelpers';
 import { fetchNearbyChurches } from '../../api/googleMaps';
 import { DEFAULT_FONT_SIZE, MAX_FONT_SIZE, MIN_FONT_SIZE, initialChurchState, MASS_TIMES_OPTIONS } from './constants';
 import BackIcon from '../utils/BackIcon';
@@ -20,9 +17,8 @@ import latinMassImage from './latin_mass.jpg';
 
 const Mass = () => {
     const { toggleModal } = useModal();
-    const { user, token } = useAuth();
-    const { _id } = user || {};
-    const userId = _id;
+    const { user } = useUser(); // Get the user data from the UserContext
+    const userId = user?._id; // Extract userId from the user object
 
     const [count, setCount] = useState(0);
     const [massAttendances, setMassAttendances] = useState([]);
@@ -48,13 +44,13 @@ const Mass = () => {
     const [nearbyChurches, setNearbyChurches] = useState([]);
 
     useEffect(() => {
-        fetchMassData(userId, token, setCount, setMassAttendances, setPieChartData, setUserChurches, setPrayerIntentions, setError);
-        fetchIntentions(userId, token, setPrayerIntentions);
-    }, [userId, token]);
+        fetchMassData(userId, setCount, setMassAttendances, setPieChartData, setUserChurches, setPrayerIntentions, setError);
+        fetchIntentions(userId, setPrayerIntentions);
+    }, [userId]);
 
     const handleSubmitMass = async () => {
         setIsSubmitting(true);
-        await handleMassData(userId, selectedChurch, selectedMassTime, selectedIntentions, specialIntentions, token, toggleModal, setCount, setSelectedIntentions, setSelectedChurch, setSelectedMassTime);
+        await handleMassData(userId, selectedChurch, selectedMassTime, selectedIntentions, specialIntentions, toggleModal, setCount, setSelectedIntentions, setSelectedChurch, setSelectedMassTime);
         setIsSubmitting(false);
     };
 
@@ -68,7 +64,7 @@ const Mass = () => {
                 async (position) => {
                     const { latitude, longitude } = position.coords;
                     try {
-                        const nearbyChurchesData = await fetchNearbyChurches(latitude, longitude, 5, token);
+                        const nearbyChurchesData = await fetchNearbyChurches(latitude, longitude, 5, userId);
                         if (Array.isArray(nearbyChurchesData)) {
                             setNearbyChurches(nearbyChurchesData);
                         } else {
@@ -85,15 +81,15 @@ const Mass = () => {
                 }
             );
         }
-    }, [token, userId]);
+    }, [userId]);
 
     const handleChurchSelection = (church) => {
         setSelectedChurch(church);
     };
 
-    const addChurchToMassOptions = async (church, token) => {
+    const addChurchToMassOptions = async (church, userId) => {
         try {
-            const result = await addChurchToUser(userId, church, token);
+            const result = await addChurchToUser(userId, church);
             if (result.churches && result.churches.length > 0) {
                 setUserChurches(prev => [...prev, ...result.churches]);
                 setNearbyChurches(prev => prev.filter(c => c.placeId !== church.placeId));

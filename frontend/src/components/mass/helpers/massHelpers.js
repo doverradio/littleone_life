@@ -3,23 +3,23 @@ import { getAllIntentions } from '../../../api/intentions';
 import { createChurch, getAllChurches } from '../../../api/church';
 const API = process.env.REACT_APP_API ? process.env.REACT_APP_API : 'https://www.littleone.life/api';
 
-export const fetchMassData = async (userId, token, setCount, setMassAttendances, setPieChartData, setUserChurches, setPrayerIntentions, setError) => {
-    await fetchMassCount(userId, token, setCount);
-    await fetchMassAttendances(userId, token, setMassAttendances, setPieChartData, setError);
-    await fetchUserChurches(userId, token, setUserChurches);
-    await fetchIntentions(userId, token, setPrayerIntentions, setError);
+export const fetchMassData = async (userId, setCount, setMassAttendances, setPieChartData, setUserChurches, setPrayerIntentions, setError) => {
+    await fetchMassCount(userId, setCount);
+    await fetchMassAttendances(userId, setMassAttendances, setPieChartData, setError);
+    await fetchUserChurches(userId, setUserChurches);
+    await fetchIntentions(userId, setPrayerIntentions, setError);
 };
 
-const fetchMassCount = async (userId, token, setCount) => {
-    const response = await countMassesByUser(userId, token);
+const fetchMassCount = async (userId, setCount) => {
+    const response = await countMassesByUser(userId);
     if (response) {
         setCount(response.massAttendanceCount);
     }
 };
 
-const fetchMassAttendances = async (userId, token, setMassAttendances, setPieChartData, setError) => {
+const fetchMassAttendances = async (userId, setMassAttendances, setPieChartData, setError) => {
     try {
-        const data = await getAllMassAttendances(userId, token);
+        const data = await getAllMassAttendances(userId);
         if (data.error) {
             setError(data.error);
         } else {
@@ -44,17 +44,15 @@ const processMassAttendanceDataForPieChart = (massAttendances) => {
         }
     });
 
-    return Object.keys(countByMassTime).map(massTime => {
-        return {
-            label: massTime,
-            value: countByMassTime[massTime]
-        };
-    });
+    return Object.keys(countByMassTime).map(massTime => ({
+        label: massTime,
+        value: countByMassTime[massTime]
+    }));
 };
 
-const fetchUserChurches = async (userId, token, setUserChurches) => {
+const fetchUserChurches = async (userId, setUserChurches) => {
     try {
-        const response = await getAllChurches(userId, token);
+        const response = await getAllChurches(userId);
         if (response) {
             setUserChurches(response);
         } else {
@@ -65,9 +63,9 @@ const fetchUserChurches = async (userId, token, setUserChurches) => {
     }
 };
 
-const fetchIntentions = async (userId, token, setPrayerIntentions, setError) => {
+export const fetchIntentions = async (userId, setPrayerIntentions, setError) => {
     try {
-        const response = await getAllIntentions(userId, "Mass", token);
+        const response = await getAllIntentions(userId, "Mass");
         if (response) {
             setPrayerIntentions(response);
         } else {
@@ -79,7 +77,7 @@ const fetchIntentions = async (userId, token, setPrayerIntentions, setError) => 
     }
 };
 
-export const handleMassData = async (userId, selectedChurch, selectedMassTime, selectedIntentions, specialIntentions, token, toggleModal, setCount, setSelectedIntentions, setSelectedChurch, setSelectedMassTime) => {
+export const handleMassData = async (userId, selectedChurch, selectedMassTime, selectedIntentions, specialIntentions, toggleModal, setCount, setSelectedIntentions, setSelectedChurch, setSelectedMassTime) => {
     const massData = {
         user: userId,
         church: selectedChurch,
@@ -89,7 +87,7 @@ export const handleMassData = async (userId, selectedChurch, selectedMassTime, s
     };
 
     try {
-        await createMassAttendance(massData, token);
+        await createMassAttendance(massData);
         setSelectedIntentions([]);
         setSelectedChurch(null);
         setSelectedMassTime('');
@@ -101,16 +99,16 @@ export const handleMassData = async (userId, selectedChurch, selectedMassTime, s
     setCount(prevCount => prevCount + 1);
 };
 
-export const addChurchToUser = async (userId, church, token) => {
+export const addChurchToUser = async (userId, church) => {
     try {
         const response = await fetch(`${API}/churches/addToUser`, {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify({ userId, churches: [church] }),
+            credentials: 'include'
         });
         return await response.json();
     } catch (error) {
@@ -119,16 +117,16 @@ export const addChurchToUser = async (userId, church, token) => {
     }
 };
 
-export const removeChurchFromUser = async (userId, church, token) => {
+export const removeChurchFromUser = async (userId, church) => {
     try {
         const response = await fetch(`${API}/churches/removeFromUser`, {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify({ userId, churchId: church._id }),
+            credentials: 'include'
         });
         return await response.json();
     } catch (error) {
@@ -137,9 +135,9 @@ export const removeChurchFromUser = async (userId, church, token) => {
     }
 };
 
-export const addChurchToMassOptions = async (userId, church, token, setUserChurches, setNearbyChurches) => {
+export const addChurchToMassOptions = async (userId, church, setUserChurches, setNearbyChurches) => {
     try {
-        const updatedChurch = await addChurchToUser(userId, church, token);
+        const updatedChurch = await addChurchToUser(userId, church);
         setUserChurches(prevUserChurches => [...prevUserChurches, updatedChurch]);
         setNearbyChurches(prevNearbyChurches => prevNearbyChurches.filter(nearby => nearby.name !== church.name || nearby.address !== church.address));
     } catch (error) {
@@ -147,9 +145,9 @@ export const addChurchToMassOptions = async (userId, church, token, setUserChurc
     }
 };
 
-export const removeChurchFromUserOptions = async (userId, church, token, setUserChurches, setNearbyChurches) => {
+export const removeChurchFromUserOptions = async (userId, church, setUserChurches, setNearbyChurches) => {
     try {
-        await removeChurchFromUser(userId, church, token);
+        await removeChurchFromUser(userId, church);
         setUserChurches(prevUserChurches => prevUserChurches.filter(userChurch => userChurch._id !== church._id));
         setNearbyChurches(prevNearbyChurches => [...prevNearbyChurches, church]);
     } catch (error) {

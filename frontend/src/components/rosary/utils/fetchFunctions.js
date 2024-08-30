@@ -33,7 +33,7 @@ export const fetchMysteryCounts = async (userId, token, setChartData) => {
 
 export const fetchIntentions = async (userId, token, setPrayerIntentions) => {
     try {
-        const response = await getAllIntentions(userId, "Rosary", token);
+        const response = await getAllIntentions(userId, "Rosary");
         if (response) {
             // console.log('fetchIntentions response:', response); // Log the response
             setPrayerIntentions(response);

@@ -4,7 +4,7 @@ import { getAllIntentions } from '../../../api/intentions';
 
 export const fetchIntentions = async (userId, token, setPrayerIntentions) => {
     try {
-        const response = await getAllIntentions(userId, "Mass", token);
+        const response = await getAllIntentions(userId, "Mass");
         if (response) {
             setPrayerIntentions(response);
         } else {

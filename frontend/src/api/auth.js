@@ -4,7 +4,7 @@ const API = process.env.REACT_APP_API || 'https://www.littleone.life/api'; // Yo
 
 // Function to check if the user is still authenticated by checking the session
 export const checkSession = async () => {
-  console.log(`Begin checkSession!`)
+  // console.log(`Begin checkSession!`)
   try {
       const response = await fetch(`${API}/check-session`, {
           method: 'GET',
@@ -16,7 +16,7 @@ export const checkSession = async () => {
       }
 
       const sessionData = await response.json();
-      console.log(`sessionData: `, sessionData)
+      // console.log(`sessionData: `, sessionData)
       return sessionData; // Return the session data, which includes isAuthenticated
   } catch (error) {
       console.error('Error checking session:', error);
@@ -130,7 +130,7 @@ export const resetPassword = async (resetInfo) => {
   }
 };
 
-export const googleSignIn = async (token) => {
+export const googleSignIn = async (token) => { // not the JWT token, the google token
   try {
       const response = await fetch(`${API}/google-login`, {
           method: 'POST',
@@ -141,7 +141,6 @@ export const googleSignIn = async (token) => {
           credentials: 'include', // Ensure session cookie is included
           body: JSON.stringify({ idToken: token }),
       });
-      console.log(`5. Backend API Call - /google-login`);
       return await response.json();
   } catch (err) {
       return { error: 'Google sign-in failed. Please try again.' };
@@ -149,7 +148,7 @@ export const googleSignIn = async (token) => {
 };
 
 
-export const googleSignup = async (token) => {
+export const googleSignup = async (token) => { // not the JWT token, the google token
   if (token) {
     try {
       const response = await fetch(`${API}/google-signup`, {

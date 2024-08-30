@@ -129,9 +129,9 @@ export const getUser = async (userId, token) => {
         const response = await fetch(`${API}/user/${userId}`, {
             method: 'GET',
             headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            }
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include'
         });
         
         if (!response.ok) {

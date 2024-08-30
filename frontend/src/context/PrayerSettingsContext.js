@@ -16,7 +16,7 @@ export const PrayerSettingsProvider = ({ children }) => {
             if (user && user._id) { // Ensure user is valid before making the request
                 try {
                     const settings = await getPrayerSettings(user._id);
-                    console.log('Fetched Prayer Settings:', settings); // Log the settings
+                    // console.log('Fetched Prayer Settings:', settings); // Log the settings
                     setPrayerSettings(settings);
                 } catch (error) {
                     console.error('Error fetching prayer settings:', error);

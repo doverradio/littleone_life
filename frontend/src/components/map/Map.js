@@ -24,7 +24,10 @@ const Map = ({ setNearbyChurches, distance }) => {
 
             const fetchChurches = async (pos) => {
                 try {
-                    const response = await fetch(`/api/churches?lat=${pos.lat}&lng=${pos.lng}&distance=${distance}`);
+                    const response = await fetch(`/api/churches?lat=${pos.lat}&lng=${pos.lng}&distance=${distance}`, {
+                        method: 'POST',
+                        credentials: 'include', // Ensure session is included
+                    });
                     const data = await response.json();
                     if (data.length > 0) {
                         setNearbyChurches(data);
@@ -34,7 +37,7 @@ const Map = ({ setNearbyChurches, distance }) => {
                                 position: { lat: church.lat, lng: church.lng },
                                 title: church.name,
                             });
-
+            
                             marker.addListener('click', () => {
                                 infoWindow.setContent(church.name);
                                 infoWindow.open(map, marker);
@@ -48,6 +51,7 @@ const Map = ({ setNearbyChurches, distance }) => {
                     fetchFromGoogle(pos);
                 }
             };
+            
 
             const fetchFromGoogle = (pos) => {
                 const request = {
@@ -92,12 +96,14 @@ const Map = ({ setNearbyChurches, distance }) => {
                         headers: {
                             'Content-Type': 'application/json',
                         },
+                        credentials: 'include', // Ensure session is included
                         body: JSON.stringify(churches),
                     });
                 } catch (error) {
                     console.error('Error saving churches to DB:', error);
                 }
             };
+            
 
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(
