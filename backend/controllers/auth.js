@@ -24,25 +24,25 @@ exports.googleSignin = async (req, res) => {
         });
 
         const payload = ticket.getPayload();
-        log(`6. Verify ID Token - `, payload)
+        // log(`6. Verify ID Token - `, payload)
         const { name: username, email_verified, email } = payload;
 
         if (email_verified) {
             let user = await User.findOne({ username });
-            log(`7. Check User in Database: `, user._id)
+            // log(`7. Check User in Database: `, user._id)
 
             if (user) {
                 req.session.userId = user._id; // Set the user ID in the session
                 req.session.username = username; // Set the username in the session
 
-                console.log('Session ID after setting userId:', req.session.id); // Log the session ID
+                // console.log('Session ID after setting userId:', req.session.id); // Log the session ID
 
                 req.session.save(err => { // Save the session explicitly to ensure it's stored
                     if (err) {
                         console.error('Session save error:', err);
                         return res.status(500).json({ error: 'Failed to save session' });
                     }
-                    log(`8. Session Creation`)
+                    // log(`8. Session Creation`)
 
                     return res.json({
                         user: { _id: user._id, username, role: user.role, email: user.email }
@@ -66,10 +66,9 @@ exports.googleSignin = async (req, res) => {
     }
 };
 
-
 // The checkSession function
 exports.checkSession = async (req, res) => {
-    log(`Begin checkSession!  req.session: `, req.session)
+    // log(`Begin checkSession!  req.session: `, req.session)
     if (req.session.userId) {
         try {
             // Optionally, you can retrieve more user details from the database
@@ -174,8 +173,6 @@ exports.signup = async (req, res) => {
     }
 };
 
-
-
 // GOOGLE SIGN UP
 // In your auth controller
 exports.googleSignup = async (req, res) => {
@@ -233,7 +230,6 @@ exports.googleSignup = async (req, res) => {
     }
 };
 
-
 // USERNAME / PASSWORD SIGN IN
 exports.signin = async (req, res) => {
     try {
@@ -274,12 +270,6 @@ exports.signin = async (req, res) => {
     }
 };
 
-
-
-
-
-
-
 // Signout controller in your backend (e.g., authController.js)
 exports.signout = (req, res) => {
     req.session.destroy(() => {
@@ -288,14 +278,6 @@ exports.signout = (req, res) => {
     });
 };
 
-
-// exports.requireSignin = (req, res, next) => {
-//     if (!req.session.userId) {
-//         return res.status(401).json({ error: 'Access denied. Please sign in.' });
-//     }
-//     next();
-// };
-
 exports.requireSignin = (req, res, next) => {
     if (req.session && req.session.userId) {
         next(); // User is signed in, proceed to the next middleware
@@ -303,7 +285,6 @@ exports.requireSignin = (req, res, next) => {
         return res.status(401).json({ error: 'Unauthorized access' });
     }
 };
-
 
 exports.authMiddleware = async (req, res, next) => {
     if (req.session.userId) {
@@ -331,16 +312,8 @@ exports.adminMiddleware = async (req, res, next) => {
     }
 };
 
-// exports.isAuth = (req, res, next) => {
-//     if (req.profile && req.session.userId && req.profile._id.toString() === req.session.userId) {
-//         next();
-//     } else {
-//         return res.status(403).json({ error: "Access denied" });
-//     }
-// };
-
 exports.isAuth = (req, res, next) => {
-    const userId = req.params.userId;
+    const userId = req.params.userId || req.body.userId; // Check both params and body
 
     if (req.session.userId && req.session.userId === userId) {
         next();

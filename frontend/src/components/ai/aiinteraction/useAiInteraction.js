@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { interactWithAI, getChatHistory } from '../../../api/ai';
 
-const useAiInteraction = (userId, token) => {
+const useAiInteraction = (userId) => {
     const [inputText, setInputText] = useState('');
     const [chatHistory, setChatHistory] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -23,7 +23,7 @@ const useAiInteraction = (userId, token) => {
 
     const fetchChatHistory = async (page) => {
         try {
-            const history = await getChatHistory(userId, page, token);
+            const history = await getChatHistory(userId, page);
             if (history.length === 0) {
                 setHasMoreMessages(false);
             } else {
@@ -46,7 +46,7 @@ const useAiInteraction = (userId, token) => {
         setError(null);
 
         try {
-            const response = await interactWithAI(userId, 'guidance', inputText, token);
+            const response = await interactWithAI(userId, 'guidance', inputText);
             setChatHistory(prevHistory => [...prevHistory, { content: inputText, response }]);
             setInputText(''); // Clear the textarea after submission
         } catch (err) {

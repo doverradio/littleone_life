@@ -2,15 +2,15 @@
 
 const API = process.env.REACT_APP_API || 'https://www.littleone.life/api'; // Your backend API URL
 
-export const interactWithAI = async (userId, interactionType, content, token) => {
+export const interactWithAI = async (userId, interactionType, content) => {
     try {
         const response = await fetch(`${API}/ai/interact`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`, // Include the token in the headers
             },
             body: JSON.stringify({ userId, interactionType, content }),
+            credentials: 'include'
         });
 
         if (!response.ok) {
@@ -25,14 +25,14 @@ export const interactWithAI = async (userId, interactionType, content, token) =>
     }
 };
 
-export const getChatHistory = async (userId, page, token) => {
+export const getChatHistory = async (userId, page) => {
     try {
         const response = await fetch(`${API}/ai/chat-history?userId=${userId}&page=${page}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`, // Include the token in the headers
             },
+            credentials: 'include'
         });
 
         if (!response.ok) {

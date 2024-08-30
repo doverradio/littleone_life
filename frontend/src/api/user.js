@@ -1,15 +1,20 @@
 const API = process.env.REACT_APP_API ? process.env.REACT_APP_API : 'https://www.littleone.life/api';
 
-export const updatePrayerSettings = async (userId, prayerSettings, token) => {
+export const updatePrayerSettings = async (userId, prayerSettings) => {
     try {
         const response = await fetch(`${API}/user/update-prayer-settings`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}` // Adjust according to your authentication method
             },
-            body: JSON.stringify({ userId, prayerSettings })
+            body: JSON.stringify({ userId, prayerSettings }),
+            credentials: 'include' // Ensure cookies are sent with the request
         });
+
+        if (!response.ok) {
+            throw new Error('Failed to update prayer settings');
+        }
+
         return await response.json();
     } catch (error) {
         console.error('Error in updatePrayerSettings:', error);
@@ -17,20 +22,18 @@ export const updatePrayerSettings = async (userId, prayerSettings, token) => {
     }
 };
 
-export const getPrayerSettings = async (userId, token) => {
+
+export const getPrayerSettings = async (userId) => {
     try {
         const response = await fetch(`${API}/user/prayer-settings`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
             },
-            body: JSON.stringify({ userId })
+            body: JSON.stringify({ userId }),
+            credentials: 'include' // Ensure cookies are sent with the request
         });
         const data = await response.json();
-
-        // Log the response data
-        // console.log("data (getPrayerSettings):", data);
 
         return data;
     } catch (error) {
@@ -38,6 +41,7 @@ export const getPrayerSettings = async (userId, token) => {
         throw error;
     }
 };
+
 
 
 export const getUserSettings = async (token, _id) => {

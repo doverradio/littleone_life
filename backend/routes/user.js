@@ -10,22 +10,22 @@ const {
     getUserById
 
 } = require('../controllers/user'); // Adjust the path according to your project structure
-const { requireSignin, authMiddleware, adminMiddleware, isAuth, isAdmin } = require('../controllers/auth');
+const { requireSignin, isAuth } = require('../controllers/auth');
 
 // Update prayer settings
 router.put('/user/update-prayer-settings', updatePrayerSettings);
-router.post('/user/prayer-settings', requireSignin, authMiddleware, isAuth, getPrayerSettings);
+router.post('/user/prayer-settings', requireSignin, isAuth, getPrayerSettings);
 router.post('/user/settings', requireSignin, getUserSettings);
 router.put('/user/settings', 
     // requireSignin, 
     updateUserSettings
 );
-router.get('/user/token-usage/:userId', requireSignin, authMiddleware, isAuth, getUserTokenUsage);
+router.get('/user/token-usage/:userId', requireSignin, isAuth, getUserTokenUsage);
 
 // Dashboard User Stats
 router.get('/user/stats/:userId', requireSignin, isAuth, getUserPrayerStats);
 
 // Route to get user by ID
-router.get('/user/:userId', requireSignin, authMiddleware, isAuth, getUserById);
+router.get('/user/:userId', requireSignin, isAuth, getUserById);
 
 module.exports = router;

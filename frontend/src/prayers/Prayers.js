@@ -13,8 +13,11 @@ import { usePrayerSettings } from '../context/PrayerSettingsContext';
 import "./Prayers.css";
 
 const Prayers = () => {
-    const { user, token } = useAuth();
+    const { user } = useAuth();
     const { prayerSettings, loading } = usePrayerSettings();
+
+    // Log for debugging
+    console.log('Prayer Settings:', prayerSettings);
 
     const icons = [
         { id: 'rosary', name: 'Rosary', icon: rosaryIcon, route: '/prayers/rosary' },
@@ -27,8 +30,11 @@ const Prayers = () => {
         { id: 'prayerSettings', name: 'Prayer Settings', icon: prayerSettingsIcon, route: '/prayers/settings' },
     ];
 
+    // Check if prayerSettings is an array
+    const validPrayerSettings = Array.isArray(prayerSettings) ? prayerSettings : [];
+
     const visiblePrayers = icons.filter(icon => {
-        const prayerSetting = prayerSettings.find(prayer => prayer.id === icon.id);
+        const prayerSetting = validPrayerSettings.find(prayer => prayer.id === icon.id);
         return prayerSetting ? prayerSetting.isVisible : false;
     });
 
@@ -47,14 +53,18 @@ const Prayers = () => {
                     )}
                 </div>
                 <div className="prayer-icons">
-                    {visiblePrayers.map(icon => (
-                        <Link to={icon.route} key={icon.id}>
-                            <div className="prayer-icon">
-                                <img src={icon.icon} alt={icon.name} />
-                                <p>{icon.name}</p>
-                            </div>
-                        </Link>
-                    ))}
+                    {visiblePrayers.length > 0 ? (
+                        visiblePrayers.map(icon => (
+                            <Link to={icon.route} key={icon.id}>
+                                <div className="prayer-icon">
+                                    <img src={icon.icon} alt={icon.name} />
+                                    <p>{icon.name}</p>
+                                </div>
+                            </Link>
+                        ))
+                    ) : (
+                        <p>No prayers available to display.</p>
+                    )}
                 </div>
             </div>
         </div>

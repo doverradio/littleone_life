@@ -39,7 +39,7 @@ exports.updatePrayerSettings = async (req, res) => {
 exports.getPrayerSettings = async (req, res) => {
     try {
         const { userId } = req.body;
-        // console.log('Fetching prayer settings for user:', userId);
+        console.log('Fetching prayer settings for user:', userId);
 
         const user = await User.findById(userId, '-hashed_password -salt');
         // console.log('Fetched user:', user);

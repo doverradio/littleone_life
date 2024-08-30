@@ -5,10 +5,8 @@ import PrayerSettings from '../../components/otherprayers/PrayerSettings';
 
 const PrayerSettingsPage = () => {
     const [availablePrayers, setAvailablePrayers] = useState([]);
-
-    const { user, token } = useAuth();
-    const { _id } = user || {};
-    const userId = _id;
+    const { user } = useAuth();
+    const { _id: userId } = user || {};
 
     const fetchPrayerSettings = async () => {
         if (!userId) {
@@ -16,13 +14,7 @@ const PrayerSettingsPage = () => {
             return;
         }
         try {
-            // console.log("UserID:", userId);
-            // console.log("Token:", token);
-
-            const settings = await getPrayerSettings(userId, token);
-
-            // Log the fetched settings
-            // console.log("Fetched Settings:", settings);
+            const settings = await getPrayerSettings(userId);
 
             if (settings.length === 0) {
                 const defaultPrayerSettings = [
@@ -34,13 +26,11 @@ const PrayerSettingsPage = () => {
                     { id: 'stfrancis', name: 'St. Francis Prayer', isVisible: false },
                     { id: 'stleandroruiz', name: 'St. Leandro Ruiz Prayer', isVisible: false },
                 ];
-                await updatePrayerSettings(userId, defaultPrayerSettings, token);
-                const updatedSettings = await getPrayerSettings(userId, token);
+                await updatePrayerSettings(userId, defaultPrayerSettings);
+                const updatedSettings = await getPrayerSettings(userId);
                 setAvailablePrayers(updatedSettings);
-                // console.log("Updated Settings after default set:", updatedSettings);
             } else {
                 setAvailablePrayers(settings);
-                // console.log("Updated Available Prayers after fetching:", settings);
             }
         } catch (error) {
             console.error("Error fetching prayer settings:", error);
@@ -51,31 +41,7 @@ const PrayerSettingsPage = () => {
         if (userId) {
             fetchPrayerSettings();
         }
-    }, []);
-
-    
-    // const fetchPrayerSettings = async () => {
-    //     try {
-    //         const settings = await getPrayerSettings(userId, token);
-    //         if (settings.length === 0) {
-    //             await updatePrayerSettings(userId, defaultPrayerSettings, token);
-    //             const updatedSettings = await getPrayerSettings(userId, token);
-    //             setAvailablePrayers(updatedSettings);
-    //         } else {
-    //             setAvailablePrayers(settings);
-    //         }
-    //     } catch (error) {
-    //         console.error("Error fetching prayer settings:", error);
-    //     }
-    // };
-
-    // useEffect(() => {
-    //     fetchPrayerSettings();
-    // }, []);
-
-    // useEffect(() => {
-    //     console.log("Updated Available Prayers in useEffect:", availablePrayers);
-    // }, [availablePrayers]);
+    }, [userId]);
 
     const persistPrayerSettings = async (updatedPrayers) => {
         if (!userId) {
@@ -83,7 +49,7 @@ const PrayerSettingsPage = () => {
             return;
         }
         try {
-            await updatePrayerSettings(userId, updatedPrayers, token);
+            await updatePrayerSettings(userId, updatedPrayers);
         } catch (error) {
             console.error('Error updating prayer settings:', error);
         }

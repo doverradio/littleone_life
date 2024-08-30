@@ -45,7 +45,6 @@ const RoutesComponent = () => {
           <Route element={<Layout />}>
             <Route path="/user/dashboard" element={<PrivateRoute component={UserDashboard} />} exact />
             <Route path="/user/settings" element={<PrivateRoute component={Settings} />} exact />
-            {/* <Route path="/admin/dashboard" element={<AdminDashboard />} exact />  */}
             <Route path="/admin/dashboard" element={<AdminRoute component={AdminDashboard} />} exact />
             <Route path="/shop" element={<PrivateRoute component={Shop} />} exact />
             <Route path="/works" element={<PrivateRoute component={Works} />} exact />

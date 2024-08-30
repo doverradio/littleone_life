@@ -1,18 +1,16 @@
+// src/api/admin.js
+
 // Base URL for API requests
 const API_BASE_URL = process.env.REACT_APP_API || 'http://localhost:8000/api';
 
 // Function to get all users
-export const getUsers = async (token) => {
-  if (!token) {
-    throw new Error('No token found');
-  }
-
+export const getUsers = async () => {
   try {
     const response = await fetch(`${API_BASE_URL}/users`, {
       method: 'GET',
+      credentials: 'include', // Include credentials (cookies) for session management
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`,
       },
     });
 
@@ -29,17 +27,13 @@ export const getUsers = async (token) => {
 };
 
 // Function to update a user's role
-export const updateUserRole = async (token, userId, role) => {
-  if (!token) {
-    throw new Error('No token found');
-  }
-
+export const updateUserRole = async (userId, role) => {
   try {
     const response = await fetch(`${API_BASE_URL}/users/${userId}/role`, {
       method: 'PUT',
+      credentials: 'include', // Include credentials (cookies) for session management
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`,
       },
       body: JSON.stringify({ role }),
     });
