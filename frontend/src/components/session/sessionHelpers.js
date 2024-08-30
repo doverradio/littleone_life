@@ -1,6 +1,6 @@
 // frontend/src/components/session/sessionHelpers.js
 
-import { refreshToken, signout } from '../../api/auth';
+import { checkSession, signout } from '../../api/auth';
 
 export const clearTimers = (warningTimeoutRef, logoutTimeoutRef) => {
     try {
@@ -35,42 +35,31 @@ export const scheduleTimers = (warningTimeoutRef, logoutTimeoutRef, showLogoutWa
     }
 };
 
-export const refreshTokenHandler = async (logoutUser, clearTimers, scheduleTimers, setWarningShown) => {
+export const refreshSessionHandler = async (logoutUser, warningTimeoutRef, logoutTimeoutRef, setWarningShown) => {
     try {
-        const newToken = await refreshToken();
-        if (!newToken) {
-            throw new Error('Failed to refresh token');
+        const sessionResponse = await checkSession();
+        if (!sessionResponse.isAuthenticated) {
+            throw new Error('Session expired or invalid');
         } else {
             setWarningShown(false);
-            try {
-                clearTimers(); 
-            } catch (error) {
-                console.error('Error during clearTimers:', error);
-            }
-
-            try {
-                scheduleTimers(); 
-            } catch (error) {
-                console.error('Error during scheduleTimers:', error);
-                throw error; 
-            }
+            clearTimers(warningTimeoutRef, logoutTimeoutRef);
+            scheduleTimers(warningTimeoutRef, logoutTimeoutRef, () => setWarningShown(true), logoutUser);
         }
     } catch (error) {
-        console.error('Error refreshing token:', error);
+        console.error('Error refreshing session:', error);
         logoutUser();  
     }
 };
 
-export const logoutUser = (navigate, clearTimers, warningTimeoutRef, logoutTimeoutRef, setToken) => {
+export const logoutUser = (navigate, clearTimers, warningTimeoutRef, logoutTimeoutRef) => {
     clearTimers(warningTimeoutRef, logoutTimeoutRef);
-    signout(setToken, () => {
+    signout(() => {
         navigate('/signin');
     });
 };
 
-export const updateActivity = (setLastActivityTime, scheduleTimers, warningShown) => {
+export const updateActivity = (scheduleTimers, warningShown) => {
     if (!warningShown) {
-        setLastActivityTime(Date.now());
         scheduleTimers();
     }
 };

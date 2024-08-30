@@ -12,7 +12,7 @@ import './Layout.css';
 const Layout = () => {
   
   // Ensure the user is authenticated
-  const { user, token } = useAuth();
+  const { user } = useAuth();
   const { _id } = user || {};
   const userId = _id;
 
@@ -33,9 +33,9 @@ const Layout = () => {
 
   useEffect(() => {
     const fetchUserStats = async () => {
-      if (userId && token) {  // Ensure userId and token are available before making the request
+      if (userId) {  // Ensure userId and token are available before making the request
         try {
-          const stats = await getUserPrayerStats(userId, token);
+          const stats = await getUserPrayerStats(userId);
           setUserStats(stats);
         } catch (error) {
           console.error('Error fetching user stats:', error);
@@ -44,7 +44,7 @@ const Layout = () => {
     };
 
     fetchUserStats();
-  }, [userId, token]);  // Add userId and token as dependencies
+  }, [userId]);  // Add userId and token as dependencies
 
   const shouldShowFooter = !isMobile || (isMobile && location.pathname === '/user/settings');
   
@@ -69,7 +69,7 @@ const Layout = () => {
         </div>
       )}
       {shouldShowFooter && <Footer />}
-      {userId && token && <ChatIcon userId={userId} token={token} />} {/* Add ChatIcon here */}
+      {userId && <ChatIcon userId={userId} />} {/* Add ChatIcon here */}
     </div>
   );
 };

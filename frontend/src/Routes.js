@@ -1,4 +1,3 @@
-// frontend/src/Routes.js
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import MainPage from './MainPage';
@@ -7,8 +6,8 @@ import SignUp from './signup/Signup';
 import TermsOfService from './TermsOfService';
 import Contact from './Contact';
 import PrivacyPolicy from './PrivacyPolicy';
-import PrivateRoute from './auth/PrivateRoute'; // Ensure this is correctly imported
-import AdminRoute from './auth/AdminRoute'; // Ensure this is correctly imported
+import PrivateRoute from './auth/PrivateRoute';
+import AdminRoute from './auth/AdminRoute';
 import UserDashboard from './user/dashboard/UserDashboard';
 import AdminDashboard from './admin/AdminDashboard';
 import Settings from './components/settings/Settings';
@@ -46,6 +45,7 @@ const RoutesComponent = () => {
           <Route element={<Layout />}>
             <Route path="/user/dashboard" element={<PrivateRoute component={UserDashboard} />} exact />
             <Route path="/user/settings" element={<PrivateRoute component={Settings} />} exact />
+            {/* <Route path="/admin/dashboard" element={<AdminDashboard />} exact />  */}
             <Route path="/admin/dashboard" element={<AdminRoute component={AdminDashboard} />} exact />
             <Route path="/shop" element={<PrivateRoute component={Shop} />} exact />
             <Route path="/works" element={<PrivateRoute component={Works} />} exact />

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { interactWithAI, getChatHistory } from '../../api/ai';
 import AiInteractionLayout from './aiinteraction/AiInteractionLayout';
 
-const AiInteraction = ({ userId, token, onClose }) => {
+const AiInteraction = ({ userId, onClose }) => { // Removed token prop
     const [inputText, setInputText] = useState('');
     const [chatHistory, setChatHistory] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -20,7 +20,7 @@ const AiInteraction = ({ userId, token, onClose }) => {
 
     const fetchChatHistory = async (page) => {
         try {
-            const history = await getChatHistory(userId, page, token);
+            const history = await getChatHistory(userId, page); // Removed token argument
             if (history.length === 0) {
                 setHasMoreMessages(false);
             } else {
@@ -43,7 +43,7 @@ const AiInteraction = ({ userId, token, onClose }) => {
         setError(null);
 
         try {
-            const response = await interactWithAI(userId, 'guidance', inputText, token);
+            const response = await interactWithAI(userId, 'guidance', inputText); // Removed token argument
             setChatHistory(prevHistory => [...prevHistory, { content: inputText, response }]);
             setInputText(''); // Clear the textarea after submission
         } catch (err) {

@@ -1,14 +1,14 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
-import { jwtDecode } from "jwt-decode";  // Correct import statement
-import { getCookie } from '../helpers/cookieHelper'; // Adjust the import based on your folder structure
-import { getPrayerSettings } from '../api/user'; // Import the getPrayerSettings function
+import { jwtDecode } from "jwt-decode";  // Importing jwtDecode as a named export
+import { getCookie } from '../helpers/cookieHelper';
+import { getPrayerSettings } from '../api/user';
 
 export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [prayerSettings, setPrayerSettings] = useState([]);
-    const [loading, setLoading] = useState(true); // Add loading state
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const token = getCookie('token');
@@ -23,13 +23,13 @@ export const UserProvider = ({ children }) => {
                 } catch (error) {
                     console.error('Error fetching prayer settings:', error);
                 } finally {
-                    setLoading(false); // Set loading to false after fetching settings
+                    setLoading(false);
                 }
             };
 
             fetchPrayerSettings();
         } else {
-            setLoading(false); // Set loading to false if no token is found
+            setLoading(false);
         }
     }, []);
 
@@ -41,9 +41,5 @@ export const UserProvider = ({ children }) => {
 };
 
 export const useUser = () => {
-    const context = useContext(UserContext);
-    if (!context) {
-        throw new Error('useUser must be used within a UserProvider');
-    }
-    return context;
+    return useContext(UserContext);
 };

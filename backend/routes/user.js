@@ -23,7 +23,7 @@ router.put('/user/settings',
 router.get('/user/token-usage/:userId', requireSignin, authMiddleware, isAuth, getUserTokenUsage);
 
 // Dashboard User Stats
-router.get('/user/stats/:userId', requireSignin, authMiddleware, isAuth, getUserPrayerStats);
+router.get('/user/stats/:userId', requireSignin, isAuth, getUserPrayerStats);
 
 // Route to get user by ID
 router.get('/user/:userId', requireSignin, authMiddleware, isAuth, getUserById);

@@ -1,7 +1,7 @@
 import React from 'react';
 import { GoogleLogin } from '@react-oauth/google';
 import { toast } from 'react-toastify';
-import { googleSignup, authenticate } from '../api/auth'; // Import the googleSignup and authenticate functions
+import { googleSignup } from '../api/auth'; // Import googleSignup only
 import { useNavigate } from "react-router-dom";
 import { useToken } from '../context/TokenContext'; // Import useToken from the context
 
@@ -19,15 +19,15 @@ const GoogleSignupButton = ({ informParent = f => f }) => {
             if (result.error) {
                 toast.error(result.error);
             } else {
-                authenticate(result, setToken, () => { // Pass setToken to authenticate
-                    informParent(result);
-                    const { user } = result;
-                    if (user && user.role === 1) {
-                        navigate('/admin/dashboard');
-                    } else {
-                        navigate('/user/dashboard');
-                    }
-                });
+                // No need for authenticate, simply handle the token and navigation
+                setToken(result.token); // Store the token in the context
+                informParent(result); // Inform parent of the successful signup
+                const { user } = result;
+                if (user && user.role === 1) {
+                    navigate('/admin/dashboard');
+                } else {
+                    navigate('/user/dashboard');
+                }
             }
         } catch (error) {
             console.error('GOOGLE SIGNUP ERROR', error);

@@ -1,5 +1,3 @@
-// backend/routes/auth.js
-
 const express = require("express");
 const router = express.Router();
 const {
@@ -12,7 +10,8 @@ const {
     checkUsernameAvailability,
     googleSignin,
     googleSignup,
-    refreshToken 
+    checkSession,  // Import the checkSession controller
+    refreshToken
 } = require("../controllers/auth");
 const { 
     forgotPasswordValidator,
@@ -31,8 +30,11 @@ router.post("/signout", signout);
 router.post('/check-username', checkUsernameAvailability);
 router.put('/forgot-password', forgotPasswordValidator, forgotPassword);
 router.put('/reset-password', resetPasswordValidator, resetPassword);
-router.post('/google-login', googleSignin); // https://littleone.life/api/google/callback
-router.post('/google-signup', googleSignup); // For new users completing the sign-up process with Google
+router.post('/google-login', googleSignin);
+router.post('/google-signup', googleSignup);
+
+// New route to check if the user is authenticated based on the session
+router.get('/check-session', checkSession);
 
 // Redirect to Google's OAuth 2.0 server to initiate authentication
 router.get('/google', (req, res) => {
@@ -58,7 +60,7 @@ router.get('/callback', async (req, res) => {
     }
 });
 
-// Refresh Token Route
+// Refresh Token Route (optional, depending on how you want to handle refresh tokens)
 router.post('/refresh-token', refreshToken);
 
 module.exports = router;

@@ -89,6 +89,7 @@ const Rosary = () => {
     const { user, token } = useAuth();
     const { _id } = user || {};
     const userId = _id;
+    const { username } = user;
 
     useEffect(() => {
         fetchIntentions(userId, token, setPrayerIntentions);
@@ -160,17 +161,25 @@ const Rosary = () => {
                     ? process.env.REACT_APP_API
                     : 'https://www.littleone.life';
 
+
+                // Get the current date and time and format it
+                const currentTime = new Date().toLocaleString('en-US', {
+                    year: 'numeric',
+                    month: 'numeric',
+                    day: 'numeric',
+                    hour: 'numeric',
+                    minute: 'numeric',
+                    hour12: true,
+                });
+
                 const emailData = {
                     to: user.email,
-                    subject: 'Rosary Prayer Submitted',
-                    message: `Dear ${user.username || 'User'},
-
-You have successfully submitted a Rosary prayer. If you wish to turn off these notifications, please click the link below:
-
-${DOMAIN}/disable-notifications?userId=${user._id}&component=Rosary
-
-Blessings,
-Your Prayer Team`,
+                    subject: `${selectedMystery} Mystery Rosary Submitted on ${currentTime}`,
+                    message: `<p>Congratulations ${user.username || ''},</p>
+<p>You successfully submitted a ${selectedMystery} Rosary.</p> 
+<p>Blessings,</p>
+<p>littleone.life Team</p>
+<p><a href="${DOMAIN}/disable-notifications?userId=${user._id}&component=Rosary">Turn off notification</a>.</p>`,
                 };
 
                 await sendNotificationEmail(emailData, token);

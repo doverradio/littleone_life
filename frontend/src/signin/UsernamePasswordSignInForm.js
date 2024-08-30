@@ -1,9 +1,10 @@
+// src/signin/UsernamePasswordSignInForm.js
+
 import React, { useState } from "react";
-import { signin, authenticate } from '../api/auth';
+import { signin } from '../api/auth'; // Removed authenticate import
 import { useAuth } from '../api/authHook';
 import { useNavigate } from "react-router-dom";
 import { toast } from 'react-toastify';
-import { useToken } from '../context/TokenContext';  // Import useToken
 
 const UsernamePasswordSignInForm = () => {
     const [values, setValues] = useState({
@@ -15,7 +16,6 @@ const UsernamePasswordSignInForm = () => {
     });
     const { username, password, loading, error, redirectToReferrer } = values;
     const { user } = useAuth();
-    const { setToken } = useToken();  // Get the setToken function from context
     const navigate = useNavigate();
 
     const handleChange = name => event => {
@@ -25,19 +25,16 @@ const UsernamePasswordSignInForm = () => {
     const clickSubmit = async (event) => {
         event.preventDefault();
         setValues({ ...values, error: false, loading: true });
-        const user = { username, password };
-
+        const userCredentials = { username, password };
+    
         try {
-            const response = await signin(user);
+            const response = await signin(userCredentials);
             if (response.error) {
                 setValues({ ...values, error: response.error, loading: false });
             } else {
-                authenticate(response, setToken, () => {  // Pass setToken to authenticate
-                    setValues({ ...values, redirectToReferrer: true });
-                });
+                setValues({ ...values, redirectToReferrer: true });
             }
         } catch (err) {
-            console.error('Sign in error:', err);
             setValues({ ...values, error: 'Sign in failed', loading: false });
         }
     };
@@ -50,15 +47,6 @@ const UsernamePasswordSignInForm = () => {
                 navigate('/admin/dashboard');
             } else {
                 navigate('/user/dashboard');
-            }
-        }
-        if (user) {
-            if (user && user.role === 1) {
-                navigate('/admin/dashboard');
-            } else if (user && user.role === 0) {
-                navigate('/user/dashboard');
-            } else {
-                navigate('/');
             }
         }
     };

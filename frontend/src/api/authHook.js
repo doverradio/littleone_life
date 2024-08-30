@@ -1,18 +1,34 @@
-import { useToken } from '../context/TokenContext';
+import { useState, useEffect, useContext } from 'react';
+import { checkSession } from './auth';
+import { UserContext } from '../context/UserContext'; // Make sure to import UserContext
 
 export const useAuth = () => {
-    const { token } = useToken();
-    if (!token) {
-        return { user: null, token: null, isAuthenticated: false };
-    }
+    const { user, setUser } = useContext(UserContext); // Destructure user and setUser from UserContext
+    const [isAuthenticated, setIsAuthenticated] = useState(!!user);
+    const [loading, setLoading] = useState(true);
 
-    try {
-        const payload = JSON.parse(atob(token.split('.')[1])); // Decode the JWT payload
-        const user = { ...payload, token }; // Include the token in the user object
+    useEffect(() => {
+        const initializeAuth = async () => {
+            try {
+                const sessionResponse = await checkSession();
+                if (sessionResponse.isAuthenticated) {
+                    setIsAuthenticated(true);
+                    setUser(sessionResponse.user);
+                } else {
+                    setIsAuthenticated(false);
+                    setUser(null);
+                }
+            } catch (error) {
+                console.error('Error checking session:', error);
+                setIsAuthenticated(false);
+                setUser(null);
+            } finally {
+                setLoading(false);
+            }
+        };
 
-        return { user, token, isAuthenticated: true };
-    } catch (error) {
-        console.error('Error parsing token:', error);
-        return { user: null, token: null, isAuthenticated: false };
-    }
+        initializeAuth();
+    }, [setUser]); // Add setUser as a dependency
+
+    return { user, setUser, isAuthenticated, loading };
 };

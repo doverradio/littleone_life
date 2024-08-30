@@ -7,14 +7,14 @@ import Step1Username from './wizard/Step1Username';
 import Step4Phone from './wizard/Step4Phone';
 import Step5Summary from './wizard/Step5Summary';
 import Step3Names from './wizard/Step3Names';
-import { checkUsernameAvailability, signup, googleSignup, authenticate } from '../api/auth';
+import { checkUsernameAvailability, signup, googleSignup } from '../api/auth'; // Removed authenticate
 import ProgressBar from './wizard/ProgressBar';
 import GoogleSignupButton from './GoogleSignupButton';
-import { useToken } from '../context/TokenContext';  // Import the custom hook
+import { useToken } from '../context/TokenContext';
 
 const SignUpWizard = ({ googleProfile, googleToken, informParent }) => {
     const navigate = useNavigate();
-    const { setToken } = useToken();  // Get the setToken function from context
+    const { setToken } = useToken(); 
     const [step, setStep] = useState(1);
     const [signUpMethod, setSignUpMethod] = useState(null);
     const [userData, setUserData] = useState({
@@ -64,14 +64,6 @@ const SignUpWizard = ({ googleProfile, googleToken, informParent }) => {
         }
     };
 
-    // const handleChange = (input) => (e) => {
-    //     let value = e.target.value;
-    //     if (input === 'username' && usernameEmpty) {
-    //         setUsernameEmpty(false);
-    //     }
-    //     setUserData({ ...userData, [input]: value });
-    // };
-
     const handleSubmit = async () => {
         try {
             const response = await signup(userData);
@@ -119,11 +111,12 @@ const SignUpWizard = ({ googleProfile, googleToken, informParent }) => {
 
     const handleGoogleSignup = async (response) => {
         const googleToken = response.credential;
-        const result = await googleSignup(googleToken);
-        if (result.error) {
-            toast.error(result.error);
-        } else {
-            authenticate(result, setToken, () => {  // Pass setToken to authenticate
+        try {
+            const result = await googleSignup(googleToken);
+            if (result.error) {
+                toast.error(result.error);
+            } else {
+                setToken(result.token); // Store the token in the context
                 setUserData({
                     ...userData,
                     username: result.user.username,
@@ -132,8 +125,11 @@ const SignUpWizard = ({ googleProfile, googleToken, informParent }) => {
                     lastName: result.user.lastName,
                     preferredLoginType: 'google-account',
                 });
-            });
-            navigate('/dashboard');
+                navigate('/dashboard');
+            }
+        } catch (error) {
+            console.error('Google Signup Error:', error);
+            toast.error('Google sign-up failed. Please try again.');
         }
     };
 

@@ -2,21 +2,23 @@ import React from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { signout } from './api/auth';
 import { useAuth } from './api/authHook';
-import { useToken } from './context/TokenContext'; // Import useToken
 import ProfileIcon from './components/profile/profileicon/ProfileIcon';
 import { MdOutlineDashboard } from "react-icons/md";
 import './index.css';
 
 const NavbarMain = ({ userStats, backgroundColor }) => {
   
-  const { user, isAuthenticated } = useAuth();
-  const { setToken } = useToken(); // Destructure setToken from useToken
+  const { user, isAuthenticated, setUser } = useAuth(); // Now setUser is available
   const navigate = useNavigate();
 
-  const handleSignout = () => {
-    signout(setToken, () => {
-      navigate('/');
-    });
+  const handleSignout = async () => {
+    const result = await signout(); // Await the signout function
+    if (result.success) {
+      setUser(null); // Clear the user from the context
+      navigate('/signin'); // Redirect to the signin page
+    } else {
+      console.error('Failed to sign out'); // Handle any signout failure (optional)
+    }
   };
 
   return (

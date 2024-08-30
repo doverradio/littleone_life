@@ -1,4 +1,6 @@
 const express = require('express');
+const session = require('express-session');
+const MongoStore = require('connect-mongo');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
@@ -9,20 +11,19 @@ const http = require('http');
 const socketIo = require('socket.io');
 require('dotenv').config();
 
-
-const adminRoutes = require('./routes/admin'); // Add this line
+const adminRoutes = require('./routes/admin');
 const aiRoutes = require('./routes/ai');
 const authRoutes = require("./routes/auth");
 const churchRoutes = require('./routes/church');
 const confessionRoutes = require('./routes/confession');
-const emailRoutes = require('./routes/email'); // Email routes
+const emailRoutes = require('./routes/email');
 const intentionRoutes = require('./routes/intentions');
 const massAttendanceRoutes = require('./routes/massAttendance');
 const notificationRoutes = require('./routes/notification');
 const prayerRoutes = require('./routes/prayer');
-const prayerSpaceRoutes = require('./routes/prayerSpaces'); // New prayer space routes
+const prayerSpaceRoutes = require('./routes/prayerSpaces');
 const rosaryRoutes = require('./routes/rosary');
-const stripeRoutes = require('./routes/stripe'); // Stripe routes
+const stripeRoutes = require('./routes/stripe');
 const userRoutes = require('./routes/user');
 
 // app
@@ -38,6 +39,20 @@ mongoose
   .catch(err => {
     console.log(err);
   });
+
+// session configuration
+app.use(session({
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: false,
+  store: MongoStore.create({ mongoUrl: process.env.DATABASE }),
+  cookie: {
+    maxAge: 2 * 60 * 60 * 1000, // 2 hours
+    httpOnly: true,
+    secure: process.env.USE_HTTPS === 'true', // Convert string to boolean
+    sameSite: 'Strict'
+  }
+}));
 
 // middlewares
 app.use(morgan('common', {
@@ -57,21 +72,22 @@ app.use(cors({
 }));
 
 // Define routes
-app.use('/api', adminRoutes); // Add this line
+app.use('/api', adminRoutes);
 app.use('/api', aiRoutes);
 app.use('/api', authRoutes);
 app.use('/api', churchRoutes);
 app.use('/api', confessionRoutes);
-app.use('/api', emailRoutes); // Email routes
+app.use('/api', emailRoutes);
 app.use('/api', intentionRoutes);
 app.use('/api', massAttendanceRoutes);
 app.use('/api', notificationRoutes);
 app.use('/api', prayerRoutes);
-app.use('/api/prayerSpaces', prayerSpaceRoutes); // New prayer space routes
+app.use('/api/prayerSpaces', prayerSpaceRoutes);
 app.use('/api', rosaryRoutes);
-app.use('/api/stripe', stripeRoutes); // Stripe routes
+app.use('/api/stripe', stripeRoutes);
 app.use('/api', userRoutes);
 
+// Socket.io connection
 io.on('connection', (socket) => {
     console.log('New client connected');
 

@@ -1,3 +1,5 @@
+// src/components/profile/profileicon/ProfileIcon.js
+
 import React, { useState, useRef, useEffect } from 'react';
 import { FaUserCircle, FaCog, FaCross, FaPray, FaChurch } from 'react-icons/fa';
 import { useAuth } from '../../../api/authHook';

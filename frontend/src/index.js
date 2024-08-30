@@ -7,7 +7,6 @@ import { GoogleOAuthProvider } from '@react-oauth/google';
 import { UserProvider } from './context/UserContext';
 import { ModalProvider } from './context/ModalContext';
 import { PrayerSettingsProvider } from './context/PrayerSettingsContext';
-import { TokenProvider } from './context/TokenContext';  // Import TokenProvider
 
 if (module.hot) {
   module.hot.accept();
@@ -15,17 +14,15 @@ if (module.hot) {
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <TokenProvider>
     <UserProvider>
       <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
         <ModalProvider>
           <PrayerSettingsProvider>
-          <RoutesComponent />
+            <RoutesComponent />
           </PrayerSettingsProvider>
         </ModalProvider>
       </GoogleOAuthProvider>
     </UserProvider>
-  </TokenProvider>
 );
 
 reportWebVitals();

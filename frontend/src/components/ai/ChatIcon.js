@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { FaComments } from 'react-icons/fa'; // Import an icon for the chat button
 import AiInteraction from './AiInteraction'; // Import the AI interaction component
 
-const ChatIcon = ({ userId, token }) => {
+const ChatIcon = ({ userId }) => {  // Removed token prop
     const [isOpen, setIsOpen] = useState(false);
 
     const toggleChat = () => {
@@ -51,7 +51,7 @@ const ChatIcon = ({ userId, token }) => {
                         flexDirection: 'column',
                     }}
                 >
-                    <AiInteraction userId={userId} token={token} onClose={toggleChat} />
+                    <AiInteraction userId={userId} onClose={toggleChat} /> {/* Removed token prop */}
                 </div>
             )}
         </div>

@@ -77,15 +77,15 @@ export const updateUserSettings = async (token, settings) => {
 };
 
 // New API call to get user prayer stats
-export const getUserPrayerStats = async (userId, token) => {
+export const getUserPrayerStats = async (userId) => {
     try {
         const response = await fetch(`${API}/user/stats/${userId}`, {
             method: 'GET',
+            credentials: 'include', // This ensures cookies (and hence session data) are included
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`
-            }
+            },
         });
 
         if (!response.ok) {
@@ -98,6 +98,7 @@ export const getUserPrayerStats = async (userId, token) => {
         throw error;
     }
 };
+
 
 export const getTokenUsage = async (userId, token) => {
     try {

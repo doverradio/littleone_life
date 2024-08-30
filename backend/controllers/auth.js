@@ -12,6 +12,99 @@ const { generateRandomPassword } = require('../utils/password'); // Adjust the p
 const log = console.log; 
 
 
+// GOOGLE SIGN IN
+// Updated googleSignin controller
+exports.googleSignin = async (req, res) => {
+    const { idToken } = req.body;
+
+    try {
+        const ticket = await client.verifyIdToken({
+            idToken,
+            audience: process.env.GOOGLE_CLIENT_ID,
+        });
+
+        const payload = ticket.getPayload();
+        log(`6. Verify ID Token - `, payload)
+        const { name: username, email_verified, email } = payload;
+
+        if (email_verified) {
+            let user = await User.findOne({ username });
+            log(`7. Check User in Database: `, user._id)
+
+            if (user) {
+                req.session.userId = user._id; // Set the user ID in the session
+                req.session.username = username; // Set the username in the session
+
+                console.log('Session ID after setting userId:', req.session.id); // Log the session ID
+
+                req.session.save(err => { // Save the session explicitly to ensure it's stored
+                    if (err) {
+                        console.error('Session save error:', err);
+                        return res.status(500).json({ error: 'Failed to save session' });
+                    }
+                    log(`8. Session Creation`)
+
+                    return res.json({
+                        user: { _id: user._id, username, role: user.role, email: user.email }
+                    });
+                });
+            } else {
+                return res.status(400).json({
+                    error: 'Google login failed. Try again'
+                });
+            }
+        } else {
+            return res.status(400).json({
+                error: 'Google login failed. Try again'
+            });
+        }
+    } catch (error) {
+        console.error('GOOGLE SIGNIN ERROR', error);
+        return res.status(400).json({
+            error: 'Google login failed. Try again.'
+        });
+    }
+};
+
+
+// The checkSession function
+exports.checkSession = async (req, res) => {
+    log(`Begin checkSession!  req.session: `, req.session)
+    if (req.session.userId) {
+        try {
+            // Optionally, you can retrieve more user details from the database
+            const user = await User.findById(req.session.userId).select('-hashed_password -salt');
+            if (!user) {
+                return res.status(404).json({
+                    isAuthenticated: false,
+                    message: 'User not found'
+                });
+            }
+            return res.json({
+                isAuthenticated: true,
+                user: {
+                    _id: user._id,
+                    username: user.username,
+                    email: user.email,
+                    role: user.role,
+                    // Include other fields as needed
+                }
+            });
+        } catch (error) {
+            console.error('Error retrieving user from session:', error);
+            return res.status(500).json({
+                isAuthenticated: false,
+                message: 'Internal server error'
+            });
+        }
+    } else {
+        // If there's no userId in the session, the user is not authenticated
+        return res.json({
+            isAuthenticated: false
+        });
+    }
+};
+
 const generateUniqueUsername = async (username) => {
     let uniqueUsername = username;
     let user = await User.findOne({ username: uniqueUsername });
@@ -51,27 +144,37 @@ exports.signup = async (req, res) => {
 
         // Proceed with creating a new user
         let user = new User(req.body);
-        user.password = password; // Set the password, which will automatically hash it and set hashed_password
+        user.password = password;
         let userDoc = await user.save();
 
-        // Manually pick the fields you want to include in the response
-        const userResponse = {
-            username: userDoc.username,
-            firstName: userDoc.firstName,
-            lastName: userDoc.lastName,
-            email: userDoc.email,
-            phone: userDoc.phone,
-            role: userDoc.role,
-            createdAt: userDoc.createdAt,
-            updatedAt: userDoc.updatedAt
-        };
+        req.session.userId = userDoc._id;
 
-        res.json({ userSaved: userResponse });
+        req.session.save(err => {
+            if (err) {
+                console.error('Session save error:', err);
+                return res.status(500).json({ error: 'Failed to save session' });
+            }
+
+            const userResponse = {
+                username: userDoc.username,
+                firstName: userDoc.firstName,
+                lastName: userDoc.lastName,
+                email: userDoc.email,
+                phone: userDoc.phone,
+                role: userDoc.role,
+                createdAt: userDoc.createdAt,
+                updatedAt: userDoc.updatedAt
+            };
+
+            res.json({ userSaved: userResponse });
+        });
     } catch (e) {
         console.error(`Signup error: `, e);
         res.status(500).send('Error in signup process');
     }
 };
+
+
 
 // GOOGLE SIGN UP
 // In your auth controller
@@ -85,30 +188,37 @@ exports.googleSignup = async (req, res) => {
         });
 
         const payload = ticket.getPayload();
-        const { email, email_verified, name } = payload;
+        const { email, email_verified, name: username, sub: googleId } = payload;
 
         if (email_verified) {
             let user = await User.findOne({ email });
+
             if (!user) {
-                user = new User({ 
-                    username: name, 
-                    email, 
-                    preferredLoginType: 'google' 
+                // Create a new user with the googleId
+                user = new User({
+                    username,
+                    email,
+                    googleId,
+                    preferredLoginType: 'google'
                 });
+                await user.save();
+            } else if (!user.googleId) {
+                // Update the existing user with the googleId if it's not already set
+                user.googleId = googleId;
                 await user.save();
             }
 
-            const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: '2h' });
-            res.cookie('token', token, {
-                httpOnly: true,
-                secure: process.env.NODE_ENV === 'production',
-                maxAge: 7 * 24 * 60 * 60 * 1000, // 1 week
-            });
+            req.session.userId = user._id;
+            req.session.save(err => {
+                if (err) {
+                    console.error('Session save error:', err);
+                    return res.status(500).json({ error: 'Failed to save session' });
+                }
 
-            const { _id, username, role } = user;
-            return res.json({
-                token,
-                user: { _id, username, role },
+                const { _id, username, role } = user;
+                return res.json({
+                    user: { _id, username, role },
+                });
             });
         } else {
             return res.status(400).json({
@@ -122,6 +232,7 @@ exports.googleSignup = async (req, res) => {
         });
     }
 };
+
 
 // USERNAME / PASSWORD SIGN IN
 exports.signin = async (req, res) => {
@@ -138,159 +249,109 @@ exports.signin = async (req, res) => {
             return res.status(401).json({ error: "Username and password don't match" });
         }
 
-        const { _id, role, firstName, lastName, email } = userDoc;
+        req.session.userId = userDoc._id;
 
-        // Set the token expiration to 2 hours
-        const token = jwt.sign({ _id, role, email }, process.env.JWT_SECRET, { expiresIn: '2h' });
-
-        // Set the cookie with the token
-        res.cookie("t", token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production', 
-            maxAge: 2 * 60 * 60 * 1000 // 2 hours in milliseconds
-        });
-
-        return res.json({
-            token,
-            user: {
-                _id,
-                username,
-                firstName,
-                lastName,
-                role,
-                email // Include the email in the user object
+        req.session.save(err => {
+            if (err) {
+                console.error('Session save error:', err);
+                return res.status(500).json({ error: 'Failed to save session' });
             }
+
+            return res.json({
+                user: {
+                    _id: userDoc._id,
+                    username: userDoc.username,
+                    firstName: userDoc.firstName,
+                    lastName: userDoc.lastName,
+                    role: userDoc.role,
+                    email: userDoc.email,
+                }
+            });
         });
     } catch (error) {
-        console.log("Got an error in signin...", error);
-        res.status(400).json({ error });
-    }
-};
-
-// GOOGLE SIGN IN
-exports.googleSignin = async (req, res) => {
-    const { idToken } = req.body;
-
-    try {
-        const ticket = await client.verifyIdToken({
-            idToken,
-            audience: process.env.GOOGLE_CLIENT_ID,
-        });
-
-        const payload = ticket.getPayload();
-        const { name: username, email_verified, email } = payload;
-
-        if (email_verified) {
-            let user = await User.findOne({ username });
-
-            if (user) {
-                const token = jwt.sign({ _id: user._id, role: user.role, email: user.email }, process.env.JWT_SECRET, { expiresIn: '2h' });
-                console.log(`token (googleSignin): `, token)
-                res.cookie('token', token, {
-                    httpOnly: true,
-                    secure: process.env.NODE_ENV === 'production',
-                    maxAge: 7 * 24 * 60 * 60 * 1000, // 1 week
-                });
-                const { _id, role } = user;
-                return res.json({
-                    token,
-                    user: { _id, username, role, email: user.email }
-                });
-            } else {
-                return res.status(400).json({
-                    error: 'Google login failed. Try again'
-                });
-            }
-        } else {
-            return res.status(400).json({
-                error: 'Google login failed. Try again'
-            });
-        }
-    } catch (error) {
-        console.error('GOOGLE SIGNIN ERROR', error);
-        return res.status(400).json({
-            error: 'Google login failed. Try again.'
-        });
+        console.log("Signin error:", error);
+        res.status(400).json({ error: 'Error signing in' });
     }
 };
 
 
-exports.signout = async ( req, res ) =>  // a 
-{
-    let a = {}
-    try 
-    {
-        a.message = { message: "Signout success" } // create the response message
-        res.clearCookie( "t" ) // clear out the cookie with the key of "t"
-        res.json( a.message )
-    } catch ( e ) {
-        console.log( `Got an error in signout... e, a`, e, a )
-        res.status( 400 ).json( { error: e, report: a } )
-    }
-};
 
-exports.requireSignin = expressJwt( {
-    secret: process.env.JWT_SECRET,
-    algorithms: [ "HS256" ], // added later
-    userProperty: "auth",
-} );
 
-exports.authMiddleware = async (req, res, next) => {
-    console.log('Begin authMiddleware!');
-    // console.log('authMiddleware: req.auth:', req.auth);
-    try {
-        const userId = req.auth && req.auth._id;
-        if (!userId) {
-            console.log("No user ID found in request");
-            return res.status(400).json({ error: "No user ID found in request" });
-        }
 
-        const user = await User.findById(userId);
-        if (!user) {
-            console.log("User not found");
-            return res.status(400).json({ error: 'User not found' });
-        }
-        req.profile = user; // Ensure this is set
-        // console.log('authMiddleware: req.profile:', req.profile);
-        next();
-    } catch (err) {
-        console.error("Error in authMiddleware:", err);
-        return res.status(500).json({ error: 'Server error' });
-    }
-};
 
-exports.adminMiddleware = (req, res, next) => {
-    const adminUserId = req.user._id;
-    User.findById({ _id: adminUserId }).exec((err, user) => {
-        if (err || !user) {
-            return res.status(400).json({
-                error: 'User not found'
-            });
-        }
 
-        if (user.role !== 1) {
-            return res.status(400).json({
-                error: 'Admin resource. Access denied'
-            });
-        }
-
-        req.profile = user;
-        next();
+// Signout controller in your backend (e.g., authController.js)
+exports.signout = (req, res) => {
+    req.session.destroy(() => {
+        res.clearCookie('connect.sid'); // Default cookie name for express-session
+        return res.json({ message: "Signout success" });
     });
 };
 
-exports.isAuth = (req, res, next) => {
-    log(`Begin isAuth!`)
-    // log(`Begin isAuth! req.body: `, req.body)
-    const userIsAuthenticated = req.profile && req.auth && req.profile._id.toString() === req.auth._id;
-    if (!userIsAuthenticated) {
-        return res.status(403).json({ error: "Access denied" });
+
+// exports.requireSignin = (req, res, next) => {
+//     if (!req.session.userId) {
+//         return res.status(401).json({ error: 'Access denied. Please sign in.' });
+//     }
+//     next();
+// };
+
+exports.requireSignin = (req, res, next) => {
+    if (req.session && req.session.userId) {
+        next(); // User is signed in, proceed to the next middleware
+    } else {
+        return res.status(401).json({ error: 'Unauthorized access' });
     }
-    next();
 };
 
+
+exports.authMiddleware = async (req, res, next) => {
+    if (req.session.userId) {
+        try {
+            const user = await User.findById(req.session.userId);
+            if (!user) {
+                return res.status(400).json({ error: 'User not found' });
+            }
+            req.profile = user;
+            next();
+        } catch (err) {
+            console.error("Error in authMiddleware:", err);
+            return res.status(500).json({ error: 'Server error' });
+        }
+    } else {
+        return res.status(401).json({ error: 'Access denied. Please sign in.' });
+    }
+};
+
+exports.adminMiddleware = async (req, res, next) => {
+    if (req.profile && req.profile.role === 1) {
+        next();
+    } else {
+        return res.status(403).json({ error: 'Admin resource. Access denied' });
+    }
+};
+
+// exports.isAuth = (req, res, next) => {
+//     if (req.profile && req.session.userId && req.profile._id.toString() === req.session.userId) {
+//         next();
+//     } else {
+//         return res.status(403).json({ error: "Access denied" });
+//     }
+// };
+
+exports.isAuth = (req, res, next) => {
+    const userId = req.params.userId;
+
+    if (req.session.userId && req.session.userId === userId) {
+        next();
+    } else {
+        return res.status(403).json({ error: 'Access denied' });
+    }
+};
+
+
 exports.isAdmin = async (req, res, next) => {
-    log(`Begin isAdmin!` )
+    // log(`Begin isAdmin!` )
     // log(`Begin isAdmin!  req.body: `, req.body )
     let a = {};
     try {

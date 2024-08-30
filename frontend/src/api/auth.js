@@ -1,36 +1,28 @@
-// src/api/auth.js
+// frontend/src/api/auth.js
+
 const API = process.env.REACT_APP_API || 'https://www.littleone.life/api'; // Your backend API URL
 
-export const refreshToken = async () => {
+// Function to check if the user is still authenticated by checking the session
+export const checkSession = async () => {
+  console.log(`Begin checkSession!`)
   try {
-      const jwt_token = JSON.parse(localStorage.getItem("jwt"));
-      if (!jwt_token || !jwt_token.token) {
-        throw new Error('No token found');
-      }
-      let { token } = jwt_token;
-      console.log('Token being sent:', token); // Debugging line
-
-      const response = await fetch(`${API}/refresh-token`, {
-          method: 'POST',
-          headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${token}`,
-          },
+      const response = await fetch(`${API}/check-session`, {
+          method: 'GET',
+          credentials: 'include', // Ensure cookies (and hence session) are included
       });
 
-      if (response.ok) {
-          const { token: newToken } = await response.json();
-          localStorage.setItem('jwt', JSON.stringify({ token: newToken })); // Update the token in localStorage
-          return newToken;
-      } else {
-          throw new Error('Failed to refresh token');
+      if (!response.ok) {
+          throw new Error('Failed to check session');
       }
+
+      const sessionData = await response.json();
+      console.log(`sessionData: `, sessionData)
+      return sessionData; // Return the session data, which includes isAuthenticated
   } catch (error) {
-      console.error('Error refreshing token:', error);
-      return null;
+      console.error('Error checking session:', error);
+      return { isAuthenticated: false }; // Explicitly set to false in case of error
   }
 };
-
 
 
 export const signup = async (user) => {
@@ -49,24 +41,22 @@ export const signup = async (user) => {
   }
 };
 
-
 export const checkUsernameAvailability = async (username, userId) => {
   try {
-      const response = await fetch(`${API}/check-username`, {
-          method: 'POST',
-          headers: {
-              Accept: 'application/json',
-              'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ username, userId })
-      });
-      return await response.json();
+    const response = await fetch(`${API}/check-username`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ username, userId }),
+    });
+    return await response.json();
   } catch (err) {
-      console.error('Error checking username availability:', err);
-      return { error: 'Error checking username availability' };
+    console.error('Error checking username availability:', err);
+    return { error: 'Error checking username availability' };
   }
 };
-
 
 export const signin = async (user) => {
   try {
@@ -76,8 +66,10 @@ export const signin = async (user) => {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
+      credentials: 'include', // Include cookies
       body: JSON.stringify(user),
     });
+
     return await response.json();
   } catch (err) {
     console.error('Sign-In error:', err);
@@ -85,78 +77,77 @@ export const signin = async (user) => {
   }
 };
 
-export const authenticate = (data, setToken, next) => {
-  if (typeof window !== "undefined") {
-    setToken(data.token);  // Store the token in the context
-    next();
-  }
-};
+// Signout the user and clear the session on the server-side
+export const signout = async () => {
+  try {
+    const response = await fetch(`${API}/signout`, {
+      method: "POST",
+      credentials: 'include', // Ensure cookies are included
+    });
 
-
-export const signout = (setToken, next) => {
-  if (typeof window !== "undefined") {
-    localStorage.removeItem("jwt");
-    setToken(null);  // Clear the token from context
-    next();
-    return fetch(`${API}/signout`, {
-      method: "POST"
-    })
-      .then(response => {
-        // console.log("signout", response);
-      })
-      .catch(err => console.log(err));
-  }
-};
-
-export const forgotPassword = email => {
-  return fetch(`${API}/forgot-password`, {
-    method: 'PUT',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(email)
-  })
-    .then(response => {
-      return response.json();
-    })
-    .catch(err => console.log(err));
-};
-
-export const resetPassword = resetInfo => {
-  return fetch(`${API}/reset-password`, {
-    method: 'PUT',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(resetInfo)
-  })
-    .then(response => {
-      return response.json();
-    })
-    .catch(err => console.log(err));
-};
-export const googleSignIn = async (token) => {
-  if (token) {
-    try {
-      const response = await fetch(`${API}/google-login`, {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ idToken: token }),
-      });
-      return await response.json();
-    } catch (err) {
-      console.error('Google Sign-In error:', err);
-      return { error: 'Google sign-in failed. Please try again.' };
+    if (response.ok) {
+      return { success: true };
+    } else {
+      throw new Error('Signout failed');
     }
-  } else {
-    return { error: 'Google sign-in failed. Please try again.' };
+  } catch (err) {
+    console.error('Signout error:', err);
+    return { success: false };
   }
 };
+
+export const forgotPassword = async (email) => {
+  try {
+    const response = await fetch(`${API}/forgot-password`, {
+      method: 'PUT',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(email),
+    });
+    return await response.json();
+  } catch (err) {
+    console.error('Forgot Password error:', err);
+    throw err;
+  }
+};
+
+export const resetPassword = async (resetInfo) => {
+  try {
+    const response = await fetch(`${API}/reset-password`, {
+      method: 'PUT',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(resetInfo),
+    });
+    return await response.json();
+  } catch (err) {
+    console.error('Reset Password error:', err);
+    throw err;
+  }
+};
+
+export const googleSignIn = async (token) => {
+  try {
+      const response = await fetch(`${API}/google-login`, {
+          method: 'POST',
+          headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json',
+          },
+          credentials: 'include', // Ensure session cookie is included
+          body: JSON.stringify({ idToken: token }),
+      });
+      console.log(`5. Backend API Call - /google-login`);
+      return await response.json();
+  } catch (err) {
+      return { error: 'Google sign-in failed. Please try again.' };
+  }
+};
+
 
 export const googleSignup = async (token) => {
   if (token) {
@@ -167,6 +158,7 @@ export const googleSignup = async (token) => {
           Accept: 'application/json',
           'Content-Type': 'application/json',
         },
+        credentials: 'include', // Include cookies
         body: JSON.stringify({ idToken: token }),
       });
       return await response.json();
@@ -179,12 +171,4 @@ export const googleSignup = async (token) => {
   }
 };
 
-export const isTokenExpired = (token) => {
-  if (!token) return true;
-
-  const payload = JSON.parse(atob(token.split('.')[1]));
-  const expiration = payload.exp * 1000;
-  const currentTime = Date.now();
-
-  return expiration < currentTime;
-};
+// Remove isTokenExpired, since session management will be handled by the server
