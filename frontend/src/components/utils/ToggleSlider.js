@@ -5,8 +5,7 @@ import { toggleNotification } from '../../api/notification';
 const ToggleSlider = ({ 
   initialIsEnabled,  // Received initial state from parent
   componentName, 
-  userId, 
-  token 
+  userId
 }) => {
     const [isEnabled, setIsEnabled] = useState(initialIsEnabled);
 
@@ -16,7 +15,7 @@ const ToggleSlider = ({
 
     const handleToggle = async () => {
         try {
-            const updatedStatus = await toggleNotification(userId, componentName, token);
+            const updatedStatus = await toggleNotification(userId, componentName);
             setIsEnabled(prevState => !prevState);  // Flip the state locally
         } catch (error) {
             console.error('Failed to toggle notification:', error);

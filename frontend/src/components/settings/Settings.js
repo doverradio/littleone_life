@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { getUserSettings, updateUserSettings, getTokenUsage } from '../../api/user';
-import { useAuth } from '../../api/authHook';
+import { useUser } from '../../context/UserContext'; // Import the useUser hook
 import { toast } from 'react-toastify';
 
 import PersonalInfoForm from './PersonalInfoForm';
@@ -11,7 +11,7 @@ import AiModelSettingsForm from './AiModelSettingsForm';
 
 const Settings = () => {
     
-    const { user, token } = useAuth();
+    const { user } = useUser(); // Get the user data from the UserContext
 
     const [settings, setSettings] = useState({
         firstName: '',
@@ -33,8 +33,8 @@ const Settings = () => {
 
     useEffect(() => {
         const fetchSettingsAndUsage = async () => {
-            const result = await getUserSettings(token, user._id);
-            const usage = await getTokenUsage(user._id, token);
+            const result = await getUserSettings(user._id);
+            const usage = await getTokenUsage(user._id);
 
             if (result.error) {
                 toast.error(result.error);
@@ -62,7 +62,7 @@ const Settings = () => {
 
         // Send update to the backend
         try {
-            const result = await updateUserSettings(token, { ...settings, prayerSettings: updatedPrayerSettings });
+            const result = await updateUserSettings({ ...settings, prayerSettings: updatedPrayerSettings });
             if (result.error) {
                 toast.error(result.error);
             } else {
@@ -87,7 +87,7 @@ const Settings = () => {
         
         console.log('Submitting settings:', settings); // Log the settings being submitted
         
-        const result = await updateUserSettings(token, settings); // Ensure `settings` includes the updated `prayerSettings`
+        const result = await updateUserSettings(settings); // Ensure `settings` includes the updated `prayerSettings`
         
         if (result.error) {
             toast.error(result.error);

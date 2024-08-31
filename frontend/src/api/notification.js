@@ -4,15 +4,15 @@
 const API = process.env.REACT_APP_API || 'http://localhost:8000/api';
 
 // Function to toggle notification
-export const toggleNotification = async (userId, component, token) => {
+export const toggleNotification = async (userId, component) => {
   try {
     const response = await fetch(`${API}/toggle-notification`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({ userId, component }),
+      credentials: 'include',
     });
 
     if (!response.ok) {
@@ -28,15 +28,15 @@ export const toggleNotification = async (userId, component, token) => {
 };
 
 // Function to get user notification preferences
-export const getUserNotificationPreferences = async (userId, token) => {
+export const getUserNotificationPreferences = async (userId) => {
     try {
         const response = await fetch(`${API}/user/notification-preferences`, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify({ userId }),
+            credentials: 'include',
         });
 
         if (!response.ok) {

@@ -44,16 +44,16 @@ export const getPrayerSettings = async (userId) => {
 
 
 
-export const getUserSettings = async (token, _id) => {
+export const getUserSettings = async (_id) => {
     try {
         const response = await fetch(`${API}/user/settings`, {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`
+                'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ _id })
+            body: JSON.stringify({ _id }),
+            credentials: 'include'
         });
         return await response.json();
     } catch (err) {
@@ -62,16 +62,16 @@ export const getUserSettings = async (token, _id) => {
     }
 };
 
-export const updateUserSettings = async (token, settings) => {
+export const updateUserSettings = async (settings) => {
     try {
         const response = await fetch(`${API}/user/settings`, {
             method: 'PUT',
             headers: {
                 Accept: 'application/json',
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`
+                'Content-Type': 'application/json'
             },
-            body: JSON.stringify(settings)
+            body: JSON.stringify(settings),
+            credentials: 'include'
         });
         return await response.json();
     } catch (err) {
@@ -104,13 +104,11 @@ export const getUserPrayerStats = async (userId) => {
 };
 
 
-export const getTokenUsage = async (userId, token) => {
+export const getTokenUsage = async (userId) => {
     try {
         const response = await fetch(`${API}/user/token-usage/${userId}`, {
             method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
+            credentials: 'include'
         });
 
         if (!response.ok) {
