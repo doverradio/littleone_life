@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { useAuth } from '../../api/authHook';
+import { useUser } from '../../context/UserContext';
 import rosaryIcon from './rosary_icon.png';
 import './styles.css';
 import { useModal } from '../../context/ModalContext';
-import { getUserNotificationPreferences } from '../../api/notification'; // Add this import
 import Mysteries, { mysteries } from './mysteries/Mysteries';
 import mysteriesDetails from './mysteries/mysteriesDetails';
 import MysteryDetails from './mysteries/MysteryDetails';
 import PrayerIntentions from './intentions/PrayerIntentions';
-import { sendNotificationEmail } from '../../api/email';
 import PrayerIntentionsForm from './PrayerIntentionsForm';
 import {
     increaseFontSize,
@@ -36,11 +34,15 @@ import ToggleSlider from '../utils/ToggleSlider';
 import RosaryHeader from './RosaryHeader';
 import BackIcon from '../utils/BackIcon';
 import { getUser } from '../../api/user';
-import { ToastContainer, toast } from 'react-toastify'; // Import ToastContainer and toast
-import 'react-toastify/dist/ReactToastify.css'; // Import Toast styles
+import { sendNotificationEmail } from '../../api/email'; // Make sure this import is included
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Rosary = () => {
     const { toggleModal } = useModal();
+    const { user } = useUser();
+    const userId = user?._id;
+
     const [count, setCount] = useState(0);
     const [selectedMystery, setSelectedMystery] = useState('');
     const [prayerIntentions, setPrayerIntentions] = useState([]);
@@ -86,24 +88,18 @@ const Rosary = () => {
     const [refreshTrigger, setRefreshTrigger] = useState(0);
     const [showVirtualRosary, setShowVirtualRosary] = useState(false);
 
-    const { user, token } = useAuth();
-    const { _id } = user || {};
-    const userId = _id;
-    const { username } = user;
-
     useEffect(() => {
-        fetchIntentions(userId, token, setPrayerIntentions);
-        fetchRosaryCount(userId, token, setCount);
-        fetchRosaries(userId, token, currentPage, rosariesPerPage, setLoading, setRosaries, setTotalRosaries, setError);
+        fetchIntentions(userId, setPrayerIntentions);
+        fetchRosaryCount(userId, setCount);
+        fetchRosaries(userId, currentPage, rosariesPerPage, setLoading, setRosaries, setTotalRosaries, setError);
 
         if (activeTab === 'Responses') {
-            fetchMysteryCounts(userId, token, setChartData);
+            fetchMysteryCounts(userId, setChartData);
         }
 
-        // Fetch the user data to get the notification preferences
         const fetchUser = async () => {
             try {
-                const userData = await getUser(userId, token);
+                const userData = await getUser(userId);
                 setIsEmailEnabled(userData.notificationPreferences?.Rosary || false);
             } catch (err) {
                 console.error('Failed to fetch user data:', err);
@@ -112,22 +108,7 @@ const Rosary = () => {
 
         fetchUser();
 
-        // Fetch the notification preferences when the component loads
-        const fetchNotificationPreferences = async () => {
-            try {
-                const preferences = await getUserNotificationPreferences(userId, token);
-                const rosaryNotificationEnabled = preferences?.Rosary || false;
-                setIsEmailEnabled(rosaryNotificationEnabled); // Set initial state
-            } catch (error) {
-                console.error('Failed to fetch notification preferences:', error);
-            }
-        };
-
-        if (userId && token) {
-            fetchNotificationPreferences();
-        }
-
-    }, [userId, token, activeTab, currentPage, refreshTrigger]);
+    }, [userId, activeTab, currentPage, refreshTrigger]);
 
     const handleCloseForm = () => {
         setIsAddingIntention(false);
@@ -142,27 +123,24 @@ const Rosary = () => {
             toast.error('Please select a Rosary mystery before submitting.');
             return;
         }
-
+    
         try {
             await handlePrayRosary(
                 userId,
                 selectedMystery,
                 selectedIntentions,
-                token,
                 toggleModal,
                 setSelectedIntentions,
                 setSelectedMystery,
                 setIsSubmitting,
                 setCount
             );
-
+    
             if (isEmailEnabled) {
                 const DOMAIN = process.env.REACT_APP_API.includes('localhost') 
                     ? process.env.REACT_APP_API
                     : 'https://www.littleone.life';
-
-
-                // Get the current date and time and format it
+    
                 const currentTime = new Date().toLocaleString('en-US', {
                     year: 'numeric',
                     month: 'numeric',
@@ -171,28 +149,29 @@ const Rosary = () => {
                     minute: 'numeric',
                     hour12: true,
                 });
-
+    
                 const emailData = {
                     to: user.email,
                     subject: `${selectedMystery} Mystery Rosary Submitted on ${currentTime}`,
-                    message: `<p>Congratulations ${user.username || ''},</p>
-<p>You successfully submitted a ${selectedMystery} Rosary.</p> 
-<p>Blessings,</p>
-<p>littleone.life Team</p>
-<p><a href="${DOMAIN}/disable-notifications?userId=${user._id}&component=Rosary">Turn off notification</a>.</p>`,
+                    message: `<p>Hello ${user.username || ''},</p>
+    <p>You successfully submitted a ${selectedMystery} Rosary.</p> 
+    <p>Blessings,</p>
+    <p>littleone.life Team</p>
+    <p><a href="${DOMAIN}/disable-notifications?userId=${user._id}&component=Rosary">Turn off notification</a>.</p>`,
                 };
-
-                await sendNotificationEmail(emailData, token);
-                // console.log('Notification email sent successfully.');
+    
+                await sendNotificationEmail(emailData, userId);
             }
         } catch (error) {
             console.error('Failed to submit Rosary or send notification email:', error);
+            toast.error('There was an error submitting the Rosary. Please try again later.');
         }
     };
+    
 
     const handleEmailToggle = async () => {
         setIsEmailEnabled(!isEmailEnabled);
-    
+
         if (!isEmailEnabled) {
             console.log('Email notifications enabled.');
         } else {
@@ -202,7 +181,7 @@ const Rosary = () => {
 
     return (
         <div className="rosary-component container">
-            <BackIcon /> {/* Add the BackIcon component */}
+            <BackIcon />
             <RosaryHeader
                 activeTab={activeTab}
                 setActiveTab={setActiveTab}
@@ -222,9 +201,9 @@ const Rosary = () => {
                                     selectedIntentions={selectedIntentions}
                                     handleIntentionCheckboxChange={handleIntentionCheckboxChange}
                                     handleEditClick={handleEditClick}
-                                    handleSaveClick={(id, updatedContent) => handleSaveClick(id, updatedContent, token, fetchIntentions, userId, setPrayerIntentions, setEditingIntentionId, setEditContent)}
+                                    handleSaveClick={(id, updatedContent) => handleSaveClick(id, updatedContent, fetchIntentions, userId, setPrayerIntentions, setEditingIntentionId, setEditContent)}
                                     handleCancelClick={() => handleCancelClick(setEditingIntentionId, setEditContent)}
-                                    handleDeleteIntention={(id) => handleDeleteIntention(id, token, fetchIntentions, userId, setPrayerIntentions)}
+                                    handleDeleteIntention={(id) => handleDeleteIntention(id, fetchIntentions, userId, setPrayerIntentions)}
                                     editingIntentionId={editingIntentionId}
                                     editContent={editContent}
                                     setEditContent={setEditContent}
@@ -235,7 +214,7 @@ const Rosary = () => {
                                     <PrayerIntentionsForm
                                         isAddingIntention={isAddingIntention}
                                         newIntention={newIntention}
-                                        handleNewIntentionSubmit={(e) => handleNewIntentionSubmit(e, newIntention, userId, token, setPrayerIntentions, setNewIntention, setIsAddingIntention, 'Rosary')}
+                                        handleNewIntentionSubmit={(e) => handleNewIntentionSubmit(e, newIntention, userId, setPrayerIntentions, setNewIntention, setIsAddingIntention, 'Rosary')}
                                         setNewIntention={setNewIntention}
                                         handleCloseForm={handleCloseForm}
                                     />
@@ -259,7 +238,7 @@ const Rosary = () => {
                                 <button 
                                     onClick={handlePrayRosaryWrapper} 
                                     className="btn btn-primary"
-                                    disabled={!selectedMystery} // Disable button if no mystery is selected
+                                    disabled={!selectedMystery}
                                 >
                                     {
                                         isSubmitting ? 'Submitting...' : 'Submit Rosary'
@@ -298,14 +277,13 @@ const Rosary = () => {
                                 initialIsEnabled={isEmailEnabled} 
                                 toggleFunction={handleEmailToggle} 
                                 componentName="Rosary"
-                                token={token}
                                 userId={userId}
                             />
                         </div>
                     </div>
                 )}
             </main>
-            <ToastContainer /> {/* Add ToastContainer for the toast notifications */}
+            <ToastContainer />
         </div>
     );
 };

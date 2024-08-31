@@ -34,10 +34,6 @@ const noreplyTransporter = nodemailer.createTransport({
 // Function to send email
 // Function to send email
 exports.sendEmail = async (req, res) => {
-  console.log(`Begin sendEmail!  req.body: `, req.body);
-  console.log('Notification Email Password:', process.env.NOTIFICATION_EMAIL_PASSWORD);
-  console.log('Noreply Email Password:', process.env.NOREPLY_EMAIL_PASSWORD);
-
   const { from = 'notification@littleone.life', to, subject, message, html } = req.body; // Default 'from' address
   const text = message;
 
@@ -73,7 +69,6 @@ exports.sendEmail = async (req, res) => {
       html: htmlContent,
   };
 
-  console.log(`mailOptions: `, mailOptions)
   try {
       // Send email using the appropriate transporter
       const info = await transporter.sendMail(mailOptions);

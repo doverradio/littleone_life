@@ -21,5 +21,38 @@
 }
 
 .mystery-item {
-    margin: 5px 0;
+    margin: 5px;
+    padding: 10px;
+    cursor: pointer;
+    border: 2px solid transparent; /* Default border */
+    border-radius: 8px;
+    transition: border-color 0.3s ease, opacity 0.3s ease;
+    opacity: 1; /* Full opacity by default */
+}
+
+/* Apply to mystery items inside mysteries-row only */
+.mysteries-row .mystery-item.selected-mystery {
+    border-color: darkblue; /* Dark blue border for selected item */
+    opacity: 1; /* Ensure selected item stays fully opaque */
+}
+
+/* Reduce opacity of non-selected mysteries only inside mysteries-row */
+.mysteries-row .mystery-item:not(.selected-mystery) {
+    opacity: 0.5; /* Set to 50% opacity for non-selected items */
+}
+
+.mystery-item img {
+    max-width: 100%;
+    border-radius: 8px;
+}
+
+.mystery-item p {
+    margin-top: 10px;
+    font-weight: bold;
+    text-align: center;
+}
+
+/* No opacity reduction for the details list */
+.mysteries-list .mystery-item {
+    opacity: 1; /* Ensure details remain fully opaque */
 }

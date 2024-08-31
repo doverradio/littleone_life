@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import luminousImage from '../luminous.jpg';
 import sorrowfulImage from '../sorrowful.jpg';
 import gloriousImage from '../glorious.jpg';
@@ -13,11 +13,22 @@ export const mysteries = [
 ];
 
 const Mysteries = ({ handleMysteryClick }) => {
+    const [selectedMystery, setSelectedMystery] = useState('');
+
+    const handleClick = (mysteryName) => {
+        setSelectedMystery(mysteryName);
+        handleMysteryClick(mysteryName);
+    };
+
     return (
         <div className="mysteries-card">
             <div className="mysteries-row">
                 {mysteries.map((mystery, index) => (
-                    <div key={index} onClick={() => handleMysteryClick(mystery.name)} className="mystery-item">
+                    <div
+                        key={index}
+                        onClick={() => handleClick(mystery.name)}
+                        className={`mystery-item ${selectedMystery === mystery.name ? 'selected-mystery' : ''}`}
+                    >
                         <img src={mystery.image} alt={mystery.name} className="mystery-image" />
                         <p>{mystery.name}</p>
                     </div>
@@ -27,19 +38,4 @@ const Mysteries = ({ handleMysteryClick }) => {
     );
 };
 
-const MysteryDetails = ({ selectedMysteryDetails }) => {
-    return (
-        <div className="mysteries-card">
-            <ul className="mysteries-list">
-                {selectedMysteryDetails.map((detail, index) => (
-                    <li key={index} className="mystery-item">
-                        {index + 1}. {detail}
-                    </li>
-                ))}
-            </ul>
-        </div>
-    );
-};
-
 export default Mysteries;
-export { MysteryDetails };

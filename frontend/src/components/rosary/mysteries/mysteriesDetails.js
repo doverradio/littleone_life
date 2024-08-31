@@ -8,25 +8,25 @@ const mysteriesDetails = {
         "The Institution of the Eucharist"
     ],
     Sorrowful: [
-        "The Agony of Jesus in the Garden of Gethsemane",
-        "The Scourging of Jesus at the Pillar",
-        "The Crowning of Jesus with Thorns",
+        "The Agony in the Garden",
+        "The Scourging at the Pillar",
+        "The Crowning of Thorns",
         "The Carrying of the Cross",
-        "The Crucifixion and Death of Jesus"
+        "The Crucifixion and Death of Our Lord Jesus Christ"
     ],
     Glorious: [
-        "The Resurrection of Jesus",
-        "The Ascension of Jesus into Heaven",
-        "The Descent of the Holy Spirit at Pentecost",
-        "The Assumption of Mary into Heaven",
-        "The Coronation of Our Lady in Heaven"
+        "The Resurrection",
+        "The Ascension",
+        "The Descent of the Holy Spirit upon the Apostles",
+        "The Assumption",
+        "The Coronation of Our Lady as Queen of Heaven and Earth"
     ],
     Joyful: [
-        "The Annunciation of the Angel Gabriel to Mary",
-        "The Visitation of Mary to Elizabeth",
-        "The Birth of Jesus in Bethlehem of Judea",
-        "The Presentation of Jesus in the Temple",
-        "The Finding of Jesus in the Temple"
+        "The Annunciation",
+        "The Visitation",
+        "The Nativity",
+        "The Presentation",
+        "The Finding of the child Jesus in the Temple"
     ]
 };
 
