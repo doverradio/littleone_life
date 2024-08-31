@@ -4,45 +4,14 @@ const { v1: uuidv1 } = require('uuid');
 const fieldEncryption = require('mongoose-field-encryption').fieldEncryption;
 
 const userSchema = new mongoose.Schema({
-    username: {
-        type: String,
-        trim: true,
-        required: true,
-        unique: true,
-        maxlength: 25
-    },
-    firstName: {
-        type: String,
-        trim: true,
-        maxlength: 100
-    },
-    lastName: {
-        type: String,
-        trim: true,
-        maxlength: 100
-    },
-    email: {
-        type: String,
-        trim: true,
-        required: true,
-        unique: true
-    },
-    phone: {
-        type: String,
-        trim: true,
-    },
-    hashed_password: {
-        type: String,
-    },
-    googleId: {
-        type: String,
-        unique: true,
-        sparse: true
-    },
-    about: {
-        type: String,
-        trim: true
-    },
+    username: { type: String, trim: true, required: true, unique: true, maxlength: 25 },
+    firstName: { type: String, trim: true, maxlength: 100 },
+    lastName: { type: String, trim: true, maxlength: 100 },
+    email: { type: String, trim: true, required: true, unique: true },
+    phone: { type: String, trim: true },
+    hashed_password: { type: String },
+    googleId: { type: String, unique: true, sparse: true },
+    about: { type: String, trim: true },
     prayerSettings: {
         type: Array,
         default: [
@@ -56,51 +25,22 @@ const userSchema = new mongoose.Schema({
         ]
     },
     salt: String,
-    role: {
-        type: Number,
-        default: 0
-    },
-    preferredLoginType: {
-        type: String,
-        default: 'username-password'
-    },
-    allowInstantPrayerArmy: {
-        type: Boolean,
-        default: false
-    },
-    allowNotifications: {
-        type: Boolean,
-        default: false
-    },
-    autoSendPrayerGroupRequest: {
-        type: Boolean,
-        default: false
-    },
-    isSeller: {
-        type: Boolean,
-        default: false
-    },
-    seller: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Seller',
-        default: null
-    },
-    churches: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Church'
-    }],
-    aiModel: {
-        type: String,
-        default: 'gpt-3.5-turbo',  // Default model
-    },
-    notificationPreferences: {
-        type: Object, // Change from Map to Object
-        default: {}
-    },
+    role: { type: Number, default: 0 },
+    preferredLoginType: { type: String, default: 'username-password' },
+    allowInstantPrayerArmy: { type: Boolean, default: false },
+    allowNotifications: { type: Boolean, default: false },
+    autoSendPrayerGroupRequest: { type: Boolean, default: false },
+    isSeller: { type: Boolean, default: false },
+    stripeCustomerId: { type: String },
+    sellerInfo: { type: mongoose.Schema.Types.ObjectId, ref: 'Seller', default: null },
+    buyerInfo: { type: mongoose.Schema.Types.ObjectId, ref: 'Buyer', default: null },
+    churches: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Church' }],
+    aiModel: { type: String, default: 'gpt-3.5-turbo' },
+    notificationPreferences: { type: Object, default: {} },
 }, { timestamps: true });
 
-var encKey = process.env.SOME_32BYTE_BASE64_STRING;
-var sigKey = process.env.SOME_64BYTE_BASE64_STRING;
+const encKey = process.env.SOME_32BYTE_BASE64_STRING;
+const sigKey = process.env.SOME_64BYTE_BASE64_STRING;
 
 userSchema.virtual('password')
     .set(function(password) {

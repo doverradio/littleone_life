@@ -1,6 +1,9 @@
+// src/components/settings/Settings.js
 import React, { useState, useEffect } from 'react';
+import { Elements } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
 import { getUserSettings, updateUserSettings, getTokenUsage } from '../../api/user';
-import { useUser } from '../../context/UserContext'; // Import the useUser hook
+import { useUser } from '../../context/UserContext'; 
 import { toast } from 'react-toastify';
 
 import PersonalInfoForm from './PersonalInfoForm';
@@ -8,10 +11,13 @@ import LoginSettingsForm from './LoginSettingsForm';
 import NotificationSettingsForm from './NotificationSettingsForm';
 import PrayerSettingsForm from './PrayerSettingsForm';
 import AiModelSettingsForm from './AiModelSettingsForm';
+import PaymentSettings from './PaymentSettings';
+
+// Load Stripe with your publishable key
+const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
 
 const Settings = () => {
-    
-    const { user } = useUser(); // Get the user data from the UserContext
+    const { user } = useUser();
 
     const [settings, setSettings] = useState({
         firstName: '',
@@ -60,7 +66,6 @@ const Settings = () => {
             prayerSettings: updatedPrayerSettings,
         }));
 
-        // Send update to the backend
         try {
             const result = await updateUserSettings({ ...settings, prayerSettings: updatedPrayerSettings });
             if (result.error) {
@@ -85,19 +90,15 @@ const Settings = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         
-        console.log('Submitting settings:', settings); // Log the settings being submitted
-        
-        const result = await updateUserSettings(settings); // Ensure `settings` includes the updated `prayerSettings`
+        const result = await updateUserSettings(settings);
         
         if (result.error) {
             toast.error(result.error);
         } else {
             toast.success('Settings updated successfully');
-            console.log('Updated settings saved:', result); // Log the result from the backend
             setSettings(result);
         }
     };
-    
 
     return (
         <div className="container" style={{ minHeight: '80vh' }}>
@@ -130,6 +131,11 @@ const Settings = () => {
 
                 <button type="submit" className="btn btn-primary">Save Settings</button>
             </form>
+
+            {/* Wrap PaymentSettings in Elements */}
+            <Elements stripe={stripePromise}>
+                <PaymentSettings user={user} />
+            </Elements>
         </div>
     );
 };
