@@ -1,12 +1,16 @@
 // shop/next.config.mjs
 export default {
-    async rewrites() {
-      return [
-        {
-          source: '/api/:path*',
-          destination: `${process.env.NEXT_PUBLIC_API_URL}/:path*`,
-        },
-      ];
-    },
-  };
-  
+  async headers() {
+    return [
+      {
+        source: '/(.*)',
+        headers: [
+          {
+            key: 'X-Forwarded-Proto',
+            value: 'https',
+          },
+        ],
+      },
+    ];
+  },
+};
