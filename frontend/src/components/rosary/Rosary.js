@@ -154,9 +154,11 @@ const Rosary = () => {
                     to: user.email,
                     subject: `${selectedMystery} Mystery Rosary Submitted on ${currentTime}`,
                     message: `<p>Hello ${user.username || ''},</p>
-    <p>You successfully submitted a ${selectedMystery} Rosary.</p> 
-    <p>Blessings,</p>
-    <p>littleone.life Team</p>
+    <p>You have successfully submitted a ${selectedMystery} Rosary at ${currentTime}.</p> 
+    <p>May our Lord hear and answer your prayer according to His Will.</p> 
+    <p>Amen,</p>
+    <br>
+    <p>littleone</p>
     <p><a href="${DOMAIN}/disable-notifications?userId=${user._id}&component=Rosary">Turn off notification</a>.</p>`,
                 };
     
