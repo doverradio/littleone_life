@@ -86,3 +86,34 @@ exports.handleWebhook = async (req, res) => {
     // Return a response to acknowledge receipt of the event
     res.json({ received: true });
 };
+
+
+exports.handleStripeCallback = async (req, res) => {
+    try {
+      const { session_id } = req.query;
+  
+      if (!session_id) {
+        return res.status(400).json({ error: 'Session ID is required' });
+      }
+  
+      // Here you would typically verify the session or payment intent
+      // and update your database accordingly.
+  
+      // For example, you might retrieve the session information:
+      const session = await stripe.checkout.sessions.retrieve(session_id);
+  
+      if (!session) {
+        return res.status(404).json({ error: 'Session not found' });
+      }
+  
+      // Update your database based on the session data
+      // For example, mark the order as paid, update the user subscription, etc.
+  
+      // Redirect the user to a success page or dashboard
+      return res.redirect('/success'); // or any other page you want
+  
+    } catch (error) {
+      console.error('Stripe callback error:', error);
+      return res.status(500).json({ error: 'An error occurred' });
+    }
+  };

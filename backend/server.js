@@ -49,10 +49,12 @@ app.use(session({
   cookie: {
     maxAge: 2 * 60 * 60 * 1000, // 2 hours
     httpOnly: true,
-    secure: process.env.USE_HTTPS === 'true', // Convert string to boolean
-    sameSite: 'Strict'
+    secure: process.env.USE_HTTPS === 'true', // Ensure cookies are only sent over HTTPS when set to true
+    sameSite: 'Lax', // Allows cookies to be sent with cross-origin subdomain requests
+    domain: process.env.USE_HTTPS === 'true' ? '.littleone.life' : undefined, // Set domain for production only
   }
 }));
+
 
 // middlewares
 app.use(morgan('common', {
@@ -84,7 +86,7 @@ app.use('/api', notificationRoutes);
 app.use('/api', prayerRoutes);
 app.use('/api/prayerSpaces', prayerSpaceRoutes);
 app.use('/api', rosaryRoutes);
-app.use('/api/stripe', stripeRoutes);
+app.use('/api', stripeRoutes);
 app.use('/api', userRoutes);
 
 // Socket.io connection
