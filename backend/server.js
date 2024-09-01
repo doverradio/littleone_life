@@ -82,7 +82,7 @@ app.use('/api', confessionRoutes);
 app.use('/api', emailRoutes);
 app.use('/api', intentionRoutes);
 app.use('/api', massAttendanceRoutes);
-app.use('/notify', notificationRoutes);
+app.use('/api', notificationRoutes);
 app.use('/api', prayerRoutes);
 app.use('/api', prayerSpaceRoutes);
 app.use('/api', rosaryRoutes);

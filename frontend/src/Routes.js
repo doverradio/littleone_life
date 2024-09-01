@@ -27,6 +27,7 @@ import StFrancisPrayer from './components/otherprayers/stfrancis/StFrancisPrayer
 import StLeandroRuizPrayer from './components/otherprayers/stleandroruiz/StLeandroRuiz';
 import PrayerSettingsPage from './components/otherprayers/PrayerSettingsPage';
 import SessionManager from './components/session/SessionManager';
+import DisableNotification from './components/notifications/DisableNotification'; // Import the new component
 
 const RoutesComponent = () => {
   return (
@@ -40,6 +41,9 @@ const RoutesComponent = () => {
           <Route path="/terms" element={<TermsOfService />} exact />
           <Route path="/contact" element={<Contact />} exact />
           <Route path="/privacy" element={<PrivacyPolicy />} exact />
+
+          {/* Public Route for disabling notifications */}
+          <Route path="/notify/disable-notifications" element={<DisableNotification />} exact />
 
           {/* Routes with Layout */}
           <Route element={<Layout />}>
