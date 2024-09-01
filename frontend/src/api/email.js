@@ -1,7 +1,7 @@
 // src/api/email.js
 
 // Base URL for API requests
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000/api';
+const API_BASE_URL = process.env.REACT_APP_API || 'http://localhost:8000/api';
 
 // Function to send email notifications
 export const sendNotificationEmail = async (emailData, userId) => {
