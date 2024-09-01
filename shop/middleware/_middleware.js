@@ -1,7 +1,7 @@
-// shop/pages/dashboard/_middleware.js
+// shop/middleware/_middleware.js
 
 import { NextResponse } from 'next/server';
-import { getSession } from '../../utils/session';
+import { getSession } from '../utils/session';
 
 export async function middleware(req) {
   const session = await getSession(req);
