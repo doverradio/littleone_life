@@ -18,7 +18,7 @@ router.get('/disable-notifications',
 
 );
 
-// Route to get user notification preferences
+// Route to get user notification preferences - 9/1/2024 MOVED TO user ROUTES
 // router.post('/user/notification-preferences', requireSignin, isAuth, getNotificationPreferences);
 
 module.exports = router;
