@@ -84,7 +84,7 @@ app.use('/api', intentionRoutes);
 app.use('/api', massAttendanceRoutes);
 app.use('/api', notificationRoutes);
 app.use('/api', prayerRoutes);
-app.use('/api/prayerSpaces', prayerSpaceRoutes);
+app.use('/api', prayerSpaceRoutes);
 app.use('/api', rosaryRoutes);
 app.use('/api', stripeRoutes);
 app.use('/api', userRoutes);

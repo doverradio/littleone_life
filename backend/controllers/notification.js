@@ -27,32 +27,25 @@ exports.toggleNotification = async (req, res) => {
 exports.disableNotification = async (req, res) => {
     const { userId, component } = req.query;
 
-    console.log(`Received request to disable notifications for userId: ${userId}, component: ${component}`);
-
     try {
         const user = await User.findById(userId);
         if (!user) {
-            console.log(`User not found with id: ${userId}`);
-            return res.status(404).send('User not found');
+            return res.status(404).json({ error: 'User not found' });
         }
 
-        console.log(`User found: ${user}`);
-        console.log(`Current notification preferences: ${user.notificationPreferences}`);
+        // Log the current user notification preferences for debugging
+        console.log('Current notification preferences:', user.notificationPreferences);
 
-        // Ensure notificationPreferences is defined and an object
-        if (typeof user.notificationPreferences === 'object') {
-            user.notificationPreferences.set(component, false);
-        } else {
-            console.log('notificationPreferences is not an object');
-            return res.status(500).send('Invalid notification preferences');
-        }
+        // Disable the notification for the specific component
+        user.notificationPreferences[component] = false;
 
         await user.save();
-        console.log('Notifications disabled successfully.');
-        res.send('Notifications disabled successfully.');
+
+        console.log(`Notifications disabled for userId: ${userId}, component: ${component}`);
+        res.json({ success: true });
     } catch (error) {
-        console.error(`Error disabling notification: `, error);
-        res.status(500).send('Server error');
+        console.error('Error disabling notification: ', error);
+        res.status(500).json({ error: 'Internal server error' });
     }
 };
 
