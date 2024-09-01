@@ -1,6 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const { toggleNotification, disableNotification, getNotificationPreferences } = require('../controllers/notification');
+const { 
+    toggleNotification, 
+    disableNotification, 
+    // getNotificationPreferences 
+
+} = require('../controllers/notification');
 const { requireSignin, authMiddleware, isAuth } = require('../controllers/auth');
 
 // Route to toggle notification (Protected Route)
@@ -14,6 +19,6 @@ router.get('/disable-notifications',
 );
 
 // Route to get user notification preferences
-router.post('/user/notification-preferences', requireSignin, isAuth, getNotificationPreferences);
+// router.post('/user/notification-preferences', requireSignin, isAuth, getNotificationPreferences);
 
 module.exports = router;
