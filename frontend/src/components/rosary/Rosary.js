@@ -158,7 +158,7 @@ const Rosary = () => {
     <p>May the Lord hear and answer your prayer according to His Will.</p> 
     <p>Amen,</p>
     <p>littleone</p>
-    <p><a href="${DOMAIN}/disable-notifications?userId=${user._id}&component=Rosary">Turn off notifications</a>.</p>`,
+    <p><a href="https://littleone.life/api/disable-notifications?userId=${user._id}&component=Rosary">Turn off notifications</a>.</p>`,
                 };
     
                 await sendNotificationEmail(emailData, userId);
