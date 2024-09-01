@@ -7,7 +7,11 @@ const { requireSignin, authMiddleware, isAuth } = require('../controllers/auth')
 router.post('/toggle-notification', requireSignin, authMiddleware, isAuth, toggleNotification);
 
 // Route to disable notification via email link (Public Route)
-router.get('/disable-notifications', requireSignin, authMiddleware, disableNotification);
+router.get('/disable-notifications', 
+    // requireSignin, authMiddleware,  // commented these out because user may click this from another device that is not logged in.
+    disableNotification
+
+);
 
 // Route to get user notification preferences
 router.post('/user/notification-preferences', requireSignin, authMiddleware, getNotificationPreferences);
