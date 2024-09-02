@@ -26,7 +26,7 @@ const ContactSupport = () => {
         <Layout>
             <div className="container mt-5">
                 <h1>Contact Support</h1>
-                <p>If you need assistance, please fill out the form below and we'll get back to you as soon as possible.</p>
+                <p>If you need assistance, please fill out the form below and we&apos;ll get back to you as soon as possible.</p>
                 <form onSubmit={handleSubmit}>
                     <div className="mb-3">
                         <label htmlFor="name" className="form-label">Name</label>
