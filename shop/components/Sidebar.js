@@ -11,16 +11,15 @@ const Sidebar = () => {
         <li>
           <h6>Manage Listings</h6>
           <ul>
-            <li><Link href="/listings/active">Active Listings</Link></li>
-            <li><Link href="/listings/new">Create New Listing</Link></li>
-            <li><Link href="/listings/drafts">Drafts</Link></li>
+            <li><Link href="/dashboard/manage-listings">Active Listings</Link></li>
+            <li><Link href="/dashboard/create-listing">Create New Listing</Link></li>
+            <li><Link href="/dashboard/drafts">Drafts</Link></li>
           </ul>
         </li>
         <li>
           <h6>Bids</h6>
           <ul>
-            <li><Link href="/bids/active">Active Bids</Link></li>
-            <li><Link href="/bids/my">My Bids</Link></li>
+            <li><Link href="/dashboard/view-bids">Active Bids</Link></li>
             <li><Link href="/bids/history">Bid History</Link></li>
           </ul>
         </li>

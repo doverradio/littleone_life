@@ -30,6 +30,7 @@ const Layout = ({ children }) => {
           <main>{children}</main>
         </div>
       </div>
+      <Sidebar />
       <Footer /> {/* Add the Footer component at the bottom */}
     </div>
   );
