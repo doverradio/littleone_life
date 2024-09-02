@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { getSession, signOut } from '../utils/session';
+import { getSession } from '../utils/session';
 import ProfileIcon from './ProfileIcon';
 import SearchBar from './SearchBar';
 import UserProfile from './UserProfile';
 import CartIcon from './CartIcon';
-import NotificationBell from './NotificationBell'; // Import the NotificationBell component
+import NotificationBell from './NotificationBell';
+import Image from 'next/image';
 
 const NavbarMain = ({ userStats }) => {
   const [user, setUser] = useState(null);
@@ -19,7 +20,6 @@ const NavbarMain = ({ userStats }) => {
       const session = await getSession();
       if (session && session.user) {
         setUser(session.user);
-        // Replace with logic to fetch the actual cart count and notifications for the user
         setCartItemCount(3); // Example count
         setNotifications([
           { message: 'You have a new bid', link: '/bids' },
@@ -38,17 +38,17 @@ const NavbarMain = ({ userStats }) => {
   return (
     <nav className="navbar navbar-light bg-light">
       <div className="container-fluid d-flex justify-content-between align-items-center">
-        <Link href="/">
-          <div className="navbar-brand d-flex align-items-center" style={{ cursor: 'pointer' }}>
-            <img src="/logo.png" alt="logo" className="logo-img" style={{ height: '40px', width: 'auto' }} />
-          </div>
+        <Link href="/" legacyBehavior>
+          <a className="navbar-brand d-flex align-items-center">
+            <Image src="/logo.png" alt="logo" className="logo-img" width={40} height={40} />
+          </a>
         </Link>
 
         <SearchBar />
 
         <div className="d-flex align-items-center">
           <CartIcon cartItemCount={cartItemCount} />
-          <NotificationBell notifications={notifications} /> {/* Add NotificationBell here */}
+          <NotificationBell notifications={notifications} />
           {user ? (
             <UserProfile user={user} />
           ) : (

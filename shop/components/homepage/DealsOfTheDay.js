@@ -8,9 +8,9 @@ const DealsOfTheDay = () => {
       <div className="card bg-warning text-white text-center">
         <div className="card-body">
           <h3>Special Offer on Selected Items!</h3>
-          <p>Don't miss out on today's exclusive deals.</p>
-          <Link href="/deals" className="btn btn-light">
-            Shop Deals
+          <p>Don&apos;t miss out on today&apos;s exclusive deals.</p>
+          <Link href="/deals" legacyBehavior>
+            <a className="btn btn-light">Shop Deals</a>
           </Link>
         </div>
       </div>
