@@ -34,8 +34,8 @@ const NotificationBell = ({ notifications }) => {
         {notifications.length > 0 ? (
           notifications.map((notification, index) => (
             <li key={index}>
-              <Link href={notification.link}>
-                <a className="dropdown-item">{notification.message}</a>
+              <Link href={notification.link} className="dropdown-item">
+                {notification.message}
               </Link>
             </li>
           ))

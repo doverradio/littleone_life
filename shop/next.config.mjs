@@ -1,4 +1,5 @@
 // shop/next.config.mjs
+
 export default {
   async headers() {
     return [

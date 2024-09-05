@@ -1,6 +1,6 @@
-// shop/pages/signup.js
 import React, { useState } from 'react';
 import Layout from './layout'; // Import the layout component
+import { signIn } from 'next-auth/react'; // Import the NextAuth signIn function
 
 const SignUp = () => {
     const [formData, setFormData] = useState({
@@ -17,10 +17,33 @@ const SignUp = () => {
         });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // Add logic to handle sign-up form submission, e.g., sending data to an API
-        console.log('Form submitted:', formData);
+
+        if (formData.password !== formData.confirmPassword) {
+            console.log('Passwords do not match');
+            return;
+        }
+
+        // Custom sign-up logic can be added here
+
+        // After sign-up, you might want to log the user in
+        const result = await signIn('credentials', {
+            redirect: false,
+            username: formData.username,
+            email: formData.email,
+            password: formData.password,
+        });
+
+        if (result.error) {
+            console.log(result.error);
+        } else {
+            // Redirect or show success message
+        }
+    };
+
+    const handleGoogleSignUp = () => {
+        signIn('google');
     };
 
     return (
@@ -78,6 +101,10 @@ const SignUp = () => {
                     </div>
                     <button type="submit" className="btn btn-primary">Sign Up</button>
                 </form>
+                <hr />
+                <button onClick={handleGoogleSignUp} className="btn btn-danger">
+                    Sign up with Google
+                </button>
             </div>
         </Layout>
     );

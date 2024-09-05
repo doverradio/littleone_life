@@ -13,8 +13,8 @@ const EditListing = () => {
         <h1>Edit Listing</h1>
         <p>Editing listing ID: {id}</p>
         <p>This is a placeholder page where the form to edit an existing listing will be implemented.</p>
-        <Link href="/dashboard/manage-listings" legacyBehavior>
-          <a className="btn btn-secondary mt-3">Back to Manage Listings</a>
+        <Link href="/dashboard/manage-listings" className="btn btn-secondary mt-3">
+          Back to Manage Listings
         </Link>
       </div>
     </Layout>

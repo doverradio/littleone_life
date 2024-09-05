@@ -51,7 +51,7 @@ const NavbarMain = () => {
                     {isAuthenticated() ? (
                         <>
                             {isAuthenticated() && (
-                                <Link to="/user/settings" className="navbar-icon">
+                                <Link href="/user/settings" className="navbar-icon">
                                     <FaCog size={24} />
                                 </Link>
                             )}

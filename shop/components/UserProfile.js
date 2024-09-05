@@ -37,18 +37,18 @@ const UserProfile = ({ user }) => {
         {user && (
           <>
             <li>
-              <Link href="/dashboard">
-                <a className="dropdown-item">Dashboard</a>
+              <Link href="/dashboard" className="dropdown-item">
+                Dashboard
               </Link>
             </li>
             <li>
-              <Link href="/profile">
-                <a className="dropdown-item">Account Settings</a>
+              <Link href="/profile" className="dropdown-item">
+                Account Settings
               </Link>
             </li>
             <li>
-              <Link href="/notifications">
-                <a className="dropdown-item">Notifications</a>
+              <Link href="/notifications" className="dropdown-item">
+                Notifications
               </Link>
             </li>
             <li>

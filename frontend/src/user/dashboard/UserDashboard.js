@@ -30,22 +30,22 @@ const UserDashboard = () => {
         <div className="card-body">
           <ul className="list-group">
             <li className="list-group-item">
-              <Link to="/prayers/rosary" style={{ textDecoration: 'none', color: 'inherit' }}>
+              <Link href="/prayers/rosary" style={{ textDecoration: 'none', color: 'inherit' }}>
                 Rosaries: {userStats.rosaries || 0}
               </Link>
             </li>
             <li className="list-group-item">
-              <Link to="/prayers/mass" style={{ textDecoration: 'none', color: 'inherit' }}>
+              <Link href="/prayers/mass" style={{ textDecoration: 'none', color: 'inherit' }}>
                 Masses: {userStats.masses || 0}
               </Link>
             </li>
             <li className="list-group-item">
-              <Link to="/prayers/confession" style={{ textDecoration: 'none', color: 'inherit' }}>
+              <Link href="/prayers/confession" style={{ textDecoration: 'none', color: 'inherit' }}>
                 Confessions: {userStats.confessions || 0}
               </Link>
             </li>
             <li className="list-group-item">
-              <Link to="/prayers/divinemercy" style={{ textDecoration: 'none', color: 'inherit' }}>
+              <Link href="/prayers/divinemercy" style={{ textDecoration: 'none', color: 'inherit' }}>
                 Divine Mercy Chaplets: {userStats.divineMercies || 0}
               </Link>
             </li>

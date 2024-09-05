@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import Link from 'next/link';
 import { useAuth } from '../api/authHook';
 import prayerSettingsIcon from '../components/otherprayers/prayersettings_icon.png';
 import stLeandroRuizIcon from '../components/otherprayers/stleandroruiz/stleandroruiz_icon.png';
@@ -55,7 +55,7 @@ const Prayers = () => {
                 <div className="prayer-icons">
                     {visiblePrayers.length > 0 ? (
                         visiblePrayers.map(icon => (
-                            <Link to={icon.route} key={icon.id}>
+                            <Link href={icon.route} key={icon.id}>
                                 <div className="prayer-icon">
                                     <img src={icon.icon} alt={icon.name} />
                                     <p>{icon.name}</p>

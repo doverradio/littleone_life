@@ -1,9 +1,18 @@
 // shop/pages/_app.js
-import 'bootstrap/dist/css/bootstrap.min.css';
-import '../styles/globals.css'; // Ensure this path is correct
+import 'tailwindcss/tailwind.css'; // Tailwind CSS
+import '../styles/globals.css'; // Global CSS
+import 'aos/dist/aos.css'; // AOS CSS
+import 'react-range-slider-input/dist/style.css'; // Slider CSS
+
+import { useEffect } from 'react';
+import AOS from 'aos';
 
 function MyApp({ Component, pageProps }) {
-    return <Component {...pageProps} />;
+  useEffect(() => {
+    AOS.init(); // Initialize AOS on client-side
+  }, []);
+
+  return <Component {...pageProps} />;
 }
 
 export default MyApp;

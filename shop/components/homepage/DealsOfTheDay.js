@@ -1,3 +1,5 @@
+// shop/components/homepage/DealsOfTheDay.js
+
 import React from 'react';
 import Link from 'next/link';
 
@@ -9,8 +11,8 @@ const DealsOfTheDay = () => {
         <div className="card-body">
           <h3>Special Offer on Selected Items!</h3>
           <p>Don&apos;t miss out on today&apos;s exclusive deals.</p>
-          <Link href="/deals" legacyBehavior>
-            <a className="btn btn-light">Shop Deals</a>
+          <Link href="/deals" className="btn btn-light">
+            Shop Deals
           </Link>
         </div>
       </div>

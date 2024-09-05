@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 import { getSession } from '../utils/session';
 import ProfileIcon from './ProfileIcon';
 import SearchBar from './SearchBar';
@@ -9,11 +8,10 @@ import CartIcon from './CartIcon';
 import NotificationBell from './NotificationBell';
 import Image from 'next/image';
 
-const NavbarMain = ({ userStats }) => {
+const NavbarMain = () => {
   const [user, setUser] = useState(null);
   const [cartItemCount, setCartItemCount] = useState(0);
   const [notifications, setNotifications] = useState([]);
-  const router = useRouter();
 
   useEffect(() => {
     async function fetchSession() {
@@ -38,7 +36,7 @@ const NavbarMain = ({ userStats }) => {
   return (
     <nav className="navbar navbar-light bg-light">
       <div className="container-fluid d-flex justify-content-between align-items-center">
-        <Link href="/" legacyBehavior>
+        <Link href="/" passHref>
           <a className="navbar-brand d-flex align-items-center">
             <Image src="/logo.png" alt="logo" className="logo-img" width={40} height={40} />
           </a>
@@ -53,10 +51,10 @@ const NavbarMain = ({ userStats }) => {
             <UserProfile user={user} />
           ) : (
             <>
-              <Link href="/signup" legacyBehavior>
+              <Link href="/signup">
                 <a className="nav-link custom-link">Sign Up</a>
               </Link>
-              <Link href="/signin" legacyBehavior>
+              <Link href="/signin">
                 <a className="nav-link custom-link">Sign In</a>
               </Link>
             </>

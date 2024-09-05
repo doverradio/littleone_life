@@ -1,24 +1,92 @@
 // shop/pages/index.js
 import React from 'react';
-import Layout from './layout';
-import HeroSection from '../components/homepage/HeroSection';
-import CategoryHighlights from '../components/homepage/CategoryHighlights';
-import FeaturedProducts from '../components/homepage/FeaturedProducts';
-import DealsOfTheDay from '../components/homepage/DealsOfTheDay';
-import CustomerTestimonials from '../components/homepage/CustomerTestimonials';
+// import Layout from '../components/Layout'; // Fixed import path
+import Layout from '@/components/Partials/Layout';
+import datas from '../data/products.json'; 
+import Banner from '../components/Home/Banner';
+import SectionStyleOne from '../components/Helpers/SectionStyleOne';
+import SectionStyleTwo from '../components/Helpers/SectionStyleTwo';
+import SectionStyleThree from '../components/Helpers/SectionStyleThree';
+import SectionStyleFour from '../components/Helpers/SectionStyleFour';
+import BrandSection from '../components/Home/BrandSection';
+import CampaignCountDown from '../components/Home/CampaignCountDown';
+import BestSellers from '../components/Home/BestSellers';
+import ProductsAds from '../components/Home/ProductsAds';
+import ViewMoreTitle from '../components/Helpers/ViewMoreTitle';
 
 const ShopPage = () => {
+  const { products } = datas;
+  const brands = products.map(product => product.brand);
+
   return (
     <Layout>
-      <div className="container mt-5">
-        <HeroSection />
-        <CategoryHighlights />
-        <FeaturedProducts />
-        <DealsOfTheDay />
-        <CustomerTestimonials />
-      </div>
+      <Banner className="banner-wrapper mb-[60px]" />
+      
+      <SectionStyleOne
+        products={products}
+        brands={brands}
+        categoryTitle="Mobile & Tablet"
+        sectionTitle="Gamer World"
+        seeMoreUrl="/all-products"
+        className="category-products mb-[60px]"
+      />
+
+      <BrandSection
+        sectionTitle="Shop by Brand"
+        className="brand-section-wrapper mb-[60px]"
+      />
+
+      <CampaignCountDown
+        className="mb-[60px]"
+        lastDate="2025-10-04 4:00:00"
+      />
+
+      <ViewMoreTitle
+        className="top-selling-product mb-[60px]"
+        seeMoreUrl="/all-products"
+        categoryTitle="Top Selling Products"
+      >
+        <SectionStyleTwo products={products.slice(3)} />
+      </ViewMoreTitle>
+
+      <ViewMoreTitle
+        className="best-sellers-section mb-[60px]"
+        seeMoreUrl="/sellers"
+        categoryTitle="Best Seller"
+      >
+        <BestSellers />
+      </ViewMoreTitle>
+
+      <ProductsAds
+        ads={[
+          `${process.env.NEXT_PUBLIC_URL}/assets/images/bannera-1.png`,
+          `${process.env.NEXT_PUBLIC_URL}/assets/images/bannera-2.png`,
+        ]}
+        sectionHeight="sm:h-[295px] h-full"
+        className="products-ads-section mb-[60px]"
+      />
+
+      <SectionStyleThree
+        products={products}
+        sectionTitle="New Arrivals"
+        seeMoreUrl="/all-products"
+        className="new-products mb-[60px]"
+      />
+
+      <ProductsAds
+        sectionHeight="164"
+        ads={[`${process.env.NEXT_PUBLIC_URL}/assets/images/bannera-4.png`]}
+        className="products-ads-section mb-[60px]"
+      />
+
+      <SectionStyleFour
+        products={products}
+        sectionTitle="Popular Sales"
+        seeMoreUrl="/all-products"
+        className="category-products mb-[60px]"
+      />
     </Layout>
   );
 };
 
-export default ShopPage;
+export default ShopPage

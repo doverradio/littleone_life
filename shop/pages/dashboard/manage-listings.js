@@ -29,8 +29,8 @@ const ManageListings = () => {
       <div className="container mt-5">
         <h1>Manage Listings</h1>
         <div className="mb-3">
-          <Link href="/dashboard/create-listing" legacyBehavior>
-            <a className="btn btn-primary">Create New Listing</a>
+          <Link href="/dashboard/create-listing" className="btn btn-primary">
+            Create New Listing
           </Link>
         </div>
         <table className="table table-bordered">
@@ -51,8 +51,8 @@ const ManageListings = () => {
                 <td>{listing.status}</td>
                 <td>{listing.views}</td>
                 <td>
-                  <Link href={`/dashboard/edit-listing/${listing.id}`} legacyBehavior>
-                    <a className="btn btn-warning btn-sm">Edit</a>
+                  <Link href={`/dashboard/edit-listing/${listing.id}`} className="btn btn-warning btn-sm">
+                    Edit
                   </Link>
                   <button
                     className="btn btn-danger btn-sm ms-2"

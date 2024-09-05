@@ -30,8 +30,8 @@ const AboutPage = () => {
                     Join us today and start your spiritual journey with Littleone.life.
                 </p>
                 <div className="d-flex justify-content-center mt-4">
-                <Link to="/" className="btn btn-secondary mx-2">Back to Home</Link>
-                    <Link to="/signup" className="btn btn-primary mx-2">Sign Up</Link>
+                <Link href="/" className="btn btn-secondary mx-2">Back to Home</Link>
+                    <Link href="/signup" className="btn btn-primary mx-2">Sign Up</Link>
                 </div>
             </div>
             <Footer />
