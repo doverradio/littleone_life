@@ -99,7 +99,7 @@ export default function Footer({ type }) {
                       </Link>
                     </li>
                     <li>
-                      <Link href="/become-saller">
+                      <Link href="/become-seller">
                         <span className="text-[#9A9A9A] text-[15px] hover:text-qblack border-b border-transparent hover:border-qblack cursor-pointer capitalize">
                           Become Seller
                         </span>
