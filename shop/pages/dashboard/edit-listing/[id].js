@@ -1,5 +1,5 @@
 import React from 'react';
-import Layout from '../../layout';
+import Layout from '../../layout0';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 

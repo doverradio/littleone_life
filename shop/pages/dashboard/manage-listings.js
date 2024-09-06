@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Layout from '../layout';
+import Layout from '../layout0';
 import Link from 'next/link';
 
 const ManageListings = () => {

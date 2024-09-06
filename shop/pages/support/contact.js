@@ -1,6 +1,6 @@
 // shop/pages/support/contact.js
 import React, { useState } from 'react';
-import Layout from '../layout'; // Import the layout component
+import Layout from '../layout0'; // Import the layout component
 
 const ContactSupport = () => {
     const [formData, setFormData] = useState({

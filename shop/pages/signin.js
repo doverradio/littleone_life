@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { signIn as nextAuthSignIn } from 'next-auth/react'; // Import next-auth signIn
-import Layout from './layout'; // Import the layout component
+import Layout from './layout0'; // Import the layout component
 import { signin } from './api/auth';
 
 const SignIn = () => {

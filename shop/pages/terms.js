@@ -1,6 +1,6 @@
 // shop/pages/terms.js
 import React from 'react';
-import Layout from './layout'; // Import the layout component
+import Layout from './layout0'; // Import the layout component
 
 const TermsOfService = () => {
     return (
