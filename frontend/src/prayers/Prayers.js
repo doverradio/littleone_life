@@ -1,5 +1,5 @@
 import React from "react";
-import Link from 'next/link';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../api/authHook';
 import prayerSettingsIcon from '../components/otherprayers/prayersettings_icon.png';
 import stLeandroRuizIcon from '../components/otherprayers/stleandroruiz/stleandroruiz_icon.png';
