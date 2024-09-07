@@ -1,6 +1,6 @@
 // shop/pages/dashboard/view-bids.js
 import React from 'react';
-import Layout from '../layout0'; // Import the layout component
+import Layout from '@/components/Partials/Layout'; // Import the layout component
 
 const ViewBids = () => {
     return (

@@ -1,6 +1,6 @@
 // shop/pages/reports/sales.js
 import React from 'react';
-import Layout from '../layout0'; // Import the layout component
+import Layout from '@/components/Partials/Layout'; // Import the layout component
 
 const SalesReports = () => {
     return (

@@ -12,38 +12,30 @@ export default function Footer() {
           <div className="lg:w-4/10 w-full mb-10 lg:mb-0">
             {/* logo area */}
             <div className="mb-14">
-              <Link href="/" passHref legacyBehavior>
-                <a>
-                  <Image
-                    width={152}
-                    height={36}
-                    src={`${process.env.NEXT_PUBLIC_BASE_URL}/assets/images/logo-2.svg`}
-                    alt="logo"
-                  />
-                </a>
+              <Link href="/" passHref>
+                <Image
+                  width={152}
+                  height={36}
+                  src={`${process.env.NEXT_PUBLIC_BASE_URL}/assets/images/logo-2.svg`}
+                  alt="logo"
+                />
               </Link>
             </div>
             <div>
               <ul className="flex flex-col space-y-5">
                 <li>
-                  <Link href="/" passHref legacyBehavior>
-                    <a className="text-[#9A9A9A] text-[15px] hover:text-qblack border-b border-transparent hover:border-qblack">
-                      Track Order
-                    </a>
+                  <Link href="/" className="text-[#9A9A9A] text-[15px] hover:text-qblack border-b border-transparent hover:border-qblack">
+                    Track Order
                   </Link>
                 </li>
                 <li>
-                  <Link href="/" passHref legacyBehavior>
-                    <a className="text-[#9A9A9A] text-[15px] hover:text-qblack border-b border-transparent hover:border-qblack">
-                      Delivery & Returns
-                    </a>
+                  <Link href="/" className="text-[#9A9A9A] text-[15px] hover:text-qblack border-b border-transparent hover:border-qblack">
+                    Delivery & Returns
                   </Link>
                 </li>
                 <li>
-                  <Link href="/" passHref legacyBehavior>
-                    <a className="text-[#9A9A9A] text-[15px] hover:text-qblack border-b border-transparent hover:border-qblack">
-                      Warranty
-                    </a>
+                  <Link href="/" className="text-[#9A9A9A] text-[15px] hover:text-qblack border-b border-transparent hover:border-qblack">
+                    Warranty
                   </Link>
                 </li>
               </ul>
@@ -55,31 +47,23 @@ export default function Footer() {
             </div>
             <ul className="flex flex-col space-y-5">
               <li>
-                <Link href="/" passHref legacyBehavior>
-                  <a className="text-[#9A9A9A] text-[15px] hover:text-qblack border-b border-transparent hover:border-qblack">
-                    Rave’s Story
-                  </a>
+                <Link href="/" className="text-[#9A9A9A] text-[15px] hover:text-qblack border-b border-transparent hover:border-qblack">
+                  Rave’s Story
                 </Link>
               </li>
               <li>
-                <Link href="/" passHref legacyBehavior>
-                  <a className="text-[#9A9A9A] text-[15px] hover:text-qblack border-b border-transparent hover:border-qblack">
-                    Work With Us
-                  </a>
+                <Link href="/" className="text-[#9A9A9A] text-[15px] hover:text-qblack border-b border-transparent hover:border-qblack">
+                  Work With Us
                 </Link>
               </li>
               <li>
-                <Link href="/" passHref legacyBehavior>
-                  <a className="text-[#9A9A9A] text-[15px] hover:text-qblack border-b border-transparent hover:border-qblack">
-                    Corporate News
-                  </a>
+                <Link href="/" className="text-[#9A9A9A] text-[15px] hover:text-qblack border-b border-transparent hover:border-qblack">
+                  Corporate News
                 </Link>
               </li>
               <li>
-                <Link href="/" passHref legacyBehavior>
-                  <a className="text-[#9A9A9A] text-[15px] hover:text-qblack border-b border-transparent hover:border-qblack">
-                    Investors
-                  </a>
+                <Link href="/" className="text-[#9A9A9A] text-[15px] hover:text-qblack border-b border-transparent hover:border-qblack">
+                  Investors
                 </Link>
               </li>
             </ul>
@@ -90,31 +74,23 @@ export default function Footer() {
             </div>
             <ul className="flex flex-col space-y-5">
               <li>
-                <Link href="/" passHref legacyBehavior>
-                  <a className="text-[#9A9A9A] text-[15px] hover:text-qblack border-b border-transparent hover:border-qblack">
-                    Furniture
-                  </a>
+                <Link href="/" className="text-[#9A9A9A] text-[15px] hover:text-qblack border-b border-transparent hover:border-qblack">
+                  Furniture
                 </Link>
               </li>
               <li>
-                <Link href="/" passHref legacyBehavior>
-                  <a className="text-[#9A9A9A] text-[15px] hover:text-qblack border-b border-transparent hover:border-qblack">
-                    Decoration
-                  </a>
+                <Link href="/" className="text-[#9A9A9A] text-[15px] hover:text-qblack border-b border-transparent hover:border-qblack">
+                  Decoration
                 </Link>
               </li>
               <li>
-                <Link href="/" passHref legacyBehavior>
-                  <a className="text-[#9A9A9A] text-[15px] hover:text-qblack border-b border-transparent hover:border-qblack">
-                    Kitchen
-                  </a>
+                <Link href="/" className="text-[#9A9A9A] text-[15px] hover:text-qblack border-b border-transparent hover:border-qblack">
+                  Kitchen
                 </Link>
               </li>
               <li>
-                <Link href="/" passHref legacyBehavior>
-                  <a className="text-[#9A9A9A] text-[15px] hover:text-qblack border-b border-transparent hover:border-qblack">
-                    Interior
-                  </a>
+                <Link href="/" className="text-[#9A9A9A] text-[15px] hover:text-qblack border-b border-transparent hover:border-qblack">
+                  Interior
                 </Link>
               </li>
             </ul>
@@ -125,31 +101,23 @@ export default function Footer() {
             </div>
             <ul className="flex flex-col space-y-5">
               <li>
-                <Link href="/" passHref legacyBehavior>
-                  <a className="text-[#9A9A9A] text-[15px] hover:text-qblack border-b border-transparent hover:border-qblack">
-                    Secure Payment
-                  </a>
+                <Link href="/" className="text-[#9A9A9A] text-[15px] hover:text-qblack border-b border-transparent hover:border-qblack">
+                  Secure Payment
                 </Link>
               </li>
               <li>
-                <Link href="/" passHref legacyBehavior>
-                  <a className="text-[#9A9A9A] text-[15px] hover:text-qblack border-b border-transparent hover:border-qblack">
-                    Privacy Policy
-                  </a>
+                <Link href="/" className="text-[#9A9A9A] text-[15px] hover:text-qblack border-b border-transparent hover:border-qblack">
+                  Privacy Policy
                 </Link>
               </li>
               <li>
-                <Link href="/" passHref legacyBehavior>
-                  <a className="text-[#9A9A9A] text-[15px] hover:text-qblack border-b border-transparent hover:border-qblack">
-                    Terms of Use
-                  </a>
+                <Link href="/" className="text-[#9A9A9A] text-[15px] hover:text-qblack border-b border-transparent hover:border-qblack">
+                  Terms of Use
                 </Link>
               </li>
               <li>
-                <Link href="/" passHref legacyBehavior>
-                  <a className="text-[#9A9A9A] text-[15px] hover:text-qblack border-b border-transparent hover:border-qblack">
-                    Archived Products
-                  </a>
+                <Link href="/" className="text-[#9A9A9A] text-[15px] hover:text-qblack border-b border-transparent hover:border-qblack">
+                  Archived Products
                 </Link>
               </li>
             </ul>
@@ -158,38 +126,25 @@ export default function Footer() {
         <div className="bottom-bar border-t border-qgray-border lg:h-[82px] lg:flex justify-between items-center">
           <div className="flex lg:space-x-5 justify-between items-center mb-3">
             <div className="flex space-x-5 items-center">
-              <a href="#">
-                <Instagram className="fill-current text-qgray hover:text-qblack" />
-              </a>
-              <a href="#">
-                <Facebook className="fill-current text-qgray hover:text-qblack" />
-              </a>
-              <a href="#">
-                <Youtube className="fill-current text-qgray hover:text-qblack" />
-              </a>
+              <Instagram className="fill-current text-qgray hover:text-qblack" />
+              <Facebook className="fill-current text-qgray hover:text-qblack" />
+              <Youtube className="fill-current text-qgray hover:text-qblack" />
             </div>
             <span className="sm:text-base text-[10px] text-qgray font-300">
               ©2022
-              <a
-                href="https://quomodosoft.com/"
-                target="_blank"
-                rel="noreferrer"
-                className="font-500 text-qblack mx-1"
-              >
+              <Link href="https://quomodosoft.com/" className="font-500 text-qblack mx-1" target="_blank" rel="noreferrer">
                 Quomodosoft
-              </a>
+              </Link>
               All rights reserved
             </span>
           </div>
-          <div className="">
-            <a href="#">
-              <Image
-                width={318}
-                height={28}
-                src={`${process.env.NEXT_PUBLIC_BASE_URL}/assets/images/payment-getways.png`}
-                alt="payment-getways"
-              />
-            </a>
+          <div>
+            <Image
+              width={318}
+              height={28}
+              src={`${process.env.NEXT_PUBLIC_BASE_URL}/assets/images/payment-getways.png`}
+              alt="payment-getways"
+            />
           </div>
         </div>
       </div>
