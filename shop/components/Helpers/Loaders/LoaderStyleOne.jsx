@@ -1,4 +1,4 @@
-// import "./loader.css";
+import styles from './loader.module.css';
 
 export default function LoaderStyleOne() {
   return (
