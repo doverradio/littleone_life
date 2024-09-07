@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Layout from './layout0'; // Import the layout component
+import Layout from '@/components/Partials/Layout'; // Import the layout component
 import { signIn } from 'next-auth/react'; // Import the NextAuth signIn function
 
 const SignUp = () => {
