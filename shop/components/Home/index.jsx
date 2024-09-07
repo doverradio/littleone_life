@@ -11,7 +11,6 @@ import CampaignCountDown from '../Home/CampaignCountDown';
 import BestSellers from '../Home/BestSellers';
 import ProductsAds from '../Home/ProductsAds';
 import ViewMoreTitle from '../Helpers/ViewMoreTitle';
-import ViewMoreTitle from '../Helpers/ViewMoreTitle';
 
 export default function Home() {
   const { products } = datas;
