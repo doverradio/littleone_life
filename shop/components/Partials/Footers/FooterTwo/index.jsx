@@ -12,36 +12,38 @@ export default function Footer() {
           <div className="lg:w-4/10 w-full mb-10 lg:mb-0">
             {/* logo area */}
             <div className="mb-14">
-              <Link href="/">
-                <Image
-                  width={152}
-                  height={36}
-                  src={`${process.env.NEXT_PUBLIC_BASE_URL}/assets/images/logo-2.svg`}
-                  alt="logo"
-                />
+              <Link href="/" passHref legacyBehavior>
+                <a>
+                  <Image
+                    width={152}
+                    height={36}
+                    src={`${process.env.NEXT_PUBLIC_BASE_URL}/assets/images/logo-2.svg`}
+                    alt="logo"
+                  />
+                </a>
               </Link>
             </div>
             <div>
               <ul className="flex flex-col space-y-5">
                 <li>
-                  <Link href="/">
-                    <span className="text-[#9A9A9A] text-[15px] hover:text-qblack border-b border-transparent hover:border-qblack">
+                  <Link href="/" passHref legacyBehavior>
+                    <a className="text-[#9A9A9A] text-[15px] hover:text-qblack border-b border-transparent hover:border-qblack">
                       Track Order
-                    </span>
+                    </a>
                   </Link>
                 </li>
                 <li>
-                  <Link href="/">
-                    <span className="text-[#9A9A9A] text-[15px] hover:text-qblack border-b border-transparent hover:border-qblack">
+                  <Link href="/" passHref legacyBehavior>
+                    <a className="text-[#9A9A9A] text-[15px] hover:text-qblack border-b border-transparent hover:border-qblack">
                       Delivery & Returns
-                    </span>
+                    </a>
                   </Link>
                 </li>
                 <li>
-                  <Link href="/">
-                    <span className="text-[#9A9A9A] text-[15px] hover:text-qblack border-b border-transparent hover:border-qblack">
+                  <Link href="/" passHref legacyBehavior>
+                    <a className="text-[#9A9A9A] text-[15px] hover:text-qblack border-b border-transparent hover:border-qblack">
                       Warranty
-                    </span>
+                    </a>
                   </Link>
                 </li>
               </ul>
@@ -53,31 +55,31 @@ export default function Footer() {
             </div>
             <ul className="flex flex-col space-y-5">
               <li>
-                <Link href="/">
-                  <span className="text-[#9A9A9A] text-[15px] hover:text-qblack border-b border-transparent hover:border-qblack">
+                <Link href="/" passHref legacyBehavior>
+                  <a className="text-[#9A9A9A] text-[15px] hover:text-qblack border-b border-transparent hover:border-qblack">
                     Rave’s Story
-                  </span>
+                  </a>
                 </Link>
               </li>
               <li>
-                <Link href="/">
-                  <span className="text-[#9A9A9A] text-[15px] hover:text-qblack border-b border-transparent hover:border-qblack">
+                <Link href="/" passHref legacyBehavior>
+                  <a className="text-[#9A9A9A] text-[15px] hover:text-qblack border-b border-transparent hover:border-qblack">
                     Work With Us
-                  </span>
+                  </a>
                 </Link>
               </li>
               <li>
-                <Link href="/">
-                  <span className="text-[#9A9A9A] text-[15px] hover:text-qblack border-b border-transparent hover:border-qblack">
+                <Link href="/" passHref legacyBehavior>
+                  <a className="text-[#9A9A9A] text-[15px] hover:text-qblack border-b border-transparent hover:border-qblack">
                     Corporate News
-                  </span>
+                  </a>
                 </Link>
               </li>
               <li>
-                <Link href="/">
-                  <span className="text-[#9A9A9A] text-[15px] hover:text-qblack border-b border-transparent hover:border-qblack">
+                <Link href="/" passHref legacyBehavior>
+                  <a className="text-[#9A9A9A] text-[15px] hover:text-qblack border-b border-transparent hover:border-qblack">
                     Investors
-                  </span>
+                  </a>
                 </Link>
               </li>
             </ul>
@@ -88,31 +90,31 @@ export default function Footer() {
             </div>
             <ul className="flex flex-col space-y-5">
               <li>
-                <Link href="/">
-                  <span className="text-[#9A9A9A] text-[15px] hover:text-qblack border-b border-transparent hover:border-qblack">
+                <Link href="/" passHref legacyBehavior>
+                  <a className="text-[#9A9A9A] text-[15px] hover:text-qblack border-b border-transparent hover:border-qblack">
                     Furniture
-                  </span>
+                  </a>
                 </Link>
               </li>
               <li>
-                <Link href="/">
-                  <span className="text-[#9A9A9A] text-[15px] hover:text-qblack border-b border-transparent hover:border-qblack">
+                <Link href="/" passHref legacyBehavior>
+                  <a className="text-[#9A9A9A] text-[15px] hover:text-qblack border-b border-transparent hover:border-qblack">
                     Decoration
-                  </span>
+                  </a>
                 </Link>
               </li>
               <li>
-                <Link href="/">
-                  <span className="text-[#9A9A9A] text-[15px] hover:text-qblack border-b border-transparent hover:border-qblack">
+                <Link href="/" passHref legacyBehavior>
+                  <a className="text-[#9A9A9A] text-[15px] hover:text-qblack border-b border-transparent hover:border-qblack">
                     Kitchen
-                  </span>
+                  </a>
                 </Link>
               </li>
               <li>
-                <Link href="/">
-                  <span className="text-[#9A9A9A] text-[15px] hover:text-qblack border-b border-transparent hover:border-qblack">
+                <Link href="/" passHref legacyBehavior>
+                  <a className="text-[#9A9A9A] text-[15px] hover:text-qblack border-b border-transparent hover:border-qblack">
                     Interior
-                  </span>
+                  </a>
                 </Link>
               </li>
             </ul>
@@ -123,31 +125,31 @@ export default function Footer() {
             </div>
             <ul className="flex flex-col space-y-5">
               <li>
-                <Link href="/">
-                  <span className="text-[#9A9A9A] text-[15px] hover:text-qblack border-b border-transparent hover:border-qblack">
+                <Link href="/" passHref legacyBehavior>
+                  <a className="text-[#9A9A9A] text-[15px] hover:text-qblack border-b border-transparent hover:border-qblack">
                     Secure Payment
-                  </span>
+                  </a>
                 </Link>
               </li>
               <li>
-                <Link href="/">
-                  <span className="text-[#9A9A9A] text-[15px] hover:text-qblack border-b border-transparent hover:border-qblack">
+                <Link href="/" passHref legacyBehavior>
+                  <a className="text-[#9A9A9A] text-[15px] hover:text-qblack border-b border-transparent hover:border-qblack">
                     Privacy Policy
-                  </span>
+                  </a>
                 </Link>
               </li>
               <li>
-                <Link href="/">
-                  <span className="text-[#9A9A9A] text-[15px] hover:text-qblack border-b border-transparent hover:border-qblack">
+                <Link href="/" passHref legacyBehavior>
+                  <a className="text-[#9A9A9A] text-[15px] hover:text-qblack border-b border-transparent hover:border-qblack">
                     Terms of Use
-                  </span>
+                  </a>
                 </Link>
               </li>
               <li>
-                <Link href="/">
-                  <span className="text-[#9A9A9A] text-[15px] hover:text-qblack border-b border-transparent hover:border-qblack">
+                <Link href="/" passHref legacyBehavior>
+                  <a className="text-[#9A9A9A] text-[15px] hover:text-qblack border-b border-transparent hover:border-qblack">
                     Archived Products
-                  </span>
+                  </a>
                 </Link>
               </li>
             </ul>

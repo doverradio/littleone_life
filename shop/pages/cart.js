@@ -1,5 +1,5 @@
 import React from 'react';
-import Layout from './layout0';
+import Layout from '@/components/Partials/Layout';
 
 const CartPage = () => {
   return (
