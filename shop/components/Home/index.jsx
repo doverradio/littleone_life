@@ -1,3 +1,18 @@
+import React from 'react';
+import Layout from '../Partials/Layout';
+import datas from '../data/products.json'; 
+import Banner from '../Home/Banner';
+import SectionStyleOne from '../Helpers/SectionStyleOne';
+import SectionStyleTwo from '../Helpers/SectionStyleTwo';
+import SectionStyleThree from '../Helpers/SectionStyleThree';
+import SectionStyleFour from '../Helpers/SectionStyleFour';
+import BrandSection from '../Home/BrandSection';
+import CampaignCountDown from '../Home/CampaignCountDown';
+import BestSellers from '../Home/BestSellers';
+import ProductsAds from '../Home/ProductsAds';
+import ViewMoreTitle from '../Helpers/ViewMoreTitle';
+import ViewMoreTitle from '../Helpers/ViewMoreTitle';
+
 export default function Home() {
   const { products } = datas;
   const brands = [];
