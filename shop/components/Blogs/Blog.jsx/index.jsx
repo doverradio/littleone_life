@@ -1,12 +1,13 @@
 import PageTitle from "../../Helpers/PageTitle";
 import Layout from "../../Partials/Layout";
 import CommentBlog from "./CommentBlog";
+import Image from 'next/image';
 
 // Blog Image Component
 function BlogImage({ src, alt }) {
   return (
-    <div className="img w-full h-[457px]">
-      <img src={src} alt={alt} className="w-full h-full object-cover" />
+    <div className="img w-full h-[457px] relative">
+      <Image src={src} alt={alt} layout="fill" objectFit="cover" />
     </div>
   );
 }
@@ -69,8 +70,8 @@ function ExtraContentImages({ imageUrls }) {
   return (
     <div className="w-full sm:flex sm:space-x-[30px] mb-3">
       {imageUrls.map((url, index) => (
-        <div key={index} className="sm:w-[370px] h-[235px]">
-          <img src={url} alt="blog" className="w-full h-full object-cover" />
+        <div key={index} className="sm:w-[370px] h-[235px] relative">
+          <Image src={url} alt="blog" layout="fill" objectFit="cover" />
         </div>
       ))}
     </div>

@@ -1,8 +1,9 @@
-import Link from 'next/link';
+import Link from "next/link";
 import ThinBag from "../../../Helpers/icons/ThinBag";
 import Middlebar from "./Middlebar";
 import Navbar from "./Navbar";
 import TopBar from "./TopBar";
+import Image from "next/image";
 
 export default function HeaderFour({ className, drawerAction }) {
   return (
@@ -29,13 +30,12 @@ export default function HeaderFour({ className, drawerAction }) {
           </div>
           <div>
             <Link href="/">
-              <img
-                width="152"
-                height="36"
-                src={`${
-                  process.env.NEXT_PUBLIC_BASE_URL
-                }/assets/images/logo-4.svg`}
+              <Image
+                width={152}
+                height={36}
+                src="/assets/images/logo-4.svg"
                 alt="logo"
+                priority
               />
             </Link>
           </div>

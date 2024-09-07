@@ -39,4 +39,9 @@ export default {
   basePath: '', // Modify if you have a basePath requirement
   trailingSlash: false, // Set to true if your routes should end with a slash
   poweredByHeader: false, // Hides the X-Powered-By: Next.js header
+
+  // Added images configuration for the localhost domain and others
+  images: {
+    domains: ['localhost', 'littleone.life', 'shop.littleone.life'], // Add your required image domains here
+  },
 };

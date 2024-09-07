@@ -2,6 +2,7 @@ import InputCom from "../Helpers/InputCom";
 import PageTitle from "../Helpers/PageTitle";
 import Layout from "../Partials/Layout";
 import Thumbnail from "./Thumbnail";
+import Link from 'next/link'; // Import Next.js Link component
 
 export default function TrackingOrder() {
   return (
@@ -22,7 +23,7 @@ export default function TrackingOrder() {
               Track Your Order
             </h1>
             <p className="text-[15px] text-qgraytwo leading-8 mb-5">
-              Enter your order taracking number and your secreet id.
+              Enter your order tracking number and your secret ID.
             </p>
             <div className="w-full bg-white lg:px-[30px] px-5 py-[23px] lg:flex items-center">
               <div className="lg:w-[642px] w-full">
@@ -41,11 +42,12 @@ export default function TrackingOrder() {
                   />
                 </div>
 
-                <a href="#">
+                {/* Replace <a> with <Link> */}
+                <Link href="#">
                   <div className="w-[142px] h-[50px] black-btn flex justify-center items-center">
                     <span>Track Now</span>
                   </div>
-                </a>
+                </Link>
               </div>
               <div className="flex-1 flex justify-center mt-5 lg:mt-0">
                 <Thumbnail />

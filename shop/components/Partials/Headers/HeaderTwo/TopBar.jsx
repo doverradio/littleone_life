@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import Arrow from "../../../Helpers/icons/Arrow";
 import Selectbox from "../../../Helpers/Selectbox";
 
@@ -41,12 +42,10 @@ export default function TopBar({ className }) {
               <div className="flex space-x-6">
                 <div className="country-select flex space-x-1 items-center">
                   <div>
-                    <img
-                      src={`${
-                        process.env.NEXT_PUBLIC_BASE_URL
-                      }/assets/images/country-logo-16x16.png`}
-                      width="16"
-                      height="16"
+                    <Image
+                      src={`${process.env.NEXT_PUBLIC_BASE_URL}/assets/images/country-logo-16x16.png`}
+                      width={16}
+                      height={16}
                       alt="country logo"
                       className="overflow-hidden rounded-full"
                     />

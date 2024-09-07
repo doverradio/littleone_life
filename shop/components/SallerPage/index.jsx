@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Image from 'next/image'; // Importing Next.js Image component
 import productDatas from "../../data/products.json";
 import ProductCardStyleOne from "../Helpers/Cards/ProductCardStyleOne";
 import DataIteration from "../Helpers/DataIteration";
@@ -150,11 +151,13 @@ export default function SallerPage() {
               <div className="saller-logo mt-5 sm:mt-5">
                 <div className="flex sm:justify-center justify-start">
                   <div className="w-[170px] h-[170px] flex justify-center items-center rounded-full bg-white mb-1">
-                    <img
+                    <Image
                       src={`${
                         process.env.NEXT_PUBLIC_BASE_URL
                       }/assets/images/saller-7.png`}
                       alt="logo"
+                      width={170}
+                      height={170}
                       className="object-contain"
                     />
                   </div>
@@ -181,12 +184,14 @@ export default function SallerPage() {
                 />
                 {/* ads */}
                 <div className="w-full hidden lg:block h-[295px]">
-                  <img
+                  <Image
                     src={`${
                       process.env.NEXT_PUBLIC_BASE_URL
                     }/assets/images/bannera-5.png`}
                     alt=""
-                    className="w-full h-full object-contain"
+                    width={295}
+                    height={295}
+                    className="object-contain"
                   />
                 </div>
               </div>
@@ -250,11 +255,13 @@ export default function SallerPage() {
                 </div>
 
                 <div className="w-full h-[164px] overflow-hidden mb-[40px]">
-                  <img
+                  <Image
                     src={`${
                       process.env.NEXT_PUBLIC_BASE_URL
                     }/assets/images/bannera-6.png`}
                     alt=""
+                    width={164}
+                    height={164}
                     className="w-full h-full object-contain"
                   />
                 </div>

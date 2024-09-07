@@ -3,6 +3,7 @@ import ThinBag from "../../../Helpers/icons/ThinBag";
 import Middlebar from "./Middlebar";
 import Navbar from "./Navbar";
 import TopBar from "./TopBar";
+import Image from 'next/image';
 
 export default function HeaderOne({ className, drawerAction, type = 1 }) {
   return (
@@ -33,34 +34,28 @@ export default function HeaderOne({ className, drawerAction, type = 1 }) {
           <div>
             {type === 3 ? (
               <Link href="/">
-                <img
-                  width="152"
-                  height="36"
-                  src={`${
-                    process.env.NEXT_PUBLIC_BASE_URL
-                  }/assets/images/logo-3.svg`}
+                <Image
+                  width={152}
+                  height={36}
+                  src={`${process.env.NEXT_PUBLIC_BASE_URL}/assets/images/logo-3.svg`}
                   alt="logo"
                 />
               </Link>
             ) : type === 4 ? (
               <Link href="/">
-                <img
-                  width="152"
-                  height="36"
-                  src={`${
-                    process.env.NEXT_PUBLIC_BASE_URL
-                  }/assets/images/logo-4.svg`}
+                <Image
+                  width={152}
+                  height={36}
+                  src={`${process.env.NEXT_PUBLIC_BASE_URL}/assets/images/logo-4.svg`}
                   alt="logo"
                 />
               </Link>
             ) : (
               <Link href="/">
-                <img
-                  width="152"
-                  height="36"
-                  src={`${
-                    process.env.NEXT_PUBLIC_BASE_URL
-                  }/assets/images/logo.svg`}
+                <Image
+                  width={152}
+                  height={36}
+                  src={`${process.env.NEXT_PUBLIC_BASE_URL}/assets/images/logo.svg`}
                   alt="logo"
                 />
               </Link>
