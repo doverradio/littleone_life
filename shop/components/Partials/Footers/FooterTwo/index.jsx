@@ -132,8 +132,13 @@ export default function Footer() {
             </div>
             <span className="sm:text-base text-[10px] text-qgray font-300">
               ©2022
-              <Link href="https://quomodosoft.com/" className="font-500 text-qblack mx-1" target="_blank" rel="noreferrer">
-                Quomodosoft
+              <Link 
+                href="https://littleone.life/"
+                target="_blank"
+                rel="noreferrer"
+                className="font-500 text-qblack mx-1"
+              >
+                littleone.life
               </Link>
               All rights reserved
             </span>

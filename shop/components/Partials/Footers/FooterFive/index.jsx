@@ -178,12 +178,12 @@ export default function FooterFour() {
             <span className="sm:text-base text-[10px] text-white font-300">
               ©2022
               <a
-                href="https://quomodosoft.com/"
+                href="https://littleone.life/"
                 target="_blank"
                 rel="noreferrer"
-                className="font-500 text-qh5-bwhite mx-1"
+                className="font-500 text-qblack mx-1"
               >
-                Quomodosoft
+                littleone.life
               </a>
               All rights reserved
             </span>

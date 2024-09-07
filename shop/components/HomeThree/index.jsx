@@ -16,6 +16,7 @@ export default function HomeThree() {
   products.forEach((product) => {
     brands.push(product.brand);
   });
+  
   return (
     <>
       <LayoutHomeThree type={3} childrenClasses="pt-0">
@@ -66,6 +67,7 @@ export default function HomeThree() {
           sectionHeight="sm:h-[295px] h-full"
           className="products-ads-section mb-[60px]"
         />
+
         <SectionStyleOneHmThree
           type={3}
           categoryBackground={`${

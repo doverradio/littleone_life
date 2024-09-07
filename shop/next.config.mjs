@@ -42,6 +42,6 @@ export default {
 
   // Added images configuration for the localhost domain and others
   images: {
-    domains: ['localhost', 'littleone.life', 'shop.littleone.life'], // Add your required image domains here
+    domains: [ 'localhost', 'littleone.life', 'shop.littleone.life'], // Add your required image domains here
   },
 };

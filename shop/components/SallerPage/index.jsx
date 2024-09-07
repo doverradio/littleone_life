@@ -95,7 +95,7 @@ export default function SallerPage() {
                         />
                       </svg>
                     </span>
-                    <span>Demoemail@gmail.com</span>
+                    <span>thebillvideos@gmail.com</span>
                   </li>
                   <li className="text-black flex space-x-5 items-center leading-9 text-base font-normal">
                     <span>
@@ -129,13 +129,13 @@ export default function SallerPage() {
                         />
                       </svg>
                     </span>
-                    <span>Haydarabad, Rord 3,Dhaka</span>
+                    <span>Los Angeles, California, United States</span>
                   </li>
                 </ul>
               </div>
 
               <div className="saller-name lg:block hidden">
-                <h1 className="text-[60px] font-bold">Quomodosoft</h1>
+                <h1 className="text-[60px] font-bold">littleone.life</h1>
                 <div className="flex justify-center">
                   <div className="flex">
                     <Star w="30" h="30" />
