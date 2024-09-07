@@ -5,6 +5,7 @@ import ThinLove from "../../../Helpers/icons/ThinLove";
 import ThinPeople from "../../../Helpers/icons/ThinPeople";
 import SearchBox from "../../../Helpers/SearchBox";
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function Middlebar({ className }) {
   return (
@@ -14,12 +15,10 @@ export default function Middlebar({ className }) {
           <div className="flex justify-between items-center h-full">
             <div>
               <Link href="/">
-                <img
-                  width="152"
-                  height="36"
-                  src={`${
-                    process.env.NEXT_PUBLIC_BASE_URL
-                  }/assets/images/logo-5.svg`}
+                <Image
+                  width={152}
+                  height={36}
+                  src={`${process.env.NEXT_PUBLIC_BASE_URL}/assets/images/logo-5.svg`}
                   alt="logo"
                 />
               </Link>
@@ -59,8 +58,6 @@ export default function Middlebar({ className }) {
                     15
                   </span>
                 </div>
-                {/* <div className="fixed left-0 top-0 w-full h-full z-40"></div> */}
-                {/* hidden group-hover:block" */}
                 <Cart className="absolute -right-[45px] top-11 z-50 hidden group-hover:block" />
               </div>
               <div>

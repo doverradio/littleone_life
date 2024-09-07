@@ -2,6 +2,7 @@ import React from "react";
 import DataIteration from "../../../Helpers/DataIteration";
 import Star from "../../../Helpers/icons/Star";
 import Link from 'next/link';
+import Image from 'next/image'; // Import Image from next/image
 
 export default function ReviewTab({ className, products }) {
   return (
@@ -19,12 +20,13 @@ export default function ReviewTab({ className, products }) {
                 >
                   <div className="flex space-x-2 items-center w-full h-full p-2">
                     <div className="w-1/3 h-full">
-                      <img
+                      <Image
                         src={`${
                           process.env.NEXT_PUBLIC_BASE_URL
                         }/assets/images/${datas.image}`}
-                        alt=""
-                        className="w-full h-full object-contain"
+                        alt={datas.title}
+                        layout="fill"
+                        objectFit="contain"
                       />
                     </div>
                     <div className="flex-1 flex flex-col justify-center h-full">
@@ -46,8 +48,8 @@ export default function ReviewTab({ className, products }) {
                           </p>
                         </Link>
                         <p className="price mb-[26px] text-sm text-qgray line-clamp-2">
-                          Didn't I tell you not put your phone on charge because
-                          weekend?
+                          Didn&apos;t I tell you not to put your phone on charge because
+                          of the weekend?
                         </p>
                       </div>
                     </div>

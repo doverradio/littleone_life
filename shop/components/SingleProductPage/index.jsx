@@ -25,7 +25,7 @@ export default function SingleProductPage() {
       id: Math.random(),
       author: "Rafiqul Islam",
       comments: `Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry. Lorem Ipsum has been the industry's standard dummy
+                industry. Lorem Ipsum has been the industry&apos;s standard dummy
                 text ever since the redi 1500s, when an unknown printer took a
                 galley of type and scrambled it to make a type specimen book. It
                 has survived not only five centuries but also the on leap into
@@ -43,7 +43,7 @@ export default function SingleProductPage() {
       id: Math.random(),
       author: "Abdullah Mamun",
       comments: `Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry. Lorem Ipsum has been the industry's standard dummy
+                industry. Lorem Ipsum has been the industry&apos;s standard dummy
                 text ever since the redi 1500s, when an unknown printer took a
                 galley of type and scrambled it to make a type specimen book. It
                 has survived not only five centuries but also the on leap into
@@ -51,6 +51,7 @@ export default function SingleProductPage() {
       review: 5,
     },
   ]);
+
   const reviewAction = () => {
     setLoading(true);
     setTimeout(() => {
@@ -160,17 +161,17 @@ export default function SingleProductPage() {
                     </h6>
                     <p className="text-[15px] text-qgray text-normal mb-10">
                       Lorem Ipsum is simply dummy text of the printing and
-                      typesetting industry. Lorem Ipsum has been the industry's
+                      typesetting industry. Lorem Ipsum has been the industry&apos;s
                       standard dummy text ever since the 1500s, when an unknown
                       printer took a galley of type and scrambled it to make a
                       type specimen book. It has survived not only five
                       centuries but also the on leap into electronic
                       typesetting, remaining essentially unchanged. It wasn’t
                       popularised in the 1960s with the release of Letraset
-                      sheets containing Lorem Ipsum passages, andei more
-                      recently with desktop publishing software like Aldus
-                      PageMaker including versions of Lorem Ipsum to make a type
-                      specimen book.
+                      sheets containing Lorem Ipsum passages, and more recently
+                      with desktop publishing software like Aldus PageMaker
+                      including versions of Lorem Ipsum to make a type specimen
+                      book.
                     </p>
                     <div>
                       <h6 className="text-[18px] text-medium mb-4">
@@ -181,7 +182,7 @@ export default function SingleProductPage() {
                           slim body with metal cover
                         </li>
                         <li className="font-normal text-qgray leading-9">
-                          latest Intel Core i5-1135G7 import.metaor (4 cores / 8
+                          latest Intel Core i5-1135G7 processor (4 cores / 8
                           threads)
                         </li>
                         <li className="font-normal text-qgray leading-9">
@@ -292,7 +293,7 @@ export default function SingleProductPage() {
               <div className="inputs w-full">
                 <div className="w-full mb-5">
                   <InputCom
-                    label="Enter Report Ttile*"
+                    label="Enter Report Title*"
                     placeholder="Reports Headline here"
                     type="email"
                     name="name"

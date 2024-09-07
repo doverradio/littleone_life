@@ -1,12 +1,8 @@
 import Link from 'next/link';
-import CountDown from "../Helpers/CountDown";
+import Image from 'next/image';
+import CountDown from '../Helpers/CountDown';
 
-export default function CampaignCountDown({
-  className,
-  lastDate,
-  counterbg,
-  appscreen,
-}) {
+export default function CampaignCountDown({ className, lastDate, counterbg, appscreen }) {
   const { showDate, showHour, showMinute, showSecound } = CountDown(lastDate);
 
   return (
@@ -69,14 +65,10 @@ export default function CampaignCountDown({
                     </div>
                   </div>
                   <div className="countdown-title mb-4">
-                    <h1 className="text-[44px] text-qblack font-600">
-                      WOO! Flash Sale
-                    </h1>
+                    <h1 className="text-[44px] text-qblack font-600">WOO! Flash Sale</h1>
                   </div>
                   <div className="inline-flex space-x-2 items-center border-b border-qyellow">
-                    <span className="text-sm font-600 tracking-wide leading-7">
-                      Shop Now
-                    </span>
+                    <span className="text-sm font-600 tracking-wide leading-7">Shop Now</span>
                     <span>
                       <svg
                         width="7"
@@ -122,52 +114,44 @@ export default function CampaignCountDown({
             >
               <div className="flex flex-col h-full justify-between">
                 <div className="get-app">
-                  <p className="text-[13px] font-600 text-qblack mb-3">
-                    MOBILE APP VERSION
-                  </p>
+                  <p className="text-[13px] font-600 text-qblack mb-3">MOBILE APP VERSION</p>
                   <h1 className="text-[30px] font-600 text-qblack leading-10 mb-8">
                     Get Our
-                    <span className="text-qred border-b-2 border-qred mx-2">
-                      Mobile App
-                    </span>
-                    <br /> It’s Make easy for you life !
+                    <span className="text-qred border-b-2 border-qred mx-2">Mobile App</span>
+                    <br /> It’s Make easy for your life!
                   </h1>
                   <div className="flex space-x-5 items-center">
                     <div>
                       <a href="#">
-                        <img
-                          width="170"
-                          height="69"
-                          src={`${
-                            process.env.NEXT_PUBLIC_BASE_URL
-                          }/assets/images/play-store.png`}
-                          alt=""
+                        <Image
+                          width={170}
+                          height={69}
+                          src={`${process.env.NEXT_PUBLIC_BASE_URL}/assets/images/play-store.png`}
+                          alt="Play Store"
                         />
                       </a>
                     </div>
                     <div>
                       <a href="#">
-                        <img
-                          width="170"
-                          height="69"
-                          src={`${
-                            process.env.NEXT_PUBLIC_BASE_URL
-                          }/assets/images/apple-store.png`}
-                          alt=""
+                        <Image
+                          width={170}
+                          height={69}
+                          src={`${process.env.NEXT_PUBLIC_BASE_URL}/assets/images/apple-store.png`}
+                          alt="Apple Store"
                         />
                       </a>
                     </div>
                   </div>
                 </div>
                 <div className="app-screen">
-                  <img
+                  <Image
                     src={
                       appscreen ||
-                      `${
-                        process.env.NEXT_PUBLIC_BASE_URL
-                      }/assets/images/app-screen.png`
+                      `${process.env.NEXT_PUBLIC_BASE_URL}/assets/images/app-screen.png`
                     }
-                    alt=""
+                    alt="App Screen"
+                    width={300}
+                    height={600}
                   />
                 </div>
               </div>

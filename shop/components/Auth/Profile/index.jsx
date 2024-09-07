@@ -1,4 +1,5 @@
 import { useRouter } from "next/router";
+import Link from 'next/link'; // Import Link component from Next.js
 import { useEffect, useState } from "react";
 import datas from "../../../data/products.json";
 import BreadcrumbCom from "../../BreadcrumbCom";
@@ -82,50 +83,48 @@ export default function Profile() {
                 <div className="w-[236px] min-h-[600px] border-r border-[rgba(0, 0, 0, 0.1)]">
                   <div className="flex flex-col space-y-10">
                     <div className="item group">
-                      <a href="/profile#dashboard">
-                        <div className="flex space-x-3 items-center text-qgray hover:text-qblack">
+                      <Link href="/profile#dashboard">
+                        <div className="flex space-x-3 items-center text-qgray hover:text-qblack cursor-pointer">
                           <span>
                             <IcoDashboard />
                           </span>
-                          <span className=" font-normal text-base">
-                            Dashboard
-                          </span>
+                          <span className="font-normal text-base">Dashboard</span>
                         </div>
-                      </a>
+                      </Link>
                     </div>
                     <div className="item group">
-                      <a href="/profile#profile">
-                        <div className="flex space-x-3 items-center text-qgray hover:text-qblack">
+                      <Link href="/profile#profile">
+                        <div className="flex space-x-3 items-center text-qgray hover:text-qblack cursor-pointer">
                           <span>
                             <IcoPeople />
                           </span>
-                          <span className=" font-normal text-base">
+                          <span className="font-normal text-base">
                             Personal Info
                           </span>
                         </div>
-                      </a>
+                      </Link>
                     </div>
                     <div className="item group">
-                      <a href="/profile#payment">
-                        <div className="flex space-x-3 items-center text-qgray hover:text-qblack">
+                      <Link href="/profile#payment">
+                        <div className="flex space-x-3 items-center text-qgray hover:text-qblack cursor-pointer">
                           <span>
                             <IcoPayment />
                           </span>
-                          <span className=" font-normal text-base">
+                          <span className="font-normal text-base">
                             Payment Method
                           </span>
                         </div>
-                      </a>
+                      </Link>
                     </div>
                     <div className="item group">
-                      <a href="/profile#order">
-                        <div className="flex space-x-3 items-center text-qgray hover:text-qblack">
+                      <Link href="/profile#order">
+                        <div className="flex space-x-3 items-center text-qgray hover:text-qblack cursor-pointer">
                           <span>
                             <IcoCart />
                           </span>
-                          <span className=" font-normal text-base">Order</span>
+                          <span className="font-normal text-base">Order</span>
                         </div>
-                      </a>
+                      </Link>
                     </div>
                     {/* Continue similarly for other links */}
                   </div>

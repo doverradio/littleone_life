@@ -1,6 +1,7 @@
 import ProductCardStyleOne from "../Helpers/Cards/ProductCardStyleOne";
 import DataIteration from "../Helpers/DataIteration";
 import Star from "../Helpers/icons/Star";
+import Image from 'next/image'; // Importing the Image component
 
 export default function SallerInfo({ products }) {
   return (
@@ -8,11 +9,11 @@ export default function SallerInfo({ products }) {
       <div className="saller-info sm:flex justify-between items-center pb-[30px] border-b border-[#E8E8E8]">
         <div className="sm:flex sm:space-x-5 items-center sm:w-1/4">
           <div className="saller w-[73px] h-[73px] rounded-full overflow-hidden">
-            <img
-              src={`${
-                process.env.NEXT_PUBLIC_BASE_URL
-              }/assets/images/comment-user-1.png`}
+            <Image
+              src={`${process.env.NEXT_PUBLIC_BASE_URL}/assets/images/comment-user-1.png`}
               alt="saller"
+              width={73}
+              height={73}
               className="w-full h-full object-cover"
             />
           </div>
@@ -21,7 +22,7 @@ export default function SallerInfo({ products }) {
               Ridoy Rock
             </h6>
             <p className="text-[13px] font-normal text-qgray leading-[30px]">
-              London,United Kingdom
+              London, United Kingdom
             </p>
             <div className="flex items-center mt-4">
               <div className="flex">
@@ -58,7 +59,7 @@ export default function SallerInfo({ products }) {
               </li>
             </ul>
           </div>
-          <div className="w-full ">
+          <div className="w-full">
             <ul>
               <li className="text-qgray leading-[30px]">
                 <span className="text-[15px] font-normal text-qblack">

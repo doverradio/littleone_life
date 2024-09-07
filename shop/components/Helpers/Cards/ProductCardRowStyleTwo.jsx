@@ -1,20 +1,21 @@
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function ProductCardRowStyleTwo({ className, datas }) {
   return (
     <div
       data-aos="fade-up"
-      className={`product-card-row-two w-full  ${className || ""}`}
+      className={`product-card-row-two w-full  ${className || ''}`}
     >
       <div className="w-full h-[105px] bg-white border border-primarygray px-5 ">
         <div className="w-full h-full flex space-x-5 justify-center items-center">
           <div className="w-[75px] h-[75px]">
-            <img
-              src={`${process.env.NEXT_PUBLIC_BASE_URL}/assets/images/${
-                datas.image
-              }`}
-              alt=""
-              className="w-full h-full object-cover"
+            <Image
+              src={`${process.env.NEXT_PUBLIC_BASE_URL}/assets/images/${datas.image}`}
+              alt={datas.title}
+              width={75}
+              height={75}
+              objectFit="cover"
             />
           </div>
           <div className="flex-1 h-full flex flex-col justify-center ">

@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image'; // Importing Next.js Image component
 import ThinBag from "../../../Helpers/icons/ThinBag";
 import Middlebar from "./Middlebar";
 import Navbar from "./Navbar";
@@ -29,12 +30,11 @@ export default function HeaderFive({ className, drawerAction }) {
           </div>
           <div>
             <Link href="/">
-              <img
-                width="152"
-                height="36"
-                src={`${
-                  process.env.NEXT_PUBLIC_BASE_URL
-                }/assets/images/logo-5.svg`}
+              {/* Using Next.js Image component for optimization */}
+              <Image
+                width={152}
+                height={36}
+                src={`${process.env.NEXT_PUBLIC_BASE_URL}/assets/images/logo-5.svg`}
                 alt="logo"
               />
             </Link>

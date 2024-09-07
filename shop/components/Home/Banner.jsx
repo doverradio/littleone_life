@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function Banner({ className }) {
   return (
@@ -6,49 +7,44 @@ export default function Banner({ className }) {
       <div className={`w-full ${className || ""}`}>
         <div className="container-x mx-auto">
           <div className="main-wrapper w-full">
-            <div className="banner-card xl:flex xl:space-x-[30px] xl:h-[600px]  mb-[30px]">
+            <div className="banner-card xl:flex xl:space-x-[30px] xl:h-[600px] mb-[30px]">
               <div data-aos="fade-right" className="xl:w-[740px] w-full h-full">
                 <Link href="/single-product">
                   <picture>
                     <source
                       media="(min-width:1025px)"
-                      srcSet={`${
-                        process.env.NEXT_PUBLIC_BASE_URL
-                      }/assets/images/banner-1.png`}
+                      srcSet={`${process.env.NEXT_PUBLIC_BASE_URL}/assets/images/banner-1.png`}
                     />
-                    <img
-                      src={`${
-                        process.env.NEXT_PUBLIC_BASE_URL
-                      }/assets/images/banner-1.2.png`}
-                      alt=""
-                      className="w-full max-w-full h-auto object-cover"
+                    <Image
+                      src={`${process.env.NEXT_PUBLIC_BASE_URL}/assets/images/banner-1.2.png`}
+                      alt="Banner 1"
+                      layout="fill"
+                      objectFit="cover"
                     />
                   </picture>
                 </Link>
               </div>
               <div
                 data-aos="fade-left"
-                className="flex-1 flex xl:flex-col flex-row  xl:space-y-[30px] h-full"
+                className="flex-1 flex xl:flex-col flex-row xl:space-y-[30px] h-full"
               >
                 <div className="w-full xl:h-1/2">
                   <Link href="/single-product">
-                    <img
-                      src={`${
-                        process.env.NEXT_PUBLIC_BASE_URL
-                      }/assets/images/banner-2.png`}
-                      alt=""
-                      className="w-full h-full"
+                    <Image
+                      src={`${process.env.NEXT_PUBLIC_BASE_URL}/assets/images/banner-2.png`}
+                      alt="Banner 2"
+                      layout="fill"
+                      objectFit="cover"
                     />
                   </Link>
                 </div>
                 <div className="w-full xl:h-1/2">
                   <Link href="/single-product">
-                    <img
-                      src={`${
-                        process.env.NEXT_PUBLIC_BASE_URL
-                      }/assets/images/banner-3.png`}
-                      alt=""
-                      className="w-full h-full"
+                    <Image
+                      src={`${process.env.NEXT_PUBLIC_BASE_URL}/assets/images/banner-3.png`}
+                      alt="Banner 3"
+                      layout="fill"
+                      objectFit="cover"
                     />
                   </Link>
                 </div>

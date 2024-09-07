@@ -1,22 +1,25 @@
+import Image from 'next/image';
+
 export default function DiscountBanner({ className }) {
   return (
     <div
-      className={`discount-banner w-full h-[307px] bg-cover  relative ${
+      className={`discount-banner w-full h-[307px] bg-cover relative ${
         className || ""
       }`}
       style={{
-        background: `url(${
+        backgroundImage: `url(${
           process.env.NEXT_PUBLIC_BASE_URL
-        }/assets/images/discount-banner-3.jpg) no-repeat`,
+        }/assets/images/discount-banner-3.jpg)`,
         backgroundSize: "cover",
       }}
     >
       <div className="container-x mx-auto relative h-full">
         <div className="thumb absolute -left-[140px] -top-[87px] w-[520px] h-[394px]">
-          <img
+          <Image
             src="/assets/images/discount-banner-3.1.png"
-            alt=""
-            className="w-full h-full object-contain"
+            alt="Discount Banner"
+            layout="fill"
+            objectFit="contain"
           />
         </div>
         <div className="flex justify-center items-center w-full h-full relative xl:left-[100px]">
@@ -68,7 +71,7 @@ export default function DiscountBanner({ className }) {
               </div>
               <button
                 type="button"
-                className="sm:w-[158px] w-[80px]  h-full bg-qh5-bwhite text-sm font-600"
+                className="sm:w-[158px] w-[80px] h-full bg-qh5-bwhite text-sm font-600"
               >
                 Get the Coupon
               </button>

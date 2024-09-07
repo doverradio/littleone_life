@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function BestSellers({ className }) {
   return (
@@ -10,11 +11,14 @@ export default function BestSellers({ className }) {
           className="item w-full flex flex-col items-center"
         >
           <div className="w-[170px] h-[170px] rounded-full bg-white flex justify-center items-center overflow-hidden mb-2">
-            <img
+            <Image
               src={`${
                 process.env.NEXT_PUBLIC_BASE_URL
               }/assets/images/saller-1.png`}
-              alt=""
+              alt="Shopno BD"
+              width={170}
+              height={170}
+              objectFit="contain"
             />
           </div>
           <Link href="/saller-page">
@@ -27,11 +31,14 @@ export default function BestSellers({ className }) {
           className="item w-full flex flex-col items-center"
         >
           <div className="w-[170px] h-[170px] rounded-full bg-white flex justify-center items-center overflow-hidden mb-2">
-            <img
+            <Image
               src={`${
                 process.env.NEXT_PUBLIC_BASE_URL
               }/assets/images/saller-2.png`}
-              alt=""
+              alt="Eecoms Shop"
+              width={170}
+              height={170}
+              objectFit="contain"
             />
           </div>
           <Link href="/saller-page">
@@ -44,11 +51,14 @@ export default function BestSellers({ className }) {
           className="item w-full flex flex-col items-center"
         >
           <div className="w-[170px] h-[170px] rounded-full bg-white flex justify-center items-center overflow-hidden mb-2">
-            <img
+            <Image
               src={`${
                 process.env.NEXT_PUBLIC_BASE_URL
               }/assets/images/saller-3.png`}
-              alt=""
+              alt="Fusion X"
+              width={170}
+              height={170}
+              objectFit="contain"
             />
           </div>
           <Link href="/saller-page">
@@ -61,11 +71,14 @@ export default function BestSellers({ className }) {
           className="item w-full flex flex-col items-center"
         >
           <div className="w-[170px] h-[170px] rounded-full bg-white flex justify-center items-center overflow-hidden mb-2">
-            <img
+            <Image
               src={`${
                 process.env.NEXT_PUBLIC_BASE_URL
               }/assets/images/saller-4.png`}
-              alt=""
+              alt="Rikayi Rox"
+              width={170}
+              height={170}
+              objectFit="contain"
             />
           </div>
           <Link href="/saller-page">
@@ -78,11 +91,14 @@ export default function BestSellers({ className }) {
           className="item w-full flex flex-col items-center"
         >
           <div className="w-[170px] h-[170px] rounded-full bg-white flex justify-center items-center overflow-hidden mb-2">
-            <img
+            <Image
               src={`${
                 process.env.NEXT_PUBLIC_BASE_URL
               }/assets/images/saller-5.png`}
-              alt=""
+              alt="Habbriyi"
+              width={170}
+              height={170}
+              objectFit="contain"
             />
           </div>
           <Link href="/saller-page">
@@ -95,11 +111,14 @@ export default function BestSellers({ className }) {
           className="item w-full flex flex-col items-center"
         >
           <div className="w-[170px] h-[170px] rounded-full bg-white flex justify-center items-center overflow-hidden mb-2">
-            <img
+            <Image
               src={`${
                 process.env.NEXT_PUBLIC_BASE_URL
               }/assets/images/saller-6.png`}
-              alt=""
+              alt="Rayhans"
+              width={170}
+              height={170}
+              objectFit="contain"
             />
           </div>
           <Link href="/saller-page">

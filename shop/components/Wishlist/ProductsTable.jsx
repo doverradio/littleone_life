@@ -1,4 +1,5 @@
 import InputQuantityCom from "../Helpers/InputQuantityCom";
+import Image from "next/image";
 
 export default function ProductsTable({ className }) {
   return (
@@ -8,27 +9,27 @@ export default function ProductsTable({ className }) {
           <tbody>
             {/* table heading */}
             <tr className="text-[13px] font-medium text-black bg-[#F6F6F6] whitespace-nowrap px-2 border-b default-border-bottom uppercase">
-              <td className="py-4 pl-10 block whitespace-nowrap  w-[380px]">
+              <td className="py-4 pl-10 block whitespace-nowrap w-[380px]">
                 product
               </td>
               <td className="py-4 whitespace-nowrap text-center">color</td>
               <td className="py-4 whitespace-nowrap text-center">size</td>
               <td className="py-4 whitespace-nowrap text-center">price</td>
-              <td className="py-4 whitespace-nowrap  text-center">quantity</td>
-              <td className="py-4 whitespace-nowrap  text-center">total</td>
+              <td className="py-4 whitespace-nowrap text-center">quantity</td>
+              <td className="py-4 whitespace-nowrap text-center">total</td>
               <td className="py-4 whitespace-nowrap text-right w-[114px] block"></td>
             </tr>
             {/* table heading end */}
             <tr className="bg-white border-b hover:bg-gray-50">
-              <td className="pl-10  py-4 ">
+              <td className="pl-10 py-4">
                 <div className="flex space-x-6 items-center">
                   <div className="w-[80px] h-[80px] overflow-hidden flex justify-center items-center border border-[#EDEDED]">
-                    <img
-                      src={`${
-                        process.env.NEXT_PUBLIC_BASE_URL
-                      }/assets/images/product-img-1.jpg`}
+                    <Image
+                      src={`${process.env.NEXT_PUBLIC_BASE_URL}/assets/images/product-img-1.jpg`}
                       alt="product"
-                      className="w-full h-full object-contain"
+                      width={80}
+                      height={80}
+                      objectFit="contain"
                     />
                   </div>
                   <div className="flex-1 flex flex-col">
@@ -39,7 +40,7 @@ export default function ProductsTable({ className }) {
                 </div>
               </td>
               <td className="text-center py-4 px-2">
-                <div className=" flex justify-center items-center">
+                <div className="flex justify-center items-center">
                   <span className="w-[20px] h-[20px] bg-[#E4BC87] block rounded-full"></span>
                 </div>
               </td>
@@ -53,7 +54,7 @@ export default function ProductsTable({ className }) {
                   <span className="text-[15px] font-normal">$38</span>
                 </div>
               </td>
-              <td className=" py-4">
+              <td className="py-4">
                 <div className="flex justify-center items-center">
                   <InputQuantityCom />
                 </div>
@@ -83,15 +84,15 @@ export default function ProductsTable({ className }) {
               </td>
             </tr>
             <tr className="bg-white border-b hover:bg-gray-50">
-              <td className="pl-10  py-4  w-[380px]">
+              <td className="pl-10 py-4 w-[380px]">
                 <div className="flex space-x-6 items-center">
                   <div className="w-[80px] h-[80px] overflow-hidden flex justify-center items-center border border-[#EDEDED]">
-                    <img
-                      src={`${
-                        process.env.NEXT_PUBLIC_BASE_URL
-                      }/assets/images/product-img-2.jpg`}
+                    <Image
+                      src={`${process.env.NEXT_PUBLIC_BASE_URL}/assets/images/product-img-2.jpg`}
                       alt="product"
-                      className="w-full h-full object-contain"
+                      width={80}
+                      height={80}
+                      objectFit="contain"
                     />
                   </div>
                   <div className="flex-1 flex flex-col">
@@ -102,7 +103,7 @@ export default function ProductsTable({ className }) {
                 </div>
               </td>
               <td className="text-center py-4 px-2">
-                <div className=" flex justify-center items-center">
+                <div className="flex justify-center items-center">
                   <span className="w-[20px] h-[20px] bg-[#E4BC87] block rounded-full"></span>
                 </div>
               </td>
@@ -116,7 +117,7 @@ export default function ProductsTable({ className }) {
                   <span className="text-[15px] font-normal">$38</span>
                 </div>
               </td>
-              <td className=" py-4">
+              <td className="py-4">
                 <div className="flex justify-center items-center">
                   <InputQuantityCom />
                 </div>
@@ -146,15 +147,15 @@ export default function ProductsTable({ className }) {
               </td>
             </tr>
             <tr className="bg-white border-b hover:bg-gray-50">
-              <td className="pl-10  py-4  w-[380px]">
+              <td className="pl-10 py-4 w-[380px]">
                 <div className="flex space-x-6 items-center">
                   <div className="w-[80px] h-[80px] overflow-hidden flex justify-center items-center border border-[#EDEDED]">
-                    <img
-                      src={`${
-                        process.env.NEXT_PUBLIC_BASE_URL
-                      }/assets/images/product-img-3.jpg`}
+                    <Image
+                      src={`${process.env.NEXT_PUBLIC_BASE_URL}/assets/images/product-img-3.jpg`}
                       alt="product"
-                      className="w-full h-full object-contain"
+                      width={80}
+                      height={80}
+                      objectFit="contain"
                     />
                   </div>
                   <div className="flex-1 flex flex-col">
@@ -165,7 +166,7 @@ export default function ProductsTable({ className }) {
                 </div>
               </td>
               <td className="text-center py-4 px-2">
-                <div className=" flex justify-center items-center">
+                <div className="flex justify-center items-center">
                   <span className="w-[20px] h-[20px] bg-[#E4BC87] block rounded-full"></span>
                 </div>
               </td>
@@ -179,7 +180,7 @@ export default function ProductsTable({ className }) {
                   <span className="text-[15px] font-normal">$38</span>
                 </div>
               </td>
-              <td className=" py-4">
+              <td className="py-4">
                 <div className="flex justify-center items-center">
                   <InputQuantityCom />
                 </div>

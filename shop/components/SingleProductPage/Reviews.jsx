@@ -2,6 +2,7 @@ import Star from "../Helpers/icons/Star";
 import InputCom from "../Helpers/InputCom";
 import LoaderStyleOne from "../Helpers/Loaders/LoaderStyleOne";
 import StarRating from "../Helpers/StarRating";
+import Image from 'next/image'; // Importing Image component
 
 export default function Reviews({
   comments,
@@ -35,11 +36,13 @@ export default function Reviews({
                 <div className="comment-author flex justify-between items-center mb-3">
                   <div className="flex space-x-3 items-center">
                     <div className="w-[50px] h-[50px] rounded-full overflow-hidden">
-                      <img
+                      <Image
                         src={`${
                           process.env.NEXT_PUBLIC_BASE_URL
                         }/assets/images/comment-user-1.png`}
-                        alt=""
+                        alt="comment-author"
+                        width={50}
+                        height={50}
                         className="w-full h-full object-cover"
                       />
                     </div>
@@ -48,7 +51,7 @@ export default function Reviews({
                         {comment.author}
                       </p>
                       <p className="text-[13px] font-normal text-qgray">
-                        London,UK
+                        London, UK
                       </p>
                     </div>
                   </div>
@@ -80,11 +83,13 @@ export default function Reviews({
                       <div className="comment-author  mb-3">
                         <div className="flex space-x-3 items-center">
                           <div className="w-[50px] h-[50px] rounded-full overflow-hidden">
-                            <img
+                            <Image
                               src={`${
                                 process.env.NEXT_PUBLIC_BASE_URL
                               }/assets/images/comment-user-2.png`}
-                              alt=""
+                              alt="comment-reply-author"
+                              width={50}
+                              height={50}
                               className="w-full h-full object-cover"
                             />
                           </div>
@@ -93,7 +98,7 @@ export default function Reviews({
                               {reply.author}
                             </p>
                             <p className="text-[13px] font-normal text-qgray">
-                              London,UK
+                              London, UK
                             </p>
                           </div>
                         </div>

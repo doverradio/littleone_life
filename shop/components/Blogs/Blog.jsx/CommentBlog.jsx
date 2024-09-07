@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Image from "next/image";
 import InputCom from "../../Helpers/InputCom";
 import LoaderStyleOne from "../../Helpers/Loaders/LoaderStyleOne";
 
@@ -7,7 +8,7 @@ export default function CommentBlog() {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [reviewLoading, setLoading] = useState(false);
-  const [commnets, setComments] = useState([
+  const [comments, setComments] = useState([
     {
       id: Math.random(),
       author: "Rafiqul Islam",
@@ -21,7 +22,7 @@ export default function CommentBlog() {
       replys: [
         {
           id: Math.random(),
-          name: "Willium Kingson",
+          author: "Willium Kingson",
           comments: `Lorem Ipsum is simply dummy text of the printing and typesetting industry.`,
         },
       ],
@@ -38,6 +39,7 @@ export default function CommentBlog() {
       review: 5,
     },
   ]);
+
   const reviewAction = () => {
     setLoading(true);
     setTimeout(() => {
@@ -56,15 +58,13 @@ export default function CommentBlog() {
         setMessage("");
       }
       setLoading(false);
-      return false;
     }, 2000);
   };
+
   return (
     <>
       <div className="write-review w-full mb-[30px]">
-        <h1 className="text-2xl font-medium text-qblack mb-5">
-          Leave a Comment
-        </h1>
+        <h1 className="text-2xl font-medium text-qblack mb-5">Leave a Comment</h1>
         <div className="w-full review-form ">
           <div className="sm:flex sm:space-x-[30px] items-center mb-5 w-full">
             <div className="w-full mb-5 sm:mb-0">
@@ -83,7 +83,7 @@ export default function CommentBlog() {
                 label="Email*"
                 placeholder=""
                 type="email"
-                name="name"
+                name="email"
                 inputClasses="h-[50px]"
                 value={email}
                 inputHandler={(e) => setEmail(e.target.value)}
@@ -97,8 +97,6 @@ export default function CommentBlog() {
             <textarea
               value={message}
               onChange={(e) => setMessage(e.target.value)}
-              name=""
-              id=""
               cols="30"
               rows="3"
               className="w-full focus:ring-0 focus:outline-none p-6"
@@ -114,7 +112,7 @@ export default function CommentBlog() {
               <span className="flex space-x-1 items-center h-full">
                 <span className="text-sm font-semibold">Submit Review</span>
                 {reviewLoading && (
-                  <span className="w-5 " style={{ transform: "scale(0.3)" }}>
+                  <span className="w-5" style={{ transform: "scale(0.3)" }}>
                     <LoaderStyleOne />
                   </span>
                 )}
@@ -123,73 +121,58 @@ export default function CommentBlog() {
           </div>
         </div>
       </div>
+      
       <div className="w-full comments">
         <h1 className="text-2xl font-medium text-qblack mb-5">Comments</h1>
-        {commnets &&
-          commnets.length > 0 &&
-          commnets.map((comment) => (
-            <div
-              key={comment.id}
-              className="comment-item bg-white px-10 py-[32px] mb-2.5"
-            >
+        {comments.length > 0 &&
+          comments.map((comment) => (
+            <div key={comment.id} className="comment-item bg-white px-10 py-[32px] mb-2.5">
               <div className="comment-author flex justify-between items-center mb-3">
                 <div className="flex space-x-3 items-center">
                   <div className="w-[50px] h-[50px] rounded-full overflow-hidden">
-                    <img
-                      src={`${
-                        process.env.NEXT_PUBLIC_BASE_URL
-                      }/assets/images/comment-user-1.png`}
-                      alt=""
-                      className="w-full h-full object-cover"
+                    <Image
+                      src={`${process.env.NEXT_PUBLIC_BASE_URL}/assets/images/comment-user-1.png`}
+                      alt="Comment User"
+                      width={50}
+                      height={50}
+                      className="object-cover"
                     />
                   </div>
                   <div>
                     <p className="text-[18px] font-medium text-qblack">
                       {comment.author}
                     </p>
-                    <p className="text-[13px] font-normal text-qgray">
-                      London,UK
-                    </p>
+                    <p className="text-[13px] font-normal text-qgray">London, UK</p>
                   </div>
                 </div>
               </div>
               <div className="comment mb-[30px]">
-                <p className="text-[15px] text-qgray leading-7 text-normal">
-                  {comment.comments}
-                </p>
+                <p className="text-[15px] text-qgray leading-7">{comment.comments}</p>
               </div>
+
               {comment.replys &&
                 comment.replys.length > 0 &&
                 comment.replys.map((reply) => (
-                  <div
-                    key={reply.id}
-                    className="sub-comment-item bg-white px-10 pt-[32px] border-t"
-                  >
-                    <div className="comment-author  mb-3">
+                  <div key={reply.id} className="sub-comment-item bg-white px-10 pt-[32px] border-t">
+                    <div className="comment-author mb-3">
                       <div className="flex space-x-3 items-center">
                         <div className="w-[50px] h-[50px] rounded-full overflow-hidden">
-                          <img
-                            src={`${
-                              process.env.NEXT_PUBLIC_BASE_URL
-                            }/assets/images/comment-user-2.png`}
-                            alt=""
-                            className="w-full h-full object-cover"
+                          <Image
+                            src={`${process.env.NEXT_PUBLIC_BASE_URL}/assets/images/comment-user-2.png`}
+                            alt="Reply User"
+                            width={50}
+                            height={50}
+                            className="object-cover"
                           />
                         </div>
                         <div>
-                          <p className="text-[18px] font-medium text-qblack">
-                            {reply.author}
-                          </p>
-                          <p className="text-[13px] font-normal text-qgray">
-                            London,UK
-                          </p>
+                          <p className="text-[18px] font-medium text-qblack">{reply.author}</p>
+                          <p className="text-[13px] font-normal text-qgray">London, UK</p>
                         </div>
                       </div>
                     </div>
                     <div className="comment mb-[30px]">
-                      <p className="text-[15px] text-qgray leading-7 text-normal">
-                        {reply.comments}
-                      </p>
+                      <p className="text-[15px] text-qgray leading-7">{reply.comments}</p>
                     </div>
                   </div>
                 ))}

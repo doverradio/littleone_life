@@ -1,18 +1,20 @@
-import React from "react";
-import QuickViewIco from "../icons/QuickViewIco";
-import ThinLove from "../icons/ThinLove";
-import Compair from "../icons/Compair";
+import React from 'react';
+import Image from 'next/image';
+import QuickViewIco from '../icons/QuickViewIco';
+import ThinLove from '../icons/ThinLove';
+import Compair from '../icons/Compair';
 
 function ProductCardStyleThree({ datas }) {
   return (
     <div className="product-cart-three w-full group">
       {/* thumb */}
       <div className="w-full h-[364px] bg-white flex justify-center items-center p-2.5 mb-6 relative overflow-hidden">
-        <img
-          src={`${process.env.NEXT_PUBLIC_BASE_URL}/assets/images/${
-            datas.image
-          }`}
-          alt=""
+        <Image
+          src={`${process.env.NEXT_PUBLIC_BASE_URL}/assets/images/${datas.image}`}
+          alt="Product Image"
+          width={364}
+          height={364}
+          objectFit="contain"
         />
         <div className="quick-access-btns flex flex-col space-y-2 absolute group-hover:right-4 -right-10 top-20  transition-all duration-300 ease-in-out">
           <a href="#">
@@ -31,7 +33,7 @@ function ProductCardStyleThree({ datas }) {
             </span>
           </a>
         </div>
-        <div className="absolute w-full h-10 px-[30px]  left-0 -bottom-10 group-hover:bottom-5 transition-all duration-300 ease-in-out">
+        <div className="absolute w-full h-10 px-[30px] left-0 -bottom-10 group-hover:bottom-5 transition-all duration-300 ease-in-out">
           <button
             type="button"
             className="black-btn w-full h-full flex justify-center items-center"
@@ -55,10 +57,10 @@ function ProductCardStyleThree({ datas }) {
         </div>
       </div>
       <h2 className="text-xl leading-6 font-medium text-qblack mb-2">
-        Women's Shirt Dress
+        Women&apos;s Shirt Dress
       </h2>
       <p className="text-base leading-6 font-medium text-qgraytwo">
-        $9.99 <span className="text-qred">$6.99</span>{" "}
+        $9.99 <span className="text-qred">$6.99</span>
       </p>
     </div>
   );

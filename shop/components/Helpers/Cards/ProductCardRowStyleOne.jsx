@@ -1,25 +1,27 @@
 import Link from 'next/link';
-import Compair from "../icons/Compair";
-import QuickViewIco from "../icons/QuickViewIco";
-import Star from "../icons/Star";
-import ThinLove from "../icons/ThinLove";
+import Image from 'next/image';
+import Compair from '../icons/Compair';
+import QuickViewIco from '../icons/QuickViewIco';
+import Star from '../icons/Star';
+import ThinLove from '../icons/ThinLove';
 
 export default function ProductCardRowStyleTwo({ className, datas, type }) {
   return (
     <div
       data-aos="fade-left"
       className={`product-row-card-style-one w-full h-[250px] bg-white group relative overflow-hidden ${
-        className || ""
+        className || ''
       }`}
     >
       <div className="flex space-x-5 items-center w-full h-full lg:p-[30px] sm:p-5 p-2">
         <div className="lg:w-1/2 w-1/3 h-full">
-          <img
-            src={`${process.env.NEXT_PUBLIC_BASE_URL}/assets/images/${
-              datas.image
-            }`}
-            alt=""
-            className="w-full h-full object-contain"
+          <Image
+            src={`${process.env.NEXT_PUBLIC_BASE_URL}/assets/images/${datas.image}`}
+            alt={datas.title}
+            width={250}
+            height={250}
+            layout="responsive"
+            objectFit="contain"
           />
         </div>
         <div className="flex-1 flex flex-col justify-center h-full">
@@ -46,8 +48,7 @@ export default function ProductCardRowStyleTwo({ className, datas, type }) {
               </span>
             </p>
             <button type="button" className="w-[110px] h-[30px]">
-              <span className={type === 3 ? "blue-btn" : "yellow-btn"}>
-                {" "}
+              <span className={type === 3 ? 'blue-btn' : 'yellow-btn'}>
                 Add To Cart
               </span>
             </button>

@@ -1,3 +1,6 @@
+import Link from 'next/link';
+import Image from 'next/image';
+
 export default function BrandSection({ className, sectionTitle, type }) {
   return (
     <div data-aos="fade-up" className={`w-full ${className || ""}`}>
@@ -13,126 +16,21 @@ export default function BrandSection({ className, sectionTitle, type }) {
         )}
 
         <div className="grid lg:grid-cols-6 sm:grid-cols-4 grid-cols-2">
-          <div className="item">
-            <div className="w-full h-[130px] bg-white border border-primarygray flex justify-center items-center">
-              <img
-                src={`${
-                  process.env.NEXT_PUBLIC_BASE_URL
-                }/assets/images/brand-1.png`}
-                alt="logo"
-              />
+          {[...Array(12).keys()].map((index) => (
+            <div className="item" key={index}>
+              <div className="w-full h-[130px] bg-white border border-primarygray flex justify-center items-center">
+                <Image
+                  src={`${
+                    process.env.NEXT_PUBLIC_BASE_URL
+                  }/assets/images/brand-${index + 1}.png`}
+                  alt={`Brand ${index + 1}`}
+                  width={130}
+                  height={130}
+                  objectFit="contain"
+                />
+              </div>
             </div>
-          </div>
-          <div className="item">
-            <div className="w-full h-[130px] bg-white border border-primarygray flex justify-center items-center">
-              <img
-                src={`${
-                  process.env.NEXT_PUBLIC_BASE_URL
-                }/assets/images/brand-2.png`}
-                alt="logo"
-              />
-            </div>
-          </div>
-          <div className="item">
-            <div className="w-full h-[130px] bg-white border border-primarygray flex justify-center items-center">
-              <img
-                src={`${
-                  process.env.NEXT_PUBLIC_BASE_URL
-                }/assets/images/brand-3.png`}
-                alt="logo"
-              />
-            </div>
-          </div>
-          <div className="item">
-            <div className="w-full h-[130px] bg-white border border-primarygray flex justify-center items-center">
-              <img
-                src={`${
-                  process.env.NEXT_PUBLIC_BASE_URL
-                }/assets/images/brand-4.png`}
-                alt="logo"
-              />
-            </div>
-          </div>
-          <div className="item">
-            <div className="w-full h-[130px] bg-white border border-primarygray flex justify-center items-center">
-              <img
-                src={`${
-                  process.env.NEXT_PUBLIC_BASE_URL
-                }/assets/images/brand-5.png`}
-                alt="logo"
-              />
-            </div>
-          </div>
-          <div className="item">
-            <div className="w-full h-[130px] bg-white border border-primarygray flex justify-center items-center">
-              <img
-                src={`${
-                  process.env.NEXT_PUBLIC_BASE_URL
-                }/assets/images/brand-6.png`}
-                alt="logo"
-              />
-            </div>
-          </div>
-          <div className="item">
-            <div className="w-full h-[130px] bg-white border border-primarygray flex justify-center items-center">
-              <img
-                src={`${
-                  process.env.NEXT_PUBLIC_BASE_URL
-                }/assets/images/brand-7.png`}
-                alt="logo"
-              />
-            </div>
-          </div>
-          <div className="item">
-            <div className="w-full h-[130px] bg-white border border-primarygray flex justify-center items-center">
-              <img
-                src={`${
-                  process.env.NEXT_PUBLIC_BASE_URL
-                }/assets/images/brand-8.png`}
-                alt="logo"
-              />
-            </div>
-          </div>
-          <div className="item">
-            <div className="w-full h-[130px] bg-white border border-primarygray flex justify-center items-center">
-              <img
-                src={`${
-                  process.env.NEXT_PUBLIC_BASE_URL
-                }/assets/images/brand-9.png`}
-                alt="logo"
-              />
-            </div>
-          </div>
-          <div className="item">
-            <div className="w-full h-[130px] bg-white border border-primarygray flex justify-center items-center">
-              <img
-                src={`${
-                  process.env.NEXT_PUBLIC_BASE_URL
-                }/assets/images/brand-10.png`}
-                alt="logo"
-              />
-            </div>
-          </div>
-          <div className="item">
-            <div className="w-full h-[130px] bg-white border border-primarygray flex justify-center items-center">
-              <img
-                src={`${
-                  process.env.NEXT_PUBLIC_BASE_URL
-                }/assets/images/brand-11.png`}
-                alt="logo"
-              />
-            </div>
-          </div>
-          <div className="item">
-            <div className="w-full h-[130px] bg-white border border-primarygray flex justify-center items-center">
-              <img
-                src={`${
-                  process.env.NEXT_PUBLIC_BASE_URL
-                }/assets/images/brand-12.png`}
-                alt="logo"
-              />
-            </div>
-          </div>
+          ))}
         </div>
       </div>
     </div>

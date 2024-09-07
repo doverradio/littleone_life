@@ -1,5 +1,6 @@
 import Link from 'next/link';
-import CountDown from "../Helpers/CountDown";
+import Image from 'next/image';
+import CountDown from '../Helpers/CountDown';
 
 export default function CampaignCountDown({
   className,
@@ -11,7 +12,7 @@ export default function CampaignCountDown({
 
   return (
     <div>
-      <div className={`w-full lg:h-[460px] ${className || ""}`}>
+      <div className={`w-full lg:h-[460px] ${className || ''}`}>
         <div className="container-x mx-auto h-full">
           <div className="lg:flex xl:space-x-[30px] lg:space-x-5 items-center h-full">
             <div
@@ -21,7 +22,7 @@ export default function CampaignCountDown({
                 background: `url(${
                   process.env.NEXT_PUBLIC_BASE_URL
                 }/assets/images/campaign-cover-countdown.jpg) no-repeat`,
-                backgroundSize: "cover",
+                backgroundSize: 'cover',
               }}
             >
               <Link href="/flash-sale">
@@ -113,11 +114,9 @@ export default function CampaignCountDown({
               style={{
                 background: `url(${
                   counterbg ||
-                  `${
-                    process.env.NEXT_PUBLIC_BASE_URL
-                  }/assets/images/download-app-cover.png`
+                  `${process.env.NEXT_PUBLIC_BASE_URL}/assets/images/download-app-cover.png`
                 }) no-repeat`,
-                backgroundSize: "cover",
+                backgroundSize: 'cover',
               }}
             >
               <div className="flex flex-col h-full justify-between">
@@ -135,39 +134,39 @@ export default function CampaignCountDown({
                   <div className="flex space-x-5 items-center">
                     <div>
                       <a href="#">
-                        <img
-                          width="170"
-                          height="69"
+                        <Image
+                          width={170}
+                          height={69}
                           src={`${
                             process.env.NEXT_PUBLIC_BASE_URL
                           }/assets/images/play-store.png`}
-                          alt=""
+                          alt="Play Store"
                         />
                       </a>
                     </div>
                     <div>
                       <a href="#">
-                        <img
-                          width="170"
-                          height="69"
+                        <Image
+                          width={170}
+                          height={69}
                           src={`${
                             process.env.NEXT_PUBLIC_BASE_URL
                           }/assets/images/apple-store.png`}
-                          alt=""
+                          alt="Apple Store"
                         />
                       </a>
                     </div>
                   </div>
                 </div>
                 <div className="app-screen">
-                  <img
+                  <Image
                     src={
                       appscreen ||
-                      `${
-                        process.env.NEXT_PUBLIC_BASE_URL
-                      }/assets/images/app-screen.png`
+                      `${process.env.NEXT_PUBLIC_BASE_URL}/assets/images/app-screen.png`
                     }
-                    alt=""
+                    alt="App Screen"
+                    width={230}
+                    height={400}
                   />
                 </div>
               </div>

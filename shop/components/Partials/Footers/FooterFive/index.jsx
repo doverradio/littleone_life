@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import Facebook from "../../../Helpers/icons/Facebook";
 import Instagram from "../../../Helpers/icons/Instagram";
 import Youtube from "../../../Helpers/icons/Youtube";
@@ -19,18 +20,16 @@ export default function FooterFour() {
             {/* logo area */}
             <div className="mb-14">
               <Link href="/">
-                <img
-                  width="152"
-                  height="36"
-                  src={`${
-                    process.env.NEXT_PUBLIC_BASE_URL
-                  }/assets/images/logo-5.svg`}
+                <Image
+                  width={152}
+                  height={36}
+                  src={`${process.env.NEXT_PUBLIC_BASE_URL}/assets/images/logo-5.svg`}
                   alt="logo"
                 />
               </Link>
             </div>
             <div>
-              <ul className="flex flex-col space-y-5 ">
+              <ul className="flex flex-col space-y-5">
                 <li>
                   <Link href="/">
                     <span className="text-white text-[15px] hover:text-[#9a9a9a] hover:underline">
@@ -59,75 +58,71 @@ export default function FooterFour() {
             <div className="mb-5">
               <h6 className="text-[18] font-500 text-[#2F2F2F]">About us</h6>
             </div>
-            <div>
-              <ul className="flex flex-col space-y-5 ">
-                <li>
-                  <Link href="/">
-                    <span className="text-white text-[15px] hover:text-[#9a9a9a] hover:underline">
-                      Rave’s Story
-                    </span>
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/">
-                    <span className="text-white text-[15px] hover:text-[#9a9a9a] hover:underline">
-                      Work With Us
-                    </span>
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/">
-                    <span className="text-white text-[15px] hover:text-[#9a9a9a] hover:underline">
-                      Coporate News
-                    </span>
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/">
-                    <span className="text-white text-[15px] hover:text-[#9a9a9a] hover:underline">
-                      Investors
-                    </span>
-                  </Link>
-                </li>
-              </ul>
-            </div>
+            <ul className="flex flex-col space-y-5">
+              <li>
+                <Link href="/">
+                  <span className="text-white text-[15px] hover:text-[#9a9a9a] hover:underline">
+                    Rave’s Story
+                  </span>
+                </Link>
+              </li>
+              <li>
+                <Link href="/">
+                  <span className="text-white text-[15px] hover:text-[#9a9a9a] hover:underline">
+                    Work With Us
+                  </span>
+                </Link>
+              </li>
+              <li>
+                <Link href="/">
+                  <span className="text-white text-[15px] hover:text-[#9a9a9a] hover:underline">
+                    Coporate News
+                  </span>
+                </Link>
+              </li>
+              <li>
+                <Link href="/">
+                  <span className="text-white text-[15px] hover:text-[#9a9a9a] hover:underline">
+                    Investors
+                  </span>
+                </Link>
+              </li>
+            </ul>
           </div>
-          <div className="lg:w-2/10 w-full mb-10 lg:mb-0 ">
+          <div className="lg:w-2/10 w-full mb-10 lg:mb-0">
             <div className="mb-5">
               <h6 className="text-[18] font-500 text-[#2F2F2F]">Online Shop</h6>
             </div>
-            <div>
-              <ul className="flex flex-col space-y-5 ">
-                <li>
-                  <Link href="/">
-                    <span className="text-white text-[15px] hover:text-[#9a9a9a] hover:underline">
-                      Furniture
-                    </span>
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/">
-                    <span className="text-white text-[15px] hover:text-[#9a9a9a] hover:underline">
-                      Decoration
-                    </span>
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/">
-                    <span className="text-white text-[15px] hover:text-[#9a9a9a] hover:underline">
-                      Kitchen
-                    </span>
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/">
-                    <span className="text-white text-[15px] hover:text-[#9a9a9a] hover:underline">
-                      Interior
-                    </span>
-                  </Link>
-                </li>
-              </ul>
-            </div>
+            <ul className="flex flex-col space-y-5">
+              <li>
+                <Link href="/">
+                  <span className="text-white text-[15px] hover:text-[#9a9a9a] hover:underline">
+                    Furniture
+                  </span>
+                </Link>
+              </li>
+              <li>
+                <Link href="/">
+                  <span className="text-white text-[15px] hover:text-[#9a9a9a] hover:underline">
+                    Decoration
+                  </span>
+                </Link>
+              </li>
+              <li>
+                <Link href="/">
+                  <span className="text-white text-[15px] hover:text-[#9a9a9a] hover:underline">
+                    Kitchen
+                  </span>
+                </Link>
+              </li>
+              <li>
+                <Link href="/">
+                  <span className="text-white text-[15px] hover:text-[#9a9a9a] hover:underline">
+                    Interior
+                  </span>
+                </Link>
+              </li>
+            </ul>
           </div>
           <div className="lg:w-2/10 w-full mb-10 lg:mb-0">
             <div className="mb-5">
@@ -135,38 +130,36 @@ export default function FooterFour() {
                 Useful Links
               </h6>
             </div>
-            <div>
-              <ul className="flex flex-col space-y-5 ">
-                <li>
-                  <Link href="/">
-                    <span className="text-white text-[15px] hover:text-[#9a9a9a] hover:underline">
-                      Secure Payment
-                    </span>
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/">
-                    <span className="text-white text-[15px] hover:text-[#9a9a9a] hover:underline">
-                      Privacy Policy
-                    </span>
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/">
-                    <span className="text-white text-[15px] hover:text-[#9a9a9a] hover:underline">
-                      Terms of Use
-                    </span>
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/">
-                    <span className="text-white text-[15px] hover:text-[#9a9a9a] hover:underline">
-                      Archived Products
-                    </span>
-                  </Link>
-                </li>
-              </ul>
-            </div>
+            <ul className="flex flex-col space-y-5">
+              <li>
+                <Link href="/">
+                  <span className="text-white text-[15px] hover:text-[#9a9a9a] hover:underline">
+                    Secure Payment
+                  </span>
+                </Link>
+              </li>
+              <li>
+                <Link href="/">
+                  <span className="text-white text-[15px] hover:text-[#9a9a9a] hover:underline">
+                    Privacy Policy
+                  </span>
+                </Link>
+              </li>
+              <li>
+                <Link href="/">
+                  <span className="text-white text-[15px] hover:text-[#9a9a9a] hover:underline">
+                    Terms of Use
+                  </span>
+                </Link>
+              </li>
+              <li>
+                <Link href="/">
+                  <span className="text-white text-[15px] hover:text-[#9a9a9a] hover:underline">
+                    Archived Products
+                  </span>
+                </Link>
+              </li>
+            </ul>
           </div>
         </div>
         <div className="bottom-bar border-t border-qgray-border lg:h-[82px] lg:flex justify-between items-center">
@@ -195,14 +188,12 @@ export default function FooterFour() {
               All rights reserved
             </span>
           </div>
-          <div className="">
+          <div>
             <a href="#">
-              <img
-                width="318"
-                height="28"
-                src={`${
-                  process.env.NEXT_PUBLIC_BASE_URL
-                }/assets/images/payment-getways.png`}
+              <Image
+                width={318}
+                height={28}
+                src={`${process.env.NEXT_PUBLIC_BASE_URL}/assets/images/payment-getways.png`}
                 alt="payment-getways"
               />
             </a>

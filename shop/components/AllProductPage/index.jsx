@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Image from 'next/image'; // Import Next.js Image component
 import productDatas from "../../data/products.json";
 import BreadcrumbCom from "../BreadcrumbCom";
 import ProductCardStyleOne from "../Helpers/Cards/ProductCardStyleOne";
@@ -73,12 +74,13 @@ export default function AllProductPage() {
                 />
                 {/* ads */}
                 <div className="w-full hidden lg:block h-[295px]">
-                  <img
-                    src={`${
-                      process.env.NEXT_PUBLIC_BASE_URL
-                    }/assets/images/bannera-5.png`}
-                    alt=""
-                    className="w-full h-full object-contain"
+                  <Image
+                    src={`${process.env.NEXT_PUBLIC_BASE_URL}/assets/images/bannera-5.png`}
+                    alt="Banner"
+                    layout="responsive"
+                    width={500}
+                    height={295} // Set the height appropriately
+                    objectFit="contain"
                   />
                 </div>
               </div>
@@ -142,12 +144,13 @@ export default function AllProductPage() {
                 </div>
 
                 <div className="w-full h-[164px] overflow-hidden mb-[40px]">
-                  <img
-                    src={`${
-                      process.env.NEXT_PUBLIC_BASE_URL
-                    }/assets/images/bannera-6.png`}
-                    alt=""
-                    className="w-full h-full object-contain"
+                  <Image
+                    src={`${process.env.NEXT_PUBLIC_BASE_URL}/assets/images/bannera-6.png`}
+                    alt="Banner"
+                    layout="responsive"
+                    width={500}
+                    height={164} // Set the height appropriately
+                    objectFit="contain"
                   />
                 </div>
                 <div className="grid xl:grid-cols-3 sm:grid-cols-2 grid-cols-1 xl:gap-[30px] gap-5 mb-[40px]">

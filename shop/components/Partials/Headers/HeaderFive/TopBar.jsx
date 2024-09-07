@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image'; // Importing Next.js Image component
 import Arrow from "../../../Helpers/icons/Arrow";
 import Selectbox from "../../../Helpers/Selectbox";
 
@@ -41,12 +42,11 @@ export default function TopBar({ className }) {
               <div className="flex space-x-6">
                 <div className="country-select flex space-x-1 items-center">
                   <div>
-                    <img
-                      src={`${
-                        process.env.NEXT_PUBLIC_BASE_URL
-                      }/assets/images/country-logo-16x16.png`}
-                      width="16"
-                      height="16"
+                    {/* Using Next.js Image component for optimization */}
+                    <Image
+                      src={`${process.env.NEXT_PUBLIC_BASE_URL}/assets/images/country-logo-16x16.png`}
+                      width={16}
+                      height={16}
                       alt="country logo"
                       className="overflow-hidden rounded-full"
                     />
@@ -64,7 +64,7 @@ export default function TopBar({ className }) {
                   <Arrow className="fill-current qblack" />
                 </div>
                 <div className="language-select flex space-x-1 items-center">
-                  <Selectbox className="w-fit" datas={["Bangla", "english"]} />
+                  <Selectbox className="w-fit" datas={["Bangla", "English"]} />
                   <Arrow className="fill-current qblack" />
                 </div>
               </div>

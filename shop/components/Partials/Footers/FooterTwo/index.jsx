@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import Facebook from "../../../Helpers/icons/Facebook";
 import Instagram from "../../../Helpers/icons/Instagram";
 import Youtube from "../../../Helpers/icons/Youtube";
@@ -12,18 +13,16 @@ export default function Footer() {
             {/* logo area */}
             <div className="mb-14">
               <Link href="/">
-                <img
-                  width="152"
-                  height="36"
-                  src={`${
-                    process.env.NEXT_PUBLIC_BASE_URL
-                  }/assets/images/logo-2.svg`}
+                <Image
+                  width={152}
+                  height={36}
+                  src={`${process.env.NEXT_PUBLIC_BASE_URL}/assets/images/logo-2.svg`}
                   alt="logo"
                 />
               </Link>
             </div>
             <div>
-              <ul className="flex flex-col space-y-5 ">
+              <ul className="flex flex-col space-y-5">
                 <li>
                   <Link href="/">
                     <span className="text-[#9A9A9A] text-[15px] hover:text-qblack border-b border-transparent hover:border-qblack">
@@ -50,116 +49,108 @@ export default function Footer() {
           </div>
           <div className="lg:w-2/10 w-full mb-10 lg:mb-0">
             <div className="mb-5">
-              <h6 className="text-[18] font-500 text-[#2F2F2F]">About us</h6>
+              <h6 className="text-[18px] font-500 text-[#2F2F2F]">About us</h6>
             </div>
-            <div>
-              <ul className="flex flex-col space-y-5 ">
-                <li>
-                  <Link href="/">
-                    <span className="text-[#9A9A9A] text-[15px] hover:text-qblack border-b border-transparent hover:border-qblack">
-                      Rave’s Story
-                    </span>
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/">
-                    <span className="text-[#9A9A9A] text-[15px] hover:text-qblack border-b border-transparent hover:border-qblack">
-                      Work With Us
-                    </span>
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/">
-                    <span className="text-[#9A9A9A] text-[15px] hover:text-qblack border-b border-transparent hover:border-qblack">
-                      Coporate News
-                    </span>
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/">
-                    <span className="text-[#9A9A9A] text-[15px] hover:text-qblack border-b border-transparent hover:border-qblack">
-                      Investors
-                    </span>
-                  </Link>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div className="lg:w-2/10 w-full mb-10 lg:mb-0 ">
-            <div className="mb-5">
-              <h6 className="text-[18] font-500 text-[#2F2F2F]">Online Shop</h6>
-            </div>
-            <div>
-              <ul className="flex flex-col space-y-5 ">
-                <li>
-                  <Link href="/">
-                    <span className="text-[#9A9A9A] text-[15px] hover:text-qblack border-b border-transparent hover:border-qblack">
-                      Furniture
-                    </span>
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/">
-                    <span className="text-[#9A9A9A] text-[15px] hover:text-qblack border-b border-transparent hover:border-qblack">
-                      Decoration
-                    </span>
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/">
-                    <span className="text-[#9A9A9A] text-[15px] hover:text-qblack border-b border-transparent hover:border-qblack">
-                      Kitchen
-                    </span>
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/">
-                    <span className="text-[#9A9A9A] text-[15px] hover:text-qblack border-b border-transparent hover:border-qblack">
-                      Interior
-                    </span>
-                  </Link>
-                </li>
-              </ul>
-            </div>
+            <ul className="flex flex-col space-y-5">
+              <li>
+                <Link href="/">
+                  <span className="text-[#9A9A9A] text-[15px] hover:text-qblack border-b border-transparent hover:border-qblack">
+                    Rave’s Story
+                  </span>
+                </Link>
+              </li>
+              <li>
+                <Link href="/">
+                  <span className="text-[#9A9A9A] text-[15px] hover:text-qblack border-b border-transparent hover:border-qblack">
+                    Work With Us
+                  </span>
+                </Link>
+              </li>
+              <li>
+                <Link href="/">
+                  <span className="text-[#9A9A9A] text-[15px] hover:text-qblack border-b border-transparent hover:border-qblack">
+                    Corporate News
+                  </span>
+                </Link>
+              </li>
+              <li>
+                <Link href="/">
+                  <span className="text-[#9A9A9A] text-[15px] hover:text-qblack border-b border-transparent hover:border-qblack">
+                    Investors
+                  </span>
+                </Link>
+              </li>
+            </ul>
           </div>
           <div className="lg:w-2/10 w-full mb-10 lg:mb-0">
             <div className="mb-5">
-              <h6 className="text-[18] font-500 text-[#2F2F2F]">
-                Useful Links
-              </h6>
+              <h6 className="text-[18px] font-500 text-[#2F2F2F]">Online Shop</h6>
             </div>
-            <div>
-              <ul className="flex flex-col space-y-5 ">
-                <li>
-                  <Link href="/">
-                    <span className="text-[#9A9A9A] text-[15px] hover:text-qblack border-b border-transparent hover:border-qblack">
-                      Secure Payment
-                    </span>
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/">
-                    <span className="text-[#9A9A9A] text-[15px] hover:text-qblack border-b border-transparent hover:border-qblack">
-                      Privacy Policy
-                    </span>
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/">
-                    <span className="text-[#9A9A9A] text-[15px] hover:text-qblack border-b border-transparent hover:border-qblack">
-                      Terms of Use
-                    </span>
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/">
-                    <span className="text-[#9A9A9A] text-[15px] hover:text-qblack border-b border-transparent hover:border-qblack">
-                      Archived Products
-                    </span>
-                  </Link>
-                </li>
-              </ul>
+            <ul className="flex flex-col space-y-5">
+              <li>
+                <Link href="/">
+                  <span className="text-[#9A9A9A] text-[15px] hover:text-qblack border-b border-transparent hover:border-qblack">
+                    Furniture
+                  </span>
+                </Link>
+              </li>
+              <li>
+                <Link href="/">
+                  <span className="text-[#9A9A9A] text-[15px] hover:text-qblack border-b border-transparent hover:border-qblack">
+                    Decoration
+                  </span>
+                </Link>
+              </li>
+              <li>
+                <Link href="/">
+                  <span className="text-[#9A9A9A] text-[15px] hover:text-qblack border-b border-transparent hover:border-qblack">
+                    Kitchen
+                  </span>
+                </Link>
+              </li>
+              <li>
+                <Link href="/">
+                  <span className="text-[#9A9A9A] text-[15px] hover:text-qblack border-b border-transparent hover:border-qblack">
+                    Interior
+                  </span>
+                </Link>
+              </li>
+            </ul>
+          </div>
+          <div className="lg:w-2/10 w-full mb-10 lg:mb-0">
+            <div className="mb-5">
+              <h6 className="text-[18px] font-500 text-[#2F2F2F]">Useful Links</h6>
             </div>
+            <ul className="flex flex-col space-y-5">
+              <li>
+                <Link href="/">
+                  <span className="text-[#9A9A9A] text-[15px] hover:text-qblack border-b border-transparent hover:border-qblack">
+                    Secure Payment
+                  </span>
+                </Link>
+              </li>
+              <li>
+                <Link href="/">
+                  <span className="text-[#9A9A9A] text-[15px] hover:text-qblack border-b border-transparent hover:border-qblack">
+                    Privacy Policy
+                  </span>
+                </Link>
+              </li>
+              <li>
+                <Link href="/">
+                  <span className="text-[#9A9A9A] text-[15px] hover:text-qblack border-b border-transparent hover:border-qblack">
+                    Terms of Use
+                  </span>
+                </Link>
+              </li>
+              <li>
+                <Link href="/">
+                  <span className="text-[#9A9A9A] text-[15px] hover:text-qblack border-b border-transparent hover:border-qblack">
+                    Archived Products
+                  </span>
+                </Link>
+              </li>
+            </ul>
           </div>
         </div>
         <div className="bottom-bar border-t border-qgray-border lg:h-[82px] lg:flex justify-between items-center">
@@ -190,12 +181,10 @@ export default function Footer() {
           </div>
           <div className="">
             <a href="#">
-              <img
-                width="318"
-                height="28"
-                src={`${
-                  process.env.NEXT_PUBLIC_BASE_URL
-                }/assets/images/payment-getways.png`}
+              <Image
+                width={318}
+                height={28}
+                src={`${process.env.NEXT_PUBLIC_BASE_URL}/assets/images/payment-getways.png`}
                 alt="payment-getways"
               />
             </a>

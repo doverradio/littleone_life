@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function Ads({ handler }) {
   return (
@@ -6,7 +7,7 @@ export default function Ads({ handler }) {
       <div className="w-full h-full flex fixed left-0 top-0 justify-center z-40 items-center">
         <div
           onClick={handler}
-          className="w-full h-full fixed left-0 right-0 bg-black  bg-opacity-25"
+          className="w-full h-full fixed left-0 right-0 bg-black bg-opacity-25"
         ></div>
         <div
           className="md:w-[812px] w-[310px] md:h-[509px] relative z-50 bg-slate-700 md:pl-10 pl-3 py-[108px] flex flex-col justify-between"
@@ -20,9 +21,9 @@ export default function Ads({ handler }) {
           <div>
             <div className="logo mb-[20px]">
               <Link href="/">
-                <img
-                  width="152"
-                  height="36"
+                <Image
+                  width={152}
+                  height={36}
                   src={`${
                     process.env.NEXT_PUBLIC_BASE_URL
                   }/assets/images/logo.svg`}
@@ -31,15 +32,16 @@ export default function Ads({ handler }) {
               </Link>
             </div>
             <p className="md:text-[22px] text-sm text-qblack mb-2">
-              by Subscribe our Newsletter
+              by Subscribe to our Newsletter
             </p>
             <h1 className="md:text-[30px] text-xl font-bold text-qblack mb-1">
               Get <span className="mx-1 text-[#EB5757]">20% Off</span> Discount
               Coupon
             </h1>
             <p className="text-qgray">
-              Get has been the industry's standard dummy text ever since <br />
-              the ey of type andmen unlimiedted offer book.
+              Get has been the industry&apos;s standard dummy text ever since{" "}
+              <br />
+              the eye of type and unlimited offer book.
             </p>
           </div>
           <div className="md:w-[415px] w-full h-[54px] sm:flex mt-8">

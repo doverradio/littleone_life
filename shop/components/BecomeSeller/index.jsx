@@ -2,9 +2,10 @@ import { useRef, useState } from "react";
 import InputCom from "../Helpers/InputCom";
 import PageTitle from "../Helpers/PageTitle";
 import Layout from "../Partials/Layout";
+import Image from 'next/image';
 import Link from 'next/link';
 
-export default function BecomeSaller() {
+export default function BecomeSeller() {
   const [profileImg, setProfileImg] = useState(null);
   const [logoImg, setLogoImg] = useState(null);
   const [coverImg, setCoverImg] = useState(null);
@@ -244,15 +245,17 @@ export default function BecomeSaller() {
                     </p>
                     <div className="flex xl:justify-center justify-start">
                       <div className="relative">
-                        <img
+                        <Image
                           src={
                             profileImg ||
                             `${
                               process.env.NEXT_PUBLIC_BASE_URL
                             }/assets/images/edit-profileimg.jpg`
                           }
-                          alt=""
-                          className="sm:w-[198px] sm:h-[198px] w-[199px] h-[199px] rounded-full overflow-hidden object-cover"
+                          alt="Profile Image"
+                          width={198}
+                          height={198}
+                          className="rounded-full"
                         />
                         <input
                           ref={profileImgInput}
@@ -311,15 +314,17 @@ export default function BecomeSaller() {
                     </p>
                     <div className="flex xl:justify-center justify-start">
                       <div className="relative">
-                        <img
+                        <Image
                           src={
                             logoImg ||
                             `${
                               process.env.NEXT_PUBLIC_BASE_URL
                             }/assets/images/edit-logoimg.jpg`
                           }
-                          alt=""
-                          className="sm:w-[198px] sm:h-[198px] w-[199px] h-[199px] rounded-full overflow-hidden object-cover"
+                          alt="Logo Image"
+                          width={198}
+                          height={198}
+                          className="rounded-full"
                         />
                         <input
                           ref={logoImgInput}
@@ -376,15 +381,17 @@ export default function BecomeSaller() {
                     </p>
                     <div className="flex justify-center">
                       <div className="w-full relative">
-                        <img
+                        <Image
                           src={
                             coverImg ||
                             `${
                               process.env.NEXT_PUBLIC_BASE_URL
                             }/assets/images/edit-coverimg.jpg`
                           }
-                          alt=""
-                          className="w-full h-[120px] rounded-lg overflow-hidden object-cover"
+                          alt="Cover Image"
+                          width={1170}
+                          height={920}
+                          className="rounded-lg"
                         />
                         <input
                           ref={coverImgInput}

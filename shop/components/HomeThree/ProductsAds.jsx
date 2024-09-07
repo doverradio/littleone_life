@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function ProductsAds({
   className,
@@ -22,13 +23,27 @@ export default function ProductsAds({
             }  `}
           >
             <Link href="/single-product">
-              <img src={ads[0]} alt="" className="w-full sm:h-full h-auto" />
+              <Image
+                src={ads[0]}
+                alt=""
+                className="w-full sm:h-full h-auto"
+                width={600}  // adjust width and height based on the actual image size
+                height={400} // adjust accordingly
+                layout="responsive"
+              />
             </Link>
           </div>
           {ads.length > 1 && ads.length <= 2 && (
             <div data-aos="fade-left" className="flex-1 h-full">
               <Link href="/single-product">
-                <img src={ads[1]} alt="" className="w-full h-full" />
+                <Image
+                  src={ads[1]}
+                  alt=""
+                  className="w-full h-full"
+                  width={600}  // adjust width and height based on the actual image size
+                  height={400} // adjust accordingly
+                  layout="responsive"
+                />
               </Link>
             </div>
           )}
