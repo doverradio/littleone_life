@@ -1,6 +1,6 @@
 // shop/pages/auth/error.js
 import React from 'react';
-import Layout from '@/pages/layout';
+import Layout from '@/components/Partials/Layout';
 
 const AuthErrorPage = () => {
   return (
