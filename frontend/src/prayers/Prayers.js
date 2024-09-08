@@ -55,7 +55,7 @@ const Prayers = () => {
                 <div className="prayer-icons">
                     {visiblePrayers.length > 0 ? (
                         visiblePrayers.map(icon => (
-                            <Link href={icon.route} key={icon.id}>
+                            <Link to={icon.route} key={icon.id}>
                                 <div className="prayer-icon">
                                     <img src={icon.icon} alt={icon.name} />
                                     <p>{icon.name}</p>
