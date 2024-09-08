@@ -47,7 +47,7 @@ const ProfileIcon = ({ handleSignout, userStats = {} }) => {
         }}>
           <div style={{ padding: '10px', fontWeight: 'bold' }}>{user ? user.username : 'User Name'}</div>
           <div style={{ padding: '10px', display: 'flex', justifyContent: 'space-around' }}>
-            <Link href="/prayers/rosary" style={{ textAlign: 'center', textDecoration: 'none', color: 'black' }}>
+            <Link to="/prayers/rosary" style={{ textAlign: 'center', textDecoration: 'none', color: 'black' }}>
               <div style={{ position: 'relative', textAlign: 'center' }}>
                 <FaCross size={20} title="Rosaries" />
                 <div>
@@ -66,7 +66,7 @@ const ProfileIcon = ({ handleSignout, userStats = {} }) => {
                 </div>
               </div>
             </Link>
-            <Link href="/prayers/mass" style={{ textAlign: 'center', textDecoration: 'none', color: 'black' }}>
+            <Link to="/prayers/mass" style={{ textAlign: 'center', textDecoration: 'none', color: 'black' }}>
               <div style={{ position: 'relative', textAlign: 'center' }}>
                 <FaChurch size={20} title="Masses" />
                 <div>
@@ -85,7 +85,7 @@ const ProfileIcon = ({ handleSignout, userStats = {} }) => {
                 </div>
               </div>
             </Link>
-            <Link href="/prayers/confession" style={{ textAlign: 'center', textDecoration: 'none', color: 'black' }}>
+            <Link to="/prayers/confession" style={{ textAlign: 'center', textDecoration: 'none', color: 'black' }}>
               <div style={{ position: 'relative', textAlign: 'center' }}>
                 <FaPray size={20} title="Confessions" />
                 <div>
@@ -106,7 +106,7 @@ const ProfileIcon = ({ handleSignout, userStats = {} }) => {
             </Link>
           </div>
           <div style={{ height: '1px', backgroundColor: '#ddd', margin: '5px 0' }}></div>
-          <Link href="/user/settings" style={{ padding: '10px', display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
+          <Link to="/user/settings" style={{ padding: '10px', display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
             <FaCog size={16} /> &nbsp;&nbsp;Settings
           </Link>
           <div style={{ padding: '10px', color: '#c0392b', cursor: 'pointer' }} onClick={handleSignout}>

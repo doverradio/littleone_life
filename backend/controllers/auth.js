@@ -33,6 +33,7 @@ exports.googleSignin = async (req, res) => {
 
             if (user) {
                 req.session.userId = user._id; // Set the user ID in the session
+                req.session.cookie.maxAge = 2 * 60 * 60 * 1000; // Session expiration: 2 hours
                 req.session.username = username; // Set the username in the session
 
                 // console.log('Session ID after setting userId:', req.session.id); // Log the session ID
@@ -68,7 +69,7 @@ exports.googleSignin = async (req, res) => {
 
 // The checkSession function
 exports.checkSession = async (req, res) => {
-    // log(`Begin checkSession!  req.session: `, req.session)
+    log(`Begin checkSession!  req.session: `, req.session)
     if (req.session.userId) {
         try {
             // Optionally, you can retrieve more user details from the database

@@ -26,7 +26,7 @@ const SignUpOptions = ({ setSignUpMethod, informParent, setStep, step }) => {
                 {/* Add more options here */}
             </ul>
             <div className="signin-message">
-                <p>Already have an account? <Link href="/signin">Please click here to sign in</Link></p>
+                <p>Already have an account? <Link to="/signin">Please click here to sign in</Link></p>
             </div>
         </div>
     );
