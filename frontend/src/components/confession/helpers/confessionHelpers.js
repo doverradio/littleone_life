@@ -87,3 +87,34 @@ export const removeChurchFromConfessionOptions = async (userId, church, token, s
         console.error('Error removing church from user:', error);
     }
 };
+
+
+export const addChurchToFavorites = async (userId, church) => {
+    const response = await fetch(`/api/favorites`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ userId, church }),
+        credentials: 'include'
+    });
+
+    if (!response.ok) {
+        throw new Error('Error adding church to favorites');
+    }
+};
+
+export const removeChurchFromFavorites = async (userId, church) => {
+    const response = await fetch(`/api/favorites/${church._id || church.placeId}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ userId }),
+        credentials: 'include'
+    });
+
+    if (!response.ok) {
+        throw new Error('Error removing church from favorites');
+    }
+};

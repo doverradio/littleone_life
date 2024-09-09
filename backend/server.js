@@ -49,9 +49,9 @@ app.use(session({
   cookie: {
     maxAge: 2 * 60 * 60 * 1000, // 2 hours
     httpOnly: true,
-    secure: process.env.USE_HTTPS === 'true', // Ensure cookies are only sent over HTTPS when set to true
-    sameSite: 'Lax', // Allows cookies to be sent with cross-origin subdomain requests
-    domain: process.env.USE_HTTPS === 'true' ? '.littleone.life' : undefined, // Set domain for production only
+    secure: process.env.USE_HTTPS === 'true', // Only secure in production
+    sameSite: process.env.USE_HTTPS === 'true' ? 'Lax' : 'Strict', // 'Lax' for production, 'Strict' for dev
+    domain: process.env.USE_HTTPS === 'true' ? '.littleone.life' : undefined, // Only set domain in production
   }
 }));
 

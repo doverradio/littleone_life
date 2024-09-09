@@ -7,13 +7,12 @@ import ConfessionForm from './components/ConfessionForm';
 import ConfessionPrayers from './components/ConfessionPrayers';
 import ConfessionResponses from './components/ConfessionResponses';
 import ConfessionSettings from './ConfessionSettings';
-import './styles.css';
 import BackIcon from '../utils/BackIcon';
+import { fetchNearbyChurches } from '../../api/googleMaps'; // Assuming you have this function
 
 const Confession = () => {
     const { user, token } = useAuth();
-    const { _id } = user || {};
-    const userId = _id;
+    const userId = user?._id;
 
     const [confessions, setConfessions] = useState([]);
     const [activeTab, setActiveTab] = useState('Form');
@@ -23,32 +22,29 @@ const Confession = () => {
     const [confessionTime, setConfessionTime] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [showChurchForm, setShowChurchForm] = useState(false);
-    const [newChurch, setNewChurch] = useState({ name: '', address: '', city: '', state: '', country: '', zipCode: '', phone: '', website: '', additionalInfo: '' });
+    const [newChurch, setNewChurch] = useState({});
 
     useEffect(() => {
         fetchUserChurches();
-        fetchNearbyChurches();
-    }, []);
+        fetchChurchesNearby();
+    }, [userId, token]);
 
     const fetchUserChurches = async () => {
         // Logic to fetch user's churches
     };
 
-    const fetchNearbyChurches = async () => {
+    const fetchChurchesNearby = async () => {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
                 async (position) => {
                     const { latitude, longitude } = position.coords;
                     try {
-                        const nearbyChurchesData = await fetchNearbyChurches(latitude, longitude, 5, token);
-                        if (Array.isArray(nearbyChurchesData)) {
-                            setNearbyChurches(nearbyChurchesData);
-                        } else {
-                            setNearbyChurches([]); // In case of error, set to an empty array
-                        }
+                        // Ensure that userId is being passed
+                        const churches = await fetchNearbyChurches(latitude, longitude, 5, userId);
+                        setNearbyChurches(churches || []); // Fallback in case of an error
                     } catch (error) {
                         console.error('Error fetching nearby churches:', error);
-                        setNearbyChurches([]); // In case of error, set to an empty array
+                        setNearbyChurches([]); // Fallback in case of an error
                     }
                 },
                 (error) => {
@@ -57,24 +53,20 @@ const Confession = () => {
             );
         }
     };
+    
 
     const handleSubmitConfession = async () => {
         if (!selectedChurch || !confessionTime) {
-            alert("Please select a church and set a confession time");
+            alert("Please select a church and set a confession time.");
             return;
         }
 
-        const confessionData = {
-            user: userId,
-            church: selectedChurch,
-            confessionTime: confessionTime
-        };
+        const confessionData = { user: userId, church: selectedChurch, confessionTime };
 
         try {
             setIsSubmitting(true);
-            // Add your API call to submit the confession here
+            // API call to submit confession
             console.log("Confession submitted:", confessionData);
-            // Reset state and update UI as needed
         } catch (error) {
             console.error("Error submitting confession:", error);
         } finally {
@@ -86,9 +78,11 @@ const Confession = () => {
         <div className="confession-component container">
             <BackIcon />
             <ConfessionHeader activeTab={activeTab} setActiveTab={setActiveTab} />
-            <div className='p-1'>
+            <div className="p-1">
                 {activeTab === 'Form' && (
                     <ConfessionForm
+                        userId={userId}               // <-- Pass userId to the form
+                        token={token}                 // <-- Pass token to the form
                         userChurches={userChurches}
                         nearbyChurches={nearbyChurches}
                         setUserChurches={setUserChurches}
@@ -104,15 +98,9 @@ const Confession = () => {
                         isSubmitting={isSubmitting}
                     />
                 )}
-                {activeTab === 'Prayers' && (
-                    <ConfessionPrayers />
-                )}
-                {activeTab === 'Responses' && (
-                    <ConfessionResponses />
-                )}
-                {activeTab === 'Settings' && (
-                    <ConfessionSettings />
-                )}
+                {activeTab === 'Prayers' && <ConfessionPrayers />}
+                {activeTab === 'Responses' && <ConfessionResponses />}
+                {activeTab === 'Settings' && <ConfessionSettings />}
             </div>
         </div>
     );
