@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart as faSolidHeart } from '@fortawesome/free-solid-svg-icons';
 import { faHeart as faRegularHeart } from '@fortawesome/free-regular-svg-icons';
@@ -7,13 +7,12 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ChurchSearch from './ChurchSearch';
 import {
-    addChurchToFavorites, // New helper function to add/remove favorites
-    removeChurchFromFavorites
+    addChurchToConfessionOptions,
+    removeChurchFromConfessionOptions,
 } from '../helpers/confessionHelpers';
 
 const ConfessionForm = ({
     userId,
-    token,
     userChurches,
     setUserChurches,
     nearbyChurches = [],
@@ -24,29 +23,62 @@ const ConfessionForm = ({
     setConfessionTime,
     handleSubmitConfession,
     isSubmitting,
-    favoriteChurches = [], // List of favorited churches passed as a prop
-    setFavoriteChurches, // Setter for favorite churches
 }) => {
+    const [favoriteChurches, setFavoriteChurches] = useState([]); // Define this locally
+    
+    const [filterQuery, setFilterQuery] = useState('');
 
     const handleChurchSelection = (church) => {
         setSelectedChurch(church);
     };
 
+    const filterChurches = (churches, query) => {
+        if (!query) return churches;
+        return churches.filter((church) =>
+            church.name.toLowerCase().includes(query.toLowerCase()) ||
+            church.address.toLowerCase().includes(query.toLowerCase()) ||
+            church.city.toLowerCase().includes(query.toLowerCase())
+        );
+    };
+
+    const filteredUserChurches = filterChurches(userChurches, filterQuery);
+    const filteredNearbyChurches = filterChurches(
+        nearbyChurches.filter((nearby) => !userChurches.some((user) => user.name === nearby.name)),
+        filterQuery
+    );
+
     const toggleFavorite = async (church) => {
-        const isFavorited = favoriteChurches.some(fav => fav._id === church._id || fav.placeId === church.placeId);
-        if (isFavorited) {
-            // Unheart the church
-            await removeChurchFromFavorites(userId, church);
-            setFavoriteChurches(favoriteChurches.filter(fav => fav._id !== church._id && fav.placeId !== church.placeId));
-        } else {
-            // Heart the church
-            await addChurchToFavorites(userId, church);
-            setFavoriteChurches([...favoriteChurches, church]);
+        const isFavorited = church.users && church.users.includes(userId);
+        try {
+            if (isFavorited) {
+                // Unheart the church by removing it from favorites
+                const result = await removeChurchFromConfessionOptions(userId, church, setUserChurches, setNearbyChurches);
+                if (result) {
+                    setFavoriteChurches((prevFavorites) =>
+                        prevFavorites.filter((fav) => fav._id !== church._id && fav.placeId !== church.placeId)
+                    );
+                    toast.success(`${church.name} removed from favorites`);
+                } else {
+                    toast.error('Failed to update favorites');
+                }
+            } else {
+                // Heart the church by adding it to favorites
+                const result = await addChurchToConfessionOptions(userId, church, setUserChurches, setNearbyChurches);
+                if (result) {
+                    setFavoriteChurches((prevFavorites) => [...prevFavorites, church]); // Update state with the newly favorited church
+                    toast.success(`${church.name} added to favorites`);
+                } else {
+                    toast.error('Failed to update favorites');
+                }
+            }
+        } catch (error) {
+            console.error('Error toggling favorite:', error);
+            toast.error('Failed to update favorites');
         }
     };
 
     const isFavorite = (church) => {
-        return favoriteChurches.some(fav => fav._id === church._id || fav.placeId === church.placeId);
+        return church.users && church.users.includes(userId);
     };
 
     return (
@@ -55,12 +87,7 @@ const ConfessionForm = ({
             <div className="row w-100 justify-content-center mb-3">
                 <div className="col-md-12 text-center">
                     <h3>Confession Attendance</h3>
-                    <ChurchSearch 
-                        filterQuery={''} 
-                        setFilterQuery={() => {}} 
-                        isFilterVisible={false} 
-                        toggleFilterVisibility={() => {}} 
-                    />
+                    <ChurchSearch filterQuery={''} setFilterQuery={() => {}} isFilterVisible={false} toggleFilterVisibility={() => {}} />
                     <div className="church-list">
                         {userChurches.map((church, index) => (
                             <ChurchItem

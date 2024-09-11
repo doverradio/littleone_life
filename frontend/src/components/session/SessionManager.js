@@ -79,13 +79,13 @@ const SessionManager = ({ children }) => {
   return (
     <>
       {children}
-      {isAuthenticated && (
+      {/* {isAuthenticated && (
         <SessionExpiryModal
           isOpen={warningShown}
           onRefresh={handleRefreshSession}
           onLogout={handleLogoutUser}
         />
-      )}
+      )} */}
     </>
   );
 };

@@ -1,120 +1,50 @@
 // src/components/confession/helpers/confessionHelpers.js
 
-const API = process.env.REACT_APP_API ? process.env.REACT_APP_API : 'https://www.littleone.life/api';
-
-/**
- * Add a church to the user's list of churches for confessions
- * @param {string} userId - The user's ID
- * @param {object} church - The church object to add
- * @param {string} token - The authentication token
- * @returns {Promise<object>} - The response from the API
- */
-export const addChurchToUser = async (userId, church, token) => {
-    try {
-        const response = await fetch(`${API}/churches/addToUser`, {
-            method: 'POST',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify({ userId, churches: [church] }),
-        });
-        return await response.json();
-    } catch (error) {
-        console.error('Error adding church to user:', error);
-        throw error;
-    }
-};
-
-/**
- * Remove a church from the user's list of churches for confessions
- * @param {string} userId - The user's ID
- * @param {object} church - The church object to remove
- * @param {string} token - The authentication token
- * @returns {Promise<object>} - The response from the API
- */
-export const removeChurchFromUser = async (userId, church, token) => {
-    try {
-        const response = await fetch(`${API}/churches/removeFromUser`, {
-            method: 'POST',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify({ userId, churchId: church._id }),
-        });
-        return await response.json();
-    } catch (error) {
-        console.error('Error removing church from user:', error);
-        throw error;
-    }
-};
+import { addChurchToUser, removeChurchFromUser } from "../../../api/church";
 
 /**
  * Add a church to the options for selecting churches during confession
  * @param {string} userId - The user's ID
  * @param {object} church - The church object to add
- * @param {string} token - The authentication token
  * @param {function} setUserChurches - The state setter for user churches
  * @param {function} setNearbyChurches - The state setter for nearby churches
  */
-export const addChurchToConfessionOptions = async (userId, church, token, setUserChurches, setNearbyChurches) => {
+export const addChurchToConfessionOptions = async (userId, church, setUserChurches, setNearbyChurches) => {
     try {
-        const updatedChurch = await addChurchToUser(userId, church, token);
-        setUserChurches(prevUserChurches => [...prevUserChurches, updatedChurch]);
-        setNearbyChurches(prevNearbyChurches => prevNearbyChurches.filter(nearby => nearby.name !== church.name || nearby.address !== church.address));
+        const updatedChurch = await addChurchToUser(userId, church);
+        console.log('Add Church Response:', updatedChurch); // Log the response
+        if (updatedChurch) {
+            setUserChurches(prevUserChurches => [...prevUserChurches, updatedChurch]);
+            setNearbyChurches(prevNearbyChurches => prevNearbyChurches.filter(nearby => nearby.name !== church.name || nearby.address !== church.address));
+            return true;
+        }
+        return false;
     } catch (error) {
         console.error('Error adding church to user:', error);
+        return false;
     }
 };
+
 
 /**
  * Remove a church from the options for selecting churches during confession
  * @param {string} userId - The user's ID
  * @param {object} church - The church object to remove
- * @param {string} token - The authentication token
  * @param {function} setUserChurches - The state setter for user churches
  * @param {function} setNearbyChurches - The state setter for nearby churches
  */
-export const removeChurchFromConfessionOptions = async (userId, church, token, setUserChurches, setNearbyChurches) => {
+export const removeChurchFromConfessionOptions = async (userId, church, setUserChurches, setNearbyChurches) => {
     try {
-        await removeChurchFromUser(userId, church, token);
-        setUserChurches(prevUserChurches => prevUserChurches.filter(userChurch => userChurch._id !== church._id));
-        setNearbyChurches(prevNearbyChurches => [...prevNearbyChurches, church]);
+        const result = await removeChurchFromUser(userId, church);
+        console.log('Remove Church Response:', result); // Log the response
+        if (result) {
+            setUserChurches(prevUserChurches => prevUserChurches.filter(userChurch => userChurch._id !== church._id));
+            setNearbyChurches(prevNearbyChurches => [...prevNearbyChurches, church]);
+            return true;
+        }
+        return false;
     } catch (error) {
         console.error('Error removing church from user:', error);
-    }
-};
-
-
-export const addChurchToFavorites = async (userId, church) => {
-    const response = await fetch(`/api/favorites`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ userId, church }),
-        credentials: 'include'
-    });
-
-    if (!response.ok) {
-        throw new Error('Error adding church to favorites');
-    }
-};
-
-export const removeChurchFromFavorites = async (userId, church) => {
-    const response = await fetch(`/api/favorites/${church._id || church.placeId}`, {
-        method: 'DELETE',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ userId }),
-        credentials: 'include'
-    });
-
-    if (!response.ok) {
-        throw new Error('Error removing church from favorites');
+        return false;
     }
 };

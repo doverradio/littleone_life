@@ -18,6 +18,7 @@ const Confession = () => {
     const [activeTab, setActiveTab] = useState('Form');
     const [selectedChurch, setSelectedChurch] = useState(null);
     const [nearbyChurches, setNearbyChurches] = useState([]);
+    const [favoriteChurches, setFavoriteChurches] = useState([]);
     const [userChurches, setUserChurches] = useState([]);
     const [confessionTime, setConfessionTime] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -53,7 +54,6 @@ const Confession = () => {
             );
         }
     };
-    
 
     const handleSubmitConfession = async () => {
         if (!selectedChurch || !confessionTime) {
@@ -96,6 +96,7 @@ const Confession = () => {
                         setConfessionTime={setConfessionTime}
                         handleSubmitConfession={handleSubmitConfession}
                         isSubmitting={isSubmitting}
+                        setFavoriteChurches={setFavoriteChurches}
                     />
                 )}
                 {activeTab === 'Prayers' && <ConfessionPrayers />}

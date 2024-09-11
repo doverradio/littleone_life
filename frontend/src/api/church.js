@@ -1,3 +1,5 @@
+// src/api/church.js
+
 const API = process.env.REACT_APP_API ? process.env.REACT_APP_API : 'https://www.littleone.life/api';
 
 export const createChurch = async (churchData) => {
@@ -99,5 +101,53 @@ export const addUserToChurch = async (userId, churchId) => {
     } catch (error) {
         console.error('Error adding user to church:', error);
         return { error: 'Unable to add user to church' };
+    }
+};
+
+/**
+ * Add a church to the user's list of churches for confessions
+ * @param {string} userId - The user's ID
+ * @param {object} church - The church object to add
+ * @returns {Promise<object>} - The response from the API
+ */
+export const addChurchToUser = async (userId, church) => {
+    try {
+        const response = await fetch(`${API}/churches/addToUser`, {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ userId, churches: [church] }),
+            credentials: 'include'
+        });
+        return await response.json();
+    } catch (error) {
+        console.error('Error adding church to user:', error);
+        throw error;
+    }
+};
+
+/**
+ * Remove a church from the user's list of churches for confessions
+ * @param {string} userId - The user's ID
+ * @param {object} church - The church object to remove
+ * @returns {Promise<object>} - The response from the API
+ */
+export const removeChurchFromUser = async (userId, church) => {
+    try {
+        const response = await fetch(`${API}/churches/removeFromUser`, {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ userId, churchId: church._id }),
+            credentials: 'include'
+        });
+        return await response.json();
+    } catch (error) {
+        console.error('Error removing church from user:', error);
+        throw error;
     }
 };

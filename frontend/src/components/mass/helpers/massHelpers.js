@@ -1,3 +1,5 @@
+// src/components/mass/helpers/massHelpers.js
+
 import { countMassesByUser, getAllMassAttendances, createMassAttendance } from '../../../api/massAttendance';
 import { getAllIntentions } from '../../../api/intentions';
 import { createChurch, getAllChurches } from '../../../api/church';
