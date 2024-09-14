@@ -87,7 +87,7 @@ export default function About() {
                   <li>NVIDIA GeForce MX350 2GB GDDR5 graphics card backlit keyboard</li>
                 </ul>
 
-                <Link href="/contact">
+                <Link href="/contact" legacyBehavior>
                   <a className="w-[121px] h-10 yellow-btn">Contact Us</a>
                 </Link>
               </div>

@@ -58,8 +58,8 @@ const ShopPage = () => {
       {/* Updated with NEXT_PUBLIC_BASE_URL and leading slashes */}
       <ProductsAds
         ads={[
-          `${process.env.NEXT_PUBLIC_BASE_URL}/assets/images/bannera-1.png`,
-          `${process.env.NEXT_PUBLIC_BASE_URL}/assets/images/bannera-2.png`,
+          `${process.env.NEXT_PUBLIC_BASE_URL}/assets/images/banner-1.png`,
+          `${process.env.NEXT_PUBLIC_BASE_URL}/assets/images/banner-2.png`,
         ]}
         sectionHeight="sm:h-[295px] h-full"
         className="products-ads-section mb-[60px]"
@@ -74,7 +74,7 @@ const ShopPage = () => {
 
       <ProductsAds
         sectionHeight="164"
-        ads={[`${process.env.NEXT_PUBLIC_BASE_URL}/assets/images/bannera-4.png`]}
+        ads={[`${process.env.NEXT_PUBLIC_BASE_URL}/assets/images/banner-4.png`]}
         className="products-ads-section mb-[60px]"
       />
 

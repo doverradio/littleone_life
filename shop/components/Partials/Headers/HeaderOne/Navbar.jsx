@@ -87,12 +87,14 @@ export default function Navbar({ className, type }) {
                             }`}
                           >
                             <div className="flex items-center space-x-6">
-                              <Image
+                              {/* <Image
                                 src={item.icon}
                                 width={20}
                                 height={20}
                                 alt={item.name}
-                              />
+                              /> */}
+                              <img src={item.icon} width={20} height={20} alt={item.name} />
+
                               <span className="text-xs font-400">
                                 {item.name}
                               </span>
@@ -123,26 +125,26 @@ export default function Navbar({ className, type }) {
 const categoryItems = [
   {
     name: "Mobile & Laptops",
-    icon: "/path/to/mobile-laptop-icon.svg",
+    icon: "/assets/icons/mobile-laptop-icon.svg",
   },
   {
     name: "Gaming Entertainment",
-    icon: "/path/to/gaming-entertainment-icon.svg",
+    icon: "/assets/icons/gaming-entertainment-icon.svg",
   },
   {
     name: "Image & Video",
-    icon: "/path/to/image-video-icon.svg",
+    icon: "/assets/icons/image-video-icon.svg",
   },
   {
     name: "Vehicles",
-    icon: "/path/to/vehicles-icon.svg",
+    icon: "/assets/icons/vehicles-icon.svg",
   },
   {
     name: "Furnitures",
-    icon: "/path/to/furnitures-icon.svg",
+    icon: "/assets/icons/furnitures-icon.svg",
   },
   {
     name: "Sport",
-    icon: "/path/to/sport-icon.svg",
+    icon: "/assets/icons/sport-icon.svg",
   },
 ];
