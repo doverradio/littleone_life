@@ -136,14 +136,22 @@ exports.addChurchesToUser = async (req, res) => {
                 church = new Church(churchData);
                 await church.save();
             }
-            // Ensure the church is added to the user's churches array
+
+            // Add user ID to church's users array if not already present
+            if (!church.users.includes(userId)) {
+                church.users.push(userId);
+                await church.save(); // Save the updated church document
+            }
+
+            // Add church ID to user's churches array if not already present
             if (!user.churches.includes(church._id)) {
                 user.churches.push(church._id);
             }
+
             savedChurches.push(church);
         }
 
-        await user.save();
+        await user.save(); // Save the updated user document
 
         res.json(savedChurches[0]); // Return the first added church as the response
     } catch (error) {
@@ -151,6 +159,7 @@ exports.addChurchesToUser = async (req, res) => {
         res.status(400).json({ error: "Unable to add churches to user" });
     }
 };
+
 
 
 

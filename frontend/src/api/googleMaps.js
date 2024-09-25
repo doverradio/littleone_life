@@ -1,3 +1,5 @@
+// src/api/googleMaps.js
+
 const API = process.env.REACT_APP_API ? process.env.REACT_APP_API : 'http://localhost:8000/api';
 
 export const fetchNearbyChurches = async (lat, lng, distance, userId) => {

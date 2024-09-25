@@ -1,3 +1,5 @@
+// src/components/mass/Mass.js
+
 import React, { useState, useEffect } from 'react';
 import { useUser } from '../../context/UserContext'; // Import the useUser hook
 import { useModal } from '../../context/ModalContext';

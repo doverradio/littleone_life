@@ -6,9 +6,20 @@ const log = console.log;
 // Create a new confession
 exports.createConfession = async (req, res) => {
     try {
-        const confessionData = req.body;
+        let { user, church, confessionTime } = req.body
+        const confessionData = { user, church, confessionTime };
+
+        // Validate user and church IDs are ObjectId instances
+        if (!mongoose.Types.ObjectId.isValid(confessionData.user) || !mongoose.Types.ObjectId.isValid(confessionData.church)) {
+            return res.status(400).json({ error: "Invalid user or church ID" });
+        }
+
+        // Create new confession document
         const newConfession = new Confession(confessionData);
+
+        // Save to the database
         await newConfession.save();
+
         res.status(201).json(newConfession);
     } catch (error) {
         log(`Error in createConfession: `, error);

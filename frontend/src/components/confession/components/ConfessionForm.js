@@ -6,6 +6,7 @@ import './ConfessionForm.css';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ChurchSearch from './ChurchSearch';
+import { CONFESSION_TIMES_OPTIONS } from '../constants'; // Import confession times
 import {
     addChurchToConfessionOptions,
     removeChurchFromConfessionOptions,
@@ -24,12 +25,19 @@ const ConfessionForm = ({
     handleSubmitConfession,
     isSubmitting,
 }) => {
-    const [favoriteChurches, setFavoriteChurches] = useState([]); // Define this locally
-    
+    const [favoriteChurches, setFavoriteChurches] = useState([]);
     const [filterQuery, setFilterQuery] = useState('');
 
     const handleChurchSelection = (church) => {
-        setSelectedChurch(church);
+        console.log(`handleChurchSelection selectedChurch - initial: `, selectedChurch)
+        console.log(`handleChurchSelection church: `, church)
+        // Toggle selection: if the same church is clicked again, unselect it
+        if (selectedChurch && selectedChurch._id === church._id) {
+            setSelectedChurch(null); // Unselect the church
+        } else {
+            setSelectedChurch(church); // Select the clicked church
+            console.log(`handleChurchSelection selectedChurch - post: `, selectedChurch)
+        }
     };
 
     const filterChurches = (churches, query) => {
@@ -50,27 +58,33 @@ const ConfessionForm = ({
     const toggleFavorite = async (church) => {
         const isFavorited = church.users && church.users.includes(userId);
         try {
+            let updatedChurch;
             if (isFavorited) {
-                // Unheart the church by removing it from favorites
                 const result = await removeChurchFromConfessionOptions(userId, church, setUserChurches, setNearbyChurches);
                 if (result) {
                     setFavoriteChurches((prevFavorites) =>
                         prevFavorites.filter((fav) => fav._id !== church._id && fav.placeId !== church.placeId)
                     );
                     toast.success(`${church.name} removed from favorites`);
+                    updatedChurch = { ...church, users: church.users.filter(user => user !== userId) };
                 } else {
                     toast.error('Failed to update favorites');
                 }
             } else {
-                // Heart the church by adding it to favorites
-                const result = await addChurchToConfessionOptions(userId, church, setUserChurches, setNearbyChurches);
-                if (result) {
-                    setFavoriteChurches((prevFavorites) => [...prevFavorites, church]); // Update state with the newly favorited church
+                const response = await addChurchToConfessionOptions(userId, church, setUserChurches, setNearbyChurches);
+                if (response) {
+                    setFavoriteChurches((prevFavorites) => [...prevFavorites, response]);
                     toast.success(`${church.name} added to favorites`);
+                    updatedChurch = { ...church, users: [...church.users, userId] };
                 } else {
                     toast.error('Failed to update favorites');
                 }
             }
+
+            if (updatedChurch) {
+                setUserChurches((prevChurches) => prevChurches.map((c) => c._id === updatedChurch._id ? updatedChurch : c));
+            }
+
         } catch (error) {
             console.error('Error toggling favorite:', error);
             toast.error('Failed to update favorites');
@@ -89,9 +103,9 @@ const ConfessionForm = ({
                     <h3>Confession Attendance</h3>
                     <ChurchSearch filterQuery={''} setFilterQuery={() => {}} isFilterVisible={false} toggleFilterVisibility={() => {}} />
                     <div className="church-list">
-                        {userChurches.map((church, index) => (
+                        {userChurches.map((church) => (
                             <ChurchItem
-                                key={church._id || index}
+                                key={church._id} // Use the unique _id as key
                                 church={church}
                                 selectedChurch={selectedChurch}
                                 handleChurchSelection={handleChurchSelection}
@@ -100,9 +114,9 @@ const ConfessionForm = ({
                             />
                         ))}
                         {nearbyChurches.length > 0 ? (
-                            nearbyChurches.map((church, index) => (
+                            nearbyChurches.map((church) => (
                                 <ChurchItem
-                                    key={church.placeId || `nearby-${index}`}
+                                    key={church.placeId || church._id} // Use placeId if available, otherwise fallback to _id
                                     church={church}
                                     selectedChurch={selectedChurch}
                                     handleChurchSelection={handleChurchSelection}
@@ -119,13 +133,19 @@ const ConfessionForm = ({
             <hr className="w-100" />
             <div className="form-group w-100 mt-3 text-center">
                 <label htmlFor="confessionTime">Confession Time:</label>
-                <input
-                    type="datetime-local"
+                <select
                     className="form-control"
                     id="confessionTime"
                     value={confessionTime}
                     onChange={(e) => setConfessionTime(e.target.value)}
-                />
+                >
+                    <option value="">Select Confession Time</option>
+                    {CONFESSION_TIMES_OPTIONS.map((time, index) => (
+                        <option key={index} value={time}>
+                            {time}
+                        </option>
+                    ))}
+                </select>
             </div>
             <div className="row w-100 justify-content-center my-3">
                 <div className="col-md-12 text-center">
@@ -143,15 +163,23 @@ const ConfessionForm = ({
 };
 
 const ChurchItem = ({ church, selectedChurch, handleChurchSelection, toggleFavorite, isFavorite }) => {
-    const isSelected = selectedChurch && (selectedChurch._id === church._id || selectedChurch.placeId === church.placeId);
+    // console.log({ church, selectedChurch, handleChurchSelection, toggleFavorite, isFavorite })
+    // const isSelected = selectedChurch && (selectedChurch._id === church._id || selectedChurch.placeId === church.placeId);
+    const isSelected = selectedChurch && (selectedChurch._id === church._id );
+    if ( isSelected ) { console.log(`isSelected: `, isSelected, `church: `, church) }
+
     return (
-        <div className={`radio-button-container ${isSelected ? 'selected-row' : ''}`}>
+        <div
+            className={`radio-button-container ${isSelected ? 'selected-row' : ''}`}
+            style={{ backgroundColor: isSelected ? '#d3f9d8' : '', borderColor: isSelected ? '#28a745' : '' }} // Change background color if selected
+        >
             <input
                 type="radio"
                 id={church._id || church.placeId}
                 name="churchSelection"
                 value={church._id || church.placeId}
                 onChange={() => handleChurchSelection(church)}
+                checked={isSelected} // Ensure the radio button is checked only when selected
             />
             <label htmlFor={church._id || church.placeId} title={`${church.name}, ${church.address}, ${church.city}, ${church.state}`}>
                 <div>

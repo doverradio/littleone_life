@@ -43,7 +43,11 @@ const churchSchema = new mongoose.Schema(
         additionalInfo: {
             type: String,
             trim: true
-        }
+        },
+        users: [{ // Add the users field here
+            type: ObjectId,
+            ref: 'User' // Reference the User model
+        }]
     },
     { timestamps: true }
 );

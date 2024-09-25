@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const { requireSignin, isAuth, authMiddleware } = require('../controllers/auth');
+const { requireSignin, isAuth } = require('../controllers/auth');
 const { 
     createConfession, 
     countConfessionsByUser,
@@ -14,27 +14,30 @@ const {
 } = require('../controllers/confession');
 
 // Create a new confession
-router.post('/confession/create', requireSignin, authMiddleware, isAuth, createConfession);
+router.post('/confession/create', 
+    requireSignin, 
+    isAuth, 
+    createConfession);
 
 // Count confessions by user
-router.post('/confession/count', requireSignin, authMiddleware, isAuth, countConfessionsByUser);
+router.post('/confession/count', requireSignin, isAuth, countConfessionsByUser);
 
 // Get all confessions for a user
-router.post('/confession/all', requireSignin, authMiddleware, isAuth, getAllConfessions);
+router.post('/confession/all', requireSignin, isAuth, getAllConfessions);
 
 // Get a single confession by ID
-router.post('/confession/single', requireSignin, authMiddleware, isAuth, getConfessionById);
+router.post('/confession/single', requireSignin, isAuth, getConfessionById);
 
 // Update a confession
-router.post('/confession/update', requireSignin, authMiddleware, isAuth, updateConfession);
+router.post('/confession/update', requireSignin, isAuth, updateConfession);
 
 // Delete a confession
-router.post('/confession/delete', requireSignin, authMiddleware, isAuth, deleteConfession);
+router.post('/confession/delete', requireSignin, isAuth, deleteConfession);
 
 
 // Datatable
-router.post('/confession/user-confessions', requireSignin, authMiddleware, isAuth, getUserConfessions);
-router.delete('/confession/delete-confessions', requireSignin, authMiddleware, isAuth, deleteConfessions);
+router.post('/confession/user-confessions', requireSignin, isAuth, getUserConfessions);
+router.delete('/confession/delete-confessions', requireSignin, isAuth, deleteConfessions);
 
 
 module.exports = router;

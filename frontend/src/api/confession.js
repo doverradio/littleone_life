@@ -2,15 +2,15 @@
 
 const API = process.env.REACT_APP_API ? process.env.REACT_APP_API : 'https://www.littleone.life/api';
 
-export const createConfession = async (confessionData, token) => {
+export const createConfession = async (confessionData) => {
     try {
         const response = await fetch(`${API}/confession/create`, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
+                'Content-Type': 'application/json'
             },
-            body: JSON.stringify(confessionData)
+            body: JSON.stringify(confessionData),
+            credentials: 'include'
         });
         return await response.json();
     } catch (error) {
@@ -19,13 +19,13 @@ export const createConfession = async (confessionData, token) => {
     }
 };
 
-export const countConfessionsByUser = async (userId, token) => {
+export const countConfessionsByUser = async (userId) => {
     try {
         const response = await fetch(`${API}/confession/count`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
+      credentials: 'include'
             },
             body: JSON.stringify({ userId })
         });
@@ -36,13 +36,13 @@ export const countConfessionsByUser = async (userId, token) => {
     }
 };
 
-export const getAllConfessions = async (userId, token) => {
+export const getAllConfessions = async (userId) => {
     try {
         const response = await fetch(`${API}/confession/all`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
+                credentials: 'include'
             },
             body: JSON.stringify({ userId })
         });
@@ -53,13 +53,13 @@ export const getAllConfessions = async (userId, token) => {
     }
 };
 
-export const getConfessionById = async (confessionId, token) => {
+export const getConfessionById = async (confessionId) => {
     try {
         const response = await fetch(`${API}/confession/single`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
+                credentials: 'include'
             },
             body: JSON.stringify({ _id: confessionId })
         });
@@ -70,13 +70,13 @@ export const getConfessionById = async (confessionId, token) => {
     }
 };
 
-export const updateConfession = async (confessionId, updateData, token) => {
+export const updateConfession = async (confessionId, updateData) => {
     try {
         const response = await fetch(`${API}/confession/update`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
+                credentials: 'include'
             },
             body: JSON.stringify({ _id: confessionId, ...updateData })
         });
@@ -87,13 +87,13 @@ export const updateConfession = async (confessionId, updateData, token) => {
     }
 };
 
-export const deleteConfession = async (confessionId, token) => {
+export const deleteConfession = async (confessionId) => {
     try {
         const response = await fetch(`${API}/confession/delete`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
+                credentials: 'include'
             },
             body: JSON.stringify({ _id: confessionId })
         });
@@ -104,13 +104,13 @@ export const deleteConfession = async (confessionId, token) => {
     }
 };
 
-export const getUserConfessions = async (userId, page, limit, token) => {
+export const getUserConfessions = async (userId, page, limit) => {
     try {
         const response = await fetch(`${API}/confession/user-confessions`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
+                credentials: 'include'
             },
             body: JSON.stringify({ userId, page, limit })
         });
@@ -127,13 +127,13 @@ export const getUserConfessions = async (userId, page, limit, token) => {
     }
 };
 
-export const deleteConfessions = async (confessionIds, token) => {
+export const deleteConfessions = async (confessionIds) => {
     try {
         const response = await fetch(`${API}/confession/delete-confessions`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
+                credentials: 'include'
             },
             body: JSON.stringify({ rowsToDelete: confessionIds })
         });
