@@ -1,15 +1,15 @@
 const API = process.env.REACT_APP_API ? process.env.REACT_APP_API : 'https://www.littleone.life/api';
 
 // Function to create a new Prayer
-export const createPrayer = async (userId, prayerData, token) => {
+export const createPrayer = async (userId, prayerData) => {
   try {
     const response = await fetch(`${API}/prayer/create`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
+        'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ userId, ...prayerData })
+      body: JSON.stringify({ userId, ...prayerData }),
+      credentials: 'include'
     });
     return await response.json();
   } catch (error) {
@@ -19,15 +19,15 @@ export const createPrayer = async (userId, prayerData, token) => {
 };
 
 // Function to retrieve Prayer count for a user
-export const getUserPrayerCount = async (userId, token) => {
+export const getUserPrayerCount = async (userId) => {
   try {
     const response = await fetch(`${API}/prayer/count`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
+        'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ userId })
+      body: JSON.stringify({ userId }),
+      credentials: 'include'
     });
     return await response.json();
   } catch (error) {
@@ -37,15 +37,15 @@ export const getUserPrayerCount = async (userId, token) => {
 };
 
 // Function to retrieve a single Prayer by ID
-export const getPrayer = async (prayerId, token) => {
+export const getPrayer = async (prayerId) => {
   try {
     const response = await fetch(`${API}/prayer/get`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
+        'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ prayerId })
+      body: JSON.stringify({ prayerId }),
+      credentials: 'include'
     });
     return await response.json();
   } catch (error) {
@@ -55,15 +55,15 @@ export const getPrayer = async (prayerId, token) => {
 };
 
 // Function to retrieve all Prayers for a user
-export const getAllPrayers = async (userId, token) => {
+export const getAllPrayers = async (userId) => {
   try {
     const response = await fetch(`${API}/prayers`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
+        'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ userId })
+      body: JSON.stringify({ userId }),
+      credentials: 'include'
     });
     return await response.json();
   } catch (error) {
@@ -73,15 +73,15 @@ export const getAllPrayers = async (userId, token) => {
 };
 
 // Function to update a Prayer
-export const updatePrayer = async (prayerId, updates, token) => {
+export const updatePrayer = async (prayerId, updates) => {
   try {
     const response = await fetch(`${API}/prayer/update`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
+        'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ prayerId, ...updates })
+      body: JSON.stringify({ prayerId, ...updates }),
+      credentials: 'include'
     });
     return await response.json();
   } catch (error) {
@@ -91,15 +91,15 @@ export const updatePrayer = async (prayerId, updates, token) => {
 };
 
 // Function to delete a Prayer
-export const deletePrayer = async (prayerId, token) => {
+export const deletePrayer = async (prayerId) => {
   try {
     const response = await fetch(`${API}/prayer/delete`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
+        'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ prayerId })
+      body: JSON.stringify({ prayerId }),
+      credentials: 'include'
     });
     return await response.json();
   } catch (error) {
@@ -109,15 +109,15 @@ export const deletePrayer = async (prayerId, token) => {
 };
 
 // For Charts
-export const getTypeCount = async (userId, token) => {
+export const getTypeCount = async (userId) => {
   try {
     const response = await fetch(`${API}/prayer/prayer-count`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
+        'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ userId })
+      body: JSON.stringify({ userId }),
+      credentials: 'include'
     });
     return await response.json();
   } catch (error) {
@@ -127,15 +127,15 @@ export const getTypeCount = async (userId, token) => {
 };
 
 // For Data Table
-export const getUserPrayers = async (userId, type, token, page = 1, limit = 30) => {
+export const getUserPrayers = async (userId, type, page = 1, limit = 30) => {
   try {
     const response = await fetch(`${API}/prayer/user-prayers`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
+        'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ userId, page, limit, type })
+      body: JSON.stringify({ userId, page, limit, type }),
+      credentials: 'include'
     });
     return await response.json();
   } catch (error) {

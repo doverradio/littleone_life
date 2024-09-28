@@ -23,7 +23,7 @@ import stFrancisIcon from "../components/otherprayers/stfrancis/stfrancis_icon.p
 import StLeandroRuizPrayer from "../components/otherprayers/stleandroruiz/StLeandroRuiz";
 import stLeandroRuizIcon from "../components/otherprayers/stleandroruiz/stleandroruiz_icon.png";
 
-const UserDashboard = () => {
+const UserDashboard0 = () => {
     const { modalState, toggleModal } = useModal(); // Import from context
     const { user, token } = useAuth();
     const { _id } = user || {};
@@ -201,4 +201,4 @@ const UserDashboard = () => {
     );    
 }
 
-export default UserDashboard;
+export default UserDashboard0;

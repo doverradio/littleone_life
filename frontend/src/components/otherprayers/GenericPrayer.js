@@ -11,6 +11,10 @@ import './styles.css'
 const log = console.log;
 
 const GenericPrayer = ({ prayerTitle, prayerText, iconSrc, onIntentionChange, prayerType, showIntentions, modalId }) => {
+    
+    const { user, token } = useAuth();
+    const userId = user?._id;
+
     const [newIntention, setNewIntention] = useState('');
     const [localIntentions, setLocalIntentions] = useState( []);
     const [editingIntentionId, setEditingIntentionId] = useState(null);
@@ -36,10 +40,6 @@ const GenericPrayer = ({ prayerTitle, prayerText, iconSrc, onIntentionChange, pr
     const [fontSize, setFontSize] = useState(DEFAULT_FONT_SIZE);
     
     const { toggleModal } = useModal();
-
-    const { user, token } = useAuth();
-    const { _id } = user || {};
-    const userId = _id;
 
     const increaseFontSize = () => {
         setFontSize(currentSize => Math.min(currentSize + 1, MAX_FONT_SIZE));
@@ -220,7 +220,7 @@ const GenericPrayer = ({ prayerTitle, prayerText, iconSrc, onIntentionChange, pr
                     setRefreshTrigger(prev => prev + 1); // Increment to trigger refresh
 
                     // Fetch the updated list of masses
-                    const data = await getUserPrayers(userId, prayerType, token, currentPage, pageSize);
+                    const data = await getUserPrayers(userId, prayerType, currentPage, pageSize);
                     // Update state with the new data
                     setPrayers(data.prayers);
                     // setMasses(data.masses);
@@ -408,7 +408,7 @@ const GenericPrayer = ({ prayerTitle, prayerText, iconSrc, onIntentionChange, pr
 
     
     const fetchData = async () => {
-        const data = await getUserPrayers(userId, prayerType, token, currentPage, pageSize);
+        const data = await getUserPrayers(userId, prayerType, currentPage, pageSize);
 
         if (data) {
             setPrayers(data.prayers);

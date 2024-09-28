@@ -2,6 +2,8 @@
 
 const MassAttendance = require("../models/massAttendance");
 const Rosary = require("../models/rosary"); 
+const Confession = require("../models/confession");
+const Prayer = require('../models/prayer');
 const AiInteraction = require('../models/ai'); // Adjust the path if necessary
 const User = require('../models/user'); // Adjust the path according to your project structure
 const log = console.log
@@ -148,13 +150,15 @@ exports.getUserPrayerStats = async (req, res) => {
     try {
       const rosaryCount = await Rosary.countDocuments({ user: userId });
       const massCount = await MassAttendance.countDocuments({ user: userId });
+      const confessionCount = await Confession.countDocuments({ user: userId });
+      const divineMercyCount = await Prayer.countDocuments({user: userId});
       // Add similar queries for confessions and divineMercies if you have those models.
   
       const stats = {
         rosaries: rosaryCount,
         masses: massCount,
-        confessions: 0, // Replace with actual count
-        divineMercies: 0 // Replace with actual count
+        confessions: confessionCount, // Replace with actual count
+        divineMercies: divineMercyCount // Replace with actual count
       };
   
       res.json(stats);
