@@ -21,7 +21,7 @@ export const saveChurches = async (churches, userId) => {
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ churches, userId }), // Include userId
+        body: JSON.stringify({ churches, userId }),
         credentials: 'include'
     });
     return response.json();

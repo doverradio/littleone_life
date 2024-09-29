@@ -12,7 +12,7 @@ const log = console.log;
 
 const GenericPrayer = ({ prayerTitle, prayerText, iconSrc, onIntentionChange, prayerType, showIntentions, modalId }) => {
     
-    const { user, token } = useAuth();
+    const { user } = useAuth();
     const userId = user?._id;
 
     const [newIntention, setNewIntention] = useState('');
@@ -89,7 +89,7 @@ const GenericPrayer = ({ prayerTitle, prayerText, iconSrc, onIntentionChange, pr
     const handleUpdateIntention = async (e) => {
         e.preventDefault();
         try {
-            await updateIntention(editingIntentionId, { content: editContent }, token);
+            await updateIntention(editingIntentionId, { content: editContent }, userId);
             fetchIntentions(); // Re-fetch intentions to update the list
             setEditingIntentionId(null); // Reset the editing state
         } catch (error) {
@@ -101,7 +101,7 @@ const GenericPrayer = ({ prayerTitle, prayerText, iconSrc, onIntentionChange, pr
         e.preventDefault();
         if (!newIntention) return;
         try {
-            await createIntention({ user: userId, content: newIntention, type: prayerType }, token);
+            await createIntention({ user: userId, content: newIntention, type: prayerType }, userId);
             fetchIntentions(); // Re-fetch the intentions
             setNewIntention('');
             setIsAddingIntention(false);
@@ -212,7 +212,7 @@ const GenericPrayer = ({ prayerTitle, prayerText, iconSrc, onIntentionChange, pr
     const handleDelete = async (selectedIds) => {
         if (window.confirm('Are you sure you want to delete the selected masses?')) {
             try {
-                const response = await deletePrayers(selectedIds, token);
+                const response = await deletePrayers(selectedIds, userId);
                 if (response) {
                     console.log('Deleted successfully');
 
@@ -378,7 +378,7 @@ const GenericPrayer = ({ prayerTitle, prayerText, iconSrc, onIntentionChange, pr
         };
     
         try {
-            const response = await createPrayer(userId, prayerData, token);
+            const response = await createPrayer(userId, prayerData);
             log(`Prayer Session Created:`, response);
             // Reset state or show success message
             toggleModal(modalId);

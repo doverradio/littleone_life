@@ -6,7 +6,6 @@ const API_BASE_URL = process.env.REACT_APP_API || 'http://localhost:8000/api';
 // Function to send email notifications
 export const sendNotificationEmail = async (emailData, userId) => {
   // console.log(`Begin sendNotificationEmail! emailData: `, emailData)
-  // console.log(`Begin sendNotificationEmail! token: `, token)
   try {
     const response = await fetch(`${API_BASE_URL}/email/send-email`, {
       method: 'POST',

@@ -56,7 +56,7 @@ const MassQuestions = ({
     });
     const [editContent, setEditContent] = useState(''); // Ensure editContent is defined
 
-    const { user, token } = useAuth();
+    const { user } = useAuth();
 
     const addChurchToMassOptions = (church) => {
         setPendingChurches([...pendingChurches, church]);
@@ -64,7 +64,7 @@ const MassQuestions = ({
 
     const savePendingChurches = async () => {
         try {
-            const response = await addChurchesToUser(user._id, pendingChurches, token);
+            const response = await addChurchesToUser(user._id, pendingChurches);
             if (response.error) {
                 console.error('Failed to add churches:', response.error);
                 return;
@@ -84,7 +84,7 @@ const MassQuestions = ({
 
     const handleZipCodeSearch = async () => {
         try {
-            const churches = await getChurchesByZipCode(zipCode, token);
+            const churches = await getChurchesByZipCode(zipCode);
             setZipCodeChurches(churches);
         } catch (error) {
             console.error('Error fetching churches by zip code:', error);
@@ -101,7 +101,7 @@ const MassQuestions = ({
     const handleManualChurchSubmit = async (e) => {
         e.preventDefault();
         try {
-            const newChurch = await createChurch(manualChurchData, token);
+            const newChurch = await createChurch(manualChurchData);
             addChurchToMassOptions(newChurch);
             setManualChurchData({
                 name: '',

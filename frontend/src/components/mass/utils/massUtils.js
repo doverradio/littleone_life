@@ -13,21 +13,21 @@ export const handleIntentionCheckboxChange = (intentionId, setSelectedIntentions
     });
 };
 
-export const handleDeleteIntention = async (id, token, fetchIntentions, userId, setPrayerIntentions) => {
+export const handleDeleteIntention = async (id, fetchIntentions, userId, setPrayerIntentions) => {
     if (window.confirm('Are you sure you want to delete this intention?')) {
         try {
-            await deleteIntention(id, token);
-            fetchIntentions(userId, token, setPrayerIntentions);
+            await deleteIntention(id, userId);
+            fetchIntentions(userId, setPrayerIntentions);
         } catch (error) {
             console.error('Error deleting intention:', error);
         }
     }
 };
 
-export const handleAddPrayerIntention = async (intention, userId, token, setPrayerIntentions, setNewIntention, setIsAddingIntention) => {
+export const handleAddPrayerIntention = async (intention, userId, setPrayerIntentions, setNewIntention, setIsAddingIntention) => {
     try {
-        await createIntention(intention, userId, token);
-        await fetchIntentions(userId, token, setPrayerIntentions);
+        await createIntention(intention, userId);
+        await fetchIntentions(userId, setPrayerIntentions);
         setNewIntention('');
         setIsAddingIntention(false);
     } catch (error) {
@@ -35,15 +35,15 @@ export const handleAddPrayerIntention = async (intention, userId, token, setPray
     }
 };
 
-export const handleNewIntentionSubmit = (e, newIntention, userId, token, setPrayerIntentions, setNewIntention, setIsAddingIntention, type) => {
+export const handleNewIntentionSubmit = (e, newIntention, userId, setPrayerIntentions, setNewIntention, setIsAddingIntention, type) => {
     e.preventDefault();
     if (newIntention.length > 100) {
         alert('Prayer intention cannot exceed 100 characters');
         return;
     }
-    createIntention({ content: newIntention, type }, userId, token)
+    createIntention({ content: newIntention, type }, userId)
         .then(() => {
-            fetchIntentions(userId, token, setPrayerIntentions);
+            fetchIntentions(userId, setPrayerIntentions);
             setNewIntention('');
             setIsAddingIntention(false);
         })
@@ -55,14 +55,14 @@ export const handleEditClick = (id, content, setEditingIntentionId, setEditConte
     setEditContent(content);
 };
 
-export const handleSaveClick = async (id, updatedContent, token, fetchIntentions, userId, setPrayerIntentions, setEditingIntentionId, setEditContent) => {
+export const handleSaveClick = async (id, updatedContent, fetchIntentions, userId, setPrayerIntentions, setEditingIntentionId, setEditContent) => {
     if (updatedContent.length > 100) {
         alert('Prayer intention cannot exceed 100 characters');
         return;
     }
     try {
-        await updateIntention(id, { content: updatedContent }, token);
-        fetchIntentions(userId, token, setPrayerIntentions);
+        await updateIntention(id, { content: updatedContent }, userId);
+        fetchIntentions(userId, setPrayerIntentions);
         setEditingIntentionId(null);
         setEditContent('');
     } catch (error) {
@@ -75,10 +75,10 @@ export const handleCancelClick = (setEditingIntentionId, setEditContent) => {
     setEditContent('');
 };
 
-export const handleUpdateIntention = async (id, updatedContent, token, fetchIntentions, userId, setPrayerIntentions, setEditingIntentionId, setEditContent) => {
+export const handleUpdateIntention = async (id, updatedContent, fetchIntentions, userId, setPrayerIntentions, setEditingIntentionId, setEditContent) => {
     try {
-        await updateIntention(id, { content: updatedContent }, token);
-        fetchIntentions(userId, token, setPrayerIntentions);
+        await updateIntention(id, { content: updatedContent }, userId);
+        fetchIntentions(userId, setPrayerIntentions);
         setEditingIntentionId(null);
         setEditContent('');
     } catch (error) {

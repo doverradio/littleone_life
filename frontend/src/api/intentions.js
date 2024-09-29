@@ -60,15 +60,15 @@ export const getIntentionById = async (intentionId) => {
 };
 
 // Function to update an intention
-export const updateIntention = async (id, intention) => {
+export const updateIntention = async (id, intention, userId) => {
     try {
         const response = await fetch(`${API}/intention/update`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ _id: id, ...intention }),
-            credentials: 'include'  // Include credentials for session-based auth
+            body: JSON.stringify({ _id: id, ...intention, userId }),
+            credentials: 'include'
         });
         return await response.json();
     } catch (error) {
@@ -78,14 +78,14 @@ export const updateIntention = async (id, intention) => {
 };
 
 // Function to delete an intention
-export const deleteIntention = async (id) => {
+export const deleteIntention = async (id, userId) => {
     try {
         const response = await fetch(`${API}/intention/delete`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ _id: id }),
+            body: JSON.stringify({ _id: id, userId }),
             credentials: 'include'  // Include credentials for session-based auth
         });
         if (!response.ok) {

@@ -21,7 +21,6 @@ const ChurchFormToggle = ({
     zipCodeChurches,
     addChurchToMassOptions,
     userId,
-    token,
     setUserChurches,
     setNearbyChurches,
     handleManualChurchChange,
@@ -43,12 +42,12 @@ const ChurchFormToggle = ({
                             newChurch={newChurch}
                             manualChurchData={manualChurchData}
                             handleManualChurchChange={(e) => handleManualChurchChange(e, setManualChurchData, manualChurchData)}
-                            handleManualChurchSubmit={(e) => handleManualChurchSubmit(e, (church) => addChurchToMassOptions(userId, church, token, setUserChurches, setNearbyChurches), manualChurchData, setManualChurchData)}
+                            handleManualChurchSubmit={(e) => handleManualChurchSubmit(e, (church) => addChurchToMassOptions(userId, church, setUserChurches, setNearbyChurches), manualChurchData, setManualChurchData)}
                             zipCode={zipCode}
                             setZipCode={setZipCode}
-                            handleZipCodeSearch={() => handleZipCodeSearch(zipCode, token, setZipCodeChurches)}
+                            handleZipCodeSearch={() => handleZipCodeSearch(zipCode, setZipCodeChurches)}
                             zipCodeChurches={zipCodeChurches}
-                            addChurchToMassOptions={(church) => addChurchToMassOptions(userId, church, token, setUserChurches, setNearbyChurches)}
+                            addChurchToMassOptions={(church) => addChurchToMassOptions(userId, church, setUserChurches, setNearbyChurches)}
                         />
                     </div>
                 </div>

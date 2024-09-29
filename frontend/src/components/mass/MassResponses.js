@@ -2,18 +2,20 @@ import React from 'react';
 import PieChart from '../utils/piechart/PieChart';
 import ReusableDatatable from '../utils/datatable/ReusableDatatable';
 import { deleteMassAttendances } from '../../api/massAttendance'; // Import the function
+import { fetchMassData } from './helpers/massHelpers';
 
-const MassResponses = ({ massAttendances, pieChartData, massesPerPage, fetchMassAttendances, setMassAttendances, userId, token }) => {
+const MassResponses = ({ massAttendances, pieChartData, massesPerPage, setCount, setMassAttendances, userId, setPieChartData, setError, setUserChurches, setPrayerIntentions }) => {
 
     const handleDelete = async (selectedIds) => {
         if (window.confirm('Are you sure you want to delete the selected masses?')) {
             try {
-                const response = await deleteMassAttendances(selectedIds, token);
+                const response = await deleteMassAttendances(selectedIds, userId);
                 if (response) {
                     console.log('Deleted successfully');
 
                     // Update your state or UI here
-                    fetchMassAttendances(); // Fetch updated mass attendances
+                    // fetchMassAttendances(); // Fetch updated mass attendances
+                    fetchMassData(userId, setCount, setMassAttendances, setPieChartData, setUserChurches, setPrayerIntentions, setError);
                 }
             } catch (error) {
                 console.error('Delete operation failed:', error);

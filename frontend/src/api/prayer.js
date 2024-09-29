@@ -144,15 +144,15 @@ export const getUserPrayers = async (userId, type, page = 1, limit = 30) => {
   }
 };
 
-export const deletePrayers = async (prayerIds, token) => {
+export const deletePrayers = async (prayerIds, userId) => {
   try {
     const response = await fetch(`${API}/prayer/delete-prayers`, {
       method: 'DELETE',
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
+        'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ rowsToDelete: prayerIds })
+      body: JSON.stringify({ rowsToDelete: prayerIds, userId }),
+        credentials: 'include'
     });
 
     return await response.json();

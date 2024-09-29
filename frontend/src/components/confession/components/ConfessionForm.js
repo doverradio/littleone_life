@@ -178,6 +178,7 @@ const ChurchItem = ({ church, selectedChurch, handleChurchSelection, toggleFavor
                 id={church._id || church.placeId}
                 name="churchSelection"
                 value={church._id || church.placeId}
+                className='m-2'
                 onChange={() => handleChurchSelection(church)}
                 checked={isSelected} // Ensure the radio button is checked only when selected
             />
@@ -189,7 +190,7 @@ const ChurchItem = ({ church, selectedChurch, handleChurchSelection, toggleFavor
             </label>
             <FontAwesomeIcon
                 icon={isFavorite ? faSolidHeart : faRegularHeart}
-                className="favorite-icon"
+                className="favorite-icon m-2"
                 onClick={() => toggleFavorite(church)}
                 title={isFavorite ? 'Unheart church' : 'Heart church'}
             />

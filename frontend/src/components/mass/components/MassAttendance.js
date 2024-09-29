@@ -14,8 +14,7 @@ const MassAttendance = ({
     massTimesOptions,
     selectedChurch,
     addChurchToMassOptions,
-    removeChurchFromUserOptions,
-    token
+    removeChurchFromUserOptions
 }) => (
     <div className='mt-3'>
         <div className="form-group">
@@ -31,6 +30,7 @@ const MassAttendance = ({
                                 id={church._id || index} 
                                 name="churchSelection" 
                                 value={church._id || index} 
+                                className='m-2'
                                 onChange={() => handleChurchSelection(church)} 
                             />
                             <label htmlFor={church._id || index} title={`${church.name}, ${church.address}, ${church.city}, ${church.state}`}>
@@ -41,7 +41,7 @@ const MassAttendance = ({
                             </label>
                             <FontAwesomeIcon 
                                 icon={solidHeart} 
-                                className="add-icon m-1" 
+                                className="add-icon m-2" 
                                 title="Remove church from user churches"
                                 onClick={() => removeChurchFromUserOptions(church)}
                             />

@@ -16,6 +16,7 @@ import { DEFAULT_FONT_SIZE, MAX_FONT_SIZE, MIN_FONT_SIZE, initialChurchState, MA
 import BackIcon from '../utils/BackIcon';
 import novusOrdoImage from './novus_ordo.jpg';
 import latinMassImage from './latin_mass.jpg';
+import { handleUpdateIntention } from './utils/massUtils';
 
 const Mass = () => {
     const { toggleModal } = useModal();
@@ -106,10 +107,6 @@ const Mass = () => {
         setEditContent(content);
     };
 
-    const handleUpdateIntention = () => {
-        // Logic for updating an intention
-    };
-
     return (
         <div className="mass-component container">
             <BackIcon />
@@ -165,6 +162,13 @@ const Mass = () => {
                     <MassResponses
                         massAttendances={massAttendances}
                         pieChartData={pieChartData}
+                        setPieChartData={setPieChartData}
+                        userId={userId}
+                        setMassAttendances={setMassAttendances}
+                        setError={setError}
+                        setCount={setCount}
+                        setUserChurches={setUserChurches}
+                        setPrayerIntentions={setPrayerIntentions}
                     />
                 )}
                 {activeTab === 'Settings' && (

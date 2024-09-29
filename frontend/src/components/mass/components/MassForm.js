@@ -41,9 +41,8 @@ const MassForm = ({
     handleEditClick,
     fetchIntentions
 }) => {
-    const { user, token } = useAuth();
-    const { _id } = user || {};
-    const userId = _id;
+    const { user } = useAuth();
+    const userId = user?._id;
 
     const [isChurchFormVisible, setIsChurchFormVisible] = useState(false);
     const [filterQuery, setFilterQuery] = useState('');
@@ -111,6 +110,7 @@ const MassForm = ({
     const handleSubmit = async () => {
         const massAttendanceData = {
             user: userId,
+            userId,
             church: selectedChurch._id,
             massTime: massTime,
             i: selectedIntentions,
@@ -118,7 +118,7 @@ const MassForm = ({
         };
 
         try {
-            await createMassAttendance(massAttendanceData, token);
+            await createMassAttendance(massAttendanceData);
             notify('Mass attendance recorded successfully!', 'success');
             resetForm(); // Reset form after successful submission
         } catch (error) {
@@ -164,14 +164,13 @@ const MassForm = ({
                                 massTimesOptions={massTimesOptions}
                                 selectedChurch={selectedChurch}
                                 addChurchToMassOptions={(church) => {
-                                    addChurchToMassOptions(userId, church, token, setUserChurches, setNearbyChurches);
+                                    addChurchToMassOptions(userId, church, setUserChurches, setNearbyChurches);
                                     notify('Church added to your list', 'success');
                                 }}
                                 removeChurchFromUserOptions={(church) => {
-                                    removeChurchFromUserOptions(userId, church, token, setUserChurches, setNearbyChurches);
+                                    removeChurchFromUserOptions(userId, church, setUserChurches, setNearbyChurches);
                                     notify('Church removed from your list', 'info');
                                 }}
-                                token={token}
                             />
                             <div className="row w-100 justify-content-center my-3">
                                 <div className="col-md-12 text-center">
@@ -192,7 +191,6 @@ const MassForm = ({
                                         zipCodeChurches={zipCodeChurches}
                                         addChurchToMassOptions={addChurchToMassOptions}
                                         userId={userId}
-                                        token={token}
                                         setUserChurches={setUserChurches}
                                         setNearbyChurches={setNearbyChurches}
                                         handleManualChurchChange={handleManualChurchChange}
@@ -219,9 +217,9 @@ const MassForm = ({
                                 selectedIntentions={selectedIntentions}
                                 handleIntentionCheckboxChange={handleIntentionCheckboxChange}
                                 handleEditClick={handleEditClick}
-                                handleSaveClick={(id, updatedContent) => handleSaveClick(id, updatedContent, token, fetchIntentions, userId, setPrayerIntentions, setEditingIntentionId, setEditContent)}
+                                handleSaveClick={(id, updatedContent) => handleSaveClick(id, updatedContent, fetchIntentions, userId, setPrayerIntentions, setEditingIntentionId, setEditContent)}
                                 handleCancelClick={() => handleCancelClick(setEditingIntentionId, setEditContent)}
-                                handleDeleteIntention={(id) => handleDeleteIntention(id, token, fetchIntentions, userId, setPrayerIntentions)}
+                                handleDeleteIntention={(id) => handleDeleteIntention(id, fetchIntentions, userId, setPrayerIntentions)}
                                 editingIntentionId={editingIntentionId}
                                 editContent={editContent}
                                 setEditContent={setEditContent}

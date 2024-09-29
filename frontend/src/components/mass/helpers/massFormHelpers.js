@@ -23,12 +23,10 @@ export const handleManualChurchSubmit = (e, addChurchToMassOptions, manualChurch
     });
 };
 
-export const handleZipCodeSearch = async (zipCode, token, setZipCodeChurches) => {
+export const handleZipCodeSearch = async (zipCode, setZipCodeChurches) => {
     try {
         const response = await fetch(`/api/churches?zipCode=${zipCode}`, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
+            credentials: 'include'
         });
         const data = await response.json();
         setZipCodeChurches(data);
@@ -41,15 +39,15 @@ export const addChurchToMassOptions = (church, setPendingChurches, pendingChurch
     setPendingChurches([...pendingChurches, church]);
 };
 
-export const savePendingChurches = async (pendingChurches, userId, token, setUserChurches, setPendingChurches, setShowChurchForm) => {
+export const savePendingChurches = async (pendingChurches, userId, setUserChurches, setPendingChurches, setShowChurchForm) => {
     try {
         const response = await fetch(`/api/churches/add`, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ churches: pendingChurches }),
+            body: JSON.stringify({ churches: pendingChurches, userId }),
+            credentials: 'include'
         });
         const data = await response.json();
         setUserChurches(data);
