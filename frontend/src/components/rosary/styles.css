@@ -74,6 +74,13 @@
 }
 
 /* New styles */
+.rosary-component {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    padding: 20px;
+}
+
 .rosary-header {
     max-height: 100px; 
     overflow: hidden;

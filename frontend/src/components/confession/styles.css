@@ -34,3 +34,10 @@
 .confession-count {
     margin-top: 20px; /* Adjust as needed */
 }
+
+.confession-component {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    padding: 20px;
+}

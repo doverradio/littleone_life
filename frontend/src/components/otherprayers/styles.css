@@ -2,3 +2,10 @@
     color: blue;
     margin-bottom: 10px; /* Adjust this value for desired line spacing */
 }
+
+.generic-prayer-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    padding: 20px;
+}
