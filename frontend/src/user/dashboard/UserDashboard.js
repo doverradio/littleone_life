@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../api/authHook';
 import { getUserPrayerStats } from '../../api/user';
-import { Link } from 'react-router-dom';
 import CRMDashboard2 from '../../components/dashboards/crm/crmdashboard2/CRMDashboard2';
 
 const UserDashboard = () => {
-  const [userStats, setUserStats] = useState({});
+  const [userStats, setUserStats] = useState({
+    rosaries: 0,
+    masses: 0,
+    divineMercies: 0
+  });
   const { user, token } = useAuth();
 
   useEffect(() => {
@@ -24,39 +27,7 @@ const UserDashboard = () => {
   return (
     <div className="container">
       <div className="row">
-        <CRMDashboard2 />
-      </div>
-      <div className="row">
-        <h1 className="my-4">User Dashboard</h1>
-        <div className="card mb-4">
-          <div className="card-header">
-            <h4>User Stats</h4>
-          </div>
-          <div className="card-body">
-            <ul className="list-group">
-              <li className="list-group-item">
-                <Link to="/prayers/rosary" style={{ textDecoration: 'none', color: 'inherit' }}>
-                  Rosaries: {userStats.rosaries || 0}
-                </Link>
-              </li>
-              <li className="list-group-item">
-                <Link to="/prayers/mass" style={{ textDecoration: 'none', color: 'inherit' }}>
-                  Masses: {userStats.masses || 0}
-                </Link>
-              </li>
-              <li className="list-group-item">
-                <Link to="/prayers/confession" style={{ textDecoration: 'none', color: 'inherit' }}>
-                  Confessions: {userStats.confessions || 0}
-                </Link>
-              </li>
-              <li className="list-group-item">
-                <Link to="/prayers/divinemercy" style={{ textDecoration: 'none', color: 'inherit' }}>
-                  Divine Mercy Chaplets: {userStats.divineMercies || 0}
-                </Link>
-              </li>
-            </ul>
-          </div>
-        </div>
+        <CRMDashboard2 userStats={userStats} />
       </div>
     </div>
   );
