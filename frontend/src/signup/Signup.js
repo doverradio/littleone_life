@@ -17,6 +17,8 @@ import Step4Phone from './wizard/Step4Phone';
 import Step5Summary from './wizard/Step5Summary';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import './styles.css';
+
 
 const SignUp = () => {
     const [userData, setUserData] = useState({
@@ -142,8 +144,8 @@ const SignUp = () => {
             <NavbarMain />
             <ToastContainer />
             <Row className="h-100 no-gutters">
-                <Col lg="7" md="12" className="h-100 d-md-flex d-sm-block bg-white justify-content-center align-items-center">
-                    <Col lg="9" md="10" sm="12" className="mx-auto app-login-box">
+                <Col lg="7" md="12" sm="12" xs="12" className="h-100 d-flex bg-white justify-content-center align-items-center">
+                    <Col lg="9" md="10" sm="12" xs="12" className="mx-auto app-login-box">
                         <div className="app-logo" />
                         <h4>
                             <div>Welcome,</div>
@@ -191,7 +193,7 @@ const SignUp = () => {
                 </Col>
 
                 {/* Background Slider Section */}
-                <Col lg="5" className="d-lg-flex d-xs-none">
+                <Col lg="5" sm="12" xs="12" className="d-lg-flex d-none">
                     <div className="slider-light">
                         <Slider {...settings}>
                             <div className="h-100 d-flex justify-content-center align-items-center bg-premium-dark">
