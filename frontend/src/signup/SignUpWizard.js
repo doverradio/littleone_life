@@ -46,10 +46,28 @@ const SignUpWizard = ({ googleProfile, googleToken, informParent }) => {
         }
     }, [googleProfile]);
 
+    // const checkUsername = async () => {
+    //     if (userData.username.length > 0) {
+    //         try {
+    //             const result = await checkUsernameAvailability(userData.username);
+    //             setUserData({ 
+    //                 ...userData, 
+    //                 usernameAvailable: result.isAvailable,
+    //                 canProceed: result.isAvailable
+    //             });
+    //         } catch (error) {
+    //             console.error('Error checking username:', error);
+    //             setUserData({ ...userData, canProceed: false });
+    //         }
+    //     } else {
+    //         setUserData({ ...userData, usernameAvailable: null, canProceed: false });
+    //     }
+    // };
+
     const checkUsername = async () => {
-        if (userData.username.length > 0) {
+        if (userData.username.trim()) {
             try {
-                const result = await checkUsernameAvailability(userData.username);
+                const result = await checkUsernameAvailability(userData.username); // Assuming this calls your API
                 setUserData({ 
                     ...userData, 
                     usernameAvailable: result.isAvailable,
@@ -57,12 +75,21 @@ const SignUpWizard = ({ googleProfile, googleToken, informParent }) => {
                 });
             } catch (error) {
                 console.error('Error checking username:', error);
-                setUserData({ ...userData, canProceed: false });
+                setUserData({ 
+                    ...userData, 
+                    usernameAvailable: false, 
+                    canProceed: false 
+                });
             }
         } else {
-            setUserData({ ...userData, usernameAvailable: null, canProceed: false });
+            setUserData({ 
+                ...userData, 
+                usernameAvailable: null, 
+                canProceed: false 
+            });
         }
     };
+    
 
     const handleSubmit = async () => {
         try {

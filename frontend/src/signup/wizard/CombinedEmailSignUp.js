@@ -1,35 +1,46 @@
 import React, { useEffect } from 'react';
-import debounce from "lodash.debounce";
+import { debounce } from 'lodash';
+import { useUser } from '../../context/UserContext';
 
-const CombinedEmailSignUp = ({ userData, setUserData, nextStep, prevStep, checkUsername, handleKeyPress, setUsernameEmpty, usernameEmpty }) => {
-    const debouncedCheckUsername = debounce(checkUsername, 1000);
+const CombinedEmailSignUp = ({ nextStep, prevStep, checkUsername, handleKeyPress, setUsernameEmpty, usernameEmpty }) => {
+    const { user, setUser } = useUser(); // Get the user and setUser from context
+
+    // Debounce checkUsername with a 1-second delay to prevent excessive API calls
+    const debouncedCheckUsername = debounce(() => {
+        if (user.username.trim()) {
+            checkUsername();
+        }
+    }, 1000);
 
     useEffect(() => {
-        if (userData.username && userData.username.length > 0) {
-            debouncedCheckUsername();
+        // Only call the debounced function when the username changes
+        if (user.username && user.username.length > 0) {
+            debouncedCheckUsername(); // Trigger the debounced function
         }
         return () => {
-            debouncedCheckUsername.cancel();
+            debouncedCheckUsername.cancel(); // Clean up the debounced function on unmount or username change
         };
-    }, [userData.username, debouncedCheckUsername]);
+    }, [user.username, debouncedCheckUsername]);
 
-    const renderUsernameAvailabilityMessage = () => {
-        if (userData.username && userData.username.length > 0) {
-            if (userData.usernameAvailable === false) {
-                return <p style={{ color: 'red' }}>{userData.username} is not available</p>;
-            } else if (userData.usernameAvailable === true) {
-                return <p style={{ color: 'green' }}>{userData.username} is available</p>;
-            }
-        }
-        return <p style={{ height: '1rem' }}>&nbsp;</p>;
-    };
-
+    // Function to handle changes in input fields
     const handleChange = (input) => (e) => {
-        let value = e.target.value;
+        const value = e.target.value;
         if (input === 'username' && usernameEmpty) {
             setUsernameEmpty(false);
         }
-        setUserData({ ...userData, [input]: value });
+        setUser({ ...user, [input]: value }); // Use setUser from context to update user data
+    };
+
+    // Render username availability message
+    const renderUsernameAvailabilityMessage = () => {
+        if (user.username && user.username.length > 0) {
+            if (user.usernameAvailable === false) {
+                return <p style={{ color: 'red' }}>{user.username} is not available</p>;
+            } else if (user.usernameAvailable === true) {
+                return <p style={{ color: 'green' }}>{user.username} is available</p>;
+            }
+        }
+        return <p style={{ height: '1rem' }}>&nbsp;</p>; // Empty space to maintain layout consistency
     };
 
     return (
@@ -39,25 +50,25 @@ const CombinedEmailSignUp = ({ userData, setUserData, nextStep, prevStep, checkU
                 {usernameEmpty && <p style={{ color: 'red' }}>Please enter a username to proceed</p>}
                 <input 
                     type="text" 
-                    value={userData.username} 
+                    value={user.username} 
                     onChange={handleChange('username')} 
                     className='form-control'
                     placeholder="Username"
                     onKeyPress={handleKeyPress}
                 />
-                {userData.usernameError && <p style={{ color: 'red' }}>{userData.usernameError}</p>}
+                {user.usernameError && <p style={{ color: 'red' }}>{user.usernameError}</p>}
                 <div className="form-group">
                     <label htmlFor="email">Email</label>
-                    <input onChange={handleChange('email')} type="email" className="form-control" value={userData.email} />
+                    <input onChange={handleChange('email')} type="email" className="form-control" value={user.email} />
                 </div>
                 <div className="form-group">
                     <label htmlFor="password">Password</label>
-                    <input onChange={handleChange('password')} type="password" className="form-control" value={userData.password} />
+                    <input onChange={handleChange('password')} type="password" className="form-control" value={user.password} />
                 </div>
                 <button 
                     className="btn btn-primary btn-block m-1" 
                     onClick={nextStep}
-                    disabled={userData.username.trim() === '' || userData.usernameAvailable === false}
+                    disabled={user.username.trim() === '' || user.usernameAvailable === false}
                 >
                     Next
                 </button>

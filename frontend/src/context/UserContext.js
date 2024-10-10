@@ -1,3 +1,5 @@
+// src/context/UserContext.js
+
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import { jwtDecode } from "jwt-decode";  // Importing jwtDecode as a named export
 import { getCookie } from '../helpers/cookieHelper';

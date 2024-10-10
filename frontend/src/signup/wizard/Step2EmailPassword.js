@@ -35,12 +35,12 @@ const Step2EmailPassword = ({ userData, setUserData, nextStep, prevStep, handleK
                 </>
             )}
             <div className="row">
-                <div className="col">
+                {/* <div className="col">
                     <button className="btn btn-secondary btn-sm w-100 m-1" onClick={prevStep}>Back</button>
                 </div>
                 <div className="col">
                     <button className="btn btn-primary btn-sm w-100 m-1" onClick={nextStep}>Next</button>
-                </div>
+                </div> */}
             </div>
         </div>
     );

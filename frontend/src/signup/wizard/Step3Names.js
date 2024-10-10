@@ -30,12 +30,12 @@ const Step3Names = ({ userData, setUserData, nextStep, prevStep, handleKeyPress 
                 </div>
             </div>
             <div className="row mt-3">
-                <div className="col">
+                {/* <div className="col">
                     <button className="btn btn-secondary btn-sm w-100" onClick={prevStep}>Back</button>
                 </div>
                 <div className="col">
                     <button className="btn btn-primary btn-sm w-100" onClick={nextStep}>Next</button>
-                </div>
+                </div> */}
             </div>
         </div>
     );

@@ -17,14 +17,14 @@ const Step4Phone = ({ userData, setUserData, nextStep, prevStep, handleKeyPress 
                 maxLength={14}
                 onKeyPress={handleKeyPress}
             />
-            <div className="row mt-3">
+            {/* <div className="row mt-3">
                 <div className="col">
                     <button className="btn btn-secondary btn-sm w-100" onClick={prevStep}>Back</button>
                 </div>
                 <div className="col">
                     <button className="btn btn-primary btn-sm w-100" onClick={nextStep}>Next</button>
                 </div>
-            </div>
+            </div> */}
             <div className="row mt-3">
                 <div className="col">
                     <button className="btn btn-outline-secondary btn-sm w-100" onClick={nextStep}>Skip</button>

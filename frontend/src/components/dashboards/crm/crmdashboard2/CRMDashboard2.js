@@ -1,16 +1,18 @@
 import React, { Component, Fragment } from 'react';
-import { Button, UncontrolledPopover, PopoverBody, Progress, Container, Row, Col } from 'reactstrap';
+import { Container, Row, Col } from 'reactstrap';
+import RosaryCard from './cards/RosaryCard';
+import MassCard from './cards/MassCard';
+import DivineMercyCard from './cards/DivineMercyCard';
 
 export default class CRMDashboard2 extends Component {
   state = {
     tooltipOpen: {
-      massBadge: false, // Tooltip for Mass Badge
-      rosaryProgress: false, // Tooltip for Rosary Progress
-      chapletProgress: false // Tooltip for Divine Mercy Chaplet Progress
+      massBadge: false,
+      rosaryProgress: false,
+      chapletProgress: false
     }
   };
 
-  // Helper function to toggle tooltips
   toggleTooltip = (tooltipName) => {
     this.setState({
       tooltipOpen: {
@@ -22,7 +24,7 @@ export default class CRMDashboard2 extends Component {
 
   calculateProgress(current, goal) {
     const percentage = (current / goal) * 100;
-    return percentage > 100 ? 100 : percentage; // Ensure the bar doesn't exceed 100%
+    return percentage > 100 ? 100 : percentage;
   }
 
   getMassLevel(masses) {
@@ -35,118 +37,56 @@ export default class CRMDashboard2 extends Component {
     }
   }
 
+  getRosaryLevel(rosaries) {
+    if (rosaries >= 30) {
+      return { rosaryLevel: "Apostle of the Rosary", badge: "🔵 Apostle of the Rosary" };
+    } else if (rosaries >= 20) {
+      return { rosaryLevel: "Champion of the Rosary", badge: "🏅 Champion of the Rosary" };
+    } else if (rosaries >= 15) {
+      return { rosaryLevel: "Disciple of Mary", badge: "🌟 Disciple of Mary" };
+    } else if (rosaries >= 7) {
+      return { rosaryLevel: "Child of Mary", badge: "💙 Child of Mary" };
+    } else if (rosaries >= 3) {
+      return { rosaryLevel: "Devoted Servant", badge: "🙏 Devoted Servant" };
+    } else {
+      return { rosaryLevel: "Handmaid of Mary", badge: "🌸 Handmaid of Mary" };
+    }
+  }
+
   render() {
     const { userStats } = this.props;
 
-    // Define goals
-    const rosaryGoal = 5; // Weekly goal
-    const massGoal = 4; // Monthly goal
-    const divineMercyGoal = 10; // Weekly goal
     const { massLevel, badge: massLevelBadge } = this.getMassLevel(userStats.masses || 0);
+    const { rosaryLevel, badge: rosaryLevelBadge } = this.getRosaryLevel(userStats.rosaries || 0);
 
     return (
       <Fragment>
         <Container fluid>
           <Row>
-            {/* Rosary Progress Card */}
             <Col md="6" xl="4">
-              <div className="card mb-3 widget-content">
-                <div className="widget-content-outer">
-                  <div className="widget-content-wrapper">
-                    <div className="widget-content-left">
-                      <div className="widget-heading">Rosaries Prayed</div>
-                      <div className="widget-subheading">Weekly Goal: 5 Rosaries</div>
-                    </div>
-                    <div className="widget-content-right">
-                      <div className="widget-numbers text-success">
-                        {userStats.rosaries}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="widget-progress-wrapper">
-                    <Progress className="progress-bar-sm" color="primary" value={this.calculateProgress(userStats.rosaries, rosaryGoal)} />
-                    <div className="progress-sub-label">
-                      <div className="sub-label-left">Rosary Progress</div>
-                      <div className="sub-label-right">
-                        {this.calculateProgress(userStats.rosaries, rosaryGoal).toFixed(1)}%
-                      </div>
-                    </div>
-                  </div>
-                  <Button id="PopoverRosaryProgress" color="link">More Info</Button>
-                  <UncontrolledPopover placement="bottom" target="PopoverRosaryProgress">
-                    <PopoverBody>Complete 5 Rosaries per week to stay on track. Each rosary is a step closer to spiritual growth!</PopoverBody>
-                  </UncontrolledPopover>
-                </div>
-              </div>
+              <RosaryCard
+                rosaries={userStats.rosaries}
+                rosaryLevelBadge={rosaryLevelBadge}
+                calculateProgress={this.calculateProgress}
+              />
             </Col>
 
-            {/* Mass Attendance Progress Card */}
             <Col md="6" xl="4">
-              <div className="card mb-3 widget-content">
-                <div className="widget-content-outer">
-                  <div className="widget-content-wrapper">
-                    <div className="widget-content-left">
-                      <div className="widget-heading">Masses Attended</div>
-                      <div className="widget-subheading">Weekly/Monthly Goal: {massGoal} Masses</div>
-                    </div>
-                    <div className="widget-content-right">
-                      <div className="widget-numbers text-warning">
-                        {userStats.masses} ({massLevel})
-                      </div>
-                    </div>
-                  </div>
-                  <div className="widget-progress-wrapper">
-                    <Progress className="progress-bar-sm" color="danger" value={this.calculateProgress(userStats.masses, massGoal)} />
-                    <div className="progress-sub-label">
-                      <div className="sub-label-left">Mass Progress</div>
-                      <div className="sub-label-right">{massLevelBadge}</div>
-                    </div>
-                  </div>
-                  <Button id="PopoverMassProgress" color="link">More Info</Button>
-                  <UncontrolledPopover placement="bottom" target="PopoverMassProgress">
-                    <PopoverBody>
-                      {massLevel === "Son of God" ? (
-                        "You are at the highest level, attending daily mass. Keep up the great work!"
-                      ) : (
-                        "Attend more masses to reach the 'Son of God' level. Consistency is key!"
-                      )}
-                    </PopoverBody>
-                  </UncontrolledPopover>
-                </div>
-              </div>
+              <MassCard
+                masses={userStats.masses}
+                massLevel={massLevel}
+                massLevelBadge={massLevelBadge}
+                calculateProgress={this.calculateProgress}
+              />
             </Col>
 
-            {/* Divine Mercy Progress Card */}
             <Col md="6" xl="4">
-              <div className="card mb-3 widget-content">
-                <div className="widget-content-outer">
-                  <div className="widget-content-wrapper">
-                    <div className="widget-content-left">
-                      <div className="widget-heading">Divine Mercy Chaplets</div>
-                      <div className="widget-subheading">Weekly Goal: 10 Chaplets</div>
-                    </div>
-                    <div className="widget-content-right">
-                      <div className="widget-numbers text-danger">
-                        {userStats.divineMercies}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="widget-progress-wrapper">
-                    <Progress className="progress-bar-sm" color="success" value={this.calculateProgress(userStats.divineMercies, divineMercyGoal)} />
-                    <div className="progress-sub-label">
-                      <div className="sub-label-left">Chaplet Progress</div>
-                      <div className="sub-label-right">
-                        {this.calculateProgress(userStats.divineMercies, divineMercyGoal).toFixed(1)}%
-                      </div>
-                    </div>
-                  </div>
-                  <Button id="PopoverChapletProgress" color="link">More Info</Button>
-                  <UncontrolledPopover placement="bottom" target="PopoverChapletProgress">
-                    <PopoverBody>Pray more chaplets to strengthen your faith and commitment.</PopoverBody>
-                  </UncontrolledPopover>
-                </div>
-              </div>
+              <DivineMercyCard
+                divineMercies={userStats.divineMercies}
+                calculateProgress={this.calculateProgress}
+              />
             </Col>
+
           </Row>
         </Container>
       </Fragment>

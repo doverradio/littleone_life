@@ -1,24 +1,22 @@
 import React, { useEffect, useState, useCallback, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom'; // Import useLocation to get current path
 import { useUser } from '../../context/UserContext';
 import {
   clearTimers,
   scheduleTimers,
-  updateActivity,
   logoutUser,
 } from './sessionHelpers';
 import { checkSession } from '../../api/auth';
-import SessionExpiryModal from './SessionExpiryModal';
 import Modal from 'react-modal';
-const log = console.log;
 
 Modal.setAppElement('#root');
 
 const SessionManager = ({ children }) => {
-  const { user, setUser } = useUser(); 
+  const { user, setUser } = useUser();
   const [isAuthenticated, setIsAuthenticated] = useState(!!user);
   const [warningShown, setWarningShown] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation(); // Use location hook to get current pathname
 
   const warningTimeoutRef = useRef(null);
   const logoutTimeoutRef = useRef(null);
@@ -28,12 +26,11 @@ const SessionManager = ({ children }) => {
       console.log("Showing logout warning...");
       setWarningShown(true);
     }
-  }, []); // Ensure this function is defined
+  }, []);
 
   const handleLogoutUser = useCallback(() => {
-    // console.log("Logging out user and clearing session...");
     logoutUser(navigate, clearTimers, warningTimeoutRef, logoutTimeoutRef);
-    setUser(null); 
+    setUser(null);
     setIsAuthenticated(false);
   }, [navigate, setUser]);
 
@@ -41,51 +38,30 @@ const SessionManager = ({ children }) => {
     scheduleTimers(warningTimeoutRef, logoutTimeoutRef, handleShowLogoutWarning, handleLogoutUser);
   }, [handleShowLogoutWarning, handleLogoutUser]);
 
-  const handleRefreshSession = useCallback(() => {
-    checkSession().then(response => {
-      // log(`checkSession response: `, response)
-      if (response.isAuthenticated) {
-        setIsAuthenticated(true);
-        setUser(response.user); 
-        handleScheduleTimers();
-      } else {
-        handleLogoutUser();
-      }
-    }).catch(error => {
-      handleLogoutUser();
-    });
-  }, [handleLogoutUser, handleScheduleTimers, setUser]);
-
   useEffect(() => {
-    // log(`SessionManager useEffect`)
-    if (user) { 
-      // log(`SessionManager useEffect - got user: `, user)
+    // If the user is on '/signin' or '/signup', skip session checking
+    if (location.pathname === '/signin' || location.pathname === '/signup') {
+      return;
+    }
+
+    if (user) {
       setIsAuthenticated(true);
       handleScheduleTimers();
     } else {
       checkSession().then(response => {
-        // log(`checkSession response (in SessionManager useEffect): `, response)
-
         if (response.isAuthenticated) {
-          setUser(response.user); 
+          setUser(response.user);
           setIsAuthenticated(true);
         } else {
           navigate('/signin');
         }
       });
     }
-  }, [navigate, handleScheduleTimers, user]);
+  }, [navigate, handleScheduleTimers, user, location.pathname]); // Add location.pathname to dependencies
 
   return (
     <>
       {children}
-      {/* {isAuthenticated && (
-        <SessionExpiryModal
-          isOpen={warningShown}
-          onRefresh={handleRefreshSession}
-          onLogout={handleLogoutUser}
-        />
-      )} */}
     </>
   );
 };
