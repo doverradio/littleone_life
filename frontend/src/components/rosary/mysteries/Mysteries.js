@@ -1,3 +1,5 @@
+// src/components/rosary/mysteries/Mysteries.js
+
 import React, { useState } from 'react';
 import luminousImage from '../luminous.jpg';
 import sorrowfulImage from '../sorrowful.jpg';
@@ -30,7 +32,7 @@ const Mysteries = ({ handleMysteryClick }) => {
                         className={`mystery-item ${selectedMystery === mystery.name ? 'selected-mystery' : ''}`}
                     >
                         <img src={mystery.image} alt={mystery.name} className="mystery-image" />
-                        <p>{mystery.name}</p>
+                        <p className='mt-2'>{mystery.name}</p>
                     </div>
                 ))}
             </div>

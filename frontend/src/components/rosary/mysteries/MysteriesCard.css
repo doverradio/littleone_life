@@ -1,4 +1,4 @@
-/* Add this to your styles.css or the relevant CSS file */
+/* Card container for mystery details */
 .mystery-details-card {
     display: flex;
     justify-content: center;
@@ -8,51 +8,47 @@
     border-radius: 8px;
     background-color: #fff;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    max-width: 600px; /* Adjust this value if needed */
+    max-width: 600px;
 }
 
+/* Container for the mystery details */
 .mystery-details-content {
     text-align: left;
 }
 
+/* Styling for the list */
 .mysteries-list {
     list-style-type: none;
     padding: 0;
+    margin: 0; /* Remove default list margins */
 }
 
+/* Individual mystery items with proper line-height */
 .mystery-item {
-    margin: 5px;
-    padding: 10px;
+    margin: 8px 0;
+    padding: 8px;
+    font-size: 18px; /* Keep text size readable */
+    line-height: 0.6; /* Set a tighter line height */
     cursor: pointer;
-    border: 2px solid transparent; /* Default border */
+    border: 2px solid transparent;
     border-radius: 8px;
     transition: border-color 0.3s ease, opacity 0.3s ease;
-    opacity: 1; /* Full opacity by default */
+    opacity: 1;
+    text-align: left;
 }
 
-/* Apply to mystery items inside mysteries-row only */
+/* Highlight selected mystery item */
 .mysteries-row .mystery-item.selected-mystery {
-    border-color: darkblue; /* Dark blue border for selected item */
-    opacity: 1; /* Ensure selected item stays fully opaque */
+    border-color: darkblue;
+    opacity: 1;
 }
 
-/* Reduce opacity of non-selected mysteries only inside mysteries-row */
+/* Reduce opacity for non-selected items */
 .mysteries-row .mystery-item:not(.selected-mystery) {
-    opacity: 0.5; /* Set to 50% opacity for non-selected items */
+    opacity: 0.7;
 }
 
-.mystery-item img {
-    max-width: 100%;
-    border-radius: 8px;
-}
-
-.mystery-item p {
-    margin-top: 10px;
-    font-weight: bold;
-    text-align: center;
-}
-
-/* No opacity reduction for the details list */
+/* Ensure full opacity for the list inside details */
 .mysteries-list .mystery-item {
-    opacity: 1; /* Ensure details remain fully opaque */
+    opacity: 1;
 }
