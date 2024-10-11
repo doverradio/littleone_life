@@ -28,7 +28,7 @@
     margin: 8px 0;
     padding: 8px;
     font-size: 18px; /* Keep text size readable */
-    line-height: 0.6; /* Set a tighter line height */
+    line-height: 1; /* Set a tighter line height */
     cursor: pointer;
     border: 2px solid transparent;
     border-radius: 8px;

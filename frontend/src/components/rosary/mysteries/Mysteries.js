@@ -19,7 +19,7 @@ const Mysteries = ({ handleMysteryClick }) => {
 
     const handleClick = (mysteryName) => {
         setSelectedMystery(mysteryName);
-        handleMysteryClick(mysteryName);
+        handleMysteryClick(mysteryName); // Pass the selected mystery name to the parent
     };
 
     return (

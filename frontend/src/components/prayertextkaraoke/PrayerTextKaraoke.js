@@ -5,7 +5,7 @@ import './PrayerTextKaraoke.css'; // Ensure proper styling
 
 const PrayerTextKaraoke = ({ prayerText = '', transcript }) => {
   const words = prayerText ? prayerText.split(' ') : [];
-  const [highlightedIndex, setHighlightedIndex] = useState(2); // Start with the first two words
+  const [highlightedIndex, setHighlightedIndex] = useState(0); // Start with the first word
 
   useEffect(() => {
     if (!transcript) return;
@@ -32,7 +32,10 @@ const PrayerTextKaraoke = ({ prayerText = '', transcript }) => {
               {words.map((word, index) => (
                 <span
                   key={index}
-                  className={index < highlightedIndex ? 'highlighted' : 'unhighlighted'}
+                  style={{
+                    color: index < highlightedIndex ? 'black' : index === highlightedIndex ? 'red' : 'grey',
+                    textDecoration: index === highlightedIndex ? 'underline' : 'none'
+                  }}
                 >
                   {word}{' '}
                 </span>

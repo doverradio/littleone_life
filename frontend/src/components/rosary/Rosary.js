@@ -57,6 +57,7 @@ const Rosary = () => {
     const [editingIntentionId, setEditingIntentionId] = useState(null);
     const [editContent, setEditContent] = useState('');
     const [selectedMysteryDetails, setSelectedMysteryDetails] = useState([]);
+    const [selectedMysteryName, setSelectedMysteryName] = useState(''); // Store the mystery name
     const [selectedMysteryIcon, setSelectedMysteryIcon] = useState(null);
     const [activeTab, setActiveTab] = useState('Form');
     const [isSubmitting, setIsSubmitting] = useState(false);

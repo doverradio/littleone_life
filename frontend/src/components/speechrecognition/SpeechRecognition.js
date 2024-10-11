@@ -1,6 +1,8 @@
 import React, { useState } from "react";
+import { FaMicrophone, FaMicrophoneSlash } from 'react-icons/fa'; // Import microphone icons
+import './SpeechRecognitionComponent.css'; // Import the CSS for styling
 
-const SpeechRecognitionComponent = ({ animateBead }) => { 
+const SpeechRecognitionComponent = ({ animateBead, updateTranscript }) => { 
   const [listening, setListening] = useState(false);
   const [transcript, setTranscript] = useState("");
   const [error, setError] = useState(null);
@@ -33,14 +35,14 @@ const SpeechRecognitionComponent = ({ animateBead }) => {
     recognition.onresult = (event) => {
       const lastResult = event.results[event.results.length - 1][0].transcript;
       setTranscript(lastResult);
+      updateTranscript(lastResult); // Update the parent component's transcript state
       console.log("Recognized:", lastResult);
 
-      // After recognition, handle prayer completion
-      handlePrayerCompletion(lastResult);
+      handlePrayerCompletion(lastResult); // Call the function to animate the bead
     };
 
     recognition.onerror = (event) => {
-      console.error("Speech recognition error:", event.error); // Debugging the error
+      console.error("Speech recognition error:", event.error);
       setError(event.error);
       recognition.stop();
       setListening(false);
@@ -65,16 +67,18 @@ const SpeechRecognitionComponent = ({ animateBead }) => {
   };
 
   return (
-    <div>
-      {/* <h3>Begin Praying the Rosary</h3> */}
-      <button onClick={handleStartListening} disabled={listening}>
-        Begin Praying
-      </button>
-      <button onClick={handleStopListening} disabled={!listening}>
-        Stop Praying
+    <div className="speech-recognition-container mt-5">
+      {/* Dynamically change the text above the icon */}
+      <sup>{listening ? "Stop Listening" : "Begin Praying"}</sup>
+      {/* Use a microphone icon that toggles when listening */}
+      <button 
+        onClick={listening ? handleStopListening : handleStartListening} 
+        className="microphone-button"
+      >
+        {listening ? <FaMicrophoneSlash className="microphone-icon" /> : <FaMicrophone className="microphone-icon" />}
       </button>
       {error && <p>Error: {error}</p>}
-      <p>Transcript: {transcript}</p>
+      {/* <p>Transcript: {transcript}</p> */}
     </div>
   );
 };

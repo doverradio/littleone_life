@@ -1,0 +1,32 @@
+/* src/components/speechrecognition/SpeechRecognitionComponent.css */
+
+.speech-recognition-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+  }
+  
+  .microphone-button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    outline: none;
+  }
+  
+  .microphone-icon {
+    font-size: 40px; /* Adjust the size of the icon */
+    color: #ff6347; /* Change the color of the microphone icon (Tomato color) */
+    transition: color 0.3s ease;
+  }
+  
+  .microphone-icon:hover {
+    color: #d9534f; /* Darker shade of red on hover */
+  }
+  
+  sup {
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 8px;
+  }
+  
