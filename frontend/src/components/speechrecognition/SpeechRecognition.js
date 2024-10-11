@@ -13,20 +13,18 @@ const SpeechRecognitionComponent = ({ animateBead }) => {
   }
 
   const recognition = new SpeechRecognition();
-  recognition.continuous = true;  // Keep listening continuously
-  recognition.interimResults = false;  // Only final results
+  recognition.continuous = true;
+  recognition.interimResults = false;
   recognition.lang = "en-US";
 
-  // Handle prayer completion logic
-  const handlePrayerCompletion = (transcript) => {
-    // Check which prayer was spoken
-    if (transcript.toLowerCase().includes("our father")) {
-      animateBead('our-father');
-    } else if (transcript.toLowerCase().includes("hail mary")) {
-      animateBead('hail-mary');
-    }
-    // Clear the transcript after recognition
-    setTranscript("");
+  // Debugging: Check if the microphone is starting and stopping correctly
+  recognition.onstart = () => {
+    console.log("Speech recognition started.");
+  };
+
+  recognition.onend = () => {
+    console.log("Speech recognition ended.");
+    if (listening) recognition.start(); // Automatically restart recognition if the user is still praying
   };
 
   const handleStartListening = () => {
@@ -43,15 +41,20 @@ const SpeechRecognitionComponent = ({ animateBead }) => {
     };
 
     recognition.onerror = (event) => {
+      console.error("Speech recognition error:", event.error); // Debugging the error
       setError(event.error);
       recognition.stop();
       setListening(false);
     };
+  };
 
-    recognition.onend = () => {
-      // Automatically restart recognition to reduce delays
-      if (listening) recognition.start();
-    };
+  const handlePrayerCompletion = (transcript) => {
+    if (transcript.toLowerCase().includes("our father")) {
+      animateBead('our-father');
+    } else if (transcript.toLowerCase().includes("hail mary")) {
+      animateBead('hail-mary');
+    }
+    setTranscript(""); // Clear transcript after each prayer
   };
 
   const handleStopListening = () => {
@@ -61,7 +64,7 @@ const SpeechRecognitionComponent = ({ animateBead }) => {
 
   return (
     <div>
-      {/* <h3>Begin Praying the Rosary</h3> */}
+      <h3>Begin Praying the Rosary</h3>
       <button onClick={handleStartListening} disabled={listening}>
         Begin Praying
       </button>
