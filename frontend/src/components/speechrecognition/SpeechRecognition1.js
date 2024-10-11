@@ -48,7 +48,6 @@ const SpeechRecognitionComponent1 = () => {
 
   return (
     <div>
-      <h1>Speech Recognition for Rosary Prayers</h1>
       <button onClick={handleStartListening} disabled={listening}>
         Begin Praying
       </button>

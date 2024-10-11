@@ -41,6 +41,7 @@ import 'react-toastify/dist/ReactToastify.css';
 // Ensure correct component import
 import SpeechRecognitionComponent from '../speechrecognition/SpeechRecognition';
 import VirtualRosary from './virtualrosary/VirtualRosary'; 
+import PrayerTextKaraoke from '../prayertextkaraoke/PrayerTextKaraoke';
 
 const Rosary = () => {
     const { toggleModal } = useModal();
@@ -91,8 +92,19 @@ const Rosary = () => {
     const [error, setError] = useState(null);
     const [refreshTrigger, setRefreshTrigger] = useState(0);
     const [showVirtualRosary, setShowVirtualRosary] = useState(false);
+    const [currentTranscript, setCurrentTranscript] = useState(""); // To store the current transcript
+
+
+    // This is the full prayer text (Hail Mary example)
+    const hailMaryText = "Hail Mary, full of grace, the Lord is with thee. Blessed art thou among women, and blessed is the fruit of thy womb, Jesus. Holy Mary, Mother of God, pray for us sinners, now and at the hour of our death. Amen.";
 
     let hailMaryIndex = 0;  // To track Hail Mary bead index
+
+
+    // Function to update transcript (this will come from the speech recognition)
+    const handleTranscriptUpdate = (transcript) => {
+        setCurrentTranscript(transcript); // Update state when new words are recognized
+    };
 
     useEffect(() => {
         fetchIntentions(userId, setPrayerIntentions);
@@ -214,8 +226,11 @@ const Rosary = () => {
                         
                         {/* Add the SpeechRecognitionComponent for prayer listening */}
                         <div className="speech-recognition-section">
-                            <h3>Begin Praying the Rosary</h3>
-                            <SpeechRecognitionComponent animateBead={animateBead} />
+                            {/* <h3>Begin Praying the Rosary</h3> */}
+                            <SpeechRecognitionComponent 
+                                animateBead={animateBead}
+                                updateTranscript={handleTranscriptUpdate}
+                            />
                         </div>
 
                         {/* Rest of the existing logic */}
@@ -237,6 +252,9 @@ const Rosary = () => {
                         </div>
                     </div>
                 )}
+
+                {/* Pass the transcript and the full prayer to PrayerTextKaraoke */}
+                <PrayerTextKaraoke transcript={currentTranscript} prayerText={hailMaryText} />
 
                 {/* Render the virtual rosary */}
                 <VirtualRosary animateBead={animateBead} />
