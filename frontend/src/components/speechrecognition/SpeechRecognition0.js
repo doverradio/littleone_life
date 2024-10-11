@@ -1,23 +1,31 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
-const SpeechRecognitionComponent = () => {
+const SpeechRecognitionComponent0 = ({ animateBead }) => {
   const [listening, setListening] = useState(false);
   const [transcript, setTranscript] = useState("");
   const [error, setError] = useState(null);
 
-  // Cross-browser SpeechRecognition support
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
-  // Check for browser support
   if (!SpeechRecognition) {
     alert("Your browser does not support speech recognition. Please use Google Chrome or Microsoft Edge.");
     return <div>Speech Recognition is not supported in your browser.</div>;
   }
 
   const recognition = new SpeechRecognition();
-  recognition.continuous = true;  // Continuous listening
-  recognition.interimResults = false;  // Final results only
-  recognition.lang = "en-US";  // Set language to English
+  recognition.continuous = true;
+  recognition.interimResults = false;
+  recognition.lang = "en-US";
+
+  // Debugging: Check if the microphone is starting and stopping correctly
+  recognition.onstart = () => {
+    console.log("Speech recognition started.");
+  };
+
+  recognition.onend = () => {
+    console.log("Speech recognition ended.");
+    if (listening) recognition.start(); // Automatically restart recognition if the user is still praying
+  };
 
   const handleStartListening = () => {
     setListening(true);
@@ -27,18 +35,26 @@ const SpeechRecognitionComponent = () => {
       const lastResult = event.results[event.results.length - 1][0].transcript;
       setTranscript(lastResult);
       console.log("Recognized:", lastResult);
+
+      // After recognition, handle prayer completion
+      handlePrayerCompletion(lastResult);
     };
 
     recognition.onerror = (event) => {
+      console.error("Speech recognition error:", event.error); // Debugging the error
       setError(event.error);
       recognition.stop();
       setListening(false);
     };
+  };
 
-    recognition.onend = () => {
-      console.log("Speech recognition ended.");
-      setListening(false);
-    };
+  const handlePrayerCompletion = (transcript) => {
+    if (transcript.toLowerCase().includes("our father")) {
+      animateBead('our-father');
+    } else if (transcript.toLowerCase().includes("hail mary")) {
+      animateBead('hail-mary');
+    }
+    setTranscript(""); // Clear transcript after each prayer
   };
 
   const handleStopListening = () => {
@@ -48,7 +64,7 @@ const SpeechRecognitionComponent = () => {
 
   return (
     <div>
-      <h1>Speech Recognition for Rosary Prayers</h1>
+      <h3>Begin Praying the Rosary</h3>
       <button onClick={handleStartListening} disabled={listening}>
         Begin Praying
       </button>
@@ -61,4 +77,4 @@ const SpeechRecognitionComponent = () => {
   );
 };
 
-export default SpeechRecognitionComponent;
+export default SpeechRecognitionComponent0;
