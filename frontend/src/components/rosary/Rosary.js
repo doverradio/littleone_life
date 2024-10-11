@@ -224,41 +224,9 @@ const Rosary = () => {
                             <MysteryDetails selectedMysteryDetails={selectedMysteryDetails} />
                         )}
                         
-                        {/* Add the SpeechRecognitionComponent for prayer listening */}
-                        <div className="speech-recognition-section">
-                            {/* <h3>Begin Praying the Rosary</h3> */}
-                            <SpeechRecognitionComponent 
-                                animateBead={animateBead}
-                                updateTranscript={handleTranscriptUpdate}
-                            />
-                        </div>
-
-                        {/* Rest of the existing logic */}
-                        <div className="prayer-intentions-container">
-                            {/* Your existing Prayer Intentions logic */}
-                        </div>
-                        <div className="row mt-5">
-                            <div className="col-12 text-center">
-                                <button 
-                                    onClick={handlePrayRosaryWrapper} 
-                                    className="btn btn-primary"
-                                    disabled={!selectedMystery}
-                                >
-                                    {
-                                        isSubmitting ? 'Submitting...' : 'Submit Rosary'
-                                    }
-                                </button>
-                            </div>
-                        </div>
                     </div>
                 )}
 
-                {/* Pass the transcript and the full prayer to PrayerTextKaraoke */}
-                <PrayerTextKaraoke transcript={currentTranscript} prayerText={hailMaryText} />
-
-                {/* Render the virtual rosary */}
-                <VirtualRosary animateBead={animateBead} />
-                
                 {/* Other tabs logic */}
                 
                 <div className="questions-tab">
@@ -305,7 +273,37 @@ const Rosary = () => {
                                 </div>
                             )}
                         </div>
-                        <div className="row mt-5">
+
+
+
+
+
+
+
+
+
+                        {/* Pass the transcript and the full prayer to PrayerTextKaraoke */}
+                        <PrayerTextKaraoke transcript={currentTranscript} prayerText={hailMaryText} />
+
+                        
+
+                        
+                        {/* Add the SpeechRecognitionComponent for prayer listening */}
+                        <div className="speech-recognition-section">
+                            {/* <h3>Begin Praying the Rosary</h3> */}
+                            <SpeechRecognitionComponent 
+                                animateBead={animateBead}
+                                updateTranscript={handleTranscriptUpdate}
+                            />
+                        </div>
+
+
+                        {/* Render the virtual rosary */}
+                        <VirtualRosary animateBead={animateBead} />
+                        
+
+
+                        <div className="row mt-4">
                             <div className="col-12 text-center">
                                 <button 
                                     onClick={handlePrayRosaryWrapper} 
