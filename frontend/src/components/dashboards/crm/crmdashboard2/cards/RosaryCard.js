@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button, UncontrolledPopover, PopoverBody, Progress } from 'reactstrap';
 import { useNavigate } from 'react-router-dom';
+import './RosaryCard.css'; // Add for custom styles
 
 const RosaryCard = ({ rosaries, rosaryLevelBadge, calculateProgress }) => {
   const navigate = useNavigate();
@@ -21,7 +22,7 @@ const RosaryCard = ({ rosaries, rosaryLevelBadge, calculateProgress }) => {
           </div>
         </div>
         <div className="widget-progress-wrapper">
-          <Progress className="progress-bar-sm" color="primary" value={calculateProgress(rosaries, rosaryGoal)} />
+          <Progress className="progress-bar-sm animate-progress" color="primary" value={calculateProgress(rosaries, rosaryGoal)} />
           <div className="progress-sub-label">
             <div className="sub-label-left">Rosary Progress</div>
             <div className="sub-label-right">{calculateProgress(rosaries, rosaryGoal).toFixed(1)}%</div>

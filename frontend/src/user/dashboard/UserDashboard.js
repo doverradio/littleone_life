@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../api/authHook';
 import { getUserPrayerStats } from '../../api/user';
 import CRMDashboard2 from '../../components/dashboards/crm/crmdashboard2/CRMDashboard2';
+import './UserDashboard.css'; // Add this for styling
 
 const UserDashboard = () => {
   const [userStats, setUserStats] = useState({
@@ -25,8 +26,8 @@ const UserDashboard = () => {
   }, [user._id, token]);
 
   return (
-    <div className="container">
-      <div className="row">
+    <div className="dashboard-container">
+      <div className="dashboard-row">
         <CRMDashboard2 userStats={userStats} />
       </div>
     </div>

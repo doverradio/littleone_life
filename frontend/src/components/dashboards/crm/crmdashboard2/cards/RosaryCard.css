@@ -1,0 +1,13 @@
+.card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .card:hover {
+    transform: scale(1.02);
+    box-shadow: 0 0 15px 5px gold;
+  }
+  
+  .animate-progress {
+    transition: width 0.6s ease-in-out;
+  }
+  

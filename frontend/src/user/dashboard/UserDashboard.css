@@ -3,7 +3,13 @@
     display: flex;
     justify-content: center; /* Center the content horizontally */
     padding: 20px; /* Add some padding around the container */
+    background-image: url('../../assets/dashboard.png'); /* Ornate background image */
+    background-size: contain; /* Scale the image to fit the container */
+    background-repeat: no-repeat; /* Prevent the image from repeating */
+    background-position: center; /* Center the image */
+    min-height: 100vh; /* Ensure it takes full height */
 }
+
 
 .dashboard-content {
     max-width: 1000px; /* Add a max-width to center the content better */
@@ -11,22 +17,99 @@
     box-sizing: border-box; /* Ensure padding doesn't add to the width */
     padding: 20px;
     margin: 0 20px; /* Add margin to prevent it from touching the sides */
-    background-color: #fff; /* Add a background color if needed */
-    border-radius: 8px; /* Optional: add border radius for better appearance */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Optional: add box shadow for better appearance */
+    background-color: rgba(255, 255, 255, 0.8); /* Add a slightly transparent background */
+    border-radius: 16px; /* Add border radius for better appearance */
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.5); /* Golden shadow for a premium look */
+    border: 2px solid gold; /* Optional: ornate gold border */
 }
 
 .user-stats {
     text-align: left; /* Ensure stats are aligned to the left */
 }
 
+/* New Card Styles */
+.card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.95); /* Subtle transparency */
+    border: 2px solid gold; /* Gold border to match ornate style */
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.3); /* Golden shadow */
+    cursor: pointer; /* Add pointer to indicate clickable */
+}
+
+.card:hover {
+    transform: scale(1.05); /* Slightly increase size on hover */
+    box-shadow: 0 0 20px 8px rgba(255, 215, 0, 0.7); /* Stronger golden glow on hover */
+}
+
+.widget-content-left .widget-heading {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #444; /* Adjust color for visibility */
+}
+
+.widget-content-left .widget-subheading {
+    font-size: 1rem;
+    color: #666;
+}
+
+.widget-numbers {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #28a745; /* Success green for stats */
+}
+
+.widget-progress-wrapper {
+    margin-top: 10px;
+}
+
+.progress-bar-sm {
+    height: 8px;
+    background: linear-gradient(90deg, #f5d76e, #f7b32b); /* Golden progress bar */
+    transition: width 0.6s ease-in-out; /* Animate progress bar */
+}
+
+.sub-label-left {
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.sub-label-right {
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: #555;
+}
+
+/* Popover Styling */
+.popover {
+    border-radius: 8px;
+    border: 1px solid gold;
+    background-color: #fff;
+}
+
+.popover-body {
+    font-size: 0.9rem;
+    color: #333;
+    text-align: center;
+    padding: 12px;
+}
+
+/* Mobile Adjustments */
 @media (max-width: 768px) {
     .dashboard-container {
-        padding: 10px; /* Reduce padding for mobile view */
+        padding: 10px;
     }
 
     .dashboard-content {
-        margin-left: 0; /* Remove the left margin */
-        padding: 10px; /* Adjust padding for mobile view */
+        margin-left: 0;
+        padding: 10px;
+    }
+
+    .card {
+        margin-bottom: 20px; /* Ensure cards have space between them on mobile */
+    }
+
+    .widget-numbers {
+        font-size: 1.6rem;
     }
 }

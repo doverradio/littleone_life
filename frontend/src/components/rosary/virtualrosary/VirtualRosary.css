@@ -1,26 +1,36 @@
 .virtual-rosary {
-    text-align: center;
-}
-
-.rosary-beads {
     display: flex;
     justify-content: center;
-    margin: 10px 0;
-}
-
-.bead {
-    height: 20px;
+    align-items: center;
+    margin: 20px;
+  }
+  
+  .rosary-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .bead {
     width: 20px;
-    margin: 5px;
-    background-color: gray;
+    height: 20px;
+    background-color: #ccc;
     border-radius: 50%;
-    display: inline-block;
-}
-
-.active-bead {
-    background-color: gold;
-}
-
-.rosary-controls button {
-    margin: 5px;
-}
+    transition: background-color 0.5s, box-shadow 0.5s;
+  }
+  
+  .bead.our-father {
+    background-color: #f5a623;
+  }
+  
+  .bead.hail-mary {
+    background-color: #36a2eb;
+  }
+  
+  .bead.glow {
+    background-color: yellow;
+    box-shadow: 0 0 10px yellow;
+  }
+  

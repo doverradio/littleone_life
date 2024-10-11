@@ -39,10 +39,8 @@ import { getUser } from '../../api/user';
 import { sendNotificationEmail } from '../../api/email'; // Make sure this import is included
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import SpeechRecognition from '../speechrecognition/SpeechRecognition'; // Import SpeechRecognition
-import VirtualRosary from './virtualrosary/VirtualRosary';
 
-const Rosary = () => {
+const Rosary0 = () => {
     const { toggleModal } = useModal();
     const { user } = useUser();
     const userId = user?._id;
@@ -184,7 +182,6 @@ const Rosary = () => {
         }
     };
 
-    
     return (
         <div className="rosary-component container">
             <BackIcon />
@@ -196,45 +193,6 @@ const Rosary = () => {
             <main className="rosary-main">
                 {activeTab === 'Form' && (
                     <div className="questions-tab">
-                        <Mysteries 
-                            handleMysteryClick={(name) => handleMysteryClick(name, mysteriesDetails, setSelectedMystery, setSelectedMysteryDetails, setSelectedMysteryIcon, mysteries, setShowVirtualRosary)} 
-                        />
-                        {selectedMystery && (
-                            <MysteryDetails selectedMysteryDetails={selectedMysteryDetails} />
-                        )}
-                        
-                        {/* Add the SpeechRecognition component for prayer listening */}
-                        <div className="speech-recognition-section">
-                            <h3>Begin Praying the Rosary</h3>
-                            <SpeechRecognition />
-                        </div>
-
-                        {/* Rest of the existing logic */}
-                        <div className="prayer-intentions-container">
-                            {/* Your existing Prayer Intentions logic */}
-                        </div>
-                        <div className="row mt-5">
-                            <div className="col-12 text-center">
-                                <button 
-                                    onClick={handlePrayRosaryWrapper} 
-                                    className="btn btn-primary"
-                                    disabled={!selectedMystery}
-                                >
-                                    {
-                                        isSubmitting ? 'Submitting...' : 'Submit Rosary'
-                                    }
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                )}
-
-                {/* Render the virtual rosary */}
-                <VirtualRosary />
-                
-                {/* Other tabs logic */}
-                
-                <div className="questions-tab">
                         <Mysteries handleMysteryClick={(name) => handleMysteryClick(name, mysteriesDetails, setSelectedMystery, setSelectedMysteryDetails, setSelectedMysteryIcon, mysteries, setShowVirtualRosary)} />
                         {selectedMystery && (
                             <MysteryDetails selectedMysteryDetails={selectedMysteryDetails} />
@@ -292,10 +250,45 @@ const Rosary = () => {
                             </div>
                         </div>
                     </div>
+                )}
+                {activeTab === 'Prayers' && (
+                    <>
+                        <div className="container">
+                            <div className="text-size-controls">
+                                Text Size
+                                <button onClick={() => decreaseFontSize(setFontSize, MIN_FONT_SIZE)} className='btn btn-outline-secondary btn-sm m-1'>-</button>
+                                <button onClick={() => increaseFontSize(setFontSize, MAX_FONT_SIZE)} className='btn btn-outline-secondary btn-sm m-1'>+</button>
+                            </div>
+                            <RosaryPrayerText fontSize={fontSize} />
+                        </div>
+                    </>
+                )}
+                {activeTab === 'Responses' && (
+                    <RosaryResponses 
+                        rosaries={rosaries}
+                        chartData={chartData}
+                        columns={columns}
+                        handleRowSelect={handleRowSelect}
+                        handleDelete={handleDelete}
+                        refreshTrigger={refreshTrigger}
+                    />
+                )}
+                {activeTab === 'Settings' && (
+                    <div>
+                        <div className="email-toggle">
+                            <ToggleSlider 
+                                initialIsEnabled={isEmailEnabled} 
+                                toggleFunction={handleEmailToggle} 
+                                componentName="Rosary"
+                                userId={userId}
+                            />
+                        </div>
+                    </div>
+                )}
             </main>
             <ToastContainer />
         </div>
     );
 };
 
-export default Rosary;
+export default Rosary0;

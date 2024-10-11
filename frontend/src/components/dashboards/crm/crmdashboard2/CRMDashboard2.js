@@ -3,6 +3,7 @@ import { Container, Row, Col } from 'reactstrap';
 import RosaryCard from './cards/RosaryCard';
 import MassCard from './cards/MassCard';
 import DivineMercyCard from './cards/DivineMercyCard';
+import './CRMDashboard2.css'; // Add for styling
 
 export default class CRMDashboard2 extends Component {
   state = {
@@ -86,7 +87,6 @@ export default class CRMDashboard2 extends Component {
                 calculateProgress={this.calculateProgress}
               />
             </Col>
-
           </Row>
         </Container>
       </Fragment>
