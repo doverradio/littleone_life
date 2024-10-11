@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import './VirtualRosary.css'; // For bead styling
+import React, { useState } from 'react';
+import './VirtualRosary.css'; // We'll create this for the bead styling
 
 const VirtualRosary = ({ animateBead }) => {
   const [beads, setBeads] = useState([
@@ -15,33 +15,33 @@ const VirtualRosary = ({ animateBead }) => {
     { id: 'hail-mary-9', type: 'hail-mary', glowing: false },
     { id: 'hail-mary-10', type: 'hail-mary', glowing: false }
   ]);
-
-  // Trigger the animation when `animateBead` prop is called
-  useEffect(() => {
-    if (animateBead) {
-      animateBeadCallback(animateBead);
-    }
-  }, [animateBead]);
+  
+  const [currentBeadIndex, setCurrentBeadIndex] = useState(0); // Track the current bead
 
   const animateBeadCallback = (beadId) => {
-    // Start glowing the correct bead
-    setBeads(beads.map(bead => 
-      bead.id === beadId ? { ...bead, glowing: true } : bead
+    // Get bead index for our father or hail mary sequence
+    const beadIndex = beadId === 'our-father' ? 0 : currentBeadIndex;
+
+    // Start glowing the current bead
+    setBeads(beads.map((bead, index) => 
+      index === beadIndex ? { ...bead, glowing: true } : bead
     ));
 
-    // Stop glowing after 2 seconds
+    // Stop glowing after 2 seconds and move to the next bead
     setTimeout(() => {
-      setBeads(beads.map(bead => ({ ...bead, glowing: false })));
-    }, 2000); // <- Missing semicolon added here
+      setBeads(beads.map(bead => ({ ...bead, glowing: false }))); // Added semicolon here
+      setCurrentBeadIndex((prevIndex) => (prevIndex + 1) % beads.length); // Move to the next bead
+    }, 2000);
   };
 
   return (
     <div className="virtual-rosary">
       <div className="rosary-container">
-        {beads.map(bead => (
+        {beads.map((bead, index) => (
           <div
             key={bead.id}
             className={`bead ${bead.glowing ? 'glow' : ''} ${bead.type}`}
+            style={index === currentBeadIndex ? { border: '2px solid red' } : {}}
           />
         ))}
       </div>

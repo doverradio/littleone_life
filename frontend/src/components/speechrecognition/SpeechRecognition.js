@@ -1,23 +1,33 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 const SpeechRecognitionComponent = ({ animateBead }) => {
   const [listening, setListening] = useState(false);
   const [transcript, setTranscript] = useState("");
   const [error, setError] = useState(null);
 
-  // Cross-browser SpeechRecognition support
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
-  // Check for browser support
   if (!SpeechRecognition) {
     alert("Your browser does not support speech recognition. Please use Google Chrome or Microsoft Edge.");
     return <div>Speech Recognition is not supported in your browser.</div>;
   }
 
   const recognition = new SpeechRecognition();
-  recognition.continuous = true;  // Continuous listening
-  recognition.interimResults = false;  // Final results only
-  recognition.lang = "en-US";  // Set language to English
+  recognition.continuous = true;  // Keep listening continuously
+  recognition.interimResults = false;  // Only final results
+  recognition.lang = "en-US";
+
+  // Handle prayer completion logic
+  const handlePrayerCompletion = (transcript) => {
+    // Check which prayer was spoken
+    if (transcript.toLowerCase().includes("our father")) {
+      animateBead('our-father');
+    } else if (transcript.toLowerCase().includes("hail mary")) {
+      animateBead('hail-mary');
+    }
+    // Clear the transcript after recognition
+    setTranscript("");
+  };
 
   const handleStartListening = () => {
     setListening(true);
@@ -28,13 +38,8 @@ const SpeechRecognitionComponent = ({ animateBead }) => {
       setTranscript(lastResult);
       console.log("Recognized:", lastResult);
 
-      // Trigger rosary bead animation based on the recognized prayer
-      if (lastResult.toLowerCase().includes("our father")) {
-        animateBead('our-father');
-      } else if (lastResult.toLowerCase().includes("hail mary")) {
-        // Example: Cycle through hail mary beads; in practice, you could manage the specific bead
-        animateBead(`hail-mary-1`);  // You could have logic to cycle through hail mary beads here
-      }
+      // After recognition, handle prayer completion
+      handlePrayerCompletion(lastResult);
     };
 
     recognition.onerror = (event) => {
@@ -44,8 +49,8 @@ const SpeechRecognitionComponent = ({ animateBead }) => {
     };
 
     recognition.onend = () => {
-      console.log("Speech recognition ended.");
-      setListening(false);
+      // Automatically restart recognition to reduce delays
+      if (listening) recognition.start();
     };
   };
 
@@ -56,7 +61,7 @@ const SpeechRecognitionComponent = ({ animateBead }) => {
 
   return (
     <div>
-      <h1>Speech Recognition for Rosary Prayers</h1>
+      <h3>Begin Praying the Rosary</h3>
       <button onClick={handleStartListening} disabled={listening}>
         Begin Praying
       </button>
