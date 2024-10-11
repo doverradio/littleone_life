@@ -61,7 +61,7 @@ const SpeechRecognitionComponent = ({ animateBead }) => {
 
   return (
     <div>
-      <h3>Begin Praying the Rosary</h3>
+      {/* <h3>Begin Praying the Rosary</h3> */}
       <button onClick={handleStartListening} disabled={listening}>
         Begin Praying
       </button>
