@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './VirtualRosary.css'; // We'll create this for the bead styling
 
-const VirtualRosary = ({ animateBead }) => {
+const VirtualRosary1 = ({ animateBead }) => {
   const [beads, setBeads] = useState([
     { id: 'our-father', type: 'our-father', glowing: false },
     { id: 'hail-mary-1', type: 'hail-mary', glowing: false },
@@ -18,21 +18,20 @@ const VirtualRosary = ({ animateBead }) => {
   
   const [currentBeadIndex, setCurrentBeadIndex] = useState(0); // Track the current bead
 
-  // This method will animate a specific bead based on the beadId passed
   const animateBeadCallback = (beadId) => {
-    // Determine the bead index based on the ID
-    const beadIndex = beads.findIndex(bead => bead.id === beadId);
+    // Get bead index for our father or hail mary sequence
+    const beadIndex = beadId === 'our-father' ? 0 : currentBeadIndex;
 
-    if (beadIndex >= 0) {
-      setBeads(beads.map((bead, index) => 
-        index === beadIndex ? { ...bead, glowing: true } : bead
-      ));
+    // Start glowing the current bead
+    setBeads(beads.map((bead, index) => 
+      index === beadIndex ? { ...bead, glowing: true } : bead
+    ));
 
-      setTimeout(() => {
-        setBeads(beads.map(bead => ({ ...bead, glowing: false })));
-        setCurrentBeadIndex((prevIndex) => (prevIndex + 1) % beads.length); // Move to the next bead
-      }, 2000);
-    }
+    // Stop glowing after 2 seconds and move to the next bead
+    setTimeout(() => {
+      setBeads(beads.map(bead => ({ ...bead, glowing: false }))); // Added semicolon here
+      setCurrentBeadIndex((prevIndex) => (prevIndex + 1) % beads.length); // Move to the next bead
+    }, 2000);
   };
 
   return (
@@ -50,4 +49,4 @@ const VirtualRosary = ({ animateBead }) => {
   );
 };
 
-export default VirtualRosary;
+export default VirtualRosary1;
