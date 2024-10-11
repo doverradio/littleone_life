@@ -216,20 +216,8 @@ const Rosary = () => {
             />
             <main className="rosary-main">
                 {activeTab === 'Form' && (
+                    
                     <div className="questions-tab">
-                        <Mysteries 
-                            handleMysteryClick={(name) => handleMysteryClick(name, mysteriesDetails, setSelectedMystery, setSelectedMysteryDetails, setSelectedMysteryIcon, mysteries, setShowVirtualRosary)} 
-                        />
-                        {selectedMystery && (
-                            <MysteryDetails selectedMysteryDetails={selectedMysteryDetails} />
-                        )}
-                        
-                    </div>
-                )}
-
-                {/* Other tabs logic */}
-                
-                <div className="questions-tab">
                         <Mysteries handleMysteryClick={(name) => handleMysteryClick(name, mysteriesDetails, setSelectedMystery, setSelectedMysteryDetails, setSelectedMysteryIcon, mysteries, setShowVirtualRosary)} />
                         {selectedMystery && (
                             <MysteryDetails selectedMysteryDetails={selectedMysteryDetails} />
@@ -317,6 +305,10 @@ const Rosary = () => {
                             </div>
                         </div>
                     </div>
+                )}
+
+                {/* Other tabs logic */}
+                
             </main>
             <ToastContainer />
         </div>
