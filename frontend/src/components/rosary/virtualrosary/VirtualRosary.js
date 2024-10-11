@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import './VirtualRosary.css'; // We'll create this for the bead styling
+import React, { useState, useEffect } from 'react';
+import './VirtualRosary.css'; // For bead styling
 
-const VirtualRosary = () => {
+const VirtualRosary = ({ animateBead }) => {
   const [beads, setBeads] = useState([
     { id: 'our-father', type: 'our-father', glowing: false },
     { id: 'hail-mary-1', type: 'hail-mary', glowing: false },
@@ -16,15 +16,23 @@ const VirtualRosary = () => {
     { id: 'hail-mary-10', type: 'hail-mary', glowing: false }
   ]);
 
-  // Function to trigger bead animation
-  const animateBead = (beadId) => {
+  // Trigger the animation when `animateBead` prop is called
+  useEffect(() => {
+    if (animateBead) {
+      animateBeadCallback(animateBead);
+    }
+  }, [animateBead]);
+
+  const animateBeadCallback = (beadId) => {
+    // Start glowing the correct bead
     setBeads(beads.map(bead => 
       bead.id === beadId ? { ...bead, glowing: true } : bead
     ));
 
+    // Stop glowing after 2 seconds
     setTimeout(() => {
       setBeads(beads.map(bead => ({ ...bead, glowing: false })));
-    }, 2000); // Animation lasts for 2 seconds
+    }, 2000); // <- Missing semicolon added here
   };
 
   return (

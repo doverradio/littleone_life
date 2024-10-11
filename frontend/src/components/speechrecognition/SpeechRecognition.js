@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const SpeechRecognitionComponent = () => {
+const SpeechRecognitionComponent = ({ animateBead }) => {
   const [listening, setListening] = useState(false);
   const [transcript, setTranscript] = useState("");
   const [error, setError] = useState(null);
@@ -27,6 +27,14 @@ const SpeechRecognitionComponent = () => {
       const lastResult = event.results[event.results.length - 1][0].transcript;
       setTranscript(lastResult);
       console.log("Recognized:", lastResult);
+
+      // Trigger rosary bead animation based on the recognized prayer
+      if (lastResult.toLowerCase().includes("our father")) {
+        animateBead('our-father');
+      } else if (lastResult.toLowerCase().includes("hail mary")) {
+        // Example: Cycle through hail mary beads; in practice, you could manage the specific bead
+        animateBead(`hail-mary-1`);  // You could have logic to cycle through hail mary beads here
+      }
     };
 
     recognition.onerror = (event) => {

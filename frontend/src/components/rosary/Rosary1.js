@@ -1,3 +1,5 @@
+// src/components/rosary/Rosary.js
+
 import React, { useState, useEffect } from 'react';
 import { useUser } from '../../context/UserContext';
 import rosaryIcon from './rosary_icon.png';
@@ -34,13 +36,11 @@ import ToggleSlider from '../utils/ToggleSlider';
 import RosaryHeader from './RosaryHeader';
 import BackIcon from '../utils/BackIcon';
 import { getUser } from '../../api/user';
-import { sendNotificationEmail } from '../../api/email'; 
+import { sendNotificationEmail } from '../../api/email'; // Make sure this import is included
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
-// Ensure correct component import
-import SpeechRecognitionComponent from '../speechrecognition/SpeechRecognition';
-import VirtualRosary from './virtualrosary/VirtualRosary'; 
+import SpeechRecognition from '../speechrecognition/SpeechRecognition'; // Import SpeechRecognition
+import VirtualRosary from './virtualrosary/VirtualRosary';
 
 const Rosary = () => {
     const { toggleModal } = useModal();
@@ -92,8 +92,6 @@ const Rosary = () => {
     const [refreshTrigger, setRefreshTrigger] = useState(0);
     const [showVirtualRosary, setShowVirtualRosary] = useState(false);
 
-    let hailMaryIndex = 0;  // To track Hail Mary bead index
-
     useEffect(() => {
         fetchIntentions(userId, setPrayerIntentions);
         fetchRosaryCount(userId, setCount);
@@ -113,6 +111,7 @@ const Rosary = () => {
         };
 
         fetchUser();
+
     }, [userId, activeTab, currentPage, refreshTrigger]);
 
     const handleCloseForm = () => {
@@ -173,6 +172,7 @@ const Rosary = () => {
             toast.error('There was an error submitting the Rosary. Please try again later.');
         }
     };
+    
 
     const handleEmailToggle = async () => {
         setIsEmailEnabled(!isEmailEnabled);
@@ -184,16 +184,7 @@ const Rosary = () => {
         }
     };
 
-    // Function to animate rosary beads when prayers are spoken
-    const animateBead = (beadId) => {
-        console.log(`Animating bead: ${beadId}`);
-        if (beadId === 'hail-mary') {
-            hailMaryIndex = (hailMaryIndex % 10) + 1;  // Cycle through Hail Mary beads
-            return `hail-mary-${hailMaryIndex}`;
-        }
-        return beadId;
-    };
-
+    
     return (
         <div className="rosary-component container">
             <BackIcon />
@@ -212,10 +203,10 @@ const Rosary = () => {
                             <MysteryDetails selectedMysteryDetails={selectedMysteryDetails} />
                         )}
                         
-                        {/* Add the SpeechRecognitionComponent for prayer listening */}
+                        {/* Add the SpeechRecognition component for prayer listening */}
                         <div className="speech-recognition-section">
                             <h3>Begin Praying the Rosary</h3>
-                            <SpeechRecognitionComponent animateBead={animateBead} />
+                            <SpeechRecognition />
                         </div>
 
                         {/* Rest of the existing logic */}
@@ -239,7 +230,7 @@ const Rosary = () => {
                 )}
 
                 {/* Render the virtual rosary */}
-                <VirtualRosary animateBead={animateBead} />
+                <VirtualRosary />
                 
                 {/* Other tabs logic */}
                 
