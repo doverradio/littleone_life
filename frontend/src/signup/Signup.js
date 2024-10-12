@@ -3,7 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Slider from "react-slick";
+// import bg3 from '../styles/utils/images/originals/citynights.jpg'; // Import background
 import bg3 from '../styles/utils/images/originals/baptism.jpg'; // Import background
+import rosaryImage from '../styles/utils/images/originals/rosary.jpg'; 
+import stThereseImage from '../styles/utils/images/originals/st_therese.jpg'; 
 import { Col, Row, Button, Card, CardBody, CardHeader, Collapse } from 'reactstrap';
 import NavbarMain from "../NavbarMain"; // Navbar
 import Footer from "../Footer"; // Footer
@@ -193,7 +196,7 @@ const SignUp = () => {
                 </Col>
 
                 {/* Background Slider Section */}
-                <Col lg="5" sm="12" xs="12" className="d-lg-flex d-none">
+                <Col lg="5" sm="12" xs="12" className="d-none d-lg-block">
                     <div className="slider-light">
                         <Slider {...settings}>
                             <div className="h-100 d-flex justify-content-center align-items-center bg-premium-dark">
@@ -202,6 +205,26 @@ const SignUp = () => {
                                     <h3>“Begin Your Journey with Christ”</h3>
                                     <p>
                                         Your faith is a living, growing journey. Take the first step today, and let this community guide you closer to the Sacred Heart of Jesus. Together, we grow stronger in prayer, faith, and love.
+                                    </p>
+                                </div>
+                            </div>
+                            <div className="h-100 d-flex justify-content-center align-items-center bg-plum-plate">
+                                <div className="slide-img-bg" style={{ backgroundImage: `url(${rosaryImage})` }} />
+                                <div className="slider-content">
+                                    <h3>“The Power of Prayer”</h3>
+                                    <p>
+                                        Prayer is the foundation of your relationship with God. It opens the door to His grace 
+                                        and strengthens your soul. Never underestimate the power of a single prayer.
+                                    </p>
+                                </div>
+                            </div>
+                            <div className="h-100 d-flex justify-content-center align-items-center bg-sunny-morning">
+                                <div className="slide-img-bg" style={{ backgroundImage: `url(${stThereseImage})` }} />
+                                <div className="slider-content">
+                                    <h3>“Called to Be Saints”</h3>
+                                    <p>
+                                        Every baptized soul is called to holiness. Follow the path of the saints before you, and 
+                                        let their example inspire you to live a life of virtue and faith.
                                     </p>
                                 </div>
                             </div>
