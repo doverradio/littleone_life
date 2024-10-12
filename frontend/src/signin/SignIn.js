@@ -95,7 +95,7 @@ const SignIn = () => {
                             <div className="h-100 d-flex justify-content-center align-items-center bg-plum-plate">
                                 <div className="slide-img-bg" style={{ backgroundImage: `url(${bg1})` }} />
                                 <div className="slider-content">
-                                    <h3>“Totus Tuus, Maria”</h3>
+                                    <h3>“Hail Mary, Full of Grace”</h3>
                                     <p>Give yourself completely to the Blessed Mother, and she will lead you to her Son. Find your peace in her Immaculate Heart.</p>
                                 </div>
                             </div>
