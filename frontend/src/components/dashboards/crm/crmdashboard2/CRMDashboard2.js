@@ -1,3 +1,5 @@
+// src/components/dashboards/crm/crmdashboard2/CRMDashboard2.js
+
 import React, { Component, Fragment } from 'react';
 import { Container, Row, Col } from 'reactstrap';
 import RosaryCard from './cards/RosaryCard';

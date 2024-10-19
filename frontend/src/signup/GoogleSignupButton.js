@@ -1,33 +1,31 @@
-import React from 'react';
+// src/signup/GoogleSignupButton.js
+
+import React, { useState } from 'react';
 import { GoogleLogin } from '@react-oauth/google';
 import { toast } from 'react-toastify';
-import { googleSignup } from '../api/auth'; // Import googleSignup only
-import { useNavigate } from "react-router-dom";
-import { useUser } from '../context/UserContext'; // Using useUser from the context
-
-const log = console.log;
+import { googleSignup } from '../api/auth'; 
+import { useNavigate } from 'react-router-dom';
+import { useUser } from '../context/UserContext';
+import NewUserWizard from './newuserwizard/NewUserWizard'; // Import the wizard
 
 const GoogleSignupButton = ({ informParent = f => f }) => {
+    const [showWizard, setShowWizard] = useState(false); // To control when to show the wizard
+    const { setUser, userPreferences } = useUser(); 
     const navigate = useNavigate();
-    const { setUser } = useUser(); // Get setUser from UserContext
 
     const responseGoogleSuccess = async (response) => {
         try {
-            const googleToken = response.credential; // Extract the token directly
-            const result = await googleSignup(googleToken);
-            log(`result: `, result);
+            const googleToken = response.credential;
+            const result = await googleSignup(googleToken, userPreferences);
+            
             if (result.error) {
                 toast.error(result.error);
             } else {
-                // No need for authenticate, simply handle session data and navigation
-                setUser(result.user); // Store the user in the context (session-based)
-                informParent(result); // Inform parent of the successful signup
-                const { user } = result;
-                if (user && user.role === 1) {
-                    navigate('/admin/dashboard'); // Redirect based on role
-                } else {
-                    navigate('/user/dashboard');
-                }
+                setUser(result.user);
+                informParent(result);
+                
+                // Instead of navigating directly, we show the wizard first
+                setShowWizard(true); // Trigger the wizard
             }
         } catch (error) {
             console.error('GOOGLE SIGNUP ERROR', error);
@@ -40,13 +38,23 @@ const GoogleSignupButton = ({ informParent = f => f }) => {
         toast.error("Google sign-up failed. Please try again.");
     };
 
+    // Handle form submission from the wizard
+    const handleWizardCompletion = () => {
+        // Once the wizard is complete, navigate to the dashboard
+        navigate('/user/dashboard');
+    };
+
     return (
         <div className="pb-3">
-            <GoogleLogin
-                onSuccess={responseGoogleSuccess}
-                onError={responseGoogleFailure}
-                text="Sign up with Google"
-            />
+            {!showWizard ? (
+                <GoogleLogin
+                    onSuccess={responseGoogleSuccess}
+                    onError={responseGoogleFailure}
+                    text="Sign up with Google"
+                />
+            ) : (
+                <NewUserWizard informParent={handleWizardCompletion} />
+            )}
         </div>
     );
 };

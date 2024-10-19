@@ -28,6 +28,7 @@ import StLeandroRuizPrayer from './components/otherprayers/stleandroruiz/StLeand
 import PrayerSettingsPage from './components/otherprayers/PrayerSettingsPage';
 import SessionManager from './components/session/SessionManager';
 import DisableNotification from './components/notifications/DisableNotification'; // Import the new component
+import Fasting from './components/fasting/Fasting';
 
 const RoutesComponent = () => {
   return (
@@ -61,6 +62,7 @@ const RoutesComponent = () => {
             <Route path="/prayers/mass" element={<PrivateRoute component={Mass} />} exact />
             <Route path="/prayers/confession" element={<PrivateRoute component={Confession} />} exact />
             <Route path="/prayers/divinemercy" element={<PrivateRoute component={DivineMercy} />} exact />
+            <Route path="/prayers/fasting" element={<PrivateRoute component={Fasting} />} exact />
             <Route path="/prayers/stmichael" element={<PrivateRoute component={StMichaelPrayer} />} exact />
             <Route path="/prayers/stfrancis" element={<PrivateRoute component={StFrancisPrayer} />} exact />
             <Route path="/prayers/stleandroruiz" element={<PrivateRoute component={StLeandroRuizPrayer} />} exact />

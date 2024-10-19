@@ -1,5 +1,3 @@
-// src/context/UserContext.js
-
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import { jwtDecode } from "jwt-decode";  // Importing jwtDecode as a named export
 import { getCookie } from '../helpers/cookieHelper';
@@ -9,7 +7,11 @@ export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
     const [user, setUser] = useState(null);
-    const [prayerSettings, setPrayerSettings] = useState([]);
+    const [userPreferences, setUserPreferences] = useState({
+        prayerSettings: [],
+        gender: '', // Add other preferences like gender
+        novenas: [], // Store novena selections as an array
+    });
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -18,10 +20,14 @@ export const UserProvider = ({ children }) => {
             const decoded = jwtDecode(token);
             setUser({ ...decoded, token });
 
-            const fetchPrayerSettings = async () => {
+            const fetchUserPreferences = async () => {
                 try {
+                    // Fetch prayer settings or any other settings from the server
                     const settings = await getPrayerSettings(decoded._id, token);
-                    setPrayerSettings(settings);
+                    setUserPreferences((prevPreferences) => ({
+                        ...prevPreferences,
+                        prayerSettings: settings, // Update prayerSettings in userPreferences
+                    }));
                 } catch (error) {
                     console.error('Error fetching prayer settings:', error);
                 } finally {
@@ -29,14 +35,14 @@ export const UserProvider = ({ children }) => {
                 }
             };
 
-            fetchPrayerSettings();
+            fetchUserPreferences();
         } else {
             setLoading(false);
         }
     }, []);
 
     return (
-        <UserContext.Provider value={{ user, setUser, prayerSettings, setPrayerSettings, loading }}>
+        <UserContext.Provider value={{ user, setUser, userPreferences, setUserPreferences, loading }}>
             {children}
         </UserContext.Provider>
     );

@@ -1,27 +1,29 @@
+// src/signup/Signup.js
+
 import React, { useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Slider from "react-slick";
-// import bg3 from '../styles/utils/images/originals/citynights.jpg'; // Import background
-import bg3 from '../styles/utils/images/originals/baptism.jpg'; // Import background
+import bg3 from '../styles/utils/images/originals/baptism.jpg'; 
 import rosaryImage from '../styles/utils/images/originals/rosary.jpg'; 
 import stThereseImage from '../styles/utils/images/originals/st_therese.jpg'; 
 import { Col, Row, Button, Card, CardBody, CardHeader, Collapse } from 'reactstrap';
-import NavbarMain from "../NavbarMain"; // Navbar
-import Footer from "../Footer"; // Footer
-import { signup, checkUsernameAvailability } from '../api/auth'; // Include checkUsernameAvailability function
-import GoogleSignupButton from './GoogleSignupButton'; // Google Signup button component
-import MultiStep from './MultiStep'; // Multi-step component for the signup process
+import NavbarMain from "../NavbarMain";
+import Footer from "../Footer";
+import { signup, checkUsernameAvailability } from '../api/auth';
+import GoogleSignupButton from './GoogleSignupButton';
+import MultiStep from './MultiStep';
 import Step1Username from './wizard/Step1Username';
-import Step2EmailPassword from './wizard/Step2EmailPassword'; // Import the email/password step
+import Step2EmailPassword from './wizard/Step2EmailPassword';
 import Step3Names from './wizard/Step3Names';
 import Step4Phone from './wizard/Step4Phone';
 import Step5Summary from './wizard/Step5Summary';
+import NewUserWizard from "./newuserwizard/NewUserWizard";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import './styles.css';
-
+import ReCAPTCHA from 'react-google-recaptcha'; // Import reCAPTCHA
 
 const SignUp = () => {
     const [userData, setUserData] = useState({
@@ -32,15 +34,18 @@ const SignUp = () => {
         phone: ''
     });
 
-    const [accordion, setAccordion] = useState([true, false]); // State for managing accordion
+    const [showPreferencesWizard, setShowPreferencesWizard] = useState(false); // State to control the wizard flow
+    const [accordion, setAccordion] = useState([true, false]); 
+    const [captchaValue, setCaptchaValue] = useState(null); 
     const navigate = useNavigate();
-    const [loading, setLoading] = useState(false); // Add a loading state for the username check
+    const [loading, setLoading] = useState(false); 
 
-    // Slider settings for the background
+    const SITE_KEY = process.env.REACT_APP_RECAPTCHA_KEY; 
+
     const settings = {
         dots: true,
         infinite: true,
-        speed: 500,
+        speed: 3000,
         arrows: true,
         slidesToShow: 1,
         slidesToScroll: 1,
@@ -50,31 +55,36 @@ const SignUp = () => {
         adaptiveHeight: true
     };
 
-    // Toggle accordion sections
     const toggleAccordion = (tab) => {
         const state = accordion.map((x, index) => tab === index ? !x : false);
         setAccordion(state);
     };
 
-    // Handle form submission (called by Step5Summary)
+    const handleCaptchaChange = (value) => {
+        setCaptchaValue(value); 
+    };
+
     const handleSubmit = async () => {
+        if (!captchaValue) {
+            toast.error('Please complete the CAPTCHA to proceed.');
+            return;
+        }
         try {
             const response = await signup(userData);
             if (response.error) {
                 toast.error(response.error);
             } else {
                 toast.success('Signup successful!');
-                navigate('/signin');
+                setShowPreferencesWizard(true);  // Show preferences wizard after successful signup
             }
         } catch (error) {
             toast.error('Signup failed. Please try again.');
         }
     };
 
-    // Function to check username availability with loading state
     const checkUsername = async () => {
         if (userData.username.trim()) {
-            setLoading(true); // Start loading
+            setLoading(true); 
             try {
                 const result = await checkUsernameAvailability(userData.username);
                 setUserData({
@@ -90,7 +100,7 @@ const SignUp = () => {
                     canProceed: false
                 });
             } finally {
-                setLoading(false); // Stop loading
+                setLoading(false); 
             }
         } else {
             setUserData({
@@ -101,15 +111,14 @@ const SignUp = () => {
         }
     };
 
-    // Wizard steps with props passed in
     const steps = [
         { 
             name: 'Account Information', 
             component: <Step1Username 
                 userData={userData} 
                 setUserData={setUserData} 
-                checkUsername={checkUsername}  // Pass checkUsername here
-                loading={loading} // Pass loading state
+                checkUsername={checkUsername}  
+                loading={loading} 
             /> 
         },
         { 
@@ -137,10 +146,15 @@ const SignUp = () => {
             name: 'Review and Submit', 
             component: <Step5Summary 
                 userData={userData} 
-                handleSubmit={handleSubmit}  // Pass handleSubmit here
+                handleSubmit={handleSubmit}  
             /> 
         }
     ];
+
+    // Check if the preferences wizard should be shown after signup
+    if (showPreferencesWizard) {
+        return <NewUserWizard />;
+    }
 
     return (
         <div className="h-100">
@@ -155,9 +169,7 @@ const SignUp = () => {
                             <span>It only takes a <span className="text-success">few seconds</span> to create your account</span>
                         </h4>
 
-                        {/* Accordion Section */}
                         <div id="accordion" className="accordion-wrapper mb-3">
-                            {/* Google Account Accordion */}
                             <Card>
                                 <CardHeader id="headingOne">
                                     <Button block color="link" className="text-left m-0 p-0"
@@ -169,12 +181,11 @@ const SignUp = () => {
                                 </CardHeader>
                                 <Collapse isOpen={accordion[0]} data-parent="#accordion" id="collapseOne" aria-labelledby="headingOne">
                                     <CardBody>
-                                        <GoogleSignupButton />
+                                        <GoogleSignupButton setShowPreferencesWizard={setShowPreferencesWizard} />
                                     </CardBody>
                                 </Collapse>
                             </Card>
 
-                            {/* Username and Password Accordion with Form Wizard */}
                             <Card>
                                 <CardHeader id="headingTwo">
                                     <Button block color="link" className="text-left m-0 p-0"
@@ -186,16 +197,20 @@ const SignUp = () => {
                                 </CardHeader>
                                 <Collapse isOpen={accordion[1]} data-parent="#accordion" id="collapseTwo">
                                     <CardBody>
-                                        {/* Multi-Step Wizard Integration */}
                                         <MultiStep steps={steps} showNavigation={true} />
                                     </CardBody>
                                 </Collapse>
                             </Card>
                         </div>
+
+                        {/* Add reCAPTCHA below the form */}
+                        <ReCAPTCHA
+                            sitekey={SITE_KEY}
+                            onChange={handleCaptchaChange}
+                        />
                     </Col>
                 </Col>
 
-                {/* Background Slider Section */}
                 <Col lg="5" sm="12" xs="12" className="d-none d-lg-block">
                     <div className="slider-light">
                         <Slider {...settings}>

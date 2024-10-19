@@ -24,6 +24,10 @@ const userSchema = new mongoose.Schema({
             { id: 'stleandroruiz', isVisible: false }
         ]
     },
+    preferences: {   // New field for user preferences
+        type: Object,
+        default: {}
+    },
     salt: String,
     role: { type: Number, default: 0 },
     preferredLoginType: { type: String, default: 'username-password' },
@@ -67,7 +71,10 @@ userSchema.methods = {
 };
 
 userSchema.plugin(fieldEncryption, {
-    fields: ['firstName', 'lastName', 'email', 'about', 'phone', 'prayerSettings'],
+    fields: ['firstName', 'lastName', 'email', 'about', 'phone', 'prayerSettings', 
+        'preferences'
+
+    ],
     secret: encKey,
     saltGenerator: function(secret) {
         const salt = crypto.randomBytes(8).toString('hex');

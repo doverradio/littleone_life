@@ -1,3 +1,5 @@
+// src/components/rosary/Rosary.js
+
 import React, { useState, useEffect } from 'react';
 import { useUser } from '../../context/UserContext';
 import rosaryIcon from './rosary_icon.png';

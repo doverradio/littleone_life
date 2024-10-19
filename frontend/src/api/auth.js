@@ -148,7 +148,29 @@ export const googleSignIn = async (token) => { // not the JWT token, the google 
 };
 
 
-export const googleSignup = async (token) => { // not the JWT token, the google token
+// export const googleSignup = async (token) => { // not the JWT token, the google token
+//   if (token) {
+//     try {
+//       const response = await fetch(`${API}/google-signup`, {
+//         method: 'POST',
+//         headers: {
+//           Accept: 'application/json',
+//           'Content-Type': 'application/json',
+//         },
+//         credentials: 'include', // Include cookies
+//         body: JSON.stringify({ idToken: token }),
+//       });
+//       return await response.json();
+//     } catch (err) {
+//       console.error('Google Sign-Up error:', err);
+//       return { error: 'Google sign-up failed. Please try again.' };
+//     }
+//   } else {
+//     return { error: 'Google sign-up failed. Please try again.' };
+//   }
+// };
+
+export const googleSignup = async (token, preferences) => { // Not the JWT token, the google token. Now accepts preferences as well
   if (token) {
     try {
       const response = await fetch(`${API}/google-signup`, {
@@ -158,7 +180,7 @@ export const googleSignup = async (token) => { // not the JWT token, the google 
           'Content-Type': 'application/json',
         },
         credentials: 'include', // Include cookies
-        body: JSON.stringify({ idToken: token }),
+        body: JSON.stringify({ idToken: token, preferences }),  // Send both token and preferences
       });
       return await response.json();
     } catch (err) {
@@ -169,5 +191,6 @@ export const googleSignup = async (token) => { // not the JWT token, the google 
     return { error: 'Google sign-up failed. Please try again.' };
   }
 };
+
 
 // Remove isTokenExpired, since session management will be handled by the server

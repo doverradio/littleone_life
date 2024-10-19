@@ -177,7 +177,7 @@ exports.signup = async (req, res) => {
 // GOOGLE SIGN UP
 // In your auth controller
 exports.googleSignup = async (req, res) => {
-    const { idToken } = req.body;
+    const { idToken, preferences } = req.body;  // Add preferences
 
     try {
         const ticket = await client.verifyIdToken({
@@ -192,17 +192,17 @@ exports.googleSignup = async (req, res) => {
             let user = await User.findOne({ email });
 
             if (!user) {
-                // Create a new user with the googleId
                 user = new User({
                     username,
                     email,
                     googleId,
+                    preferences,  // Save preferences here
                     preferredLoginType: 'google'
                 });
                 await user.save();
             } else if (!user.googleId) {
-                // Update the existing user with the googleId if it's not already set
                 user.googleId = googleId;
+                user.preferences = preferences;  // Update preferences
                 await user.save();
             }
 
@@ -230,6 +230,8 @@ exports.googleSignup = async (req, res) => {
         });
     }
 };
+
+
 
 // USERNAME / PASSWORD SIGN IN
 exports.signin = async (req, res) => {
