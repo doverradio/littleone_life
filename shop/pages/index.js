@@ -1,3 +1,5 @@
+// shop/pages/index.js
+
 import React from 'react';
 import Layout from '@/components/Partials/Layout';
 import datas from '../data/products.json'; 
@@ -18,69 +20,86 @@ const ShopPage = () => {
 
   return (
     <Layout>
-      <Banner className="banner-wrapper mb-[60px]" />
-      
+      {/* Updated Banner Section: Add Catholic theme */}
+      <Banner
+        className="banner-wrapper mb-[60px]"
+        imageSrc="/assets/images/catholic-banner.jpg"
+        heading="Shop Sacred and Spiritual Goods"
+        subheading="Find everything you need to deepen your faith"
+        buttonText="Explore Products"
+        buttonLink="/all-products"
+      />
+
+      {/* Featured Religious Products Section */}
       <SectionStyleOne
-        products={products}
+        products={products.filter(product => product.category === 'Religious Items')}
         brands={brands}
-        categoryTitle="Mobile & Tablet"
-        sectionTitle="Gamer World"
+        categoryTitle="Spiritual Essentials"
+        sectionTitle="Featured Rosaries, Medals, and More"
         seeMoreUrl="/all-products"
         className="category-products mb-[60px]"
       />
 
+      {/* Shop by Brand - Catholic Theme */}
       <BrandSection
-        sectionTitle="Shop by Brand"
+        sectionTitle="Shop by Religious Brand"
         className="brand-section-wrapper mb-[60px]"
       />
 
+      {/* Catholic Event Countdown - Modify Campaign */}
       <CampaignCountDown
         className="mb-[60px]"
-        lastDate="2025-10-04 4:00:00"
+        lastDate="2024-12-25 00:00:00" // Christmas Countdown
+        message="Prepare for the Birth of Christ!"
       />
 
+      {/* Top-Selling Catholic Items */}
       <ViewMoreTitle
         className="top-selling-product mb-[60px]"
         seeMoreUrl="/all-products"
-        categoryTitle="Top Selling Products"
+        categoryTitle="Top Selling Catholic Items"
       >
-        <SectionStyleTwo products={products.slice(3)} />
+        <SectionStyleTwo products={products.filter(product => product.category === 'Best Sellers')} />
       </ViewMoreTitle>
 
+      {/* Best Sellers Section */}
       <ViewMoreTitle
         className="best-sellers-section mb-[60px]"
         seeMoreUrl="/sellers"
-        categoryTitle="Best Seller"
+        categoryTitle="Best Sellers"
       >
         <BestSellers />
       </ViewMoreTitle>
 
-      {/* Updated with NEXT_PUBLIC_BASE_URL and leading slashes */}
+      {/* Updated Product Ads - Catholic Themed Ads */}
       <ProductsAds
         ads={[
-          `${process.env.NEXT_PUBLIC_BASE_URL}/assets/images/banner-1.png`,
-          `${process.env.NEXT_PUBLIC_BASE_URL}/assets/images/banner-2.png`,
+          `${process.env.NEXT_PUBLIC_BASE_URL}/assets/images/smart-rosary-ad.png`,
+          `${process.env.NEXT_PUBLIC_BASE_URL}/assets/images/novena-ad.png`,
         ]}
         sectionHeight="sm:h-[295px] h-full"
         className="products-ads-section mb-[60px]"
       />
 
+      {/* New Arrivals Section */}
       <SectionStyleThree
-        products={products}
-        sectionTitle="New Arrivals"
+        products={products.filter(product => product.isNewArrival)}
+        sectionTitle="New Arrivals in Spiritual Goods"
         seeMoreUrl="/all-products"
         className="new-products mb-[60px]"
       />
 
+      {/* Final Ads Section */}
       <ProductsAds
         sectionHeight="164"
-        ads={[`${process.env.NEXT_PUBLIC_BASE_URL}/assets/images/banner-4.png`]}
+        ads={[`${process.env.NEXT_PUBLIC_BASE_URL}/assets/images/saint-statue-ad.png`]}
         className="products-ads-section mb-[60px]"
       />
 
+      {/* Popular Sales */}
       <SectionStyleFour
-        products={products}
-        sectionTitle="Popular Sales"
+        products={products.filter(product => product.isOnSale)}
+        sectionTitle="Popular Catholic Sales"
         seeMoreUrl="/all-products"
         className="category-products mb-[60px]"
       />

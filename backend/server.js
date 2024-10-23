@@ -68,10 +68,25 @@ app.use(express.json({
 app.use(cookieParser());
 
 // cors
-app.use(cors({ 
-  origin: `${process.env.CLIENT_URL}`,
-  credentials: true
-}));
+const allowedOrigins = process.env.USE_HTTPS === 'true' 
+  ? ['https://littleone.life', 'https://shop.littleone.life']
+  : ['http://localhost:3000', 'http://shop.localhost:3002'];
+
+  app.use(cors({
+    origin: (origin, callback) => {
+      // If no origin or an allowed origin, allow the request
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
+    credentials: true // Allow cookies to be sent across origins
+  }));
+// app.use(cors({ 
+//   origin: `${process.env.CLIENT_URL}`,
+//   credentials: true
+// }));
 
 // Define routes
 app.use('/api', adminRoutes);
