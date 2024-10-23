@@ -68,21 +68,21 @@ app.use(express.json({
 app.use(cookieParser());
 
 // cors
-const allowedOrigins = process.env.USE_HTTPS === 'true' 
-  ? ['https://littleone.life', 'https://shop.littleone.life']
-  : ['http://localhost:3000', 'http://shop.localhost:3002'];
+app.use(cors({
+  origin: (origin, callback) => {
+    // Allow requests with no origin (like mobile apps or CURL requests)
+    if (!origin) return callback(null, true);
 
-  app.use(cors({
-    origin: (origin, callback) => {
-      // If no origin or an allowed origin, allow the request
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error('Not allowed by CORS'));
-      }
-    },
-    credentials: true // Allow cookies to be sent across origins
-  }));
+    // Check if the origin is in the allowedOrigins array
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      console.error('Blocked by CORS. Origin:', origin);
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true, // Allow credentials to be passed with requests
+}));
 // app.use(cors({ 
 //   origin: `${process.env.CLIENT_URL}`,
 //   credentials: true
