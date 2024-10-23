@@ -68,6 +68,12 @@ app.use(express.json({
 app.use(cookieParser());
 
 // cors
+const allowedOrigins = [
+  process.env.CLIENT_URL, // The main production client
+  process.env.DEV_URL, // Add your development URL here if necessary
+  process.env.SHOP_URL, // URL for the shop subdomain if required
+];
+
 app.use(cors({
   origin: (origin, callback) => {
     // Allow requests with no origin (like mobile apps or CURL requests)
