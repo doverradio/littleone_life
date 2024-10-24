@@ -68,31 +68,32 @@ app.use(express.json({
 app.use(cookieParser());
 
 // cors
-const allowedOrigins = [
-  process.env.CLIENT_URL, // The main production client
-  process.env.DEV_URL, // Add your development URL here if necessary
-  process.env.SHOP_URL, // URL for the shop subdomain if required
-];
+// const allowedOrigins = [
+//   process.env.CLIENT_URL, // The main production client
+//   process.env.DEV_URL, // Add your development URL here if necessary
+//   process.env.SHOP_URL, // URL for the shop subdomain if required
+// ];
 
-app.use(cors({
-  origin: (origin, callback) => {
-    // Allow requests with no origin (like mobile apps or CURL requests)
-    if (!origin) return callback(null, true);
+// app.use(cors({
+//   origin: (origin, callback) => {
+//     // Allow requests with no origin (like mobile apps or CURL requests)
+//     if (!origin) return callback(null, true);
 
-    // Check if the origin is in the allowedOrigins array
-    if (allowedOrigins.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      console.error('Blocked by CORS. Origin:', origin);
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  credentials: true, // Allow credentials to be passed with requests
-}));
-// app.use(cors({ 
-//   origin: `${process.env.CLIENT_URL}`,
-//   credentials: true
+//     // Check if the origin is in the allowedOrigins array
+//     if (allowedOrigins.indexOf(origin) !== -1) {
+//       callback(null, true);
+//     } else {
+//       console.error('Blocked by CORS. Origin:', origin);
+//       callback(new Error('Not allowed by CORS'));
+//     }
+//   },
+//   credentials: true, // Allow credentials to be passed with requests
 // }));
+
+app.use(cors({ 
+  origin: `${process.env.CLIENT_URL}`,
+  credentials: true
+}));
 
 // Define routes
 app.use('/api', adminRoutes);
