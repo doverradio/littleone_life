@@ -40,6 +40,7 @@ router.get('/check-session', checkSession);
 
 // Redirect to Google's OAuth 2.0 server to initiate authentication
 router.get('/google', (req, res) => {
+    console.log(`/google called`)
     const authUrl = oauth2Client.generateAuthUrl({
         access_type: 'offline',
         scope: SCOPES
@@ -49,6 +50,7 @@ router.get('/google', (req, res) => {
 
 // Handle the OAuth 2.0 server response
 router.get('/callback', async (req, res) => {
+    console.log(`/callback req.query: `, req.query)
     const { code } = req.query;
     try {
         const { tokens } = await oauth2Client.getToken(code);
